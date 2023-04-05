@@ -13,17 +13,32 @@ void main() {
   runApp(const MyApp());
 }
 
+enum NavRoute {
+  groups,
+  group,
+  loading,
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (context) => MainNavCubit()..showGroups(),
+      child: MaterialApp(
+        title: 'Splitsby',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => const GroupsPage(),
+          "group": (context) => const GroupPage(),
+          NavRoute.loading.name: (context) =>
+              const Center(child: CircularProgressIndicator()),
+        },
       ),
-      home: const SplitsbyApp(),
     );
   }
 }
@@ -36,9 +51,6 @@ class SplitsbyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => MainNavCubit()..showGroups(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Splitsby"),
-        ),
         body: BlocBuilder<MainNavCubit, MainNavState>(
           builder: (context, state) {
             late final Widget widget;

@@ -24,16 +24,13 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
         ],
         onTap: (index) {
           _onItemSelected(context, index);
-        }
-    );
+        });
   }
-
 
   void _onItemSelected(BuildContext context, int index) {
     setState(() {
       _selectedIndex = index;
-      context.read<GroupBloc>().add(NavigateTo(index));
+      context.read<GroupBloc>().showPage(_selectedIndex);
     });
   }
-
 }

@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/group/bloc/group_event.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/events_view.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/group_bottom_nav.dart';
@@ -11,8 +10,11 @@ class GroupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+    final argGroupId = args["group_id"] ?? "";
     return BlocProvider(
-      create: (context) => GroupBloc()..add(LoadGroup()),
+      create: (context) => GroupBloc()..loadGroup(argGroupId),
       child: Scaffold(
         bottomNavigationBar: const GroupBottomNav(),
         body: BlocBuilder<GroupBloc, GroupState>(
@@ -35,4 +37,6 @@ class GroupPage extends StatelessWidget {
       ),
     );
   }
+
+  static String route = "group";
 }
