@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/extentions.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

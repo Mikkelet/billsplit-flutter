@@ -17,3 +17,5 @@ extension Sum on List<IndividualExpense> {
     return map((e) => e.expense).reduce((value, element) => value += element);
   }
 }
+
+typedef Json = Map<String, dynamic>;

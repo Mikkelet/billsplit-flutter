@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/extentions.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
 import 'package:flutter/material.dart';

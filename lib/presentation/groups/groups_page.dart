@@ -1,7 +1,5 @@
-import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/main.dart';
-import 'package:billsplit_flutter/presentation/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
+import 'package:billsplit_flutter/presentation/groups/widgets/group_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +8,6 @@ class GroupsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groups = [0, 1, 2, 3, 4, 5].map((e) => Group.mock(e));
     return Scaffold(
       body: BlocProvider(
         create: (context) => GroupsBloc()..loadGroups(),
@@ -19,29 +16,22 @@ class GroupsPage extends StatelessWidget {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }
-            return Column(
-              children: [
-                ...groups.map(
-                  (group) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(GroupPage.route,
-                              arguments: {"group_id": group.id});
-                        },
-                        child: Column(
-                          children: [
-                            Text(group.name),
-                            Text(group.createdBy.name),
-                          ],
-                        ),
+            if (state is GroupsLoaded) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(height: 80),
+                    ...state.groups.map(
+                      (group) => Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: GroupView(group: group),
                       ),
-                    ),
-                  ),
-                )
-              ],
-            );
+                    )
+                  ],
+                ),
+              );
+            }
+            return const Placeholder();
           },
         ),
       ),
