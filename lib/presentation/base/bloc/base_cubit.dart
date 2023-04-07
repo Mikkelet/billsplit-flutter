@@ -11,6 +11,7 @@ abstract class BaseCubit extends Cubit<BaseState> {
   }
 
   void showError(Exception err){
+    print(err);
     emit(Failure(err));
   }
 

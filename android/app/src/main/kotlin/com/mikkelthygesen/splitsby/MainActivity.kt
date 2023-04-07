@@ -1,4 +1,4 @@
-package com.example.billsplit_flutter
+package com.mikkelthygesen.splitsby
 
 import io.flutter.embedding.android.FlutterActivity
 

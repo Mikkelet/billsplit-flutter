@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.billsplit_flutter">
+    package="com.mikkelthygesen.splitsby">
    <application
         android:label="billsplit_flutter"
         android:name="${applicationName}"

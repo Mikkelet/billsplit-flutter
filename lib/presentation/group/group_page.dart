@@ -1,3 +1,6 @@
+import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/events_view.dart';
@@ -24,10 +27,13 @@ class GroupPage extends StatelessWidget {
           },
         ),
         bottomNavigationBar: const GroupBottomNav(),
-        body: BlocBuilder<GroupBloc, GroupState>(
+        body: BlocBuilder<GroupBloc, BaseState>(
           builder: (context, state) {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (state is Failure) {
+              return Center(child: Text(state.error.toString()));
             }
             if (state is GroupLoaded) {
               Widget widget;
@@ -60,8 +66,11 @@ class GroupPage extends StatelessWidget {
   }
 
   _onFabClicked(BuildContext context) {
-    Navigator.of(context).pushNamed("add_expense");
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const AddExpensePage()));
   }
 
-  static String route = "group";
+  static Route getRoute(Group group) => MaterialPageRoute(
+      builder: (context) => const GroupPage(),
+      settings: RouteSettings(arguments: {"group_id": group.id}));
 }

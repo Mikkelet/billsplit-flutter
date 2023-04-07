@@ -37,7 +37,6 @@ class GroupView extends StatelessWidget {
   }
 
   void _onClick(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(GroupPage.route, arguments: {"group_id": group.id});
+    Navigator.of(context).push(GroupPage.getRoute(group));
   }
 }

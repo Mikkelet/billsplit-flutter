@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class GroupBottomNav extends StatefulWidget {
 class _GroupBottomNavState extends State<GroupBottomNav> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GroupBloc, GroupState>(builder: (context, state) {
+    return BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
       if (state is GroupLoaded) {
         return BottomNavigationBar(
             currentIndex: state.nav.index,

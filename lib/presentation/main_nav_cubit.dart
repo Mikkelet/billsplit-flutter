@@ -1,42 +1,29 @@
-import 'package:billsplit_flutter/domain/models/event.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:billsplit_flutter/domain/use_cases/observe_auth_state_usecase.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
+import 'package:billsplit_flutter/domain/use_cases/initialize_auth_usecase.dart';
 
-import '../domain/models/group.dart';
+import 'base/bloc/base_state.dart';
 
-class MainNavState {}
+class MainCubit extends BaseCubit {
+  final _observeAuthStateUseCase = ObserveAuthStateUseCase();
+  final _initializeAuthUseCase = InitializeAuthUseCase();
 
-class ShowLoading extends MainNavState {}
+  MainCubit() : super.withState(Loading());
 
-class ShowGroups extends MainNavState {
-  final List<Group> groups;
-
-  ShowGroups(this.groups);
-}
-
-class ShowGroup extends MainNavState {
-  final Group group;
-
-  ShowGroup(this.group);
-}
-
-class ShowAddExpense extends MainNavState {
-  final GroupExpense groupExpense;
-
-  ShowAddExpense(this.groupExpense);
-
-  ShowAddExpense.newExpense() : this(GroupExpense.dummy(0));
-}
-
-class MainNavCubit extends Cubit<MainNavState> {
-  MainNavCubit() : super(ShowLoading());
-
-  void showGroups() async {
-    emit(ShowLoading());
-    await Future.delayed(const Duration(seconds: 2));
-    emit(ShowGroups([0, 1, 2, 3, 4, 5].map((e) => Group.mock(e)).toList()));
+  Stream<String?> observeAuthState() {
+    return _observeAuthStateUseCase.observe();
   }
 
-  void showGroup(Group group) {
-    emit(ShowGroup(group));
+  void initialize() {
+    showLoading();
+    _initializeAuthUseCase.initialize().then((value) {
+      showGroups();
+    }).catchError((err) {
+      showError(err);
+    });
+  }
+
+  void showGroups() async {
+    emit(Main());
   }
 }

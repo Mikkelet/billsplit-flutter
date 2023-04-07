@@ -12,7 +12,7 @@ class GetGroupUseCase {
     print(response.events);
     print(response.services);
     return {
-      "groups": response.group.toGroup(),
+      "group": response.group.toGroup(),
       "events": response.events.toEvents(),
       "services": response.services.toServices()
     };
