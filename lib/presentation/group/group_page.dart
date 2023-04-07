@@ -26,29 +26,27 @@ class GroupPage extends StatelessWidget {
         bottomNavigationBar: const GroupBottomNav(),
         body: BlocBuilder<GroupBloc, GroupState>(
           builder: (context, state) {
-            print("qqq state=${state.runtimeType}");
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is GroupLoaded) {
               Widget widget;
-              switch (state.navIndex) {
-                case 1:
+              switch (state.nav) {
+                case GroupPageNav.services:
                   widget = ServicesView(services: state.services);
                   break;
-                case 2:
+                case GroupPageNav.debt:
                   widget = const Placeholder();
                   break;
                 default:
                   widget = EventsView(events: state.events);
                   break;
               }
-              print("qqq widget=${widget.runtimeType}");
               return WillPopScope(
                   child: widget,
                   onWillPop: () async {
-                    if (state.navIndex != 0) {
-                      context.read<GroupBloc>().showPage(0);
+                    if (state.nav != GroupPageNav.events) {
+                      context.read<GroupBloc>().showEvents();
                       return false;
                     }
                     return true;

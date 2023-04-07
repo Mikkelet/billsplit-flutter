@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/group/bloc/group_event.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,26 +13,28 @@ class GroupBottomNav extends StatefulWidget {
 class _GroupBottomNavState extends State<GroupBottomNav> {
   @override
   Widget build(BuildContext context) {
-    final groupState = context.read<GroupBloc>().state;
-    if (groupState is GroupLoaded) {
-      final selectedIndex = groupState.navIndex;
-      return BottomNavigationBar(
-          currentIndex: selectedIndex,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.add), label: "Events"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.ac_unit), label: "Services"),
-            BottomNavigationBarItem(icon: Icon(Icons.ad_units), label: "Debt"),
-          ],
-          onTap: (index) {
-            _onItemSelected(context, index);
-          });
-    } else {
-      return Container();
-    }
+    return BlocBuilder<GroupBloc, GroupState>(builder: (context, state) {
+      if (state is GroupLoaded) {
+        return BottomNavigationBar(
+            currentIndex: state.nav.index,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.add), label: "Events"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.ac_unit), label: "Services"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.ad_units), label: "Debt"),
+            ],
+            onTap: (index) {
+              _onItemSelected(context, index);
+            });
+      } else {
+        return Container();
+      }
+    });
   }
 
   void _onItemSelected(BuildContext context, int index) {
-    context.read<GroupBloc>().showPage(index);
+    final cubit = context.read<GroupBloc>();
+    cubit.showPage(GroupPageNav.fromIndex(index));
   }
 }

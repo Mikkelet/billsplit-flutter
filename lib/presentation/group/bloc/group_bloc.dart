@@ -11,7 +11,7 @@ class GroupBloc extends Cubit<GroupState> {
   late final Group _group;
   late final List<Event> _events;
   late final List<SubscriptionService> _services;
-  int _navIndex = 0;
+  GroupPageNav _navIndex = GroupPageNav.events;
 
   GroupBloc() : super(Loading());
 
@@ -19,11 +19,11 @@ class GroupBloc extends Cubit<GroupState> {
     emit(Loading());
     final response = await getGroupUseCase.launch(groupId).execute();
     response.foldResponse(onSuccess: (data) {
-      if(data is Map) {
+      if (data is Map) {
         _group = data["groups"];
         _events = data["events"];
         _services = data["services"];
-        emit(GroupLoaded(_group, _events, 0, _services));
+        emit(GroupLoaded(_group, _events, _navIndex, _services));
       }
     }, onFailure: (err) {
       emit(LoadingFailed());
@@ -31,8 +31,14 @@ class GroupBloc extends Cubit<GroupState> {
     });
   }
 
-  void showPage(int index) {
-    _navIndex = index;
+  void showEvents() => showPage(GroupPageNav.events);
+
+  void showServices() => showPage(GroupPageNav.services);
+
+  void showDebt() => showPage(GroupPageNav.events);
+
+  void showPage(GroupPageNav nav) {
+    _navIndex = nav;
     final newState = GroupLoaded(_group, _events, _navIndex, _services);
     emit(newState);
   }
