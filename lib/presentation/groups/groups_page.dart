@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_state.dart';
 import 'package:billsplit_flutter/presentation/groups/widgets/group_view.dart';
@@ -12,10 +13,13 @@ class GroupsPage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => GroupsBloc()..loadGroups(),
-        child: BlocBuilder<GroupsBloc, GroupsState>(
+        child: BlocBuilder<GroupsBloc, BaseState>(
           builder: (context, state) {
-            if (state is LoadingState) {
+            if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (state is Failure) {
+              return Center(child: Text(state.error.toString()));
             }
             if (state is GroupsLoadedState) {
               return SingleChildScrollView(
@@ -30,11 +34,6 @@ class GroupsPage extends StatelessWidget {
                     )
                   ],
                 ),
-              );
-            }
-            if(state is FailureState){
-              return Center(
-                child: Text(state.exception.toString()),
               );
             }
             return const Placeholder();

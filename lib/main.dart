@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
               builder: (context, snapshot) {
                 final uid = snapshot.data;
                 if (uid == null) {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                   return const LandingPage();
                 }
                 return const GroupsPage();

@@ -19,55 +19,70 @@ class GroupPage extends StatelessWidget {
     final argGroupId = args["group_id"] ?? "";
     return BlocProvider(
       create: (context) => GroupBloc()..loadGroup(argGroupId),
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            _onFabClicked(context);
-          },
-        ),
-        bottomNavigationBar: const GroupBottomNav(),
-        body: BlocBuilder<GroupBloc, BaseState>(
-          builder: (context, state) {
-            if (state is Loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state is Failure) {
-              return Center(child: Text(state.error.toString()));
-            }
-            if (state is GroupLoaded) {
-              Widget widget;
-              switch (state.nav) {
-                case GroupPageNav.services:
-                  widget = ServicesView(services: state.services);
-                  break;
-                case GroupPageNav.debt:
-                  widget = const Placeholder();
-                  break;
-                default:
-                  widget = EventsView(events: state.events);
-                  break;
+      child: BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              _onFabClicked(context);
+            },
+          ),
+          appBar: AppBar(
+              leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    _onBackButtonPressed(state, context);
+                  })),
+          bottomNavigationBar: const GroupBottomNav(),
+          body: Builder(
+            builder: (context) {
+              if (state is Loading) {
+                return const Center(child: CircularProgressIndicator());
               }
-              return WillPopScope(
-                  child: widget,
-                  onWillPop: () async {
-                    if (state.nav != GroupPageNav.events) {
-                      context.read<GroupBloc>().showEvents();
-                      return false;
-                    }
-                    return true;
-                  });
-            }
-            return const Placeholder();
-          },
-        ),
-      ),
+              if (state is Failure) {
+                return Center(child: Text(state.error.toString()));
+              }
+              if (state is GroupLoaded) {
+                Widget widget;
+                switch (state.nav) {
+                  case GroupPageNav.services:
+                    widget = ServicesView(services: state.services);
+                    break;
+                  case GroupPageNav.debt:
+                    widget = const Placeholder();
+                    break;
+                  default:
+                    widget = EventsView(events: state.events);
+                    break;
+                }
+                return WillPopScope(
+                    child: widget,
+                    onWillPop: () async {
+                      if (state.nav != GroupPageNav.events) {
+                        context.read<GroupBloc>().showEvents();
+                        return false;
+                      }
+                      return true;
+                    });
+              }
+              return const Placeholder();
+            },
+          ),
+        );
+      }),
     );
   }
 
   _onFabClicked(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const AddExpensePage()));
+    Navigator.of(context).push(AddExpensePage.getRoute(null));
+  }
+
+  _onBackButtonPressed(BaseState state, BuildContext context) {
+    if (state is GroupLoaded && state.nav != GroupPageNav.events) {
+      context.read<GroupBloc>().showEvents();
+    } else {
+      Navigator.of(context).pop();
+    }
   }
 
   static Route getRoute(Group group) => MaterialPageRoute(

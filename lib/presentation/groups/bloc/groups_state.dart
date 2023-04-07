@@ -1,17 +1,8 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
-abstract class GroupsState {}
-
-class GroupsLoadedState extends GroupsState {
+class GroupsLoadedState extends BaseState {
   final List<Group> groups;
 
   GroupsLoadedState(this.groups);
 }
-
-class FailureState extends GroupsState {
-  final Exception exception;
-
-  FailureState(this.exception);
-}
-
-class LoadingState extends GroupsState {}

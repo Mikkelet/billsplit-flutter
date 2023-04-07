@@ -13,6 +13,7 @@ class SignInView extends StatelessWidget {
     return Center(
       child: Column(
         children: [
+          Container(height: 120),
           TextField(controller: emailFieldController),
           TextField(controller: passwordFieldController),
           ElevatedButton(

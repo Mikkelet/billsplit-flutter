@@ -1,4 +1,3 @@
-
 import 'package:billsplit_flutter/domain/models/person.dart';
 
 class IndividualExpense {
@@ -8,6 +7,9 @@ class IndividualExpense {
 
   IndividualExpense(
       {required this.person, this.expense = 0, this.isParticipant = false});
+
+  IndividualExpense.sharedExpense(num sharedExpense)
+      : this(person: Person("", "Shared", ""), expense: sharedExpense);
 
   @override
   String toString() {

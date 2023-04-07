@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/domain/mappers/service_mapper.dart';
 class GetGroupUseCase {
   final _apiService = ApiService();
 
-  Future<Map<String, dynamic>> launch(String groupId) async {
+  Future<Map<String, dynamic>>  launch(String groupId) async {
     final response = await _apiService.getGroup(groupId);
     print(response.group);
     print(response.events);

@@ -16,7 +16,7 @@ class GroupBloc extends BaseCubit {
   GroupBloc() : super.withState(Loading());
 
   void loadGroup(String groupId) async {
-    emit(Loading());
+    showLoading();
     getGroupUseCase.launch(groupId).then((value) {
       _group = value["group"];
       _services = value["services"];
