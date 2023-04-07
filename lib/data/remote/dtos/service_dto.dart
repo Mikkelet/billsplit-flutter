@@ -10,10 +10,11 @@ class ServiceDTO {
   final String name;
   final String imageUrl;
   final num monthlyExpense;
+  final PersonDTO payer;
   final PersonDTO createdBy;
   final List<PersonDTO> participants;
 
-  ServiceDTO(this.id, this.name, this.imageUrl, this.monthlyExpense, this.createdBy, this.participants);
+  ServiceDTO(this.id, this.name, this.imageUrl, this.monthlyExpense, this.createdBy, this.participants, this.payer);
 
   factory ServiceDTO.fromJson(Json json) => _$ServiceDTOFromJson(json);
 

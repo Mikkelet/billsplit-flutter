@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/models/expense_holder.dart';
+import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/group/group_page.dart';
@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "/",
         routes: {
           "/": (context) => const GroupsPage(),
+          "add_expense": (context) => const AddExpensePage(),
           "group": (context) => const GroupPage(),
           NavRoute.loading.name: (context) =>
               const Center(child: CircularProgressIndicator()),

@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_event.dart';
+import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,26 +12,28 @@ class GroupBottomNav extends StatefulWidget {
 }
 
 class _GroupBottomNavState extends State<GroupBottomNav> {
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Events"),
-          BottomNavigationBarItem(icon: Icon(Icons.ac_unit), label: "Services"),
-          BottomNavigationBarItem(icon: Icon(Icons.ad_units), label: "Debt"),
-        ],
-        onTap: (index) {
-          _onItemSelected(context, index);
-        });
+    final groupState = context.read<GroupBloc>().state;
+    if (groupState is GroupLoaded) {
+      final selectedIndex = groupState.navIndex;
+      return BottomNavigationBar(
+          currentIndex: selectedIndex,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.add), label: "Events"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.ac_unit), label: "Services"),
+            BottomNavigationBarItem(icon: Icon(Icons.ad_units), label: "Debt"),
+          ],
+          onTap: (index) {
+            _onItemSelected(context, index);
+          });
+    } else {
+      return Container();
+    }
   }
 
   void _onItemSelected(BuildContext context, int index) {
-    setState(() {
-      _selectedIndex = index;
-      context.read<GroupBloc>().showPage(_selectedIndex);
-    });
+    context.read<GroupBloc>().showPage(index);
   }
 }

@@ -1,37 +1,39 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/domain/models/subscription_service.dart';
+import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/utils/response.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupBloc extends Cubit<GroupState> {
+  final getGroupUseCase = GetGroupUseCase();
   late final Group _group;
-  final List<Event> _events = [
-    ...[0, 1, 2, 3, 5].mapToImmutableList((e) => GroupExpense.dummy(e))
-  ];
+  late final List<Event> _events;
+  late final List<SubscriptionService> _services;
   int _navIndex = 0;
 
   GroupBloc() : super(Loading());
 
   void loadGroup(String groupId) async {
     emit(Loading());
-    await Future.delayed(const Duration(seconds: 2));
-    _group = Group(
-      id: groupId,
-      name: "GroupName",
-      people: [],
-      createdBy: Person.dummy(0),
-      timestamp: 0,
-      debts: [],
-      latestEvent: null
-    );
-    emit(GroupLoaded(_group, _events, 0));
+    final response = await getGroupUseCase.launch(groupId).execute();
+    response.foldResponse(onSuccess: (data) {
+      if(data is Map) {
+        _group = data["groups"];
+        _events = data["events"];
+        _services = data["services"];
+        emit(GroupLoaded(_group, _events, 0, _services));
+      }
+    }, onFailure: (err) {
+      emit(LoadingFailed());
+      print("qqq error=$err");
+    });
   }
 
-  void showPage(int index){
+  void showPage(int index) {
     _navIndex = index;
-    final newState = GroupLoaded(_group, _events, _navIndex);
+    final newState = GroupLoaded(_group, _events, _navIndex, _services);
     emit(newState);
   }
 }

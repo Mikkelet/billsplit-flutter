@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/models/expense_holder.dart';
+import '../../../domain/models/individual_expense.dart';
 import '../../../domain/models/person.dart';
 import 'add_expense_event.dart';
 

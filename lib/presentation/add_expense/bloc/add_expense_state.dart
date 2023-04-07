@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/models/expense_holder.dart';
+import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:flutter/foundation.dart';
 

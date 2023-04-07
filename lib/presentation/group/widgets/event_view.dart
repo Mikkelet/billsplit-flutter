@@ -12,6 +12,7 @@ class EventView extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(children: [
         Text("Event ${event.id}"),
+        event is GroupExpense ? Text("Expense \$${(event as GroupExpense).getTotal()}") : Container(),
         Text("Created by ${event.createdBy.name}"),
       ]),
     );

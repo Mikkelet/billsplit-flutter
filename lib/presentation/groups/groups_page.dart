@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
+import 'package:billsplit_flutter/presentation/groups/bloc/groups_state.dart';
 import 'package:billsplit_flutter/presentation/groups/widgets/group_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,10 +14,10 @@ class GroupsPage extends StatelessWidget {
         create: (context) => GroupsBloc()..loadGroups(),
         child: BlocBuilder<GroupsBloc, GroupsState>(
           builder: (context, state) {
-            if (state is Loading) {
+            if (state is LoadingState) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (state is GroupsLoaded) {
+            if (state is GroupsLoadedState) {
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -29,6 +30,11 @@ class GroupsPage extends StatelessWidget {
                     )
                   ],
                 ),
+              );
+            }
+            if(state is FailureState){
+              return Center(
+                child: Text(state.exception.toString()),
               );
             }
             return const Placeholder();

@@ -10,27 +10,34 @@ class GroupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+      child: Center(
+        child: MaterialButton(
+          onPressed: () => _onClick(context),
+          minWidth: double.infinity,
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           color: Colors.cyan,
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .pushNamed(GroupPage.route, arguments: {"group_id": group.id});
-          },
-          child: Column(
-            children: [
-              Text(group.name),
-              Text(group.createdBy.name),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                children: [
+                  Text(group.name),
+                  Text(group.createdBy.name),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void _onClick(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(GroupPage.route, arguments: {"group_id": group.id});
   }
 }

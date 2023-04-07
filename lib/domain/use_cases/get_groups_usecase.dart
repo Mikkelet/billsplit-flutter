@@ -7,6 +7,6 @@ class GetGroupsUseCase {
 
   Future<List<Group>> launch() async {
     final response = await _apiService.getGroups();
-    return response.toGroups();
+    return response.groups.toGroups();
   }
 }

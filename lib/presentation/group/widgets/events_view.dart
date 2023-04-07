@@ -16,11 +16,14 @@ class EventsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>().state as GroupLoaded;
     return Center(
-      child: Column(
-        children: [
-          Text("ID: ${cubit.group.id}"),
-          ...events.mapToImmutableList((event) => EventView(event: event))
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(height: 80,),
+            Text("group: ${cubit.group.id}"),
+            ...events.mapToImmutableList((event) => EventView(event: event))
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'domain/models/expense_holder.dart';
+import 'domain/models/individual_expense.dart';
 
 extension IterableExt<T> on Iterable<T> {
   List<T> toImmutableList() {
