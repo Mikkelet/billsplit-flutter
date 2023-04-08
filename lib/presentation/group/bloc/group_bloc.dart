@@ -8,7 +8,7 @@ import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 
 class GroupBloc extends BaseCubit {
   final getGroupUseCase = GetGroupUseCase();
-  late final Group _group;
+  late final Group group;
   late final List<Event> _events;
   late final List<SubscriptionService> _services;
   GroupPageNav _navIndex = GroupPageNav.events;
@@ -18,7 +18,7 @@ class GroupBloc extends BaseCubit {
   void loadGroup(String groupId) async {
     showLoading();
     getGroupUseCase.launch(groupId).then((value) {
-      _group = value["group"];
+      group = value["group"];
       _services = value["services"];
       _events = value["events"];
       showPage(_navIndex);
@@ -35,7 +35,7 @@ class GroupBloc extends BaseCubit {
 
   void showPage(GroupPageNav nav) {
     _navIndex = nav;
-    final newState = GroupLoaded(_group, _events, _navIndex, _services);
+    final newState = GroupLoaded(group, _events, _navIndex, _services);
     emit(newState);
   }
 }

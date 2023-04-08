@@ -1,6 +1,8 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
+import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventView extends StatelessWidget {
   final Event event;
@@ -12,8 +14,9 @@ class EventView extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (event is GroupExpense) {
+          final group = context.read<GroupBloc>().group;
           Navigator.of(context)
-              .push(AddExpensePage.getRoute(event as GroupExpense));
+              .push(AddExpensePage.getRoute(group, event as GroupExpense));
         }
       },
       child: Padding(

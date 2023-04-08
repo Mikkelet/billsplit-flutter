@@ -51,13 +51,13 @@ class GroupExpense extends Event {
             sharedExpense: 0,
             timestamp: 0);
 
-  GroupExpense.newExpense()
+  GroupExpense.newExpense(List<Person> people)
       : this(
             id: "",
             createdBy: Person.dummy(0),
             description: "",
-            individualExpenses: [],
+            individualExpenses: people.map((e) => IndividualExpense(person: e)).toList(),
             payer: Person.dummy(0),
             sharedExpense: 0,
-            timestamp: 0);
+            timestamp: DateTime.now().millisecond);
 }

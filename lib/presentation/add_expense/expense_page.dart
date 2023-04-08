@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
@@ -13,7 +14,8 @@ class AddExpensePage extends StatelessWidget {
   AddExpensePage({super.key, required GroupExpense groupExpense})
       : expense = groupExpense;
 
-  AddExpensePage.newExpense({super.key}) : expense = GroupExpense.newExpense();
+  AddExpensePage.newExpense(Group group, {super.key})
+      : expense = GroupExpense.newExpense(group.people);
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +46,10 @@ class AddExpensePage extends StatelessWidget {
     );
   }
 
-  static Route getRoute(GroupExpense? expense) {
+  static Route getRoute(Group group, GroupExpense? expense) {
     if (expense == null) {
       return MaterialPageRoute(
-          builder: (context) => AddExpensePage.newExpense());
+          builder: (context) => AddExpensePage.newExpense(group));
     } else {
       return MaterialPageRoute(
           builder: (context) => AddExpensePage(groupExpense: expense));

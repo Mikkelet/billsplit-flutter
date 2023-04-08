@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupPage extends StatelessWidget {
-  const GroupPage({Key? key}) : super(key: key);
+  final Group group;
+  const GroupPage({Key? key, required this.group}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class GroupPage extends StatelessWidget {
   }
 
   _onFabClicked(BuildContext context) {
-    Navigator.of(context).push(AddExpensePage.getRoute(null));
+    Navigator.of(context).push(AddExpensePage.getRoute(group, null));
   }
 
   _onBackButtonPressed(BaseState state, BuildContext context) {
@@ -86,6 +87,6 @@ class GroupPage extends StatelessWidget {
   }
 
   static Route getRoute(Group group) => MaterialPageRoute(
-      builder: (context) => const GroupPage(),
+      builder: (context) => GroupPage(group: group),
       settings: RouteSettings(arguments: {"group_id": group.id}));
 }
