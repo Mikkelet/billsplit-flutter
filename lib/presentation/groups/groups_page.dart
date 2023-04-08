@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_state.dart';
@@ -11,6 +12,12 @@ class GroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(AddGroupPage.getRoute());
+        },
+      ),
       body: BlocProvider(
         create: (context) => GroupsBloc()..loadGroups(),
         child: BlocBuilder<GroupsBloc, BaseState>(

@@ -6,7 +6,7 @@ import 'individual_expense_dto.dart';
 
 part 'event_dto.g.dart';
 
-@JsonSerializable(createToJson: false, createFactory: false)
+@JsonSerializable()
 class EventDTO { // cannot be abstract because of json serializer
   final String type;
   final String id;
