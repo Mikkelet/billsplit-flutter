@@ -16,10 +16,9 @@ class GroupView extends StatelessWidget {
         child: MaterialButton(
           onPressed: () => _onClick(context),
           minWidth: double.infinity,
-          elevation: 0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          color: Colors.cyan,
+          color: Theme.of(context).primaryColor,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Center(

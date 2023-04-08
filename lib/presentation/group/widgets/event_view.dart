@@ -13,11 +13,7 @@ class EventView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (event is GroupExpense) {
-          final group = context.read<GroupBloc>().group;
-          Navigator.of(context)
-              .push(AddExpensePage.getRoute(group, event as GroupExpense));
-        }
+        _onTap(context);
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -30,5 +26,13 @@ class EventView extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  _onTap(BuildContext context) {
+    if (event is GroupExpense) {
+      final group = context.read<GroupBloc>().group;
+      Navigator.of(context)
+          .push(AddExpensePage.getRoute(group, event as GroupExpense));
+    }
   }
 }

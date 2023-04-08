@@ -17,13 +17,18 @@ class EventsView extends StatelessWidget {
     final cubit = context.read<GroupBloc>().state as GroupLoaded;
     return Center(
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(height: 80,),
-            Text("group: ${cubit.group.id}"),
-            ...events.mapToImmutableList((event) => EventView(event: event))
-          ],
-        ),
+        child: Builder(builder: (context) {
+          if (events.isEmpty) return const Center(child: Text("No events"));
+          return Column(
+            children: [
+              Container(
+                height: 80,
+              ),
+              Text("group: ${cubit.group.id}"),
+              ...events.mapToImmutableList((event) => EventView(event: event))
+            ],
+          );
+        }),
       ),
     );
   }

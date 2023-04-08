@@ -15,11 +15,8 @@ class GroupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    final argGroupId = args["group_id"] ?? "";
     return BlocProvider(
-      create: (context) => GroupBloc()..loadGroup(argGroupId),
+      create: (context) => GroupBloc(group)..loadGroup(),
       child: BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
@@ -29,6 +26,7 @@ class GroupPage extends StatelessWidget {
             },
           ),
           appBar: AppBar(
+            title: Text(group.name),
               leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {

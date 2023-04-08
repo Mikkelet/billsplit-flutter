@@ -66,7 +66,11 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
     final text = textController.text;
 
     // prevents numbers starting with 0
-    if (text.startsWith("0") && text.length > 1) {
+    if (text.isEmpty) {
+      textController.text = "0";
+      textController.selection =
+          TextSelection.collapsed(offset: textController.text.length);
+    } else if (text.startsWith("0") && text.length > 1) {
       textController.text = text.replaceFirst("0", "");
       textController.selection =
           TextSelection.collapsed(offset: textController.text.length);

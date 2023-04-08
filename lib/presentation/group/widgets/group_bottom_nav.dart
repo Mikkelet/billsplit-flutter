@@ -15,9 +15,12 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
-      if (state is GroupLoaded) {
-        return BottomNavigationBar(
-            currentIndex: state.nav.index,
+      int navIndex = 0;
+      if(state is GroupLoaded){
+        navIndex = state.nav.index;
+      }
+      return BottomNavigationBar(
+            currentIndex: navIndex,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.add), label: "Events"),
               BottomNavigationBarItem(
@@ -28,9 +31,6 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
             onTap: (index) {
               _onItemSelected(context, index);
             });
-      } else {
-        return Container();
-      }
     });
   }
 
