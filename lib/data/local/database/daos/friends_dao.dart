@@ -9,12 +9,13 @@ class FriendsDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$FriendsDAOMixin {
   FriendsDAO(SplitsbyDatabase db) : super(db);
 
-  Future insert(FriendDb expense) => into(friendsTable).insert(expense);
+  Future insert(FriendDb expense) =>
+      into(friendsTable).insert(expense, mode: InsertMode.insertOrReplace);
 
-  Future insertAll(List<FriendDb> expenses) =>
-      batch((batch) => batch.insertAll(friendsTable, expenses));
+  Future insertAll(Iterable<FriendDb> expenses) => batch((batch) => batch
+      .insertAll(friendsTable, expenses, mode: InsertMode.insertOrReplace));
 
-  Stream<List<FriendDb>> watch(String groupId) {
+  Stream<Iterable<FriendDb>> watch() {
     return select(friendsTable).watch();
   }
 

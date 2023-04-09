@@ -10,7 +10,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 
 class GroupBloc extends BaseCubit {
-  final getGroupUseCase = GetGroupUseCase();
+  final _getGroupUseCase = GetGroupUseCase();
   final _observeEventsUseCase = ObserveEventsUseCase();
   final _observeServicesUseCase = ObserveServicesUseCase();
 
@@ -36,7 +36,7 @@ class GroupBloc extends BaseCubit {
   }
 
   void loadGroup() async {
-    getGroupUseCase.launch(group.id).catchError((err) {
+    _getGroupUseCase.launch(group.id).catchError((err) {
       showError(err);
       return Map<String, dynamic>.identity();
     });
