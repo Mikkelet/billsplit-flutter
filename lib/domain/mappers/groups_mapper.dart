@@ -7,8 +7,8 @@ import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 
-extension GroupDtosExt on List<GroupDTO> {
-  List<Group> toGroups() {
+extension GroupDtosExt on Iterable<GroupDTO> {
+  Iterable<Group> toGroups() {
     return map((e) => e.toGroup()).toList();
   }
 
@@ -44,7 +44,7 @@ extension GroupExt on Group {
 }
 
 extension GroupDbsExt on List<GroupDb> {
-  List<Group> toGroups() => map((e) => e.toGroup()).toList();
+  Iterable<Group> toGroups() => map((e) => e.toGroup()).toList();
 }
 
 extension GroupDbExt on GroupDb {

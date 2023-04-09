@@ -10,7 +10,7 @@ class GroupsBloc extends BaseCubit {
   GroupsBloc() : super();
 
   Stream<Iterable<Group>> getGroupStream() =>
-      _observeGroupsUseCase.observe().map((event) => event
+      _observeGroupsUseCase.observe().map((event) => event.toList()
         ..sort(
           (a, b) {
             final aTimestamp = a.latestEvent?.timestamp ?? 0;

@@ -5,7 +5,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 class ObserveGroupsUseCase {
   final _database = SplitsbyDatabase.instance;
 
-  Stream<List<Group>> observe() {
+  Stream<Iterable<Group>> observe() {
     return _database.groupsDAO.watchGroups().map((event) => event.toGroups());
   }
 }

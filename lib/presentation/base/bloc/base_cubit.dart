@@ -7,20 +7,20 @@ abstract class BaseCubit extends Cubit<BaseState> {
 
   BaseCubit.withState(super.initialState) : super();
 
-  void showLoading(){
+  void showLoading() {
     emit(Loading());
   }
 
-  void showError(dynamic err){
-    print(err);
-    if(err is Error){
+  void showError(dynamic err) {
+    if (err is Error) {
+      print(err);
       print((err as Error).stackTrace);
-    }
-    if(err is DriftRemoteException){
+    } else if (err is DriftRemoteException) {
       print(err.remoteCause);
       print(err.remoteStackTrace);
+    } else {
+      print(err);
     }
     emit(Failure(Exception(err)));
   }
-
 }

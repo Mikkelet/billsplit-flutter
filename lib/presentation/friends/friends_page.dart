@@ -12,7 +12,9 @@ class FriendsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => FriendsCubit()..getFriends(),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: const BackButton(),
+        ),
         body: Builder(
           builder: (context) {
             final cubit = context.read<FriendsCubit>();

@@ -6,8 +6,8 @@ import 'package:billsplit_flutter/domain/mappers/individual_expense_mapper.dart'
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 
-extension GroupExpensesDtoExt on List<GroupExpenseDTO> {
-  List<GroupExpenseDb> toDb(String groupId) =>
+extension GroupExpensesDtoExt on Iterable<GroupExpenseDTO> {
+  Iterable<GroupExpenseDb> toDb(String groupId) =>
       map((e) => e.toDb(groupId)).toList();
 }
 

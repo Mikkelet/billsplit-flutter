@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/domain/use_cases/sign_in_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/landing/bloc/landing_state.dart';
-import 'package:billsplit_flutter/presentation/utils/response.dart';
 
 class LandingBloc extends BaseCubit {
   final _signInUseCase = SignInUseCase();
@@ -9,10 +8,9 @@ class LandingBloc extends BaseCubit {
 
   void signIn(String email, String password) async {
     showLoading();
-    final response = await _signInUseCase.launch(email, password).execute();
-    response.foldResponse(onSuccess: (data) {
+    _signInUseCase.launch(email, password).then((data) {
       showLanding();
-    }, onFailure: (err) {
+    }).catchError((err) {
       print(err);
       showLanding();
     });

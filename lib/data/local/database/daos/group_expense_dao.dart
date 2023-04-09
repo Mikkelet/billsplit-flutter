@@ -12,11 +12,11 @@ class GroupExpenseDAO extends DatabaseAccessor<SplitsbyDatabase>
   Future insert(GroupExpenseDb expense) =>
       into(groupExpenseTable).insert(expense, mode: InsertMode.insertOrReplace);
 
-  Future insertAll(List<GroupExpenseDb> expenses) =>
+  Future insertAll(Iterable<GroupExpenseDb> expenses) =>
       batch((batch) => batch.insertAll(groupExpenseTable, expenses,
           mode: InsertMode.insertOrReplace));
 
-  Stream<List<GroupExpenseDb>> watch(String groupId) {
+  Stream<Iterable<GroupExpenseDb>> watch(String groupId) {
     return (select(groupExpenseTable)
           ..where((tbl) => tbl.groupId.equals(groupId)))
         .watch();

@@ -7,7 +7,7 @@ class GetGroupsUseCase {
   final _apiService = ApiService();
   final _database = SplitsbyDatabase.instance;
 
-  Future<List<Group>> launch() async {
+  Future<Iterable<Group>> launch() async {
     final response = await _apiService.getGroups();
     await _database.groupsDAO.clearTable();
     await _database.groupsDAO.insertGroups(response.groups.toDb());
