@@ -1,6 +1,4 @@
-import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
 enum GroupPageNav {
@@ -23,9 +21,7 @@ enum GroupPageNav {
 
 class GroupLoaded extends BaseState {
   final Group group;
-  final List<Event> events;
-  final List<SubscriptionService> services;
   final GroupPageNav nav;
 
-  GroupLoaded(this.group, this.events, this.nav, this.services);
+  GroupLoaded(this.group, this.nav);
 }

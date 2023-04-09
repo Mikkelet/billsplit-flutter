@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupPage extends StatelessWidget {
   final Group group;
+
   const GroupPage({Key? key, required this.group}) : super(key: key);
 
   @override
@@ -20,53 +21,45 @@ class GroupPage extends StatelessWidget {
       child: BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              _onFabClicked(context);
-            },
-          ),
+              child: const Icon(Icons.add),
+              onPressed: () {
+                _onFabClicked(context);
+              }),
           appBar: AppBar(
-            title: Text(group.name),
+              title: Text(group.name),
               leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     _onBackButtonPressed(state, context);
                   })),
           bottomNavigationBar: const GroupBottomNav(),
-          body: Builder(
-            builder: (context) {
-              if (state is Loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state is Failure) {
-                return Center(child: Text(state.error.toString()));
-              }
-              if (state is GroupLoaded) {
-                Widget widget;
+          body: Builder(builder: (context) {
+            if (state is Loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state is Failure) {
+              return Center(child: Text(state.error.toString()));
+            }
+            if (state is GroupLoaded) {
+              return WillPopScope(child: Builder(builder: (context) {
                 switch (state.nav) {
                   case GroupPageNav.services:
-                    widget = ServicesView(services: state.services);
-                    break;
+                    return const ServicesView();
                   case GroupPageNav.debt:
-                    widget = const Placeholder();
-                    break;
+                    return const Placeholder();
                   default:
-                    widget = EventsView(events: state.events);
-                    break;
+                    return const EventsView();
                 }
-                return WillPopScope(
-                    child: widget,
-                    onWillPop: () async {
-                      if (state.nav != GroupPageNav.events) {
-                        context.read<GroupBloc>().showEvents();
-                        return false;
-                      }
-                      return true;
-                    });
-              }
-              return const Placeholder();
-            },
-          ),
+              }), onWillPop: () async {
+                if (state.nav != GroupPageNav.events) {
+                  context.read<GroupBloc>().showEvents();
+                  return false;
+                }
+                return true;
+              });
+            }
+            return Container();
+          }),
         );
       }),
     );

@@ -7,42 +7,35 @@ import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 
 class GroupBloc extends BaseCubit {
   final getGroupUseCase = GetGroupUseCase();
-  final observeEventsUseCase = ObserveEventsUseCase();
-  final observeServicesUseCase = ObserveServicesUseCase();
+  final _observeEventsUseCase = ObserveEventsUseCase();
+  final _observeServicesUseCase = ObserveServicesUseCase();
 
-  StreamSubscription? _eventsStream;
   StreamSubscription? _servicesStream;
 
   final Group group;
-  List<Event> _events = [];
-  List<SubscriptionService> _services = [];
   GroupPageNav _navIndex = GroupPageNav.events;
 
-  GroupBloc(this.group) : super.withState(Loading()) {
-    _eventsStream = observeEventsUseCase.observe(group.id).listen((events) {
-      _events = events.toList();
-      showPage(_navIndex);
-    });
-    _servicesStream = observeServicesUseCase.observe(group.id).listen((event) {
-      _services = event.toList();
-      showPage(_navIndex);
-    });
-  }
+  GroupBloc(this.group)
+      : super.withState(GroupLoaded(group, GroupPageNav.events));
+
+  Stream<Iterable<Event>> getEventsStream() => _observeEventsUseCase
+      .observe(group.id);
+
+  Stream<Iterable<SubscriptionService>> getServicesStream() =>
+      _observeServicesUseCase
+          .observe(group.id);
 
   @override
   Future<void> close() {
-    _eventsStream?.cancel();
     _servicesStream?.cancel();
     return super.close();
   }
 
   void loadGroup() async {
-    showLoading();
     getGroupUseCase.launch(group.id).catchError((err) {
       showError(err);
       return Map<String, dynamic>.identity();
@@ -57,7 +50,7 @@ class GroupBloc extends BaseCubit {
 
   void showPage(GroupPageNav nav) {
     _navIndex = nav;
-    final newState = GroupLoaded(group, _events, _navIndex, _services);
+    final newState = GroupLoaded(group, _navIndex);
     emit(newState);
   }
 }
