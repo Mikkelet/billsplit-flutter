@@ -18,4 +18,8 @@ extension Sum on List<IndividualExpense> {
   }
 }
 
+extension MapExt<T> on Iterable<Iterable<T>> {
+  Iterable<T> flatMap() => reduce((value, element) => [...value, ...element]);
+}
+
 typedef Json = Map<String, dynamic>;

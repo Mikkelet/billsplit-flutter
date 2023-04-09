@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/models/Debt.dart';
+import 'package:billsplit_flutter/domain/models/debt.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 

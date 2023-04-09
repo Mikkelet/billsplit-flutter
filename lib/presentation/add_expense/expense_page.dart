@@ -9,12 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddExpensePage extends StatelessWidget {
   final GroupExpense expense;
+  final Group group;
   final textFieldController = TextEditingController(text: "");
 
-  AddExpensePage({super.key, required GroupExpense groupExpense})
+  AddExpensePage(
+      {super.key, required GroupExpense groupExpense, required this.group})
       : expense = groupExpense;
 
-  AddExpensePage.newExpense(Group group, {super.key})
+  AddExpensePage.newExpense(this.group, {super.key})
       : expense = GroupExpense.newExpense(group.people);
 
   @override
@@ -22,7 +24,7 @@ class AddExpensePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: BlocProvider(
-        create: (context) => AddExpenseBloc(expense),
+        create: (context) => AddExpenseBloc(group.id, expense),
         child:
             BlocBuilder<AddExpenseBloc, BaseState>(builder: (context, state) {
           if (state is Loading) {
@@ -53,7 +55,8 @@ class AddExpensePage extends StatelessWidget {
           builder: (context) => AddExpensePage.newExpense(group));
     } else {
       return MaterialPageRoute(
-          builder: (context) => AddExpensePage(groupExpense: expense));
+          builder: (context) =>
+              AddExpensePage(group: group, groupExpense: expense));
     }
   }
 }

@@ -6,6 +6,11 @@ import 'package:billsplit_flutter/domain/mappers/individual_expense_mapper.dart'
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 
+extension GroupExpensesDtoExt on List<GroupExpenseDTO> {
+  List<GroupExpenseDb> toDb(String groupId) =>
+      map((e) => e.toDb(groupId)).toList();
+}
+
 extension GroupExpenseDtoExt on GroupExpenseDTO {
   GroupExpenseDb toDb(String groupId) =>
       GroupExpenseDb(id: id, groupId: groupId, groupExpense: json.encode(this));
@@ -21,4 +26,13 @@ extension GroupExpenseDtoExt on GroupExpenseDTO {
           individualExpenses.map((e) => e.toExpense()).toList());
 }
 
+extension GroupExpensesDbExt on Iterable<GroupExpenseDb> {
+  Iterable<GroupExpense> toGroupExpenses() => map((e) => e.toGroupExpense());
+}
 
+extension GroupExpenseDbExt on GroupExpenseDb {
+  GroupExpenseDTO toDTO() =>
+      GroupExpenseDTO.fromJson(json.decode(groupExpense));
+
+  GroupExpense toGroupExpense() => toDTO().toGroupExpense();
+}

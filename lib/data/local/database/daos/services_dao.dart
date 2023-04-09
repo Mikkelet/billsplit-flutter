@@ -9,10 +9,10 @@ class ServicesDao extends DatabaseAccessor<SplitsbyDatabase>
     with _$ServicesDaoMixin {
   ServicesDao(SplitsbyDatabase db) : super(db);
 
-  Future insert(ServiceDb service) => into(servicesTable).insert(service);
+  Future insert(ServiceDb service) => into(servicesTable).insert(service, mode: InsertMode.insertOrReplace);
 
   Future insertAll(List<ServiceDb> expenses) =>
-      batch((batch) => batch.insertAll(servicesTable, expenses));
+      batch((batch) => batch.insertAll(servicesTable, expenses, mode: InsertMode.insertOrReplace));
 
   Stream<List<ServiceDb>> watch(String groupId) {
     return (select(servicesTable)..where((tbl) => tbl.groupId.equals(groupId)))

@@ -9,12 +9,13 @@ class PaymentsDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$PaymentsDAOMixin {
   PaymentsDAO(SplitsbyDatabase db) : super(db);
 
-  Future insert(PaymentDb payment) => into(paymentsTable).insert(payment);
+  Future insert(PaymentDb payment) =>
+      into(paymentsTable).insert(payment, mode: InsertMode.insertOrReplace);
 
-  Future insertAll(List<GroupExpenseDb> expenses) =>
-      batch((batch) => batch.insertAll(paymentsTable, expenses));
+  Future insertAll(Iterable<PaymentDb> expenses) => batch((batch) => batch
+      .insertAll(paymentsTable, expenses, mode: InsertMode.insertOrReplace));
 
-  Stream<List<PaymentDb>> watch(String groupId) {
+  Stream<Iterable<PaymentDb>> watch(String groupId) {
     return (select(paymentsTable)..where((tbl) => tbl.groupId.equals(groupId)))
         .watch();
   }

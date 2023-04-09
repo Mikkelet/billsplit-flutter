@@ -9,10 +9,11 @@ class GroupsDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$GroupsDAOMixin {
   GroupsDAO(SplitsbyDatabase db) : super(db);
 
-  Future<void> insertGroups(List<GroupDb> groups) =>
-      batch((batch) => batch.insertAll(groupsTable, groups));
+  Future<void> insertGroups(List<GroupDb> groups) => batch((batch) =>
+      batch.insertAll(groupsTable, groups, mode: InsertMode.insertOrReplace));
 
-  Future<void> insertGroup(GroupDb group) => into(groupsTable).insert(group);
+  Future<void> insertGroup(GroupDb group) =>
+      into(groupsTable).insert(group, mode: InsertMode.insertOrReplace);
 
   Future<void> clearTable() => delete(groupsTable).go();
 

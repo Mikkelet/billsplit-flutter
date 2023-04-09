@@ -5,10 +5,26 @@ import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 
+extension PaymentsDto on Iterable<PaymentDTO> {
+  List<PaymentDb> toDb(String groupId) => map((e) => e.toDb(groupId)).toList();
+
+  List<Payment> toPayments() => map((e) => e.toPayment()).toList();
+}
+
 extension PaymentDtoExt on PaymentDTO {
   PaymentDb toDb(String groupId) =>
       PaymentDb(id: id, groupId: groupId, payment: json.encode(this));
 
   Payment toPayment() =>
       Payment(id, createdBy.toPerson(), timeStamp, paidTo.toPerson(), amount);
+}
+
+extension PaymentsDbExt on Iterable<PaymentDb> {
+  Iterable<Payment> toPayments() => map((e) => e.toPayment());
+}
+
+extension PaymentDbExt on PaymentDb {
+  PaymentDTO toDTO() => PaymentDTO.fromJson(json.decode(payment));
+
+  Payment toPayment() => toDTO().toPayment();
 }

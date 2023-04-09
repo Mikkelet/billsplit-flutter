@@ -1,5 +1,5 @@
 import 'package:billsplit_flutter/data/remote/dtos/debts_dto.dart';
-import 'package:billsplit_flutter/domain/models/Debt.dart';
+import 'package:billsplit_flutter/domain/models/debt.dart';
 
 extension DebtExt on List<Debt> {
   List<DebtDTO> toDTOs() => map((e) => e.toDTO()).toList();

@@ -10,10 +10,11 @@ class GroupExpenseDAO extends DatabaseAccessor<SplitsbyDatabase>
   GroupExpenseDAO(SplitsbyDatabase db) : super(db);
 
   Future insert(GroupExpenseDb expense) =>
-      into(groupExpenseTable).insert(expense);
+      into(groupExpenseTable).insert(expense, mode: InsertMode.insertOrReplace);
 
   Future insertAll(List<GroupExpenseDb> expenses) =>
-      batch((batch) => batch.insertAll(groupExpenseTable, expenses));
+      batch((batch) => batch.insertAll(groupExpenseTable, expenses,
+          mode: InsertMode.insertOrReplace));
 
   Stream<List<GroupExpenseDb>> watch(String groupId) {
     return (select(groupExpenseTable)
