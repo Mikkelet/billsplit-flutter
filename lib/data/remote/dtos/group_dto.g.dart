@@ -7,17 +7,17 @@ part of 'group_dto.dart';
 // **************************************************************************
 
 GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
-      json['id'] as String,
-      json['name'] as String,
-      (json['people'] as List<dynamic>)
+      id: json['id'] as String,
+      name: json['name'] as String,
+      people: (json['people'] as List<dynamic>)
           .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
-      json['timeStamp'] as num,
-      (json['debts'] as List<dynamic>)
+      createdBy: PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
+      timeStamp: json['timeStamp'] as num,
+      debts: (json['debts'] as List<dynamic>)
           .map((e) => DebtDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['latestEvent'] == null
+      latestEvent: json['latestEvent'] == null
           ? null
           : EventDTO.fromJson(json['latestEvent'] as Map<String, dynamic>),
     );

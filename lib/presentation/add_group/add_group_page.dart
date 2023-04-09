@@ -9,7 +9,15 @@ class AddGroupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+
+              },
+              icon: const Icon(Icons.check))
+        ],
+      ),
       body: Column(
         children: [
           Container(height: 40),

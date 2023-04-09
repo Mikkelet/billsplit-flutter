@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/Debt.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 
@@ -8,7 +9,7 @@ class Group {
   final Person createdBy;
   final num timestamp;
   final Event? latestEvent;
-  final List<Map<String, num>> debts;
+  final List<Debt> debts;
 
   Group(
       {required this.id,

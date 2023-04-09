@@ -10,9 +10,12 @@ abstract class BaseCubit extends Cubit<BaseState> {
     emit(Loading());
   }
 
-  void showError(Exception err){
+  void showError(Error err){
     print(err);
-    emit(Failure(err));
+    if(err is Error){
+      print((err as Error).stackTrace);
+    }
+    emit(Failure(Exception(err)));
   }
 
 }

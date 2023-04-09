@@ -16,8 +16,14 @@ class GroupDTO {
   final List<DebtDTO> debts;
   final EventDTO? latestEvent;
 
-  GroupDTO(this.id, this.name, this.people, this.createdBy, this.timeStamp,
-      this.debts, this.latestEvent);
+  GroupDTO(
+      {required this.id,
+      required this.name,
+      required this.people,
+      required this.createdBy,
+      required this.timeStamp,
+      required this.debts,
+      required this.latestEvent});
 
   factory GroupDTO.fromJson(Json json) => _$GroupDTOFromJson(json);
 
