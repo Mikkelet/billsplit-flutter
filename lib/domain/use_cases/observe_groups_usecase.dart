@@ -6,6 +6,6 @@ class ObserveGroupsUseCase {
   final _database = SplitsbyDatabase.instance;
 
   Stream<List<Group>> observe() {
-    return _database.watchGroups().map((event) => event.toGroups());
+    return _database.groupsDAO.watchGroups().map((event) => event.toGroups());
   }
 }

@@ -7,6 +7,6 @@ class AddGroupUseCase {
 
   Future launch(Group group) async {
     final groupDb = group.toDb();
-    await _database.into(_database.groups).insert(groupDb);
+    await _database.groupsDAO.insertGroup(groupDb);
   }
 }
