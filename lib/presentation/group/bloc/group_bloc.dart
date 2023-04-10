@@ -18,8 +18,6 @@ class GroupBloc extends BaseCubit {
   final _observeServicesUseCase = ObserveServicesUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
 
-  StreamSubscription? _servicesStream;
-
   final Group group;
   GroupPageNav _navIndex = GroupPageNav.events;
 
@@ -34,12 +32,6 @@ class GroupBloc extends BaseCubit {
 
   Stream<Iterable<Pair<Person, num>>> getDebtsStream() =>
       _observeDebtsUseCase.observe(group.id);
-
-  @override
-  Future<void> close() {
-    _servicesStream?.cancel();
-    return super.close();
-  }
 
   void loadGroup() async {
     _getGroupUseCase.launch(group.id).catchError((err) {
