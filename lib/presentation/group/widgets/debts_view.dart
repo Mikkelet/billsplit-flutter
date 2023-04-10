@@ -20,9 +20,14 @@ class DebtsView extends StatelessWidget {
             style: TextStyle(color: Colors.grey),
           ),
         ),
-        listItem: (debt) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: DebtView(debt: debt),
-        ));
+        listItem: (debts) {
+          return ListView.builder(
+              itemCount: debts.length,
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: DebtView(debt: debts.toList()[index]),
+                  ));
+        });
   }
 }

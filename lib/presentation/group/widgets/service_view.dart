@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ServiceView extends StatelessWidget {
   final SubscriptionService service;
 
-  const ServiceView(this.service, {Key? key}) : super(key: key);
+  const   ServiceView(this.service, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

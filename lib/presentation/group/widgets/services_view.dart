@@ -11,15 +11,24 @@ class ServicesView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
     return DefaultStreamBuilder(
-        stream: cubit.getServicesStream(),
-        noData: const Padding(
-          padding: EdgeInsets.all(64.0),
-          child: Text(
-            "Subscription service expenses will be automatically added each month! Use this for monthly expenses like rent, streaming service, co-budget, etc",
-            textAlign: TextAlign.justify,
-            style: TextStyle(color: Colors.grey),
-          ),
+      stream: cubit.getServicesStream(),
+      noData: const Padding(
+        padding: EdgeInsets.all(64.0),
+        child: Text(
+          "Subscription service expenses will be automatically added each month! Use this for monthly expenses like rent, streaming service, co-budget, etc",
+          textAlign: TextAlign.justify,
+          style: TextStyle(color: Colors.grey),
         ),
-        listItem: (service) => ServiceView(service));
+      ),
+      listItem: (services) {
+        return ListView.builder(
+            itemCount: services.length,
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ServiceView(services.toList()[index]),
+                ));
+      },
+    );
   }
 }

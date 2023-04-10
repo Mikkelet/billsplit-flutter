@@ -19,9 +19,18 @@ class FriendsPage extends StatelessWidget {
           builder: (context) {
             final cubit = context.read<FriendsCubit>();
             return DefaultStreamBuilder(
-                stream: cubit.friendsStream(),
-                noData: const Text("No friends"),
-                listItem: (friend) => FriendView(friend: friend));
+              stream: cubit.friendsStream(),
+              noData: const Text("No friends"),
+              listItem: (friends) {
+                return ListView.builder(
+                    itemCount: friends.length,
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: FriendView(friend: friends.toList()[index]),
+                        ));
+              },
+            );
           },
         ),
       ),
