@@ -13,7 +13,7 @@ class EventsView extends StatelessWidget {
     final cubit = context.read<GroupBloc>();
     return DefaultStreamBuilder(
         stream: cubit.getEventsStream(),
-        noData: const Text("No groups"),
+        noData: const Text("No events"),
         body: (events) {
           return ListView.builder(
               itemCount: events.length,
