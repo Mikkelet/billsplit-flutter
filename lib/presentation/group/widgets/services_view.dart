@@ -20,7 +20,7 @@ class ServicesView extends StatelessWidget {
           style: TextStyle(color: Colors.grey),
         ),
       ),
-      listItem: (services) {
+      body: (services) {
         return ListView.builder(
             itemCount: services.length,
             padding: const EdgeInsets.symmetric(vertical: 40),

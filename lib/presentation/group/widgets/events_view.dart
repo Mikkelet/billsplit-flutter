@@ -14,7 +14,7 @@ class EventsView extends StatelessWidget {
     return DefaultStreamBuilder(
         stream: cubit.getEventsStream(),
         noData: const Text("No groups"),
-        listItem: (events) {
+        body: (events) {
           return ListView.builder(
               itemCount: events.length,
               padding: const EdgeInsets.symmetric(vertical: 40),

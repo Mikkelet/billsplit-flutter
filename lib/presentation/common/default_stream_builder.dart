@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class DefaultStreamBuilder<T> extends StatelessWidget {
   final Stream<Iterable<T>> stream;
   final Widget noData;
-  final Widget Function(Iterable<T>) listItem;
+  final Widget Function(Iterable<T>) body;
 
   const DefaultStreamBuilder(
       {Key? key,
       required this.stream,
       required this.noData,
-      required this.listItem})
+      required this.body})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
             if (data.isEmpty) {
               return Center(child: noData);
             }
-            return listItem(data);
+            return body(data);
           }),
     );
   }

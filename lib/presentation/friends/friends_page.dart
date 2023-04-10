@@ -21,7 +21,7 @@ class FriendsPage extends StatelessWidget {
             return DefaultStreamBuilder(
               stream: cubit.friendsStream(),
               noData: const Text("No friends"),
-              listItem: (friends) {
+              body: (friends) {
                 return ListView.builder(
                     itemCount: friends.length,
                     padding: const EdgeInsets.symmetric(vertical: 40),

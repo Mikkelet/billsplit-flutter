@@ -20,7 +20,7 @@ class DebtsView extends StatelessWidget {
             style: TextStyle(color: Colors.grey),
           ),
         ),
-        listItem: (debts) {
+        body: (debts) {
           return ListView.builder(
               itemCount: debts.length,
               padding: const EdgeInsets.symmetric(vertical: 40),

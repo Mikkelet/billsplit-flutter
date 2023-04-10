@@ -37,7 +37,7 @@ class GroupsPage extends StatelessWidget {
               child: DefaultStreamBuilder(
                 stream: cubit.getGroupStream(),
                 noData: const Text("No groups"),
-                listItem: (groups) {
+                body: (groups) {
                   return ListView.builder(
                       itemCount: groups.length,
                       padding: const EdgeInsets.symmetric(vertical: 40),
