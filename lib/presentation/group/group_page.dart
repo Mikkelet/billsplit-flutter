@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/group/widgets/debts_view.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/events_view.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/group_bottom_nav.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/services_view.dart';
@@ -46,7 +47,7 @@ class GroupPage extends StatelessWidget {
                   case GroupPageNav.services:
                     return const ServicesView();
                   case GroupPageNav.debt:
-                    return const Placeholder();
+                    return const DebtsView();
                   default:
                     return const EventsView();
                 }

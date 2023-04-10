@@ -15,8 +15,12 @@ extension PaymentDtoExt on PaymentDTO {
   PaymentDb toDb(String groupId) =>
       PaymentDb(id: id, groupId: groupId, payment: json.encode(this));
 
-  Payment toPayment() =>
-      Payment(id, createdBy.toPerson(), timeStamp, paidTo.toPerson(), amount);
+  Payment toPayment() => Payment(
+      id: id,
+      createdBy: createdBy.toPerson(),
+      timestamp: timeStamp,
+      paidTo: paidTo.toPerson(),
+      amount: amount);
 }
 
 extension PaymentsDbExt on Iterable<PaymentDb> {

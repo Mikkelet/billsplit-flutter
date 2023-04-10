@@ -17,14 +17,19 @@ class NetworkClient {
     _client.close();
   }
 
-  Future<Json> get(String path) async {
+  Future<Json> get(String path, {bool refreshToken = false}) async {
     final url = Uri.parse("$baseUrl$path");
-    final token = await AuthProvider.instance.getToken();
+    final token = refreshToken
+        ? await AuthProvider.instance.getToken(true)
+        : await AuthProvider.instance.getToken(false);
     final response = await _client.get(url, headers: {"Authorization": token});
     print("Request: ${response.request}");
     print("Request: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');
     print('Response body:${response.body}');
+    if (response.statusCode == 408) {
+      return get(path, refreshToken: true);
+    }
     return response.toJson();
   }
 

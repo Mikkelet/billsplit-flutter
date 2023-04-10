@@ -19,6 +19,10 @@ class GroupsDAO extends DatabaseAccessor<SplitsbyDatabase>
 
   Future<List<GroupDb>> getGroups() => select(groupsTable).get();
 
+  Future<GroupDb> getGroup(String groupId) =>
+      (select(groupsTable)..where((tbl) => tbl.groupId.equals(groupId)))
+          .getSingle();
+
   Stream<List<GroupDb>> watchGroups() {
     return select(groupsTable).watch();
   }

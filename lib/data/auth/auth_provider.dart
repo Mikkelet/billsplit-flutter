@@ -23,10 +23,10 @@ class AuthProvider {
         email: email, password: password);
   }
 
-  Future<String> getToken() async {
+  Future<String> getToken(bool refresh) async {
     final user = _firebaseAuth.currentUser;
     if (user == null) return "";
-    return await user.getIdToken();
+    return await user.getIdToken(refresh);
   }
 
   Stream<String?> authListener() {

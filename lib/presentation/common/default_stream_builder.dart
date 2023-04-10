@@ -20,12 +20,17 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
         child: StreamBuilder(
             stream: stream,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting ||
-                  !snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError) {
                 return Center(child: Text("${snapshot.error}"));
+              }
+              if (!snapshot.hasData) {
+                return const Center(child: Text("No data"));
+              }
+              if (snapshot.data!.isEmpty) {
+                return const Center(child: Text("All debts are settled"));
               }
               final data = snapshot.data!;
               if (data.isEmpty) {
@@ -33,13 +38,14 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
               }
               return Column(
                 children: [
-                  Container(height: 80),
+                  Container(height: 40),
                   ...data.map(
                     (e) => Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: listItem(e),
                     ),
-                  )
+                  ),
+                  Container(height: 40),
                 ],
               );
             }),

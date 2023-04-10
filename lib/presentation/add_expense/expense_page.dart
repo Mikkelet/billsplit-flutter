@@ -23,28 +23,33 @@ class AddExpensePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocProvider(
-        create: (context) => AddExpenseBloc(group.id, expense),
-        child:
-            BlocBuilder<AddExpenseBloc, BaseState>(builder: (context, state) {
-          if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is Failure) {
-            return Center(child: Text(state.error.toString()));
-          }
-          if (state is Main) {
-            return Center(
-              child: Column(children: [
-                IndividualExpenseView(expense.sharedExpense),
-                ...expense.individualExpenses
-                    .mapToImmutableList((e) => IndividualExpenseView(e)),
-                Text("TOTAL: \$${expense.getTotal()}"),
-              ]),
-            );
-          }
-          return const Placeholder();
-        }),
+      body: SingleChildScrollView(
+        child: BlocProvider(
+          create: (context) => AddExpenseBloc(group.id, expense),
+          child:
+              BlocBuilder<AddExpenseBloc, BaseState>(builder: (context, state) {
+            if (state is Loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state is Failure) {
+              return Center(child: Text(state.error.toString()));
+            }
+            if (state is Main) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 80),
+                child: Center(
+                  child: Column(children: [
+                    IndividualExpenseView(expense.sharedExpense),
+                    ...expense.individualExpenses
+                        .mapToImmutableList((e) => IndividualExpenseView(e)),
+                    Text("TOTAL: \$${expense.getTotal()}"),
+                  ]),
+                ),
+              );
+            }
+            return const Placeholder();
+          }),
+        ),
       ),
     );
   }

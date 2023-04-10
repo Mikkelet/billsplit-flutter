@@ -13,7 +13,13 @@ class Payment extends Event {
   final Person paidTo;
   final num amount;
 
-  Payment(super.id, super.createdBy, super.timestamp, this.paidTo, this.amount);
+  Payment(
+      {required String id,
+      required Person createdBy,
+      required num timestamp,
+      required this.paidTo,
+      required this.amount})
+      : super(id, createdBy, timestamp);
 }
 
 class GroupExpense extends Event {
@@ -56,7 +62,8 @@ class GroupExpense extends Event {
             id: "",
             createdBy: Person.dummy(0),
             description: "",
-            individualExpenses: people.map((e) => IndividualExpense(person: e)).toList(),
+            individualExpenses:
+                people.map((e) => IndividualExpense(person: e)).toList(),
             payer: Person.dummy(0),
             sharedExpense: 0,
             timestamp: DateTime.now().millisecond);
