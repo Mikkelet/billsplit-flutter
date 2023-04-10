@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => MainCubit()..initialize(),
-        child: BlocBuilder<MainCubit, BaseState>(builder: (context, state) {
+        child: BlocBuilder<MainCubit, UiState>(builder: (context, state) {
           if (state is Loading) {
             return const Scaffold(body: Center(child: CircularProgressIndicator()));
           }

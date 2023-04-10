@@ -27,7 +27,7 @@ class AddExpensePage extends StatelessWidget {
         child: BlocProvider(
           create: (context) => AddExpenseBloc(group.id, expense),
           child:
-              BlocBuilder<AddExpenseBloc, BaseState>(builder: (context, state) {
+              BlocBuilder<AddExpenseBloc, UiState>(builder: (context, state) {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }

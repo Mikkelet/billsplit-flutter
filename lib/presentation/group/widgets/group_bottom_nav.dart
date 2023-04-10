@@ -14,7 +14,7 @@ class GroupBottomNav extends StatefulWidget {
 class _GroupBottomNavState extends State<GroupBottomNav> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
+    return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
       int navIndex = 0;
       if(state is GroupLoaded){
         navIndex = state.nav.index;

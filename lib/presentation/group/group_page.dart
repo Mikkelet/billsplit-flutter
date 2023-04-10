@@ -19,7 +19,7 @@ class GroupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GroupBloc(group)..loadGroup(),
-      child: BlocBuilder<GroupBloc, BaseState>(builder: (context, state) {
+      child: BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.add),
@@ -70,7 +70,7 @@ class GroupPage extends StatelessWidget {
     Navigator.of(context).push(AddExpensePage.getRoute(group, null));
   }
 
-  _onBackButtonPressed(BaseState state, BuildContext context) {
+  _onBackButtonPressed(UiState state, BuildContext context) {
     if (state is GroupLoaded && state.nav != GroupPageNav.events) {
       context.read<GroupBloc>().showEvents();
     } else {

@@ -19,7 +19,7 @@ enum GroupPageNav {
 }
 
 
-class GroupLoaded extends BaseState {
+class GroupLoaded extends UiState {
   final Group group;
   final GroupPageNav nav;
 

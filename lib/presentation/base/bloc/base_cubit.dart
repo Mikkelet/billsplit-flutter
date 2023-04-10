@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:drift/isolate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class BaseCubit extends Cubit<BaseState> {
+abstract class BaseCubit extends Cubit<UiState> {
   BaseCubit() : super(Main());
 
   BaseCubit.withState(super.initialState) : super();

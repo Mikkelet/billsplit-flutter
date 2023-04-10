@@ -30,7 +30,7 @@ class GroupsPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) => GroupsBloc()..loadGroups(),
-        child: BlocBuilder<GroupsBloc, BaseState>(
+        child: BlocBuilder<GroupsBloc, UiState>(
           builder: (context, state) {
             final cubit = context.read<GroupsBloc>();
             return Center(

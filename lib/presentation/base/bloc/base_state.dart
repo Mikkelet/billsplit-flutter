@@ -1,10 +1,10 @@
-abstract class BaseState {}
+abstract class UiState {}
 
-class Main extends BaseState {}
+class Main extends UiState {}
 
-class Loading extends BaseState {}
+class Loading extends UiState {}
 
-class Failure extends BaseState {
+class Failure extends UiState {
   final Exception error;
 
   Failure(this.error);

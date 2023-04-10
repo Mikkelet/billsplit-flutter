@@ -108,9 +108,6 @@ class DebtCalculator {
         final accPayments = paymentsByPerson
             .map((e) => e.amount)
             .fold(0.0, (previousValue, element) => previousValue + element);
-        print(
-            "- \t${person.name} owes \$$debtAmount to ${debtee.name}, and have paid $accPayments ");
-
         return Pair(debtee, debtAmount - accPayments);
       } else if (debtAmount < 0) {
         // if debt is owed TO person (negative debt), find payments made by debtee to person
@@ -120,8 +117,6 @@ class DebtCalculator {
         final accPayments = paymentsToPerson
             .map((e) => e.amount)
             .fold(0.0, (previousValue, element) => previousValue + element);
-        print(
-            "- \t${debtee.name} owes \$${debtAmount.abs()} to ${person.name}, and have paid $accPayments ");
         return Pair(debtee, debtAmount + accPayments);
       } else {
         print("- no debt");
