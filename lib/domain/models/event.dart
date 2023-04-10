@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 
@@ -57,14 +58,14 @@ class GroupExpense extends Event {
             sharedExpense: 0,
             timestamp: 0);
 
-  GroupExpense.newExpense(List<Person> people)
+  GroupExpense.newExpense(Person user, Group group)
       : this(
             id: "",
-            createdBy: Person.dummy(0),
+            createdBy: user,
             description: "",
             individualExpenses:
-                people.map((e) => IndividualExpense(person: e)).toList(),
-            payer: Person.dummy(0),
+                group.people.map((e) => IndividualExpense(person: e)).toList(),
+            payer: user,
             sharedExpense: 0,
             timestamp: DateTime.now().millisecond);
 }

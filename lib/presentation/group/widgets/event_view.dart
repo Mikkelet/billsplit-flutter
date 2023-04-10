@@ -18,7 +18,6 @@ class EventView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
-          Text("Event ${event.id}"),
           event is GroupExpense
               ? Text("Expense \$${(event as GroupExpense).getTotal()}")
               : Container(),
@@ -34,9 +33,9 @@ class EventView extends StatelessWidget {
 
   _onTap(BuildContext context) {
     if (event is GroupExpense) {
-      final group = context.read<GroupBloc>().group;
-      Navigator.of(context)
-          .push(AddExpensePage.getRoute(group, event as GroupExpense));
+      final cubit = context.read<GroupBloc>();
+      Navigator.of(context).push(AddExpensePage.getRoute(
+          cubit.user, cubit.group, event as GroupExpense));
     }
   }
 }

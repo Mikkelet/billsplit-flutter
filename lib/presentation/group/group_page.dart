@@ -67,7 +67,9 @@ class GroupPage extends StatelessWidget {
   }
 
   _onFabClicked(BuildContext context) {
-    Navigator.of(context).push(AddExpensePage.getRoute(group, null));
+      final cubit = context.read<GroupBloc>();
+      Navigator.of(context)
+          .push(AddExpensePage.getRoute(cubit.user, group, null));
   }
 
   _onBackButtonPressed(UiState state, BuildContext context) {

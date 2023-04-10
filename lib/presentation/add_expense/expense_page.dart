@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
@@ -12,12 +13,7 @@ class AddExpensePage extends StatelessWidget {
   final Group group;
   final textFieldController = TextEditingController(text: "");
 
-  AddExpensePage(
-      {super.key, required GroupExpense groupExpense, required this.group})
-      : expense = groupExpense;
-
-  AddExpensePage.newExpense(this.group, {super.key})
-      : expense = GroupExpense.newExpense(group.people);
+  AddExpensePage({required this.expense, required this.group, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +23,7 @@ class AddExpensePage extends StatelessWidget {
         child: BlocProvider(
           create: (context) => AddExpenseBloc(group.id, expense),
           child:
-              BlocBuilder<AddExpenseBloc, UiState>(builder: (context, state) {
+          BlocBuilder<AddExpenseBloc, UiState>(builder: (context, state) {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -36,7 +32,8 @@ class AddExpensePage extends StatelessWidget {
             }
             if (state is Main) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 80),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 80),
                 child: Center(
                   child: Column(children: [
                     IndividualExpenseView(expense.sharedExpense),
@@ -54,14 +51,16 @@ class AddExpensePage extends StatelessWidget {
     );
   }
 
-  static Route getRoute(Group group, GroupExpense? expense) {
+  static Route getRoute(Person user, Group group, GroupExpense? expense) {
     if (expense == null) {
       return MaterialPageRoute(
-          builder: (context) => AddExpensePage.newExpense(group));
+          builder: (context) =>
+              AddExpensePage(
+                  group: group, expense: GroupExpense.newExpense(user, group)));
     } else {
       return MaterialPageRoute(
           builder: (context) =>
-              AddExpensePage(group: group, groupExpense: expense));
+              AddExpensePage(group: group, expense: expense));
     }
   }
 }
