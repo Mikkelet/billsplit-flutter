@@ -15,7 +15,7 @@ class DebtsView extends StatelessWidget {
         noData: const Padding(
           padding: EdgeInsets.all(64.0),
           child: Text(
-            "Subscription service expenses will be automatically added each month! Use this for monthly expenses like rent, streaming service, co-budget, etc",
+            "All debts are settled!",
             textAlign: TextAlign.justify,
             style: TextStyle(color: Colors.grey),
           ),

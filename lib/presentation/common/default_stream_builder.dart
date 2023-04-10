@@ -29,9 +29,6 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Center(child: Text("No data"));
               }
-              if (snapshot.data!.isEmpty) {
-                return const Center(child: Text("All debts are settled"));
-              }
               final data = snapshot.data!;
               if (data.isEmpty) {
                 return Center(child: noData);
