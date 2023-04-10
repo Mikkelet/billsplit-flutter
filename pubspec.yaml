@@ -21,6 +21,7 @@ dependencies:
   storage_inspector: ^0.3.0
   rxdart: ^0.27.7
   collection:
+  get_it: ^7.2.0
 
 dev_dependencies:
   json_serializable: ^6.6.1

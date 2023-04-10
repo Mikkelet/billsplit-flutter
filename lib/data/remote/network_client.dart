@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
@@ -12,6 +13,7 @@ class NetworkClient {
       : "http://localhost:5000/billsplittapp/us-central1/v1/";
 
   final _client = RetryClient(http.Client());
+  final _authProvider = getIt<AuthProvider>();
 
   void onDestroy() {
     _client.close();
@@ -20,8 +22,8 @@ class NetworkClient {
   Future<Json> get(String path, {bool refreshToken = false}) async {
     final url = Uri.parse("$baseUrl$path");
     final token = refreshToken
-        ? await AuthProvider.instance.getToken(true)
-        : await AuthProvider.instance.getToken(false);
+        ? await _authProvider.getToken(true)
+        : await _authProvider.getToken(false);
     final response = await _client.get(url, headers: {"Authorization": token});
     print("Request: ${response.request}");
     print("Request: ${response.request?.headers}");

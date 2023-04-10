@@ -23,8 +23,6 @@ part 'splitsby_db.g.dart';
 class SplitsbyDatabase extends _$SplitsbyDatabase {
   SplitsbyDatabase() : super(_openConnection());
 
-  static SplitsbyDatabase instance = SplitsbyDatabase();
-
   @override
   int get schemaVersion => 3;
 

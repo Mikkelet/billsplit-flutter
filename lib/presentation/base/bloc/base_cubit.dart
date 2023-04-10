@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:drift/isolate.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
 
-  final authProvider = AuthProvider.instance;
+  final authProvider = getIt<AuthProvider>();
 
   BaseCubit() : super(Main());
 

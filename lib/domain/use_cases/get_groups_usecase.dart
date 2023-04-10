@@ -1,11 +1,12 @@
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/api_service.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 
 class GetGroupsUseCase {
-  final _apiService = ApiService();
-  final _database = SplitsbyDatabase.instance;
+  final _apiService = getIt<ApiService>();
+  final _database = getIt<SplitsbyDatabase>();
 
   Future<Iterable<Group>> launch() async {
     final response = await _apiService.getGroups();

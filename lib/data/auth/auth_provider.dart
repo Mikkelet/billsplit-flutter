@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:billsplit_flutter/firebase_options.dart';
 
 class AuthProvider {
-  static final AuthProvider instance = AuthProvider();
   late final FirebaseApp _firebaseApp;
   late final FirebaseAuth _firebaseAuth;
 

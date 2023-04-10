@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/groups/groups_page.dart';
 import 'package:billsplit_flutter/presentation/landing/landing_page.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  setup();
   runApp(const MyApp());
 }
 

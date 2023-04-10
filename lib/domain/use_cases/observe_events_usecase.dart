@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/group_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
@@ -6,7 +7,7 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ObserveEventsUseCase {
-  final _database = SplitsbyDatabase.instance;
+  final _database = getIt<SplitsbyDatabase>();
 
   Stream<Iterable<Event>> observe(String groupId) {
     final Stream<Iterable<Payment>> paymentsStream =

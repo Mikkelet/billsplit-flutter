@@ -8,7 +8,9 @@ import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
 import 'dtos/debts_dto.dart';
 
 class ApiService {
-  final _client = NetworkClient();
+  final NetworkClient _client;
+
+  ApiService(this._client);
 
   Future<GetGroupsResponse> getGroups() async {
     final body = await _client.get("groups");
