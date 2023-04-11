@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/friends/bloc/friends_cubit.dart';
 import 'package:billsplit_flutter/presentation/friends/widgets/friend_view.dart';
+import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,8 +21,13 @@ class FriendsPage extends StatelessWidget {
             final cubit = context.read<FriendsCubit>();
             return DefaultStreamBuilder(
               stream: cubit.friendsStream(),
-              noData: const Text("No friends"),
               body: (friends) {
+                if (cubit.state is SyncingGroup && friends.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (friends.isEmpty) {
+                  return const Text("No friends");
+                }
                 return ListView.builder(
                     itemCount: friends.length,
                     padding: const EdgeInsets.symmetric(vertical: 40),

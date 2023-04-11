@@ -36,8 +36,13 @@ class GroupsPage extends StatelessWidget {
             return Center(
               child: DefaultStreamBuilder(
                 stream: cubit.getGroupStream(),
-                noData: const Text("No groups"),
                 body: (groups) {
+                  if (state is Loading && groups.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (groups.isEmpty) {
+                    return const Center(child: Text("no groups"));
+                  }
                   return ListView.builder(
                       itemCount: groups.length,
                       padding: const EdgeInsets.symmetric(vertical: 40),

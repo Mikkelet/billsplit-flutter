@@ -20,49 +20,53 @@ class AddExpensePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AddExpenseBloc(group.id, expense),
-      child: BlocBuilder<AddExpenseBloc, UiState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      final cubit = context.read<AddExpenseBloc>();
-                      cubit.addExpense();
-                    },
-                    icon: const Icon(Icons.check))
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Builder(builder: (context) {
-                if (state is Loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state is Failure) {
-                  return Center(child: Text(state.error.toString()));
-                }
-                if (state is Main) {
-                  if (state is AddExpenseSuccess) {
-                    Navigator.of(context).pop();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 80),
-                    child: Center(
-                      child: Column(children: [
-                        IndividualExpenseView(expense.sharedExpense),
-                        ...expense.individualExpenses.mapToImmutableList(
-                            (e) => IndividualExpenseView(e)),
-                        Text("TOTAL: \$${expense.getTotal()}"),
-                      ]),
-                    ),
-                  );
-                }
-                return const Placeholder();
-              }),
-            ),
-          );
+      child: BlocListener<AddExpenseBloc, UiState>(
+        listener: (context, state) {
+          if (state is AddExpenseSuccess) {
+            Navigator.of(context).pop();
+          }
         },
+        child: BlocBuilder<AddExpenseBloc, UiState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        final cubit = context.read<AddExpenseBloc>();
+                        cubit.addExpense();
+                      },
+                      icon: const Icon(Icons.check))
+                ],
+              ),
+              body: SingleChildScrollView(
+                child: Builder(builder: (context) {
+                  if (state is Loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is Failure) {
+                    return Center(child: Text(state.error.toString()));
+                  }
+                  if (state is Main) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 80),
+                      child: Center(
+                        child: Column(children: [
+                          IndividualExpenseView(expense.sharedExpense),
+                          ...expense.individualExpenses.mapToImmutableList(
+                              (e) => IndividualExpenseView(e)),
+                          Text("TOTAL: \$${expense.getTotal()}"),
+                        ]),
+                      ),
+                    );
+                  }
+                  return const Placeholder();
+                }),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
 enum GroupPageNav {
@@ -18,10 +17,16 @@ enum GroupPageNav {
   }
 }
 
-
-class GroupLoaded extends UiState {
-  final Group group;
+abstract class GroupState extends Main {
   final GroupPageNav nav;
 
-  GroupLoaded(this.group, this.nav);
+  GroupState(this.nav);
+}
+
+class SyncingGroup extends GroupState {
+  SyncingGroup(super.nav);
+}
+
+class GroupLoaded extends GroupState {
+  GroupLoaded(super.nav);
 }

@@ -1,5 +1,7 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
+import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,18 +13,23 @@ class EventsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
-    return DefaultStreamBuilder(
-        stream: cubit.getEventsStream(),
-        noData: const Text("No events"),
-        body: (events) {
-          return ListView.builder(
-              itemCount: events.length,
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              reverse: true,
-              itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: EventView(event: events.toList()[index]),
-                  ));
-        });
+    return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
+      return DefaultStreamBuilder(
+          stream: cubit.getEventsStream(),
+          body: (events) {
+            if (state is SyncingGroup && events.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (events.isEmpty) return const Center(child: Text("no events"));
+            return ListView.builder(
+                itemCount: events.length,
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                reverse: true,
+                itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: EventView(event: events.toList()[index]),
+                    ));
+          });
+    });
   }
 }

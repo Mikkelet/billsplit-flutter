@@ -41,7 +41,7 @@ class GroupPage extends StatelessWidget {
             if (state is Failure) {
               return Center(child: Text(state.error.toString()));
             }
-            if (state is GroupLoaded) {
+            if (state is GroupState) {
               return WillPopScope(child: Builder(builder: (context) {
                 switch (state.nav) {
                   case GroupPageNav.services:

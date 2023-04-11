@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 class DefaultStreamBuilder<T> extends StatelessWidget {
   final Stream<Iterable<T>> stream;
-  final Widget noData;
   final Widget Function(Iterable<T>) body;
 
   const DefaultStreamBuilder(
       {Key? key,
       required this.stream,
-      required this.noData,
       required this.body})
       : super(key: key);
 
@@ -28,9 +26,6 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
               return const Center(child: Text("No data"));
             }
             final data = snapshot.data!;
-            if (data.isEmpty) {
-              return Center(child: noData);
-            }
             return body(data);
           }),
     );
