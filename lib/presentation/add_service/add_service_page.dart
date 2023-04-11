@@ -20,7 +20,8 @@ class AddServicePage extends StatelessWidget {
           TextField(
             controller: _expenseTextController,
           ),
-          Text("Participants will pay \$${_getMonthlyServicePerPerson()} every month"),
+          Text(
+              "Participants will pay \$${_getMonthlyServicePerPerson()} every month"),
           Container()
         ],
       ),
@@ -35,7 +36,7 @@ class AddServicePage extends StatelessWidget {
     }
   }
 
-  Route<AddServicePage> getRoute(
+  static Route<AddServicePage> getRoute(
       Person user, Group group, SubscriptionService? subscriptionService) {
     if (subscriptionService == null) {
       return MaterialPageRoute(
@@ -44,6 +45,6 @@ class AddServicePage extends StatelessWidget {
                   SubscriptionService.newService(group: group, user: user)));
     }
     return MaterialPageRoute(
-        builder: (context) => AddServicePage(service: service));
+        builder: (context) => AddServicePage(service: subscriptionService));
   }
 }

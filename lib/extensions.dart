@@ -25,3 +25,5 @@ extension MapExt<T> on Iterable<Iterable<T>> {
 }
 
 typedef Json = Map<String, dynamic>;
+
+T builder<T>(T Function() build) => build();

@@ -1,5 +1,7 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
+import 'package:billsplit_flutter/presentation/add_service/add_service_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
@@ -21,11 +23,22 @@ class GroupPage extends StatelessWidget {
       create: (context) => GroupBloc(group)..loadGroup(),
       child: BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () {
-                _onFabClicked(context);
-              }),
+          floatingActionButton: builder(() {
+            if (state is GroupState) {
+              if (state.nav == GroupPageNav.debt) return null;
+              String text = state.nav == GroupPageNav.events
+                  ? "Add event"
+                  : "Add service";
+              return FloatingActionButton.extended(
+                  isExtended: true,
+                  onPressed: () {
+                    _onFabClicked(context);
+                  },
+                  label: Text(text),
+                  icon: const Icon(Icons.add));
+            }
+            return null;
+          }),
           appBar: AppBar(
               title: Text(group.name),
               leading: IconButton(
@@ -67,9 +80,19 @@ class GroupPage extends StatelessWidget {
   }
 
   _onFabClicked(BuildContext context) {
-      final cubit = context.read<GroupBloc>();
-      Navigator.of(context)
-          .push(AddExpensePage.getRoute(cubit.user, group, null));
+    final cubit = context.read<GroupBloc>();
+    final state = cubit.state;
+    if (state is GroupState) {
+      if (state.nav == GroupPageNav.events) {
+        Navigator.of(context)
+            .push(AddExpensePage.getRoute(cubit.user, group, null));
+      } else {
+        if (state.nav == GroupPageNav.services) {
+          Navigator.of(context)
+              .push(AddServicePage.getRoute(cubit.user, group, null));
+        }
+      }
+    }
   }
 
   _onBackButtonPressed(UiState state, BuildContext context) {

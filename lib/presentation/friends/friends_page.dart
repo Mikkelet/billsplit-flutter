@@ -1,7 +1,7 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/friends/bloc/friends_cubit.dart';
 import 'package:billsplit_flutter/presentation/friends/widgets/friend_view.dart';
-import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +22,7 @@ class FriendsPage extends StatelessWidget {
             return DefaultStreamBuilder(
               stream: cubit.friendsStream(),
               body: (friends) {
-                if (cubit.state is SyncingGroup && friends.isEmpty) {
+                if (cubit.state is Loading && friends.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (friends.isEmpty) {
