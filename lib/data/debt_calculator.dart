@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:collection/collection.dart';
 
 class DebtCalculator {
   final List<Person> people;
@@ -125,13 +126,20 @@ class DebtCalculator {
     });
   }
 
+  Iterable<Pair<String, num>> calculateEffectiveDebtForGroup() {
+    return people.map((person) {
+      return Pair(
+          person.uid, calculateEffectiveDebt(person).map((e) => e.second).sum);
+    });
+  }
+
   num calculateTotalDebt() {
     return expenses
         .map((it) => it.getTotal())
         .fold(0.0, (previousValue, element) => previousValue + element);
   }
 
-  void logCalculations(){
+  void logCalculations() {
     print("Total expense: ${calculateTotalDebt()}");
     print("==== DEBT ====");
     calculateDebts().forEach((pair) {

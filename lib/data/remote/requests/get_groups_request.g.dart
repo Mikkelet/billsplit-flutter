@@ -15,5 +15,5 @@ GetGroupsResponse _$GetGroupsResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$GetGroupsResponseToJson(GetGroupsResponse instance) =>
     <String, dynamic>{
-      'groups': instance.groups,
+      'groups': instance.groups.map((e) => e.toJson()).toList(),
     };

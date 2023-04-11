@@ -17,7 +17,7 @@ IndividualExpenseDTO _$IndividualExpenseDTOFromJson(
 Map<String, dynamic> _$IndividualExpenseDTOToJson(
         IndividualExpenseDTO instance) =>
     <String, dynamic>{
-      'person': instance.person,
+      'person': instance.person.toJson(),
       'expense': instance.expense,
       'isParticipant': instance.isParticipant,
     };

@@ -16,7 +16,7 @@ EventDTO _$EventDTOFromJson(Map<String, dynamic> json) => EventDTO(
 Map<String, dynamic> _$EventDTOToJson(EventDTO instance) => <String, dynamic>{
       'type': instance.type,
       'id': instance.id,
-      'createdBy': instance.createdBy,
+      'createdBy': instance.createdBy.toJson(),
       'timeStamp': instance.timeStamp,
     };
 
@@ -38,12 +38,13 @@ Map<String, dynamic> _$GroupExpenseDTOToJson(GroupExpenseDTO instance) =>
     <String, dynamic>{
       'type': instance.type,
       'id': instance.id,
-      'createdBy': instance.createdBy,
+      'createdBy': instance.createdBy.toJson(),
       'timeStamp': instance.timeStamp,
       'description': instance.description,
-      'payee': instance.payee,
+      'payee': instance.payee.toJson(),
       'sharedExpense': instance.sharedExpense,
-      'individualExpenses': instance.individualExpenses,
+      'individualExpenses':
+          instance.individualExpenses.map((e) => e.toJson()).toList(),
     };
 
 PaymentDTO _$PaymentDTOFromJson(Map<String, dynamic> json) => PaymentDTO(
@@ -59,8 +60,8 @@ Map<String, dynamic> _$PaymentDTOToJson(PaymentDTO instance) =>
     <String, dynamic>{
       'type': instance.type,
       'id': instance.id,
-      'createdBy': instance.createdBy,
+      'createdBy': instance.createdBy.toJson(),
       'timeStamp': instance.timeStamp,
-      'paidTo': instance.paidTo,
+      'paidTo': instance.paidTo.toJson(),
       'amount': instance.amount,
     };

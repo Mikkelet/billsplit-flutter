@@ -7,7 +7,8 @@ import 'individual_expense_dto.dart';
 part 'event_dto.g.dart';
 
 @JsonSerializable()
-class EventDTO { // cannot be abstract because of json serializer
+class EventDTO {
+  // cannot be abstract because of json serializer
   final String type;
   final String id;
   final PersonDTO createdBy;
@@ -31,6 +32,16 @@ class EventDTO { // cannot be abstract because of json serializer
       return null;
     }
   }
+
+  Json toJson() {
+    if (this is GroupExpenseDTO) {
+      return (this as GroupExpenseDTO).toJson();
+    } else if (this is PaymentDTO) {
+      return (this as PaymentDTO).toJson();
+    } else {
+      return toJson();
+    }
+  }
 }
 
 @JsonSerializable()
@@ -40,11 +51,18 @@ class GroupExpenseDTO extends EventDTO {
   final num sharedExpense;
   final List<IndividualExpenseDTO> individualExpenses;
 
-  GroupExpenseDTO(super.id, super.createdBy, super.timeStamp, super.type,
-      this.description, this.payee, this.sharedExpense, this.individualExpenses);
+  GroupExpenseDTO(
+      super.id,
+      super.createdBy,
+      super.timeStamp,
+      super.type,
+      this.description,
+      this.payee,
+      this.sharedExpense,
+      this.individualExpenses);
 
   factory GroupExpenseDTO.fromJson(Json json) =>
-        _$GroupExpenseDTOFromJson(json);
+      _$GroupExpenseDTOFromJson(json);
 
   Json toJson() => _$GroupExpenseDTOToJson(this);
 }

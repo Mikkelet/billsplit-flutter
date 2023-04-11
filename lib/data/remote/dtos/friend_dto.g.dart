@@ -16,6 +16,6 @@ FriendDTO _$FriendDTOFromJson(Map<String, dynamic> json) => FriendDTO(
 Map<String, dynamic> _$FriendDTOToJson(FriendDTO instance) => <String, dynamic>{
       'id': instance.id,
       'createdBy': instance.createdBy,
-      'status': instance.status,
-      'friend': instance.friend,
+      'status': instance.status.toJson(),
+      'friend': instance.friend.toJson(),
     };

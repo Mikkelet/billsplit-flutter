@@ -20,7 +20,7 @@ GetGroupResponse _$GetGroupResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$GetGroupResponseToJson(GetGroupResponse instance) =>
     <String, dynamic>{
-      'group': instance.group,
-      'events': instance.events,
-      'services': instance.services,
+      'group': instance.group.toJson(),
+      'events': instance.events.map((e) => e?.toJson()).toList(),
+      'services': instance.services.map((e) => e.toJson()).toList(),
     };

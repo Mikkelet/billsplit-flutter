@@ -9,8 +9,8 @@ part of 'add_event_request.dart';
 Map<String, dynamic> _$AddEventRequestToJson(AddEventRequest instance) =>
     <String, dynamic>{
       'groupId': instance.groupId,
-      'event': instance.event,
-      'debts': instance.debts,
+      'event': instance.event.toJson(),
+      'debts': instance.debts.map((e) => e.toJson()).toList(),
     };
 
 AddEventResponse _$AddEventResponseFromJson(Map<String, dynamic> json) =>

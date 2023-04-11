@@ -25,9 +25,9 @@ GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
 Map<String, dynamic> _$GroupDTOToJson(GroupDTO instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'people': instance.people,
-      'createdBy': instance.createdBy,
+      'people': instance.people.map((e) => e.toJson()).toList(),
+      'createdBy': instance.createdBy.toJson(),
       'timeStamp': instance.timeStamp,
-      'debts': instance.debts,
-      'latestEvent': instance.latestEvent,
+      'debts': instance.debts.map((e) => e.toJson()).toList(),
+      'latestEvent': instance.latestEvent?.toJson(),
     };

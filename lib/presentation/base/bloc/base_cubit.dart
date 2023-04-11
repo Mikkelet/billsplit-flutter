@@ -6,7 +6,6 @@ import 'package:drift/isolate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
-
   final authProvider = getIt<AuthProvider>();
 
   BaseCubit() : super(Main());
@@ -24,6 +23,8 @@ abstract class BaseCubit extends Cubit<UiState> {
     } else if (err is DriftRemoteException) {
       print(err.remoteCause);
       print(err.remoteStackTrace);
+    } else if (err is FormatException) {
+      print((err as FormatException).source);
     } else {
       print(err);
     }

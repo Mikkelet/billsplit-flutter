@@ -14,6 +14,7 @@ class AddEventRequest {
   AddEventRequest(this.groupId, this.event, this.debts);
 
   Json toJson() => _$AddEventRequestToJson(this);
+
 }
 
 @JsonSerializable(createToJson: false)

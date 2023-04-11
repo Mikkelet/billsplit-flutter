@@ -24,7 +24,7 @@ Map<String, dynamic> _$ServiceDTOToJson(ServiceDTO instance) =>
       'name': instance.name,
       'imageUrl': instance.imageUrl,
       'monthlyExpense': instance.monthlyExpense,
-      'payer': instance.payer,
-      'createdBy': instance.createdBy,
-      'participants': instance.participants,
+      'payer': instance.payer.toJson(),
+      'createdBy': instance.createdBy.toJson(),
+      'participants': instance.participants.map((e) => e.toJson()).toList(),
     };
