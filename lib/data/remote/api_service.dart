@@ -62,7 +62,7 @@ class ApiService {
     } else {
       requestType = RequestTypeUserId(value);
     }
-    final data = AddFriendRequest(type, requestType);
+    final data = AddFriendRequest(requestType);
     final response = await _client.post("friend", data.toJson());
     return AddFriendResponse.fromJson(response).friend;
   }

@@ -6,10 +6,9 @@ part 'add_friend_request.g.dart';
 
 @JsonSerializable(createFactory: false)
 class AddFriendRequest {
-  final String type;
-  final FriendRequestType requestType;
+  final FriendRequestType type;
 
-  AddFriendRequest(this.type, this.requestType);
+  AddFriendRequest(this.type);
 
   Json toJson() => _$AddFriendRequestToJson(this);
 }
@@ -24,7 +23,7 @@ class AddFriendResponse {
       _$AddFriendResponseFromJson(json);
 }
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: false, createToJson: false)
 class FriendRequestType {
   final String type;
 

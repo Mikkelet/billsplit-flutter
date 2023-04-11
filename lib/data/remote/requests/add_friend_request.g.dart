@@ -8,19 +8,13 @@ part of 'add_friend_request.dart';
 
 Map<String, dynamic> _$AddFriendRequestToJson(AddFriendRequest instance) =>
     <String, dynamic>{
-      'type': instance.type,
-      'requestType': instance.requestType.toJson(),
+      'type': instance.type.toJson(),
     };
 
 AddFriendResponse _$AddFriendResponseFromJson(Map<String, dynamic> json) =>
     AddFriendResponse(
       FriendDTO.fromJson(json['friend'] as Map<String, dynamic>),
     );
-
-Map<String, dynamic> _$FriendRequestTypeToJson(FriendRequestType instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-    };
 
 Map<String, dynamic> _$RequestTypeEmailToJson(RequestTypeEmail instance) =>
     <String, dynamic>{
