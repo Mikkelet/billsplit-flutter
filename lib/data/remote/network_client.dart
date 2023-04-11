@@ -47,8 +47,8 @@ class NetworkClient {
     print('Request body:$body');
     print("Request headers: $headers");
 
-    final response = await _client.post(
-        url, body: json.encode(body), headers: headers);
+    final response =
+        await _client.post(url, body: json.encode(body), headers: headers);
     print("Request: ${response.request}");
     print("Response headers: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');
@@ -58,8 +58,26 @@ class NetworkClient {
     return response.toJson();
   }
 
-  Future<Json> put(String path) async {
-    final response = await _client.put(Uri.http(baseUrl, path));
+  Future<Json> put(String path, Json body, {bool refreshToken = false}) async {
+    final url = Uri.parse("$baseUrl$path");
+    final token = refreshToken
+        ? await _authProvider.getToken(true)
+        : await _authProvider.getToken(false);
+    final headers = {
+      HttpHeaders.authorizationHeader: token,
+      HttpHeaders.contentTypeHeader: "application/json"
+    };
+    print('Request body:$body');
+    print("Request headers: $headers");
+
+    final response =
+        await _client.put(url, body: json.encode(body), headers: headers);
+    print("Request: ${response.request}");
+    print("Response headers: ${response.request?.headers}");
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 408) {
+      return get(path, refreshToken: true);
+    }
     return response.toJson();
   }
 }

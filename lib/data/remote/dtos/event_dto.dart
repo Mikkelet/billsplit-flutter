@@ -64,6 +64,7 @@ class GroupExpenseDTO extends EventDTO {
   factory GroupExpenseDTO.fromJson(Json json) =>
       _$GroupExpenseDTOFromJson(json);
 
+  @override
   Json toJson() => _$GroupExpenseDTOToJson(this);
 }
 
@@ -77,5 +78,6 @@ class PaymentDTO extends EventDTO {
 
   factory PaymentDTO.fromJson(Json json) => _$PaymentDTOFromJson(json);
 
+  @override
   Json toJson() => _$PaymentDTOToJson(this);
 }

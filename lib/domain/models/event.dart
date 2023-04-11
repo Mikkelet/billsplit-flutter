@@ -67,5 +67,5 @@ class GroupExpense extends Event {
                 group.people.map((e) => IndividualExpense(person: e)).toList(),
             payer: user,
             sharedExpense: 0,
-            timestamp: DateTime.now().millisecond);
+            timestamp: DateTime.now().millisecondsSinceEpoch);
 }

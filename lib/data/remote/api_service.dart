@@ -1,6 +1,10 @@
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
+import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
+import 'package:billsplit_flutter/data/remote/dtos/service_dto.dart';
 import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_event_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/add_friend_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
@@ -27,14 +31,43 @@ class ApiService {
     return GetFriendsResponse.fromJson(response);
   }
 
-  void onDestroy() {
-    _client.onDestroy();
-  }
-
   Future<AddEventResponse> addEvent(
       String groupId, EventDTO eventDTO, List<DebtDTO> debts) async {
     final request = AddEventRequest(groupId, eventDTO, debts);
     final response = await _client.post("event", request.toJson());
     return AddEventResponse.fromJson(response);
+  }
+
+  Future<ServiceDTO> addService(String groupId, ServiceDTO service) async {
+    final data = AddServiceRequest(groupId, service);
+    final response = await _client.post("service", data.toJson());
+    return AddServiceResponse.fromJson(response).service;
+  }
+
+  Future<ServiceDTO> updateService(String groupId, ServiceDTO service) async {
+    final data = AddServiceRequest(groupId, service);
+    final response = await _client.put("service", data.toJson());
+    return AddServiceResponse.fromJson(response).service;
+  }
+
+  Future<FriendDTO> addFriendEmail(String value) => _addFriend("email", value);
+
+  Future<FriendDTO> addFriendUserId(String value) =>
+      _addFriend("userId", value);
+
+  Future<FriendDTO> _addFriend(String type, String value) async {
+    final FriendRequestType requestType;
+    if (type == "email") {
+      requestType = RequestTypeEmail(value);
+    } else {
+      requestType = RequestTypeUserId(value);
+    }
+    final data = AddFriendRequest(type, requestType);
+    final response = await _client.post("friend", data.toJson());
+    return AddFriendResponse.fromJson(response).friend;
+  }
+
+  void onDestroy() {
+    _client.onDestroy();
   }
 }

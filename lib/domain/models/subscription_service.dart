@@ -29,15 +29,3 @@ class SubscriptionService {
             monthlyExpense: 0,
             participants: group.people);
 }
-
-/**
- * data class SubscriptionService(
-    val id: String,
-    private val name: String,
-    val createdBy: Person,
-    val imageUrl: String,
-    private val monthlyExpense: Float,
-    private val payer: Person,
-    private val participants: List<Person>
-    ) {
- */
