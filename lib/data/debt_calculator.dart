@@ -138,49 +138,50 @@ class DebtCalculator {
       final payer = pair.first;
       final debts = pair.second;
       print("${payer.name} is owed:");
-      debts.forEach((element) {
+      for (var element in debts) {
         final indExpense = element.first;
         final debt = element.second;
         print("\t\$$debt by ${indExpense.name}");
-      });
+      }
     });
     print("\n=== IND DEBT ===");
     calculateDebtTo().forEach((pair) {
       final payee = pair.first;
       final payeeDebts = pair.second;
       print("${payee.name} owes");
-      payeeDebts.forEach((it) {
+      for (var it in payeeDebts) {
         final ie = it.first;
         final debt = it.second;
         print("\t\$$debt to ${ie.name}");
-      });
+      }
     });
     print("\n=== Effect Debt ===");
     expenses.map((e) => e.individualExpenses).flatMap().forEach((ie) {
       print("${ie.person.name} owes:");
       final person = ie.person;
       final debt = calculateEffectiveDebt(person);
-      debt.forEach((it) {
+      for (var it in debt) {
         print("\tto ${it.first.name}: \$${it.second}");
-      });
+      }
     });
     print("\n=== After Payments ===");
     print("");
-    payments.forEach((it) {
+    for (var it in payments) {
       print("${it.createdBy.name} paid \$${it.amount} to ${it.paidTo.name}");
-    });
+    }
     print("");
-    people.forEach((person) {
+    for (var person in people) {
       print("Debts for ${person.name}");
       calculateDebtsAfterPayments(person).forEach((element) {
         final otherPerson = element.first;
         final debt = element.second;
-        if (debt > 0)
+        if (debt > 0) {
           print("\t${otherPerson.name} owes \$$debt to ${person.name}");
-        else if (debt < 0)
+        } else if (debt < 0) {
           print("\t${person.name} owes \$$debt to ${otherPerson.name}");
+        }
       });
-    });
+    }
   }
 }
 
