@@ -24,10 +24,10 @@ class DebtCalculator {
     return people.map((person) {
       // get expenses payed for by person
       final payedForGroupExpenses = expensesAndPayments
-          .where((expense) => expense.payer.uid == person.uid);
+          .where((expense) => expense.payerState.uid == person.uid);
       // person cannot have debt to themselves
       final payedForExpensesWithoutPayee = payedForGroupExpenses
-          .where((expense) => expense.payer.uid == person.uid);
+          .where((expense) => expense.payerState.uid == person.uid);
       // Update individual expenses to include the shared expense
       final payedForIndividualExpenses = payedForExpensesWithoutPayee
           .map((expense) => expense.getIndividualWithShared())
@@ -187,15 +187,15 @@ class DebtCalculator {
 extension GroupExpenseExt on GroupExpense {
   num getSharedExpense() =>
       sharedExpense.expenseState /
-      individualExpenses.where((element) => element.isParticipant).length;
+      individualExpenses.where((element) => element.isParticipantState).length;
 
   Iterable<IndividualExpense> getIndividualWithShared() =>
       individualExpenses.map((e) {
-        final expense = e.isParticipant
+        final expense = e.isParticipantState
             ? e.expenseState + getSharedExpense()
             : e.expenseState;
         return IndividualExpense(
-            person: e.person, expense: expense, isParticipant: e.isParticipant);
+            person: e.person, expense: expense, isParticipant: e.isParticipantState);
       });
 }
 

@@ -21,7 +21,8 @@ class ExpenseTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: textEditingController,
-      decoration: InputDecoration(errorText: _errorText()),
+      style: Theme.of(context).textTheme.bodyLarge,
+      decoration: InputDecoration(errorText: _errorText(),icon: const Icon(Icons.attach_money)),
       keyboardType: TextInputType.number,
     );
   }

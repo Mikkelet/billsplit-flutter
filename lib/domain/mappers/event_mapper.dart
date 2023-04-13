@@ -34,7 +34,7 @@ extension EventExt on Event {
           timestamp,
           "expense",
           (this as GroupExpense).description,
-          (this as GroupExpense).payer.toDTO(),
+          (this as GroupExpense).payerState.toDTO(),
           (this as GroupExpense).sharedExpense.expenseState,
           (this as GroupExpense).individualExpenses.toDTOs());
     }

@@ -25,25 +25,42 @@ class Payment extends Event {
 }
 
 class GroupExpense extends Event {
-  final Person payer;
+  final Person _payer;
   final IndividualExpense sharedExpense;
   final List<IndividualExpense> individualExpenses;
   final String description;
+
+  // modifiable values
+  late Person payerState = _payer;
 
   GroupExpense(
       {required String id,
       required Person createdBy,
       required num timestamp,
       required this.description,
-      required this.payer,
+      required Person payer,
       required num sharedExpense,
       required this.individualExpenses})
       : sharedExpense = IndividualExpense.sharedExpense(sharedExpense),
+        _payer = payer,
         super(id, createdBy, timestamp);
 
   num get total =>
       individualExpenses.map((e) => e.expenseState).sum +
       sharedExpense.expenseState;
+
+  num get sharedExpensePerParticipant {
+    try {
+
+      final numOfParticipants = individualExpenses
+          .where((element) => element.isParticipantState)
+          .length;
+      return sharedExpense.expenseState / numOfParticipants;
+    } catch (e) {
+      print("qqq e=$e");
+      return 0;
+    }
+  }
 
   GroupExpense.dummy(num seed)
       : this(
