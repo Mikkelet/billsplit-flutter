@@ -15,13 +15,13 @@ class DebtsView extends StatelessWidget {
         stream: cubit.getDebtsStream(),
         body: (debts) {
           if (cubit.state is SyncingGroup && debts.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (debts.isEmpty) {
             return const Padding(
               padding: EdgeInsets.all(64.0),
               child: Text(
-                "All debts are settled!",
+                "Your debts are settled!",
                 textAlign: TextAlign.justify,
                 style: TextStyle(color: Colors.grey),
               ),

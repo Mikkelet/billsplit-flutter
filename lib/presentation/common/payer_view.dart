@@ -25,13 +25,14 @@ class PayerView extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
+              person.pfpUrl.isNotEmpty ?
               ClipOval(
                   child: Image.network(
                 person.pfpUrl,
                 height: 80,
                 width: 80,
                 fit: BoxFit.fitWidth,
-              )),
+              )) : const Icon(Icons.person, size: 80,),
               isPayer
                   ? const Icon(
                       color: Colors.greenAccent,
