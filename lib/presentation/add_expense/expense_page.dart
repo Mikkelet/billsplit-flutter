@@ -56,7 +56,7 @@ class AddExpensePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: IndividualExpenseView(e),
                               )),
-                          Text("TOTAL: \$${expense.getTotal()}"),
+                          Text("TOTAL: \$${expense.total}"),
                         ]),
                       ),
                     );

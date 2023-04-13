@@ -41,9 +41,7 @@ class DebtCalculator {
         final debtsByIndebted = payedForIndividualExpenses
             .where((element) => element.person.uid == indebted.uid);
         // accumulate all their debts
-        final totalDebt = debtsByIndebted
-            .map((e) => e.expenseState)
-            .fold(0.0, (previousValue, element) => previousValue + element);
+        final totalDebt = debtsByIndebted.map((e) => e.expenseState).sum;
         return Pair(indebted, totalDebt);
       });
       return Pair(person, accExpensesByIe);
@@ -64,7 +62,7 @@ class DebtCalculator {
         final debtToPayer = debts.second
             .where((element) => element.first.uid == payer.uid)
             .map((e) => e.second)
-            .fold(0.0, (prev, element) => prev + element);
+            .sum;
         return Pair(indebted, debtToPayer);
       });
       return Pair(payer, owedByPayer);
@@ -82,13 +80,13 @@ class DebtCalculator {
       final otherPayerDebtToPayer = otherPayer.second
           .where((element) => element.first.uid == person.uid)
           .map((e) => e.second)
-          .fold(0.0, (prev, element) => prev + element);
+          .sum;
 
       // filter otherPayee debt to payee and accumulate
       final payerDebtToOtherPayer = payerDebt.second
           .where((element) => element.first.uid == otherPayer.first.uid)
           .map((e) => e.second)
-          .fold(0.0, (previousValue, element) => previousValue + element);
+          .sum;
       final effectiveDebt = payerDebtToOtherPayer - otherPayerDebtToPayer;
       return Pair(otherPayer.first, effectiveDebt);
     });
@@ -106,18 +104,14 @@ class DebtCalculator {
         final paymentsByPerson = payments.where((element) =>
             element.createdBy.uid == person.uid &&
             element.paidTo.uid == debtee.uid);
-        final accPayments = paymentsByPerson
-            .map((e) => e.amount)
-            .fold(0.0, (previousValue, element) => previousValue + element);
+        final accPayments = paymentsByPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount - accPayments);
       } else if (debtAmount < 0) {
         // if debt is owed TO person (negative debt), find payments made by debtee to person
         final paymentsToPerson = payments.where((element) =>
             element.paidTo.uid == person.uid &&
             element.createdBy.uid == debtee.uid);
-        final accPayments = paymentsToPerson
-            .map((e) => e.amount)
-            .fold(0.0, (previousValue, element) => previousValue + element);
+        final accPayments = paymentsToPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount + accPayments);
       } else {
         print("- no debt");
@@ -134,9 +128,7 @@ class DebtCalculator {
   }
 
   num calculateTotalDebt() {
-    return expenses
-        .map((it) => it.getTotal())
-        .fold(0.0, (previousValue, element) => previousValue + element);
+    return expenses.map((it) => it.total).sum;
   }
 
   void logCalculations() {
@@ -199,8 +191,9 @@ extension GroupExpenseExt on GroupExpense {
 
   Iterable<IndividualExpense> getIndividualWithShared() =>
       individualExpenses.map((e) {
-        final expense =
-            e.isParticipant ? e.expenseState + getSharedExpense() : e.expenseState;
+        final expense = e.isParticipant
+            ? e.expenseState + getSharedExpense()
+            : e.expenseState;
         return IndividualExpense(
             person: e.person, expense: expense, isParticipant: e.isParticipant);
       });

@@ -19,7 +19,7 @@ class EventView extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
           event is GroupExpense
-              ? Text("Expense \$${(event as GroupExpense).getTotal()}")
+              ? Text("Expense \$${(event as GroupExpense).total}")
               : Container(),
           event is Payment
               ? Text(

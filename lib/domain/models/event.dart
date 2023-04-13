@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:collection/collection.dart';
 
 abstract class Event {
   final String id;
@@ -40,10 +41,9 @@ class GroupExpense extends Event {
       : sharedExpense = IndividualExpense.sharedExpense(sharedExpense),
         super(id, createdBy, timestamp);
 
-  num getTotal() {
-    return individualExpenses.map((e) => e.expenseState).fold(sharedExpense.expenseState,
-        (previousValue, element) => previousValue + element);
-  }
+  num get total =>
+      individualExpenses.map((e) => e.expenseState).sum +
+      sharedExpense.expenseState;
 
   GroupExpense.dummy(num seed)
       : this(
