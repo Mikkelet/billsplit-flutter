@@ -16,5 +16,5 @@ extension PeopleExt on List<Person> {
 }
 
 extension PersonExt on Person {
-  PersonDTO toDTO() => PersonDTO(uid, name, pfpUrl);
+  PersonDTO toDTO() => PersonDTO(uid, nameState, pfpUrl);
 }

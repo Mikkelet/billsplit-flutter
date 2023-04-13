@@ -41,4 +41,8 @@ class AuthProvider {
   }
 
   Person? get user => _user;
+
+  Future signOut() async {
+    await _firebaseAuth.signOut();
+  }
 }

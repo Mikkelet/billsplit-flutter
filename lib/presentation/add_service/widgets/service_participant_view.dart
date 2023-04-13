@@ -23,7 +23,7 @@ class ServiceParticipantView extends StatelessWidget {
             onClick: () {
               cubit.onPayerClicked(person);
             }),
-        isPayer ? Text("${person.name} is paying") : Text(person.name),
+        isPayer ? Text("${person.nameState} is paying") : Text(person.nameState),
       ],
     );
   }

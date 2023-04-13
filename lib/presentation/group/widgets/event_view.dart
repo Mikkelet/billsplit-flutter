@@ -23,9 +23,9 @@ class EventView extends StatelessWidget {
               : Container(),
           event is Payment
               ? Text(
-                  "Payment by ${event.createdBy.name}: \$${(event as Payment).amount}")
+                  "Payment by ${event.createdBy.nameState}: \$${(event as Payment).amount}")
               : Container(),
-          Text("Created by ${event.createdBy.name}"),
+          Text("Created by ${event.createdBy.nameState}"),
         ]),
       ),
     );

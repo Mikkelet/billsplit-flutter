@@ -25,7 +25,7 @@ class GroupView extends StatelessWidget {
               child: Column(
                 children: [
                   Text(group.name),
-                  Text(group.createdBy.name),
+                  Text(group.createdBy.nameState),
                 ],
               ),
             ),

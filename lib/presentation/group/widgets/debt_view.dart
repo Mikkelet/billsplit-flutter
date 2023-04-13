@@ -10,10 +10,10 @@ class DebtView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (debt.second > 0) {
-      return Text("You owe \$${debt.second} to ${debt.first.name}");
+      return Text("You owe \$${debt.second} to ${debt.first.nameState}");
     }
     if (debt.second < 0) {
-      return Text("${debt.first.name} owes you \$${debt.second}");
+      return Text("${debt.first.nameState} owes you \$${debt.second}");
     }
     return Container();
   }

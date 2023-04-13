@@ -1,13 +1,15 @@
-
 class Person {
   final String uid;
-  final String name;
+  final String _name;
   final String pfpUrl;
 
-  Person(this.uid, this.name, this.pfpUrl);
+  // modifiable values
+  late String nameState = _name;
+
+  Person(this.uid, String name, this.pfpUrl) : _name = name;
 
   Person.dummy(num seed)
       : uid = "P$seed",
-        name = "Person $seed",
+        _name = "Person $seed",
         pfpUrl = "";
 }

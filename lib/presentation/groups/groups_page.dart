@@ -1,9 +1,9 @@
 import 'package:billsplit_flutter/presentation/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
-import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/groups/widgets/group_view.dart';
+import 'package:billsplit_flutter/presentation/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,9 +17,9 @@ class GroupsPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).push(FriendsPage.getRoute());
+                Navigator.of(context).push(ProfilePage.getRoute());
               },
-              icon: const Icon(Icons.people))
+              icon: const Icon(Icons.person))
         ],
       ),
       floatingActionButton: FloatingActionButton(

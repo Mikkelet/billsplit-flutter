@@ -8,7 +8,7 @@ class FriendView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Text(friend.person.name),
+      Text(friend.person.nameState),
       Text(friend.status.name)
     ],);
   }

@@ -26,7 +26,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
       color: Colors.grey,
       child: Column(
         children: [
-          Text(widget.individualExpense.person.name,
+          Text(widget.individualExpense.person.nameState,
               textAlign: TextAlign.start),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
