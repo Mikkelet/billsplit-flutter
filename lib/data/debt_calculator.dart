@@ -42,7 +42,7 @@ class DebtCalculator {
             .where((element) => element.person.uid == indebted.uid);
         // accumulate all their debts
         final totalDebt = debtsByIndebted
-            .map((e) => e.expense)
+            .map((e) => e.expenseState)
             .fold(0.0, (previousValue, element) => previousValue + element);
         return Pair(indebted, totalDebt);
       });
@@ -194,13 +194,13 @@ class DebtCalculator {
 
 extension GroupExpenseExt on GroupExpense {
   num getSharedExpense() =>
-      sharedExpense.expense /
+      sharedExpense.expenseState /
       individualExpenses.where((element) => element.isParticipant).length;
 
   Iterable<IndividualExpense> getIndividualWithShared() =>
       individualExpenses.map((e) {
         final expense =
-            e.isParticipant ? e.expense + getSharedExpense() : e.expense;
+            e.isParticipant ? e.expenseState + getSharedExpense() : e.expenseState;
         return IndividualExpense(
             person: e.person, expense: expense, isParticipant: e.isParticipant);
       });

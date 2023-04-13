@@ -41,11 +41,8 @@ class GroupExpense extends Event {
         super(id, createdBy, timestamp);
 
   num getTotal() {
-    final sumOfExpenses = individualExpenses
-        .map((e) => e.expense)
-        .fold(0.0, (previousValue, element) => previousValue + element);
-
-    return sumOfExpenses + sharedExpense.expense;
+    return individualExpenses.map((e) => e.expenseState).fold(sharedExpense.expenseState,
+        (previousValue, element) => previousValue + element);
   }
 
   GroupExpense.dummy(num seed)

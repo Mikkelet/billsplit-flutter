@@ -35,7 +35,7 @@ extension EventExt on Event {
           "expense",
           (this as GroupExpense).description,
           (this as GroupExpense).payer.toDTO(),
-          (this as GroupExpense).sharedExpense.expense,
+          (this as GroupExpense).sharedExpense.expenseState,
           (this as GroupExpense).individualExpenses.toDTOs());
     }
     return PaymentDTO(id, createdBy.toDTO(), timestamp, "payment",

@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
@@ -12,9 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddExpensePage extends StatelessWidget {
   final GroupExpense expense;
   final Group group;
-  final textFieldController = TextEditingController(text: "");
 
-  AddExpensePage({required this.expense, required this.group, super.key});
+  const AddExpensePage({required this.expense, required this.group, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +52,10 @@ class AddExpensePage extends StatelessWidget {
                       child: Center(
                         child: Column(children: [
                           IndividualExpenseView(expense.sharedExpense),
-                          ...expense.individualExpenses.mapToImmutableList(
-                              (e) => IndividualExpenseView(e)),
+                          ...expense.individualExpenses.map((e) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: IndividualExpenseView(e),
+                              )),
                           Text("TOTAL: \$${expense.getTotal()}"),
                         ]),
                       ),

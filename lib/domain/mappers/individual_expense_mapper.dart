@@ -19,5 +19,5 @@ extension IndividualExpensesExt on List<IndividualExpense> {
 
 extension IndividualExpenseExt on IndividualExpense {
   IndividualExpenseDTO toDTO() =>
-      IndividualExpenseDTO(person.toDTO(), expense, isParticipant);
+      IndividualExpenseDTO(person.toDTO(), expenseState, isParticipant);
 }

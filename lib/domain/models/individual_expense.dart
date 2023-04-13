@@ -2,17 +2,21 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 
 class IndividualExpense {
   final Person person;
-  num expense;
-  bool isParticipant;
+  final num _expense;
+  final bool isParticipant;
+
+  // modifiable values
+  late num expenseState = _expense;
 
   IndividualExpense(
-      {required this.person, this.expense = 0, this.isParticipant = false});
+      {required this.person, num expense = 0, this.isParticipant = false})
+      : _expense = expense;
 
   IndividualExpense.sharedExpense(num sharedExpense)
       : this(person: Person("", "Shared", ""), expense: sharedExpense);
 
   @override
   String toString() {
-    return "IndividualExpense(person=$person, expense=$expense, isParticipant=$isParticipant)";
+    return "IndividualExpense(person=$person, expense=$expenseState, isParticipant=$isParticipant)";
   }
 }
