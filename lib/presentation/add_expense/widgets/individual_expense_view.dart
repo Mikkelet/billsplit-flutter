@@ -1,6 +1,6 @@
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
-import 'package:billsplit_flutter/presentation/add_expense/widgets/payer_view.dart';
+import 'package:billsplit_flutter/presentation/common/payer_view.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,13 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PayerView(individualExpense: widget.individualExpense),
+              PayerView(
+                person: widget.individualExpense.person,
+                isPayer: _isPayer(widget.individualExpense, cubit),
+                onClick: () {
+                  cubit.onPayerSelected(widget.individualExpense.person);
+                },
+              ),
               Flexible(
                 child: ExpenseTextField(
                     initValue: widget.individualExpense.expenseState,
@@ -43,7 +49,8 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                     }),
               ),
               _shouldShowSharedExpense(widget.individualExpense, cubit)
-                  ? Text("\$${cubit.groupExpense.sharedExpensePerParticipant.fmt2dec()}")
+                  ? Text(
+                      "\$${cubit.groupExpense.sharedExpensePerParticipant.fmt2dec()}")
                   : const SizedBox(),
               _isSharedExpense(widget.individualExpense, cubit)
                   ? Checkbox(
@@ -60,8 +67,14 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
     );
   }
 
-  bool _shouldShowSharedExpense(IndividualExpense individualExpense, AddExpenseBloc cubit){
-    return _isSharedExpense(individualExpense, cubit) && widget.individualExpense.isParticipantState;
+  bool _isPayer(IndividualExpense individualExpense, AddExpenseBloc cubit) {
+    return cubit.groupExpense.payerState.uid == individualExpense.person.uid;
+  }
+
+  bool _shouldShowSharedExpense(
+      IndividualExpense individualExpense, AddExpenseBloc cubit) {
+    return _isSharedExpense(individualExpense, cubit) &&
+        widget.individualExpense.isParticipantState;
   }
 
   bool _isSharedExpense(

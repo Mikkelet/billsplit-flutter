@@ -11,7 +11,7 @@ class ServiceView extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Text(service.name),
+          Text(service.nameState),
           Text(service.monthlyExpenseState.toString()),
         ],
       ),

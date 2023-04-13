@@ -36,3 +36,8 @@ extension ServiceDbExt on ServiceDb {
 
   SubscriptionService toService() => toDto().toService();
 }
+
+extension ServiceExt on SubscriptionService {
+  ServiceDTO toDTO() => ServiceDTO(id, nameState, imageUrl, monthlyExpenseState,
+      createdBy.toDTO(), participants.toDTO(), payerState.toDTO());
+}

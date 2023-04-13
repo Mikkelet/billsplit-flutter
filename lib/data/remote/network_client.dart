@@ -52,6 +52,8 @@ class NetworkClient {
     print("Request: ${response.request}");
     print("Response headers: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');
+    print('Response body:${response.body}');
+
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }
@@ -72,7 +74,7 @@ class NetworkClient {
 
     final response =
         await _client.put(url, body: json.encode(body), headers: headers);
-    print("Request: ${response.request}");
+    print("Request body: ${response.body}");
     print("Response headers: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 408) {
