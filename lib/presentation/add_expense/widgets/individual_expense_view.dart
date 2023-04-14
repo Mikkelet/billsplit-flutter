@@ -22,48 +22,44 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return Container(
-      color: Colors.grey,
-      child: Column(
-        children: [
-          Text(widget.individualExpense.person.nameState,
-              textAlign: TextAlign.start),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PayerView(
-                person: widget.individualExpense.person,
-                isPayer: _isPayer(widget.individualExpense, cubit),
-                onClick: () {
-                  cubit.onPayerSelected(widget.individualExpense.person);
-                },
-              ),
-              Flexible(
-                child: ExpenseTextField(
-                    initValue: widget.individualExpense.expenseState,
-                    textEditingController: textController,
-                    onChange: (value) {
-                      widget.individualExpense.expenseState = value;
-                      context.read<AddExpenseBloc>().onExpensesUpdated();
-                      setState(() {});
-                    }),
-              ),
-              _shouldShowSharedExpense(widget.individualExpense, cubit)
-                  ? Text(
-                      "\$${cubit.groupExpense.sharedExpensePerParticipant.fmt2dec()}")
-                  : const SizedBox(),
-              _isSharedExpense(widget.individualExpense, cubit)
-                  ? Checkbox(
-                      value: widget.individualExpense.isParticipantState,
-                      onChanged: (value) {
-                        cubit.onParticipantClicked(
-                            widget.individualExpense, value);
-                      })
-                  : const SizedBox()
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Text(widget.individualExpense.person.nameState,
+            textAlign: TextAlign.start),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            PayerView(
+              person: widget.individualExpense.person,
+              isPayer: _isPayer(widget.individualExpense, cubit),
+              onClick: () {
+                cubit.onPayerSelected(widget.individualExpense.person);
+              },
+            ),
+            Flexible(
+              child: ExpenseTextField(
+                  textEditingController: textController,
+                  onChange: (value) {
+                    widget.individualExpense.expenseState = value;
+                    context.read<AddExpenseBloc>().onExpensesUpdated();
+                    setState(() {});
+                  }),
+            ),
+            _shouldShowSharedExpense(widget.individualExpense, cubit)
+                ? Text(
+                    "\$${cubit.groupExpense.sharedExpensePerParticipant.fmt2dec()}")
+                : const SizedBox(),
+            _isSharedExpense(widget.individualExpense, cubit)
+                ? Checkbox(
+                    value: widget.individualExpense.isParticipantState,
+                    onChanged: (value) {
+                      cubit.onParticipantClicked(
+                          widget.individualExpense, value);
+                    })
+                : const SizedBox()
+          ],
+        ),
+      ],
     );
   }
 

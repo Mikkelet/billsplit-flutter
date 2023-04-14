@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class ExpenseTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final void Function(num) onChange;
-  final num initValue;
 
   ExpenseTextField(
       {Key? key,
       required this.textEditingController,
-      required this.onChange,
-      required this.initValue})
+      required this.onChange})
       : super(key: key) {
     textEditingController.addListener(() {
       onChange(_parseInputToNum());

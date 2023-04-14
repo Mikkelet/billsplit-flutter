@@ -10,4 +10,14 @@ class ProfileCubit extends BaseCubit {
         .then((value) => {})
         .catchError((error) => showError(error));
   }
+
+  void changeProfilePic(){
+
+  }
+
+  void changeName(String name){
+
+  }
+
+
 }

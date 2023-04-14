@@ -79,7 +79,6 @@ class AddServicePage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ExpenseTextField(
-                                initValue: service.monthlyExpenseState,
                                 textEditingController: _expenseTextController,
                                 onChange: (value) {
                                   service.monthlyExpenseState = value;

@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/profile/bloc/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -11,28 +11,44 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final person = Person.dummy(0);
     return BlocProvider<ProfileCubit>(
       create: (context) => ProfileCubit(),
-      child: Builder(
-        builder: (context) {
-          final cubit = context.read<ProfileCubit>();
-          return Scaffold(
-            appBar: AppBar(leading: const BackButton()),
-            body: Column(
+      child: Builder(builder: (context) {
+        final cubit = context.read<ProfileCubit>();
+        final person = cubit.user;
+        return Scaffold(
+          appBar: AppBar(leading: const BackButton()),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextField(
-                    controller: _nameTextController..text = person.nameState,
-                    onChanged: (val) {
-                      person.nameState = val;
-                    },
+                ClipOval(
+                    child: Image.network(
+                  person.pfpUrl,
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.fitWidth,
+                )),
+                const SizedBox(height: 16),
+                RoundedListItem(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
+                        maxLines: 1,
+                        controller: _nameTextController
+                          ..text = person.nameState,
+                        onChanged: (val) {
+                          person.nameState = val;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Text(person.email, style: const TextStyle(fontSize: 16)),
+                      const SizedBox(height: 16),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Text(person.nameState),
                 ),
                 MaterialButton(
                     onPressed: () {
@@ -50,9 +66,9 @@ class ProfilePage extends StatelessWidget {
                     child: const Text("Sign out")),
               ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,7 +57,7 @@ class AddExpensePage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: IndividualExpenseView(e),
                               )),
-                          Text("TOTAL: \$${expense.total}"),
+                          Text("TOTAL: \$${expense.total.fmt2dec()}"),
                         ]),
                       ),
                     );

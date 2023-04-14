@@ -1,5 +1,7 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class DebtView extends StatelessWidget {
@@ -9,12 +11,27 @@ class DebtView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String text = "";
+    Color color = Colors.black;
     if (debt.second > 0) {
-      return Text("You owe \$${debt.second} to ${debt.first.nameState}");
+      text = "You owe \$${debt.second.fmt2dec()} to ${debt.first.nameState}";
+      color = Colors.redAccent;
     }
     if (debt.second < 0) {
-      return Text("${debt.first.nameState} owes you \$${debt.second}");
+      text =
+          "${debt.first.nameState} owes you \$${debt.second.abs().fmt2dec()}";
+      color = Colors.greenAccent;
     }
-    return Container();
+    return RoundedListItem(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(text, style: TextStyle(color: color)),
+        MaterialButton(
+          onPressed: () {},
+          child: const Text("Pay"),
+        )
+      ],
+    ));
   }
 }

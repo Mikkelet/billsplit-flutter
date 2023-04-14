@@ -35,7 +35,8 @@ class AuthProvider {
     return _firebaseAuth.userChanges().map((event) {
       _user = event == null
           ? null
-          : Person(event.uid, event.displayName!, event.photoURL!);
+          : Person(event.uid, event.displayName!, event.photoURL!,
+              email: event.email ?? "");
       return event?.uid;
     });
   }

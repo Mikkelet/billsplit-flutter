@@ -13,7 +13,7 @@ class ServiceParticipantView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddServiceBloc>();
-    final isPayer = cubit.service.payerState == person;
+    final isPayer = cubit.service.payerState.uid == person.uid;
 
     return Row(
       children: [

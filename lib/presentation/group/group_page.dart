@@ -40,6 +40,8 @@ class GroupPage extends StatelessWidget {
             return null;
           }),
           appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
               title: Text(group.name),
               leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
@@ -55,22 +57,25 @@ class GroupPage extends StatelessWidget {
               return Center(child: Text(state.error.toString()));
             }
             if (state is GroupState) {
-              return WillPopScope(child: Builder(builder: (context) {
-                switch (state.nav) {
-                  case GroupPageNav.services:
-                    return const ServicesView();
-                  case GroupPageNav.debt:
-                    return const DebtsView();
-                  default:
-                    return const EventsView();
-                }
-              }), onWillPop: () async {
-                if (state.nav != GroupPageNav.events) {
-                  context.read<GroupBloc>().showEvents();
-                  return false;
-                }
-                return true;
-              });
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: WillPopScope(child: Builder(builder: (context) {
+                  switch (state.nav) {
+                    case GroupPageNav.services:
+                      return const ServicesView();
+                    case GroupPageNav.debt:
+                      return const DebtsView();
+                    default:
+                      return const EventsView();
+                  }
+                }), onWillPop: () async {
+                  if (state.nav != GroupPageNav.events) {
+                    context.read<GroupBloc>().showEvents();
+                    return false;
+                  }
+                  return true;
+                }),
+              );
             }
             return Container();
           }),
