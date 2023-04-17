@@ -53,9 +53,9 @@ class RequestTypeEmail extends FriendRequestType {
 
 @JsonSerializable(createFactory: false)
 class RequestTypeUserId extends FriendRequestType {
-  final String userId;
+  final String friendId;
 
-  RequestTypeUserId(this.userId) : super("userId");
+  RequestTypeUserId(this.friendId) : super("userId");
 
   @override
   Json toJson() => _$RequestTypeUserIdToJson(this);

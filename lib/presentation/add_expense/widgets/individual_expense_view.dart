@@ -23,9 +23,10 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.individualExpense.person.nameState,
-            textAlign: TextAlign.start),
+            textAlign: TextAlign.left),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

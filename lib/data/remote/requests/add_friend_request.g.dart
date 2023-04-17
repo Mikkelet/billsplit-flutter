@@ -25,5 +25,5 @@ Map<String, dynamic> _$RequestTypeEmailToJson(RequestTypeEmail instance) =>
 Map<String, dynamic> _$RequestTypeUserIdToJson(RequestTypeUserId instance) =>
     <String, dynamic>{
       'type': instance.type,
-      'userId': instance.userId,
+      'friendId': instance.friendId,
     };

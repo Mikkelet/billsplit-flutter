@@ -1,10 +1,15 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PayerView extends StatelessWidget {
   final Person person;
   final bool isPayer;
   final Function() onClick;
+
+  static const double iconSize = 64;
+  static const double selectedIconSize = 40;
 
   const PayerView(
       {Key? key,
@@ -15,33 +20,40 @@ class PayerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onClick();
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              person.pfpUrl.isNotEmpty ?
-              ClipOval(
-                  child: Image.network(
-                person.pfpUrl,
-                height: 80,
-                width: 80,
-                fit: BoxFit.fitWidth,
-              )) : const Icon(Icons.person, size: 80,),
-              isPayer
-                  ? const Icon(
-                      color: Colors.greenAccent,
-                      Icons.attach_money_rounded,
-                      size: 40,
-                    )
-                  : const SizedBox(),
-            ],
-          ),
+    final cubit = context.read<AddExpenseBloc>();
+    final isSharedExpense =
+        person.uid == cubit.groupExpense.sharedExpense.person.uid;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            IconButton(
+                iconSize: iconSize,
+                onPressed: isSharedExpense ? null : onClick,
+                padding: EdgeInsets.zero,
+                icon: person.pfpUrl.isNotEmpty
+                    ? ClipOval(
+                        child: Image.network(
+                          person.pfpUrl,
+                          fit: BoxFit.cover,
+                          height: iconSize,
+                          width: iconSize,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.person,
+                        size: iconSize,
+                      )),
+            isPayer
+                ? const Icon(
+                    color: Colors.greenAccent,
+                    Icons.attach_money_rounded,
+                    size: selectedIconSize,
+                  )
+                : const SizedBox(),
+          ],
         ),
       ),
     );

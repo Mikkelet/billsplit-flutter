@@ -23,6 +23,8 @@ dependencies:
   collection:
   get_it: ^7.2.0
   intl: ^0.17.0
+  email_validator:
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   json_serializable: ^6.6.1

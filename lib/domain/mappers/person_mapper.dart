@@ -8,7 +8,7 @@ extension PeopleDTOExt on List<PersonDTO> {
 }
 
 extension PersonDTOExt on PersonDTO {
-  Person toPerson() => Person(id, name, pfpUrl);
+  Person toPerson() => Person(id, name, pfpUrl: pfpUrl);
 }
 
 extension PeopleExt on List<Person> {

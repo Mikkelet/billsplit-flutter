@@ -50,10 +50,10 @@ class ApiService {
     return AddServiceResponse.fromJson(response).service;
   }
 
-  Future<FriendDTO> addFriendEmail(String value) => _addFriend("email", value);
+  Future<FriendDTO> addFriendEmail(String email) => _addFriend("email", email);
 
-  Future<FriendDTO> addFriendUserId(String value) =>
-      _addFriend("userId", value);
+  Future<FriendDTO> addFriendUserId(String userId) =>
+      _addFriend("userId", userId);
 
   Future<FriendDTO> _addFriend(String type, String value) async {
     final FriendRequestType requestType;
@@ -62,8 +62,7 @@ class ApiService {
     } else {
       requestType = RequestTypeUserId(value);
     }
-    final data = AddFriendRequest(requestType);
-    final response = await _client.post("friend", data.toJson());
+    final response = await _client.post("friends", requestType.toJson());
     return AddFriendResponse.fromJson(response).friend;
   }
 

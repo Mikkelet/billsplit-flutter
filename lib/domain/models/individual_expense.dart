@@ -16,7 +16,7 @@ class IndividualExpense {
 
   IndividualExpense.sharedExpense(num sharedExpense)
       : this(
-            person: Person("", "Shared", "https://i.imgur.com/S1HrKqU.png"),
+            person: Person("", "Shared", pfpUrl: "https://i.imgur.com/S1HrKqU.png"),
             expense: sharedExpense);
 
   @override

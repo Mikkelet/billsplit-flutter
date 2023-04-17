@@ -6,9 +6,9 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:collection/collection.dart';
 
 final samplePeopleShera = [
-  Person("0", "Aang", ""),
-  Person("1", "Toph", ""),
-  Person("2", "Katara", ""),
+  Person("0", "Aang"),
+  Person("1", "Toph"),
+  Person("2", "Katara"),
 ];
 
 final sampleGroup = Group(

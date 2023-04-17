@@ -5,19 +5,12 @@ class ProfileCubit extends BaseCubit {
   final signOutUseCase = SignOutUseCase();
 
   void signOut() {
-    signOutUseCase
-        .launch()
-        .then((value) => {})
-        .catchError((error) => showError(error));
+    signOutUseCase.launch().then((value) {}).catchError((error) {
+      showError(error);
+    });
   }
 
-  void changeProfilePic(){
+  void changeProfilePic() {}
 
-  }
-
-  void changeName(String name){
-
-  }
-
-
+  void changeName(String name) {}
 }

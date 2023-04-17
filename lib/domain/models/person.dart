@@ -7,7 +7,7 @@ class Person {
   // modifiable values
   late String nameState = _name;
 
-  Person(this.uid, String name, this.pfpUrl, {this.email = ""})
+  Person(this.uid, String name, {this.pfpUrl = "", this.email = ""})
       : _name = name.isEmpty ? "Splitsby user" : name;
 
   Person.dummy(num seed)
