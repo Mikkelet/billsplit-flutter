@@ -50,20 +50,42 @@ class ProfilePage extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(height: 16),
                 MaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).push(FriendsPage.getRoute());
-                    },
-                    elevation: 0,
-                    color: Colors.grey,
-                    child: const Text("Friends")),
+                  color: Colors.grey,
+                  elevation: 0,
+                  minWidth: double.infinity,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  onPressed: () {
+                    Navigator.of(context).push(FriendsPage.getRoute());
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(18.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Friends"),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 MaterialButton(
-                    onPressed: () {
-                      cubit.signOut();
-                    },
-                    elevation: 0,
-                    color: Colors.redAccent,
-                    child: const Text("Sign out")),
+                  color: Colors.redAccent,
+                  elevation: 0,
+                  minWidth: double.infinity,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  onPressed: () {
+                    cubit.signOut();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Sign out"),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
