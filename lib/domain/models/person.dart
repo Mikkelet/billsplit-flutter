@@ -15,4 +15,13 @@ class Person {
         _name = "Person $seed",
         email = "dummy@test.dk",
         pfpUrl = "";
+
+  @override
+  int get hashCode => int.fromEnvironment(uid);
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! Person) return false;
+    return uid == other.uid;
+  }
 }
