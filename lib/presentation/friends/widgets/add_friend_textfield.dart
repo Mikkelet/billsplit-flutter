@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/friends/bloc/add_friend_cubit.dart';
 import 'package:email_validator/email_validator.dart';
@@ -19,7 +20,7 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseBlocWidget(
       create: (context) => AddFriendCubit(),
       child: BlocBuilder<AddFriendCubit, UiState>(
         builder: (context, state) {
