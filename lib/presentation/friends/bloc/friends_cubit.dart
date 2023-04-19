@@ -7,7 +7,7 @@ class FriendsCubit extends BaseCubit {
   final _getFriendsUseCase = GetFriendsUseCase();
   final _observeFriendsUseCase = ObserveFriendsUseCase();
 
-  Stream<Iterable<Friend>> friendsStream() => _observeFriendsUseCase.observe();
+  Stream<List<Friend>> friendsStream() => _observeFriendsUseCase.observe().map((event) => event.toList());
 
   void getFriends() {
     _getFriendsUseCase.launch().onError((error, stackTrace) => showError(error));

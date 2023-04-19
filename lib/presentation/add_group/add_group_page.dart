@@ -21,6 +21,7 @@ class AddGroupPage extends StatelessWidget {
           final cubit = context.read<AddGroupCubit>();
           return Scaffold(
             appBar: AppBar(
+              leading: const BackButton(),
               actions: [
                 IconButton(onPressed: () {}, icon: const Icon(Icons.check))
               ],
@@ -31,12 +32,16 @@ class AddGroupPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(height: 40),
-                    const Text("Name"),
-                    TextField(controller: nameTextController),
+                    RoundedListItem(
+                        child: TextField(
+                      controller: nameTextController,
+                      decoration: const InputDecoration(border: InputBorder.none, hintText: "New group"),
+                    )),
                     Container(height: 16),
                     RoundedListItem(
                       child: Column(
                         children: [
+                          cubit.people.isEmpty ? const Text("Add people to the group") : const SizedBox(),
                           ...cubit.people
                               .map((e) => AddedPersonView(person: e))
                               .toList(),
@@ -47,9 +52,6 @@ class AddGroupPage extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    MaterialButton(
-                        onPressed: () {}, child: const Text("Add group"))
                   ],
                 ),
               ),
