@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,50 +58,45 @@ class AddServicePage extends StatelessWidget {
                         horizontal: 16, vertical: 40),
                     child: Column(
                       children: [
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 16),
-                              child: TextField(
-                                controller: _nameTextController,
-                                onChanged: (value) {
-                                  service.nameState = value;
-                                },
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Netflix, rent, etc"),
-                              ),
-                            )),
-                        const SizedBox(height: 16),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ExpenseTextField(
-                                textEditingController: _expenseTextController,
-                                onChange: (value) {
-                                  service.monthlyExpenseState = value;
-                                  context
-                                      .read<AddServiceBloc>()
-                                      .monthlyExpenseUpdated();
-                                }),
+                        RoundedListItem(
+                          child: TextField(
+                            controller: _nameTextController,
+                            onChanged: (value) {
+                              service.nameState = value;
+                            },
+                            decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Netflix, rent, etc"),
                           ),
                         ),
-                        SizedBox(
-                          height: 80,
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: ExpenseTextField(
+                              textEditingController: _expenseTextController,
+                              onChange: (value) {
+                                service.monthlyExpenseState = value;
+                                context
+                                    .read<AddServiceBloc>()
+                                    .monthlyExpenseUpdated();
+                              }),
+                        ),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
                           child: Align(
-                            alignment: Alignment.center,
+                            alignment: Alignment.centerLeft,
                             child: Text(
                                 "Participants will pay \$${_getMonthlyServicePerPerson().fmt2dec()} every month"),
                           ),
                         ),
-                        ...service.participants
-                            .map((e) => ServiceParticipantView(person: e))
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Column(
+                            children: [
+                              ...service.participants
+                                  .map((e) => ServiceParticipantView(person: e))
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   );

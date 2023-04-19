@@ -16,6 +16,7 @@ class FriendsPage extends StatelessWidget {
       create: (context) => FriendsCubit()..getFriends(),
       child: Scaffold(
         appBar: AppBar(
+          title: const Text("Friends"),
           leading: const BackButton(),
         ),
         body: Builder(
@@ -38,11 +39,16 @@ class FriendsPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 40),
                     itemBuilder: (context, index) {
                       if (index == 0) {
-                        return AddFriendTextField();
+                        return Column(
+                          children: const [
+                            AddFriendTextField(),
+                            SizedBox(height: 32,)
+                          ],
+                        );
                       }
                       final i = index - 1;
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: FriendView(friend: lsFriends[i]),
                       );
                     },

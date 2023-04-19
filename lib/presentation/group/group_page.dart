@@ -57,28 +57,25 @@ class GroupPage extends StatelessWidget {
               if (state is Loading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (state is GroupState) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: WillPopScope(child: Builder(builder: (context) {
-                    switch (state.nav) {
-                      case GroupPageNav.services:
-                        return const ServicesView();
-                      case GroupPageNav.debt:
-                        return const DebtsView();
-                      default:
-                        return const EventsView();
-                    }
-                  }), onWillPop: () async {
-                    if (state.nav != GroupPageNav.events) {
-                      context.read<GroupBloc>().showEvents();
-                      return false;
-                    }
-                    return true;
-                  }),
-                );
-              }
-              return Container();
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: WillPopScope(child: Builder(builder: (context) {
+                  switch (cubit.navIndex) {
+                    case GroupPageNav.services:
+                      return const ServicesView();
+                    case GroupPageNav.debt:
+                      return const DebtsView();
+                    default:
+                      return const EventsView();
+                  }
+                }), onWillPop: () async {
+                  if (cubit.navIndex != GroupPageNav.events) {
+                    context.read<GroupBloc>().showEvents();
+                    return false;
+                  }
+                  return true;
+                }),
+              );
             }),
           );
         },

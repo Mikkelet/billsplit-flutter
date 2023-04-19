@@ -19,7 +19,7 @@ class GroupBloc extends BaseCubit {
   final _observeDebtsUseCase = ObserveDebtsUseCase();
 
   final Group group;
-  GroupPageNav _navIndex = GroupPageNav.events;
+  GroupPageNav navIndex = GroupPageNav.events;
 
   GroupBloc(this.group)
       : super.withState(SyncingGroup(GroupPageNav.events));
@@ -34,10 +34,10 @@ class GroupBloc extends BaseCubit {
       _observeDebtsUseCase.observe(group.id);
 
   void loadGroup() async {
-    emit(SyncingGroup(_navIndex));
+    emit(SyncingGroup(navIndex));
     _getGroupUseCase
         .launch(group.id)
-        .then((value) => emit(GroupLoaded(_navIndex)))
+        .then((value) => emit(GroupLoaded(navIndex)))
         .catchError((err) {
       showError(err);
     });
@@ -50,8 +50,8 @@ class GroupBloc extends BaseCubit {
   void showDebt() => showPage(GroupPageNav.events);
 
   void showPage(GroupPageNav nav) {
-    _navIndex = nav;
-    final newState = GroupLoaded(_navIndex);
+    navIndex = nav;
+    final newState = GroupLoaded(navIndex);
     emit(newState);
   }
 }

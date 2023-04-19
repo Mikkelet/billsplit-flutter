@@ -14,7 +14,9 @@ class ExpenseEventView extends StatelessWidget {
         ? groupExpense.description
         : "${groupExpense.payerState.nameState} added a new expense";
     return Column(
-      children: [Text(description), Text("\$${groupExpense.total.fmt2dec()}")],
+      children: [Text(description),
+        const SizedBox(height: 8),
+        Text("\$${groupExpense.total.fmt2dec()}", style: Theme.of(context).textTheme.titleLarge,)],
     );
   }
 }
