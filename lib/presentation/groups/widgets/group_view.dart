@@ -1,11 +1,10 @@
+import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/presentation/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../domain/models/group.dart';
-import '../../group/group_page.dart';
 
 class GroupView extends StatelessWidget {
   final Group group;
@@ -24,27 +23,30 @@ class GroupView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
       child: Center(
-        child: Card(
-          color: Theme.of(context).cardColor,
-          child: InkWell(
-            splashColor: Theme.of(context).splashColor,
-            splashFactory: Theme.of(context).splashFactory,
-            onTap: () => _onClick(context),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(group.name,
-                          style: Theme.of(context).textTheme.titleMedium,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis),
-                    ),
-                    _debtView(context, yourDebts)
-                  ],
-                ),
+        child: MaterialButton(
+          color: Theme.of(context).primaryColorLight,
+          splashColor: Theme.of(context).splashColor,
+          elevation: 0,
+          highlightElevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          onPressed: () {
+            _onClick(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(group.name,
+                        style: Theme.of(context).textTheme.titleMedium,
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                  _debtView(context, yourDebts)
+                ],
               ),
             ),
           ),
