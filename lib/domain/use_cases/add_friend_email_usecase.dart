@@ -13,5 +13,4 @@ class AddFriendEmailUseCase {
     final response = await _apiService.addFriendEmail(email);
     _database.friendsDAO.insert(response.toDb());
   }
-
 }

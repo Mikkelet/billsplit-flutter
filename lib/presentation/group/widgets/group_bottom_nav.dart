@@ -16,21 +16,20 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
   Widget build(BuildContext context) {
     return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
       int navIndex = 0;
-      if(state is GroupLoaded){
+      if (state is GroupLoaded) {
         navIndex = state.nav.index;
       }
-      return BottomNavigationBar(
-            currentIndex: navIndex,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.add), label: "Events"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.ac_unit), label: "Services"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.ad_units), label: "Debt"),
-            ],
-            onTap: (index) {
-              _onItemSelected(context, index);
-            });
+      return NavigationBar(
+        selectedIndex: navIndex,
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.add), label: "Events"),
+          NavigationDestination(icon: Icon(Icons.ac_unit), label: "Services"),
+          NavigationDestination(icon: Icon(Icons.ad_units), label: "Debt")
+        ],
+        onDestinationSelected: (index) {
+          _onItemSelected(context, index);
+        },
+      );
     });
   }
 

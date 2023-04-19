@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
+import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/profile/profile_page.dart';
@@ -12,25 +13,29 @@ class GroupsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(ProfilePage.getRoute());
-              },
-              icon: const Icon(Icons.person))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(AddGroupPage.getRoute());
-        },
-      ),
-      body: BlocProvider(
-        create: (context) => GroupsBloc()..loadGroups(),
-        child: BlocBuilder<GroupsBloc, UiState>(
+    return BlocProvider(
+      create: (context) => GroupsBloc()..loadGroups(),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            Builder(builder: (context) {
+              final cubit = context.read<GroupsBloc>();
+              return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(ProfilePage.getRoute());
+                  },
+                  child: ProfilePictureView(person: cubit.user));
+            }),
+            const SizedBox(width: 16)
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).push(AddGroupPage.getRoute());
+          },
+        ),
+        body: BlocBuilder<GroupsBloc, UiState>(
           builder: (context, state) {
             final cubit = context.read<GroupsBloc>();
             return Center(

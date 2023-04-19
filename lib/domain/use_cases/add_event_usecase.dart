@@ -23,9 +23,12 @@ class AddEventUseCase {
     final debtForGroup = (await _getDebtWithAddedEvent())
         .map((e) => DebtDTO(e.first, e.second))
         .toList();
-    final response =
-        await _apiService.addEvent(_groupId, _event.toEventDTO(), debtForGroup);
+
+
+    final response = await _apiService.addEvent(_groupId, _event.toEventDTO(), debtForGroup);
+
     final EventDTO eventDto = response.event!;
+
     if (eventDto is GroupExpenseDTO) {
       final expenseDb = eventDto.toDb(_groupId);
       await _database.groupExpenseDAO.insert(expenseDb);

@@ -26,29 +26,32 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Splitsby',
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        splashFactory: InkSplash.splashFactory,
+        useMaterial3: true,
+
       ),
       home: BlocProvider(
         create: (context) => MainCubit()..initialize(),
         child: BlocBuilder<MainCubit, UiState>(builder: (context, state) {
           if (state is Loading) {
-            return const Scaffold(body: Center(child: CircularProgressIndicator()));
+            return const Scaffold(
+                body: Center(child: CircularProgressIndicator()));
           }
           if (state is Failure) {
             return Scaffold(body: Center(child: Text(state.error.toString())));
           }
-          if(state is Main) {
+          if (state is Main) {
             final cubit = context.read<MainCubit>();
             return StreamBuilder<String?>(
-              stream: cubit.observeAuthState(),
-              builder: (context, snapshot) {
-                final uid = snapshot.data;
-                if (uid == null) {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                  return const LandingPage();
-                }
-                return const GroupsPage();
-              });
+                stream: cubit.observeAuthState(),
+                builder: (context, snapshot) {
+                  final uid = snapshot.data;
+                  if (uid == null) {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    return const LandingPage();
+                  }
+                  return const GroupsPage();
+                });
           }
           return const Placeholder();
         }),
