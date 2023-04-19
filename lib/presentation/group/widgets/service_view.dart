@@ -26,14 +26,21 @@ class ServiceView extends StatelessWidget {
             size: 64,
           ),
           const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(service.nameState),
-              Text(
-                  "\$${service.monthlyExpenseState} is paid by by ${service.payerState.nameState}"),
-            ],
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(service.nameState),
+                Text(
+                  "\$${service.monthlyExpenseState} is paid by by ${service.payerState.nameState}",
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         ],
       ),

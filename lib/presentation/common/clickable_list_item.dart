@@ -19,7 +19,7 @@ class ClickableListItem extends StatelessWidget {
       onPressed: onClick,
       minWidth: double.infinity,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      color: color ?? Theme.of(context).primaryColorLight,
+      color: color ?? Theme.of(context).colorScheme.primaryContainer,
       elevation: 0,
       highlightElevation: 0,
       child: Padding(

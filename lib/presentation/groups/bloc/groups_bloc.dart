@@ -11,7 +11,7 @@ class GroupsBloc extends BaseCubit {
 
   GroupsBloc() : super();
 
-  Stream<Iterable<Group>> getGroupStream() =>
+  Stream<List<Group>> getGroupStream() =>
       _observeGroupsUseCase.observe().map((event) =>
           event.toList().sortedBy((group) => group.timestamp));
 

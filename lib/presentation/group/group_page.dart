@@ -1,3 +1,4 @@
+
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/add_service/add_service_page.dart';
@@ -34,6 +35,8 @@ class GroupPage extends StatelessWidget {
                       : "Add service";
                   return FloatingActionButton.extended(
                       isExtended: true,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
                       onPressed: () {
                         _onFabClicked(context);
                       },
@@ -47,11 +50,7 @@ class GroupPage extends StatelessWidget {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 title: Text(group.name),
-                leading: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      _onBackButtonPressed(state, context);
-                    })),
+                leading: const BackButton()),
             bottomNavigationBar: const GroupBottomNav(),
             body: Builder(builder: (context) {
               if (state is Loading) {
@@ -59,22 +58,21 @@ class GroupPage extends StatelessWidget {
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: WillPopScope(child: Builder(builder: (context) {
-                  switch (cubit.navIndex) {
-                    case GroupPageNav.services:
-                      return const ServicesView();
-                    case GroupPageNav.debt:
-                      return const DebtsView();
-                    default:
-                      return const EventsView();
-                  }
-                }), onWillPop: () async {
-                  if (cubit.navIndex != GroupPageNav.events) {
-                    context.read<GroupBloc>().showEvents();
-                    return false;
-                  }
-                  return true;
-                }),
+                child: WillPopScope(
+                  child: Builder(builder: (context) {
+                    switch (cubit.navIndex) {
+                      case GroupPageNav.services:
+                        return const ServicesView();
+                      case GroupPageNav.debt:
+                        return const DebtsView();
+                      default:
+                        return const EventsView();
+                    }
+                  }),
+                  onWillPop: () async {
+                    return _tryPop(cubit);
+                  },
+                ),
               );
             }),
           );
@@ -99,12 +97,12 @@ class GroupPage extends StatelessWidget {
     }
   }
 
-  _onBackButtonPressed(UiState state, BuildContext context) {
-    if (state is GroupLoaded && state.nav != GroupPageNav.events) {
-      context.read<GroupBloc>().showEvents();
-    } else {
-      Navigator.of(context).pop();
+  bool _tryPop(GroupBloc cubit) {
+    if (cubit.navIndex != GroupPageNav.events) {
+      cubit.showEvents();
+      return false;
     }
+    return true;
   }
 
   static Route getRoute(Group group) => MaterialPageRoute(

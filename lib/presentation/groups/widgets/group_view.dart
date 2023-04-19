@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -23,14 +24,8 @@ class GroupView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
       child: Center(
-        child: MaterialButton(
-          color: Theme.of(context).primaryColorLight,
-          splashColor: Theme.of(context).splashColor,
-          elevation: 0,
-          highlightElevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          onPressed: () {
+        child: ClickableListItem(
+          onClick: () {
             _onClick(context);
           },
           child: Padding(

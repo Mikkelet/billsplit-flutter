@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class RoundedListItem extends StatelessWidget {
   final Widget child;
+  final Color? color;
 
   const RoundedListItem(
-      {Key? key, required this.child})
+      {Key? key, required this.child, this.color})
       : super(key: key);
 
   @override
@@ -12,7 +13,7 @@ class RoundedListItem extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorLight,
+          color: color ?? Theme.of(context).colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(30)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

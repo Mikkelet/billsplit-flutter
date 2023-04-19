@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                     return const LandingPage();
                   }
-                  return const GroupsPage();
+                  return GroupsPage();
                 },
               );
             }
