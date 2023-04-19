@@ -27,8 +27,8 @@ class GroupBloc extends BaseCubit {
   Stream<Iterable<Event>> getEventsStream() =>
       _observeEventsUseCase.observe(group.id);
 
-  Stream<Iterable<SubscriptionService>> getServicesStream() =>
-      _observeServicesUseCase.observe(group.id);
+  Stream<List<SubscriptionService>> getServicesStream() =>
+      _observeServicesUseCase.observe(group.id).map((event) => event.toList());
 
   Stream<Iterable<Pair<Person, num>>> getDebtsStream() =>
       _observeDebtsUseCase.observe(group.id);

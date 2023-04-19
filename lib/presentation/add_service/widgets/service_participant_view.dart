@@ -17,12 +17,14 @@ class ServiceParticipantView extends StatelessWidget {
 
     return Row(
       children: [
-        PayerView(
-            person: person,
-            isPayer: isPayer,
-            onClick: () {
-              cubit.onPayerClicked(person);
-            }),
+        Flexible(
+          child: PayerView(
+              person: person,
+              isPayer: isPayer,
+              onClick: () {
+                cubit.onPayerClicked(person);
+              }),
+        ),
         isPayer ? Text("${person.nameState} is paying") : Text(person.nameState),
       ],
     );

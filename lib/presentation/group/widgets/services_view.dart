@@ -32,7 +32,7 @@ class ServicesView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 40),
             itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: ServiceView(services.toList()[index]),
+                  child: ServiceView(services[index]),
                 ));
       },
     );

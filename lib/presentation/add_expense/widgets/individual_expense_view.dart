@@ -33,6 +33,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
             PayerView(
               person: widget.individualExpense.person,
               isPayer: _isPayer(widget.individualExpense, cubit),
+              isSharedExpense: _isSharedExpense(widget.individualExpense, cubit),
               onClick: () {
                 cubit.onPayerSelected(widget.individualExpense.person);
               },

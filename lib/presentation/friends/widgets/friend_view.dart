@@ -53,15 +53,4 @@ class FriendView extends StatelessWidget {
       ),
     );
   }
-
-/**
- *  ClipOval(
-    child: Image.network(
-    height: 80,
-    width: 80,
-    fit: BoxFit.fitWidth,
-    friend.person.pfpUrl,
-    ),
-    ),
- */
 }

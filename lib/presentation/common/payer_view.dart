@@ -1,11 +1,11 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
+import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PayerView extends StatelessWidget {
   final Person person;
   final bool isPayer;
+  final bool isSharedExpense;
   final Function() onClick;
 
   static const double iconSize = 64;
@@ -15,14 +15,12 @@ class PayerView extends StatelessWidget {
       {Key? key,
       required this.person,
       required this.isPayer,
-      required this.onClick})
+      required this.onClick,
+      this.isSharedExpense = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AddExpenseBloc>();
-    final isSharedExpense =
-        person.uid == cubit.groupExpense.sharedExpense.person.uid;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -34,14 +32,7 @@ class PayerView extends StatelessWidget {
                 onPressed: isSharedExpense ? null : onClick,
                 padding: EdgeInsets.zero,
                 icon: person.pfpUrl.isNotEmpty
-                    ? ClipOval(
-                        child: Image.network(
-                          person.pfpUrl,
-                          fit: BoxFit.cover,
-                          height: iconSize,
-                          width: iconSize,
-                        ),
-                      )
+                    ? ProfilePictureView(person: person, size: iconSize,)
                     : const Icon(
                         Icons.person,
                         size: iconSize,

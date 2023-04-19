@@ -44,10 +44,6 @@ class AddExpensePage extends StatelessWidget {
                   if (state is Loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (state is Failure) {
-                    return Center(child: Text(state.error.toString()));
-                  }
-                  if (state is Main) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 80),
@@ -62,8 +58,6 @@ class AddExpensePage extends StatelessWidget {
                         ]),
                       ),
                     );
-                  }
-                  return const Placeholder();
                 }),
               ),
             );

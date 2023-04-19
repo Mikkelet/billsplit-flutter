@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/add_service/bloc/add_service_stat
 import 'package:billsplit_flutter/presentation/add_service/bloc/add_service_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_service/widgets/service_participant_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -15,7 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddServicePage extends StatelessWidget {
   final SubscriptionService service;
   final String groupId;
-  late final _nameTextController = TextEditingController(text: service.nameState);
+  late final _nameTextController =
+      TextEditingController(text: service.nameState);
   late final _expenseTextController =
       TextEditingController(text: "${service.monthlyExpenseState}");
 
@@ -25,20 +27,20 @@ class AddServicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
+      listener: (state) {
+        if (state is ServiceAdded) {
+          Navigator.of(context).pop();
+        }
+      },
       create: (context) => AddServiceBloc(service, groupId),
-      child: BlocBuilder<AddServiceBloc, UiState>(builder: (context, state) {
-        return BlocListener<AddServiceBloc, UiState>(
-          listener: (context, state) {
-            if (state is ServiceAdded) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: Scaffold(
+      child: BaseBlocBuilder<AddServiceBloc>(
+        builder: (cubit, state) {
+          return Scaffold(
             appBar: builder(() {
               return AppBar(leading: const BackButton(), actions: [
                 IconButton(
                     onPressed: () {
-                      context.read<AddServiceBloc>().submitService();
+                      cubit.submitService();
                     },
                     icon: const Icon(Icons.check))
               ]);
@@ -64,7 +66,7 @@ class AddServicePage extends StatelessWidget {
                                   vertical: 8.0, horizontal: 16),
                               child: TextField(
                                 controller: _nameTextController,
-                                onChanged: (value){
+                                onChanged: (value) {
                                   service.nameState = value;
                                 },
                                 decoration: const InputDecoration(
@@ -105,9 +107,9 @@ class AddServicePage extends StatelessWidget {
                 }),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 

@@ -1,6 +1,10 @@
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/add_service/add_service_page.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServiceView extends StatelessWidget {
   final SubscriptionService service;
@@ -9,16 +13,18 @@ class ServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedListItem(
+    final cubit = context.read<GroupBloc>();
+    return ClickableListItem(
+      onClick: () {
+        Navigator.of(context)
+            .push(AddServicePage.getRoute(cubit.user, cubit.group, service));
+      },
       child: Row(
         children: [
-          ClipOval(
-              child: Image.network(
-            service.payerState.pfpUrl,
-            height: 64,
-            width: 64,
-            fit: BoxFit.fitWidth,
-          )),
+          ProfilePictureView(
+            person: service.payerState,
+            size: 64,
+          ),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

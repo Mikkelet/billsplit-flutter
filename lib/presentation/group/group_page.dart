@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/add_service/add_service_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -26,22 +25,24 @@ class GroupPage extends StatelessWidget {
       child: BaseBlocBuilder<GroupBloc>(
         builder: (cubit, state) {
           return Scaffold(
-            floatingActionButton: builder(() {
-              if (state is GroupState) {
-                if (state.nav == GroupPageNav.debt) return null;
-                String text = state.nav == GroupPageNav.events
-                    ? "Add event"
-                    : "Add service";
-                return FloatingActionButton.extended(
-                    isExtended: true,
-                    onPressed: () {
-                      _onFabClicked(context);
-                    },
-                    label: Text(text),
-                    icon: const Icon(Icons.add));
-              }
-              return null;
-            }),
+            floatingActionButton: Builder(
+              builder: (context) {
+                if (state is GroupState) {
+                  if (state.nav == GroupPageNav.debt) return const SizedBox();
+                  String text = state.nav == GroupPageNav.events
+                      ? "Add event"
+                      : "Add service";
+                  return FloatingActionButton.extended(
+                      isExtended: true,
+                      onPressed: () {
+                        _onFabClicked(context);
+                      },
+                      label: Text(text),
+                      icon: const Icon(Icons.add));
+                }
+                return const SizedBox();
+              },
+            ),
             appBar: AppBar(
                 backgroundColor: Colors.white,
                 elevation: 0,
@@ -58,7 +59,7 @@ class GroupPage extends StatelessWidget {
               }
               if (state is GroupState) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: WillPopScope(child: Builder(builder: (context) {
                     switch (state.nav) {
                       case GroupPageNav.services:

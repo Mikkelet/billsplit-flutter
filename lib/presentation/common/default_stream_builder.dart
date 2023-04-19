@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DefaultStreamBuilder<T> extends StatelessWidget {
-  final Stream<Iterable<T>> stream;
-  final Widget Function(Iterable<T>) body;
+  final Stream<T> stream;
+  final Widget Function(T) body;
 
   const DefaultStreamBuilder(
       {Key? key,

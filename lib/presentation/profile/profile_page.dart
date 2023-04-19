@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/profile/bloc/profile_cubit.dart';
@@ -23,13 +24,7 @@ class ProfilePage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                ClipOval(
-                    child: Image.network(
-                  person.pfpUrl,
-                  height: 120,
-                  width: 120,
-                  fit: BoxFit.fitWidth,
-                )),
+                ProfilePictureView(person: person, size: 120),
                 const SizedBox(height: 16),
                 RoundedListItem(
                   child: Column(
