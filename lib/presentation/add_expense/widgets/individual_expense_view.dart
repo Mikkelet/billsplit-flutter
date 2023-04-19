@@ -47,11 +47,11 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                     setState(() {});
                   }),
             ),
-            _shouldShowSharedExpense(widget.individualExpense, cubit)
+            !_shouldShowSharedExpense(widget.individualExpense, cubit)
                 ? Text(
                     "\$${cubit.groupExpense.sharedExpensePerParticipant.fmt2dec()}")
                 : const SizedBox(),
-            _isSharedExpense(widget.individualExpense, cubit)
+            !_isSharedExpense(widget.individualExpense, cubit)
                 ? Checkbox(
                     value: widget.individualExpense.isParticipantState,
                     onChanged: (value) {
@@ -77,7 +77,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
 
   bool _isSharedExpense(
       IndividualExpense individualExpense, AddExpenseBloc cubit) {
-    return widget.individualExpense.person.uid !=
+    return widget.individualExpense.person.uid ==
         cubit.groupExpense.sharedExpense.person.uid;
   }
 }

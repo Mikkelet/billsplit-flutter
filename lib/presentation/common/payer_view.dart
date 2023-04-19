@@ -28,15 +28,11 @@ class PayerView extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             IconButton(
-                iconSize: iconSize,
-                onPressed: isSharedExpense ? null : onClick,
-                padding: EdgeInsets.zero,
-                icon: person.pfpUrl.isNotEmpty
-                    ? ProfilePictureView(person: person, size: iconSize,)
-                    : const Icon(
-                        Icons.person,
-                        size: iconSize,
-                      )),
+              iconSize: iconSize,
+              onPressed: isSharedExpense ? null : onClick,
+              padding: EdgeInsets.zero,
+              icon: ProfilePictureView(person: person, size: iconSize),
+            ),
             isPayer
                 ? const Icon(
                     color: Colors.greenAccent,

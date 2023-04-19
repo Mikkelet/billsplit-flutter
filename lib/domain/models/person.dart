@@ -17,7 +17,7 @@ class Person {
         pfpUrl = "";
 
   @override
-  int get hashCode => int.fromEnvironment(uid);
+  int get hashCode => uid.hashCode;
 
   @override
   bool operator ==(Object other) {
