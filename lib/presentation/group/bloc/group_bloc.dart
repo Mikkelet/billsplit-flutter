@@ -24,8 +24,8 @@ class GroupBloc extends BaseCubit {
   GroupBloc(this.group)
       : super.withState(SyncingGroup(GroupPageNav.events));
 
-  Stream<Iterable<Event>> getEventsStream() =>
-      _observeEventsUseCase.observe(group.id);
+  Stream<List<Event>> getEventsStream() =>
+      _observeEventsUseCase.observe(group.id).map((event) => event.toList());
 
   Stream<List<SubscriptionService>> getServicesStream() =>
       _observeServicesUseCase.observe(group.id).map((event) => event.toList());

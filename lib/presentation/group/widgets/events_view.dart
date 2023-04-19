@@ -1,7 +1,11 @@
+import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
+import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/group/widgets/events/expense_event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,20 +21,74 @@ class EventsView extends StatelessWidget {
       return DefaultStreamBuilder(
           stream: cubit.getEventsStream(),
           body: (events) {
-            final lsEvents = events.toList();
-            if (state is SyncingGroup && lsEvents.isEmpty) {
+            if (state is SyncingGroup && events.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (lsEvents.isEmpty) return const Center(child: Text("no events"));
+            if (events.isEmpty) return const Center(child: Text("no events"));
             return ListView.builder(
                 itemCount: events.length,
                 padding: const EdgeInsets.symmetric(vertical: 40),
                 reverse: true,
-                itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: EventView(event: lsEvents[index]),
-                    ));
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  final isLatestIndex = _isLatestIndex(index, event, events);
+                  final shouldShowProfilePictureLeft =
+                      event.createdBy.uid != cubit.user.uid &&
+                          event is! Payment;
+                  final shouldShowProfilePictureRight =
+                      event.createdBy.uid == cubit.user.uid &&
+                          event is! Payment;
+
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Builder(builder: (context) {
+                      if (event is GroupExpense) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            _createdByProfilePicture(event.createdBy,
+                                shouldShowProfilePictureLeft, isLatestIndex),
+                            Flexible(
+                                child: ExpenseEventView(groupExpense: event)),
+                            _createdByProfilePicture(event.createdBy,
+                                shouldShowProfilePictureRight, isLatestIndex),
+                          ],
+                        );
+                      }
+                      return EventView(event: event);
+                    }),
+                  );
+                });
           });
     });
+  }
+
+  Widget _createdByProfilePicture(Person person, bool shouldShow,
+      bool isLatestIndex) {
+    if (shouldShow) {
+      if (isLatestIndex) {
+        return Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ProfilePictureView(person: person),
+        );
+
+      } else {
+        return const Padding(
+          padding: EdgeInsets.all(4.0),
+          child: SizedBox(height: 40, width: 40,),
+        );
+      }
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  bool _isLatestIndex(int index, Event event, List<Event> events) {
+    try {
+      return events[index - 1].createdBy.uid != event.createdBy.uid ||
+          events[index - 1] is Payment;
+    } catch (e) {
+      return true;
+    }
   }
 }
