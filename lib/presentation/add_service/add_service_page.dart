@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/add_service/bloc/add_service_stat
 import 'package:billsplit_flutter/presentation/add_service/bloc/add_service_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_service/widgets/service_participant_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class AddServicePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseBlocWidget(
       create: (context) => AddServiceBloc(service, groupId),
       child: BlocBuilder<AddServiceBloc, UiState>(builder: (context, state) {
         return BlocListener<AddServiceBloc, UiState>(

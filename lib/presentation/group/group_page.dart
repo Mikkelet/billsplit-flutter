@@ -3,6 +3,8 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/add_service/add_service_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/debts_view.dart';
@@ -19,68 +21,67 @@ class GroupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseBlocWidget<GroupBloc>(
       create: (context) => GroupBloc(group)..loadGroup(),
-      child: BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
-        return Scaffold(
-          floatingActionButton: builder(() {
-            if (state is GroupState) {
-              if (state.nav == GroupPageNav.debt) return null;
-              String text = state.nav == GroupPageNav.events
-                  ? "Add event"
-                  : "Add service";
-              return FloatingActionButton.extended(
-                  isExtended: true,
-                  onPressed: () {
-                    _onFabClicked(context);
-                  },
-                  label: Text(text),
-                  icon: const Icon(Icons.add));
-            }
-            return null;
-          }),
-          appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              title: Text(group.name),
-              leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    _onBackButtonPressed(state, context);
-                  })),
-          bottomNavigationBar: const GroupBottomNav(),
-          body: Builder(builder: (context) {
-            if (state is Loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state is Failure) {
-              return Center(child: Text(state.error.toString()));
-            }
-            if (state is GroupState) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: WillPopScope(child: Builder(builder: (context) {
-                  switch (state.nav) {
-                    case GroupPageNav.services:
-                      return const ServicesView();
-                    case GroupPageNav.debt:
-                      return const DebtsView();
-                    default:
-                      return const EventsView();
-                  }
-                }), onWillPop: () async {
-                  if (state.nav != GroupPageNav.events) {
-                    context.read<GroupBloc>().showEvents();
-                    return false;
-                  }
-                  return true;
-                }),
-              );
-            }
-            return Container();
-          }),
-        );
-      }),
+      child: BaseBlocBuilder<GroupBloc>(
+        builder: (cubit, state) {
+          return Scaffold(
+            floatingActionButton: builder(() {
+              if (state is GroupState) {
+                if (state.nav == GroupPageNav.debt) return null;
+                String text = state.nav == GroupPageNav.events
+                    ? "Add event"
+                    : "Add service";
+                return FloatingActionButton.extended(
+                    isExtended: true,
+                    onPressed: () {
+                      _onFabClicked(context);
+                    },
+                    label: Text(text),
+                    icon: const Icon(Icons.add));
+              }
+              return null;
+            }),
+            appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0,
+                title: Text(group.name),
+                leading: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      _onBackButtonPressed(state, context);
+                    })),
+            bottomNavigationBar: const GroupBottomNav(),
+            body: Builder(builder: (context) {
+              if (state is Loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is GroupState) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: WillPopScope(child: Builder(builder: (context) {
+                    switch (state.nav) {
+                      case GroupPageNav.services:
+                        return const ServicesView();
+                      case GroupPageNav.debt:
+                        return const DebtsView();
+                      default:
+                        return const EventsView();
+                    }
+                  }), onWillPop: () async {
+                    if (state.nav != GroupPageNav.events) {
+                      context.read<GroupBloc>().showEvents();
+                      return false;
+                    }
+                    return true;
+                  }),
+                );
+              }
+              return Container();
+            }),
+          );
+        },
+      ),
     );
   }
 

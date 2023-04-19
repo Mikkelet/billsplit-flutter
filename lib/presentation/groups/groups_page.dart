@@ -1,5 +1,7 @@
 import 'package:billsplit_flutter/presentation/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
@@ -13,7 +15,7 @@ class GroupsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseBlocWidget(
       create: (context) => GroupsBloc()..loadGroups(),
       child: Scaffold(
         appBar: AppBar(
@@ -35,9 +37,8 @@ class GroupsPage extends StatelessWidget {
             Navigator.of(context).push(AddGroupPage.getRoute());
           },
         ),
-        body: BlocBuilder<GroupsBloc, UiState>(
-          builder: (context, state) {
-            final cubit = context.read<GroupsBloc>();
+        body: BaseBlocBuilder<GroupsBloc>(
+          builder: (cubit, state) {
             return Center(
               child: DefaultStreamBuilder(
                 stream: cubit.getGroupStream(),

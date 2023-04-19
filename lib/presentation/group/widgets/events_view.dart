@@ -17,17 +17,18 @@ class EventsView extends StatelessWidget {
       return DefaultStreamBuilder(
           stream: cubit.getEventsStream(),
           body: (events) {
-            if (state is SyncingGroup && events.isEmpty) {
+            final lsEvents = events.toList();
+            if (state is SyncingGroup && lsEvents.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (events.isEmpty) return const Center(child: Text("no events"));
+            if (lsEvents.isEmpty) return const Center(child: Text("no events"));
             return ListView.builder(
                 itemCount: events.length,
                 padding: const EdgeInsets.symmetric(vertical: 40),
                 reverse: true,
                 itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: EventView(event: events.toList()[index]),
+                      child: EventView(event: lsEvents[index]),
                     ));
           });
     });

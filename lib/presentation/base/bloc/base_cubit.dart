@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:drift/isolate.dart';
+import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
@@ -17,18 +17,14 @@ abstract class BaseCubit extends Cubit<UiState> {
   }
 
   void showError(dynamic err) {
+    print("qqq err: ${err.runtimeType.toString()}");
     if (err is Error) {
-      print(err);
-      print((err as Error).stackTrace);
-    } else if (err is DriftRemoteException) {
-      print(err.remoteCause);
-      print(err.remoteStackTrace);
-    } else if (err is FormatException) {
-      print((err as FormatException).source);
+      emit(Failure(UiException(-1, err.toString())));
+    } else if (err is Exception) {
+      emit(Failure(err.toUiException()));
     } else {
-      print(err);
+      emit(Failure(UiException(-1, "${err.runtimeType}: $err")));
     }
-    emit(Failure(Exception(err)));
   }
 
   Person get user => authProvider.user!;

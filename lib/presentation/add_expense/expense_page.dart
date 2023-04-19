@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class AddExpensePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseBlocWidget(
       create: (context) => AddExpenseBloc(group.id, expense),
       child: BlocListener<AddExpenseBloc, UiState>(
         listener: (context, state) {

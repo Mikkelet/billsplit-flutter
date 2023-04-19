@@ -19,11 +19,8 @@ class GroupsBloc extends BaseCubit {
     emit(Loading());
     try {
       await _getGroupsUseCase.launch();
-    } on Error catch (err, _) {
-      showError(err);
     } catch (e) {
-      print(e);
-      showError(Error());
+      showError(e);
     }
   }
 }

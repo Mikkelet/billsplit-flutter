@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/profile/bloc/profile_cubit.dart';
@@ -11,7 +12,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ProfileCubit>(
+    return BaseBlocWidget<ProfileCubit>(
       create: (context) => ProfileCubit(),
       child: Builder(builder: (context) {
         final cubit = context.read<ProfileCubit>();

@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/presentation/add_group/bloc/add_group_cubit.da
 import 'package:billsplit_flutter/presentation/add_group/widgets/add_people_to_group_view.dart';
 import 'package:billsplit_flutter/presentation/add_group/widgets/added_person_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,7 @@ class AddGroupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BaseBlocWidget(
       create: (context) => AddGroupCubit(),
       child: BlocBuilder<AddGroupCubit, UiState>(
         builder: (context, state) {
