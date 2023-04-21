@@ -5,7 +5,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
 class AddGroupCubit extends BaseCubit {
-  final List<Person> _people = [];
+  late final List<Person> _people = [user];
   final _observeFriendsUseCase = ObserveFriendsUseCase();
 
   void onAddPerson(Person person) {

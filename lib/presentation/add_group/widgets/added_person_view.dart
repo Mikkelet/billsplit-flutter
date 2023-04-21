@@ -12,18 +12,24 @@ class AddedPersonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddGroupCubit>();
+    final showRemoveButton = person.uid == cubit.user.uid;
     return Row(
       children: [
         ProfilePictureView(person: person),
         const SizedBox(width: 8),
         Text(person.nameState),
-        const Flexible(child: SizedBox(width: double.infinity,)),
-        IconButton(
-            onPressed: () {
-              cubit.removePerson(person);
-            },
-            color: Colors.red,
-            icon: const Icon(Icons.remove))
+        const Flexible(
+            child: SizedBox(
+          width: double.infinity,
+        )),
+        !showRemoveButton
+            ? IconButton(
+                onPressed: () {
+                  cubit.removePerson(person);
+                },
+                color: Colors.red,
+                icon: const Icon(Icons.remove))
+            : const SizedBox()
       ],
     );
   }

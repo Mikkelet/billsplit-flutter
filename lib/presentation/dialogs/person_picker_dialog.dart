@@ -12,27 +12,29 @@ class PersonPickerDialog extends Dialog {
   @override
   Widget? get child => Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ...people.map((person) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        ProfilePictureView(person: person),
-                        const SizedBox(width: 8),
-                        Text(person.nameState),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () => onClick(person),
-                      icon: const Icon(Icons.add),
-                      color: Colors.green,
-                    )
-                  ],
-                ))
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ...people.map((person) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          ProfilePictureView(person: person),
+                          const SizedBox(width: 8),
+                          Text(person.nameState),
+                        ],
+                      ),
+                      IconButton(
+                        onPressed: () => onClick(person),
+                        icon: const Icon(Icons.add),
+                        color: Colors.green,
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       );
 }
