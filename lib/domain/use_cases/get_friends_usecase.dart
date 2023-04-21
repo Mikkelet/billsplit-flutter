@@ -10,6 +10,7 @@ class GetFriendsUseCase {
   Future launch() async {
     final response = await _apiService.getFriends();
     final friendsDb = response.friends.toDb();
+    await _database.friendsDAO.clearTable();
     await _database.friendsDAO.insertAll(friendsDb);
   }
 }

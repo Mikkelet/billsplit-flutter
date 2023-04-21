@@ -1,11 +1,11 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/friends/bloc/add_friend_cubit.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddFriendTextField extends StatefulWidget {
   const AddFriendTextField({Key? key}) : super(key: key);
@@ -22,8 +22,8 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
   Widget build(BuildContext context) {
     return BaseBlocWidget(
       create: (context) => AddFriendCubit(),
-      child: BlocBuilder<AddFriendCubit, UiState>(
-        builder: (context, state) {
+      child: BaseBlocBuilder<AddFriendCubit>(
+        builder: (cubit, state) {
           return RoundedListItem(
             child: Row(
               children: [
@@ -50,11 +50,9 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
                       onPressed: () {
                         if (!_isEmailValid()) {
                           setState(() {});
-                          return;
+                        }else {
+                          cubit.addFriendEmail(textFieldController.text);
                         }
-                        context
-                            .read<AddFriendCubit>()
-                            .addFriendEmail(textFieldController.text);
                       },
                       icon: const Icon(Icons.send));
                 })
@@ -70,11 +68,11 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
     if (textFieldController.text.isEmpty) {
       errorText = "Enter an email";
       return false;
-    } else if (EmailValidator.validate(textFieldController.text)) {
-      errorText = null;
+    } else if (!EmailValidator.validate(textFieldController.text)) {
+      errorText = "invalid email";
       return false;
     } else {
-      errorText = "invalid email";
+      errorText = null;
       return true;
     }
   }
