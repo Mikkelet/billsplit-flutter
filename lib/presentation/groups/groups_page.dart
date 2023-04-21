@@ -1,4 +1,3 @@
-
 import 'package:billsplit_flutter/presentation/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
@@ -57,7 +56,14 @@ class GroupsPage extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (groups.isEmpty) {
-                    return const Center(child: Text("no groups"));
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(64.0),
+                        child: Text(
+                          "Here you can see your groups! Click below to add one!",
+                        ),
+                      ),
+                    );
                   }
                   return ListView.builder(
                       controller: scrollingController,

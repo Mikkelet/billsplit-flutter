@@ -11,16 +11,16 @@ class GroupsBloc extends BaseCubit {
 
   GroupsBloc() : super();
 
-  Stream<List<Group>> getGroupStream() =>
-      _observeGroupsUseCase.observe().map((event) =>
-          event.toList().sortedBy((group) => group.timestamp));
+  Stream<List<Group>> getGroupStream() => _observeGroupsUseCase
+      .observe()
+      .map((event) => event.toList().sortedBy((group) => group.timestamp));
 
   void loadGroups() async {
     emit(Loading());
-    try {
-      await _getGroupsUseCase.launch();
-    } catch (e) {
-      showError(e);
-    }
+    _getGroupsUseCase.launch().then((value) {
+      emit(Main());
+    }).catchError((error) {
+      showError(error);
+    });
   }
 }
