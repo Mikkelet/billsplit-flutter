@@ -1,32 +1,42 @@
 import 'package:billsplit_flutter/domain/use_cases/sign_in_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/sign_up_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/landing/bloc/landing_state.dart';
 
 class LandingBloc extends BaseCubit {
   final _signInUseCase = SignInUseCase();
-  LandingPageNav _nav = LandingPageNav.signIn;
+  final _signUpUseCase = SignUpUseCase();
 
   void signIn(String email, String password) async {
     showLoading();
     _signInUseCase.launch(email, password).then((data) {
       showLanding();
     }).catchError((err) {
-      print(err);
+      showError(err);
+      showLanding();
+    });
+  }
+
+  void signUp(String email, String password) async {
+    showLoading();
+    _signUpUseCase.launch(email, password).then((data) {
+      showLanding();
+    }).catchError((err) {
+      showError(err);
       showLanding();
     });
   }
 
   void showLanding() {
-    emit(ShowLanding(_nav));
+    emit(Main());
   }
 
   void showSignIn() {
-    _nav = LandingPageNav.signIn;
-    showLanding();
+    emit(Main());
   }
 
   void showSignUp() {
-    _nav = LandingPageNav.signUp;
-    showLanding();
+    emit(ShowSignUp());
   }
 }

@@ -25,6 +25,11 @@ class AuthProvider {
         email: email, password: password);
   }
 
+  Future signUpWithEmail(String email, String password) async {
+    await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+  }
+
   Future<String> getToken(bool refresh) async {
     final user = _firebaseAuth.currentUser;
     if (user == null) return "";
@@ -35,9 +40,9 @@ class AuthProvider {
     return _firebaseAuth.userChanges().map((event) {
       _user = event == null
           ? null
-          : Person(event.uid, event.displayName!, pfpUrl: event.photoURL!,
-              email: event.email ?? "");
-      return event?.uid;
+          : Person(event.uid, event.displayName ?? "",
+              pfpUrl: event.photoURL ?? "", email: event.email ?? "");
+      return _user?.uid;
     });
   }
 

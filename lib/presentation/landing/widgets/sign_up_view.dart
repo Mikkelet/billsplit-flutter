@@ -5,18 +5,20 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignInView extends StatefulWidget {
-  SignInView({Key? key}) : super(key: key);
+class SignUpView extends StatefulWidget {
+  const SignUpView({Key? key}) : super(key: key);
 
   @override
-  State<SignInView> createState() => _SignInViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignInViewState extends State<SignInView> {
+class _SignUpViewState extends State<SignUpView> {
   final emailFieldController = TextEditingController();
   final passwordFieldController = TextEditingController();
+  final repeatPasswordFieldController = TextEditingController();
   String? emailError;
   String? passwordError;
+  String? repeatPasswordError;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +31,8 @@ class _SignInViewState extends State<SignInView> {
             Container(height: 120),
             Align(
               alignment: Alignment.centerLeft,
-              child:
-                  Text("Sign in", style: Theme.of(context).textTheme.displayMedium),
+              child: Text("Sign up",
+                  style: Theme.of(context).textTheme.displayMedium),
             ),
             Container(height: 32),
             RoundedListItem(
@@ -55,40 +57,51 @@ class _SignInViewState extends State<SignInView> {
               autocorrect: false,
             )),
             const SizedBox(height: 16),
+            RoundedListItem(
+                child: TextField(
+              controller: repeatPasswordFieldController,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Repeat password",
+                  errorText: repeatPasswordError),
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+            )),
+            const SizedBox(height: 16),
             SimpleButton(
               onClick: () {
                 if (validateFields()) {
                   _onPressed(context);
                 }
-                setState(() {});
+                setState(() {
+                });
               },
-              child: const Text("Sign in"),
+              child: const Text("Sign up"),
             ),
             const SizedBox(height: 16),
             MaterialButton(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
               onPressed: () {
-                cubit.showSignUp();
+                cubit.showSignIn();
               },
-              child: const Text("Create an account"),
+              child: const Text("Sign in"),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 32)
           ],
         ),
       ),
     );
   }
 
-  _onPressed(BuildContext context) {
-    final String email = emailFieldController.value.text;
-    final String password = passwordFieldController.value.text;
-    final cubit = context.read<LandingBloc>();
-    cubit.signIn(email, password);
-  }
-
   bool validateFields() {
     validateEmail();
     validatePassword();
-    return emailError == null && passwordError == null;
+    validateRepeatPassword();
+    return emailError == null &&
+        passwordError == null &&
+        repeatPasswordError == null;
   }
 
   validateEmail() {
@@ -109,5 +122,23 @@ class _SignInViewState extends State<SignInView> {
     } else {
       passwordError = null;
     }
+  }
+
+  validateRepeatPassword() {
+    if (repeatPasswordFieldController.text.isEmpty) {
+      repeatPasswordError = "Repeat your password";
+    } else if (repeatPasswordFieldController.text !=
+        passwordFieldController.text) {
+      repeatPasswordError = "Passwords do not match";
+    } else {
+      repeatPasswordError = null;
+    }
+  }
+
+  _onPressed(BuildContext context) {
+    final String email = emailFieldController.value.text;
+    final String password = passwordFieldController.value.text;
+    final cubit = context.read<LandingBloc>();
+    cubit.signUp(email, password);
   }
 }

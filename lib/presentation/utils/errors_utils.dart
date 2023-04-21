@@ -20,7 +20,6 @@ extension ExceptionExt on Exception {
   UiException toUiException() {
     switch (runtimeType) {
       case FirebaseAuthException:
-        return NoInternetException();
       default:
         return UiException(0, "$runtimeType($this)");
     }
