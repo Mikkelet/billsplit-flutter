@@ -1,12 +1,16 @@
 import 'package:billsplit_flutter/domain/models/friend.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/use_cases/get_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_friends_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
+class LoadingFriends extends Main {}
+
 class AddGroupCubit extends BaseCubit {
   late final List<Person> _people = [user];
   final _observeFriendsUseCase = ObserveFriendsUseCase();
+  final _getFriendsUseCase = GetFriendsUseCase();
 
   void onAddPerson(Person person) {
     _people.add(person);
@@ -28,4 +32,12 @@ class AddGroupCubit extends BaseCubit {
 
   List<Person> get people => _people;
 
+  void loadFriends() {
+    emit(LoadingFriends());
+    _getFriendsUseCase.launch().then((value) {
+      emit(Main());
+    }).catchError((err) {
+      showError(err);
+    });
+  }
 }

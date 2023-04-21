@@ -19,7 +19,7 @@ class ObserveDebtsUseCase {
       final calculator = DebtCalculator.fromCombined(group.people, event);
       final user = await _authProvider.authListener().first;
       final debts = calculator.calculateDebtsAfterPayments(Person(user!, ""));
-      return debts;
+      return debts.where((element) => element.second != 0);
     });
   }
 }

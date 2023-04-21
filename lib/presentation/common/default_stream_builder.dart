@@ -12,22 +12,20 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: StreamBuilder(
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(child: Text("${snapshot.error}"));
-            }
-            if (!snapshot.hasData) {
-              return const Center(child: Text("No data"));
-            }
-            final data = snapshot.data!;
-            return body(data);
-          }),
-    );
+    return StreamBuilder(
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          }
+          if (!snapshot.hasData) {
+            return const Center(child: Text("No data"));
+          }
+          final data = snapshot.data!;
+          return body(data);
+        });
   }
 }
