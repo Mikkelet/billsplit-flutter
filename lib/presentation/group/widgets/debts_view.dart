@@ -18,12 +18,14 @@ class DebtsView extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (debts.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.all(64.0),
-              child: Text(
-                "Your debts are settled!",
-                textAlign: TextAlign.justify,
-                style: TextStyle(color: Colors.grey),
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(64.0),
+                child: Text(
+                  "Your debts are settled!",
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
             );
           }

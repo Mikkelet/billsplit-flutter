@@ -18,12 +18,14 @@ class ServicesView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (services.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(64.0),
-            child: Text(
-              "Subscription service expenses will be automatically added each month! Use this for monthly expenses like rent, streaming service, co-budget, etc",
-              textAlign: TextAlign.justify,
-              style: TextStyle(color: Colors.grey),
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(64.0),
+              child: Text(
+                "Subscription service expenses will be automatically added each month! Use this for monthly expenses like rent, streaming service, co-budget, etc",
+                textAlign: TextAlign.justify,
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           );
         }
