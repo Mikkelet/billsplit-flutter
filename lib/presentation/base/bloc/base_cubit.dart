@@ -17,12 +17,13 @@ abstract class BaseCubit extends Cubit<UiState> {
   }
 
   void showError(dynamic err) {
-    print("qqq err: ${err.runtimeType.toString()}");
     if (err is Error) {
       emit(Failure(UiException(-1, err.toString())));
     } else if (err is Exception) {
+      print("qqq err: ${(err).toString()}");
       emit(Failure(err.toUiException()));
     } else {
+      print("qqq err: ${err.runtimeType.toString()}");
       emit(Failure(UiException(-1, "${err.runtimeType}: $err")));
     }
   }

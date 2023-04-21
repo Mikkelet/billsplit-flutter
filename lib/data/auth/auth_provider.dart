@@ -1,23 +1,14 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:billsplit_flutter/firebase_options.dart';
 
 class AuthProvider {
-  late final FirebaseApp _firebaseApp;
   late final FirebaseAuth _firebaseAuth;
 
   Person? _user;
 
-  Future init() async {
-    if (Firebase.apps.isEmpty) {
-      _firebaseApp = await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform);
-    } else {
-      _firebaseApp = Firebase.app();
-    }
-
-    _firebaseAuth = FirebaseAuth.instanceFor(app: _firebaseApp);
+  Future init(FirebaseApp firebaseApp) async {
+    _firebaseAuth = FirebaseAuth.instanceFor(app: firebaseApp);
   }
 
   Future signInWithEmail(String email, String password) async {
@@ -50,5 +41,9 @@ class AuthProvider {
 
   Future signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future updateProfilePicture(String downloadUrl) async {
+    await _firebaseAuth.currentUser!.updatePhotoURL(downloadUrl);
   }
 }

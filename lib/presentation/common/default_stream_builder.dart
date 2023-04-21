@@ -18,9 +18,6 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError) {
-            return Center(child: Text("${snapshot.error}"));
-          }
           if (!snapshot.hasData) {
             return const Center(child: Text("No data"));
           }

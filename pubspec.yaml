@@ -25,6 +25,8 @@ dependencies:
   intl: ^0.17.0
   email_validator:
   cached_network_image: ^3.2.3
+  firebase_storage: ^11.1.1
+  image_picker: ^0.8.7+4
 
 dev_dependencies:
   json_serializable: ^6.6.1

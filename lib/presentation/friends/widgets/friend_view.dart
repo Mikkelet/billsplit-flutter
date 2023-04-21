@@ -31,7 +31,7 @@ class FriendView extends StatelessWidget {
                   placeholder: (context, url) => const CircularProgressIndicator(),
                   errorWidget: (context, url, err) => Text("${err}"),
                   fit: BoxFit.cover,
-                  imageUrl: friend.person.pfpUrl,
+                  imageUrl: friend.person.pfpUrlState,
                 ),
               ),
             ),
