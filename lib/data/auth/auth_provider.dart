@@ -46,4 +46,8 @@ class AuthProvider {
   Future updateProfilePicture(String downloadUrl) async {
     await _firebaseAuth.currentUser!.updatePhotoURL(downloadUrl);
   }
+
+  Future updateUserName(String name) async {
+    await _firebaseAuth.currentUser!.updateDisplayName(name);
+  }
 }

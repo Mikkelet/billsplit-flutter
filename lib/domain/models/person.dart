@@ -26,4 +26,9 @@ class Person {
     if (other is! Person) return false;
     return uid == other.uid;
   }
+
+  void resetChanges(){
+    pfpUrlState = _pfpUrl;
+    nameState = _name;
+  }
 }

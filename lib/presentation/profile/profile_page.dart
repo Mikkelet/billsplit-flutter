@@ -7,13 +7,13 @@ import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/profile/bloc/profile_state.dart';
+import 'package:billsplit_flutter/presentation/profile/widgets/display_name_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
 
-  final _nameTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +53,7 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextField(
-                            decoration:
-                                const InputDecoration(border: InputBorder.none),
-                            maxLines: 1,
-                            controller: _nameTextController
-                              ..text = cubit.user.nameState,
-                            onChanged: (val) {
-                              cubit.user.nameState = val;
-                            },
-                          ),
+                          const DisplayNameTextField(),
                           const SizedBox(height: 16),
                           Text(cubit.user.email,
                               style: const TextStyle(fontSize: 16)),
