@@ -33,13 +33,12 @@ class PayerView extends StatelessWidget {
               padding: EdgeInsets.zero,
               icon: ProfilePictureView(person: person, size: iconSize),
             ),
-            isPayer
-                ? const Icon(
-                    color: Colors.greenAccent,
-                    Icons.attach_money_rounded,
-                    size: selectedIconSize,
-                  )
-                : const SizedBox(),
+            if (isPayer)
+              const Icon(
+                color: Colors.greenAccent,
+                Icons.attach_money_rounded,
+                size: selectedIconSize,
+              )
           ],
         ),
       ),

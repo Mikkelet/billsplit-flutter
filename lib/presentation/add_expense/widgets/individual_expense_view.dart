@@ -22,6 +22,8 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
+    final isShared = widget.individualExpense.person.uid ==
+        cubit.groupExpense.sharedExpense.person.uid;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -30,39 +32,47 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            PayerView(
-              person: widget.individualExpense.person,
-              isPayer: _isPayer(widget.individualExpense, cubit),
-              isSharedExpense: _isSharedExpense(widget.individualExpense, cubit),
-              onClick: () {
-                cubit.onPayerSelected(widget.individualExpense.person);
-              },
-            ),
+            if (isShared)
+              const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Icon(Icons.group, size: 64))
+            else
+              PayerView(
+                person: widget.individualExpense.person,
+                isPayer: _isPayer(widget.individualExpense, cubit),
+                isSharedExpense:
+                    _isSharedExpense(widget.individualExpense, cubit),
+                onClick: () {
+                  cubit.onPayerSelected(widget.individualExpense.person);
+                },
+              ),
             Flexible(
               child: ExpenseTextField(
-                  textEditingController: textController,
-                  onChange: (value) {
-                    widget.individualExpense.expenseState = value;
-                    context.read<AddExpenseBloc>().onExpensesUpdated();
-                    setState(() {});
-                  }),
+                textEditingController: textController,
+                onChange: (value) {
+                  widget.individualExpense.expenseState = value;
+                  context.read<AddExpenseBloc>().onExpensesUpdated();
+                  setState(() {});
+                },
+              ),
             ),
-            !_shouldShowSharedExpense(widget.individualExpense, cubit)
-                ? Text(
-                    "\$${cubit.groupExpense.sharedExpensePerParticipant.fmt2dec()}")
-                : const SizedBox(),
-            !_isSharedExpense(widget.individualExpense, cubit)
-                ? Checkbox(
-                    value: widget.individualExpense.isParticipantState,
-                    onChanged: (value) {
-                      cubit.onParticipantClicked(
-                          widget.individualExpense, value);
-                    })
-                : const SizedBox()
+            if (_shouldShowSharedExpense(widget.individualExpense, cubit))
+              Text(
+                  "\$${getTotalForUser(cubit).fmt2dec()}"),
+            if (!_isSharedExpense(widget.individualExpense, cubit))
+              Checkbox(
+                  value: widget.individualExpense.isParticipantState,
+                  onChanged: (value) {
+                    cubit.onParticipantClicked(widget.individualExpense, value);
+                  })
           ],
         ),
       ],
     );
+  }
+  
+  num getTotalForUser(AddExpenseBloc cubit){
+    return widget.individualExpense.expenseState + cubit.groupExpense.sharedExpensePerParticipant; 
   }
 
   bool _isPayer(IndividualExpense individualExpense, AddExpenseBloc cubit) {
@@ -71,7 +81,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
 
   bool _shouldShowSharedExpense(
       IndividualExpense individualExpense, AddExpenseBloc cubit) {
-    return _isSharedExpense(individualExpense, cubit) &&
+    return !_isSharedExpense(individualExpense, cubit) &&
         widget.individualExpense.isParticipantState;
   }
 
@@ -79,5 +89,11 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
       IndividualExpense individualExpense, AddExpenseBloc cubit) {
     return widget.individualExpense.person.uid ==
         cubit.groupExpense.sharedExpense.person.uid;
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 }

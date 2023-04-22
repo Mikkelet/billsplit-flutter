@@ -28,21 +28,23 @@ class GroupExpense extends Event {
   final Person _payer;
   final IndividualExpense sharedExpense;
   final List<IndividualExpense> individualExpenses;
-  final String description;
+  final String _description;
 
   // modifiable values
   late Person payerState = _payer;
+  late String descriptionState = _description;
 
   GroupExpense(
       {required String id,
       required Person createdBy,
       required num timestamp,
-      required this.description,
+      required String description,
       required Person payer,
       required num sharedExpense,
       required this.individualExpenses})
       : sharedExpense = IndividualExpense.sharedExpense(sharedExpense),
         _payer = payer,
+        _description = description,
         super(id, createdBy, timestamp);
 
   num get total =>
@@ -51,7 +53,6 @@ class GroupExpense extends Event {
 
   num get sharedExpensePerParticipant {
     try {
-
       final numOfParticipants = individualExpenses
           .where((element) => element.isParticipantState)
           .length;

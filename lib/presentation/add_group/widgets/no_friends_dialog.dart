@@ -1,11 +1,12 @@
 import 'package:billsplit_flutter/presentation/add_group/bloc/add_group_cubit.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:flutter/material.dart';
 
 class NoFriendsDialog extends StatelessWidget {
-  const NoFriendsDialog({Key? key}) : super(key: key);
+  final AddGroupCubit cubit;
+
+  const NoFriendsDialog({Key? key, required this.cubit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +36,8 @@ class NoFriendsDialog extends StatelessWidget {
                     Navigator.of(context).push(FriendsPage.getRoute());
                   },
                   child: const Text("Go to friends")),
-              BaseBlocBuilder<AddGroupCubit>(builder: (cubit, state) {
-                if (state is LoadingFriends) {
+              Builder(builder: (context) {
+                if (cubit.state is LoadingFriends) {
                   return const CircularProgressIndicator();
                 }
                 return IconButton(

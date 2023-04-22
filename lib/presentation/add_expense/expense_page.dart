@@ -3,9 +3,11 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
+import 'package:billsplit_flutter/presentation/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,20 +46,42 @@ class AddExpensePage extends StatelessWidget {
                   if (state is Loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 80),
-                      child: Center(
-                        child: Column(children: [
-                          IndividualExpenseView(expense.sharedExpense),
-                          ...expense.individualExpenses.map((e) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: IndividualExpenseView(e),
-                              )),
-                          Text("TOTAL: \$${expense.total.fmt2dec()}"),
-                        ]),
-                      ),
-                    );
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 80),
+                    child: Center(
+                      child: Column(children: [
+                        RoundedListItem(
+                            child:
+                                IndividualExpenseView(expense.sharedExpense)),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Column(
+                            children: [
+                              ...expense.individualExpenses.map(
+                                (e) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: IndividualExpenseView(e),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("TOTAL"),
+                              Text("\$${expense.total.fmt2dec()}"),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const RoundedListItem(child: DescriptionTextField())
+                      ]),
+                    ),
+                  );
                 }),
               ),
             );

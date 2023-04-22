@@ -14,8 +14,8 @@ class ExpenseEventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final description = groupExpense.description.isNotEmpty
-        ? groupExpense.description
+    final description = groupExpense.descriptionState.isNotEmpty
+        ? groupExpense.descriptionState
         : "${groupExpense.payerState.nameState} added a new expense";
     return ClickableListItem(
       onClick: () {
