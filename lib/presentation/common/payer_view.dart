@@ -21,26 +21,23 @@ class PayerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            IconButton(
-              iconSize: iconSize,
-              onPressed: isSharedExpense ? null : onClick,
-              padding: EdgeInsets.zero,
-              icon: ProfilePictureView(person: person, size: iconSize),
-            ),
-            if (isPayer)
-              const Icon(
-                color: Colors.greenAccent,
-                Icons.attach_money_rounded,
-                size: selectedIconSize,
-              )
-          ],
-        ),
+    return SizedBox(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          IconButton(
+            iconSize: iconSize,
+            onPressed: isSharedExpense ? null : onClick,
+            padding: EdgeInsets.zero,
+            icon: ProfilePictureView(person: person, size: iconSize),
+          ),
+          if (isPayer)
+            const Icon(
+              color: Colors.greenAccent,
+              Icons.attach_money_rounded,
+              size: selectedIconSize,
+            )
+        ],
       ),
     );
   }

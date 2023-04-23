@@ -22,8 +22,6 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    final isShared = widget.individualExpense.person.uid ==
-        cubit.groupExpense.sharedExpense.person.uid;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,11 +30,6 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (isShared)
-              const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Icon(Icons.group, size: 64))
-            else
               PayerView(
                 person: widget.individualExpense.person,
                 isPayer: _isPayer(widget.individualExpense, cubit),

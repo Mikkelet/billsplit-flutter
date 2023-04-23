@@ -114,4 +114,13 @@ class GroupExpense extends Event {
   String toString() {
     return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpense=${sharedExpense.expenseState}, payer=$payerState)";
   }
+
+  void addNewSharedExpense() {
+    sharedExpenses.add(SharedExpense.newInstance(
+        individualExpenses.map((e) => e.person).toList()));
+  }
+
+  void removeSharedExpense(SharedExpense sharedExpense) {
+    sharedExpenses.remove(sharedExpense);
+  }
 }

@@ -37,5 +37,4 @@ class AddExpenseBloc extends BaseCubit {
     individualExpense.isParticipantState = value ?? true;
     emit(Main());
   }
-
 }

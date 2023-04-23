@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 class SharedExpensePeoplePickerDialog extends StatefulWidget {
   final SharedExpense sharedExpense;
   final List<Person> people;
-  final Function() onUpdate;
+  final Function() onRemove;
 
   const SharedExpensePeoplePickerDialog(
       {Key? key,
       required this.sharedExpense,
       required this.people,
-      required this.onUpdate})
+      required this.onRemove})
       : super(key: key);
 
   @override
@@ -30,25 +30,47 @@ class _SharedExpensePeoplePickerDialogState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...widget.people.map((person) => Row(
-                  children: [
-                    ProfilePictureView(person: person),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Text(person.nameState),
-                    const Expanded(child: SizedBox()),
-                    Checkbox(
-                        value: widget.sharedExpense.participantsState
-                            .contains(person),
-                        onChanged: (newValue) {
-                          widget.sharedExpense.changeParticipantState(
-                              person, newValue ?? false);
-                          setState(() {});
-                          widget.onUpdate();
-                        })
-                  ],
-                ))
+            ...widget.people.map(
+              (person) => Row(
+                children: [
+                  ProfilePictureView(person: person),
+                  const SizedBox(width: 16),
+                  Text(person.nameState),
+                  const Expanded(child: SizedBox()),
+                  Checkbox(
+                      value: widget.sharedExpense.participantsState
+                          .contains(person),
+                      onChanged: (newValue) {
+                        widget.sharedExpense
+                            .changeParticipantState(person, newValue ?? false);
+                        setState(() {});
+                      })
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    widget.onRemove();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Remove",
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
+                const Expanded(child: SizedBox()),
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    color: Theme.of(context).colorScheme.primary,
+                    icon: const Icon(Icons.check))
+              ],
+            )
           ],
         ),
       ),
