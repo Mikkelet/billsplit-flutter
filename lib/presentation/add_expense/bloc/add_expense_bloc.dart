@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
@@ -7,11 +8,11 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
 class AddExpenseBloc extends BaseCubit {
-  final String groupId;
+  final Group group;
   final GroupExpense groupExpense;
   late final _addExpenseUseCase = AddEventUseCase();
 
-  AddExpenseBloc(this.groupId, this.groupExpense) : super.withState(Main());
+  AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main());
 
   void onExpensesUpdated() {
     emit(Main());
@@ -19,7 +20,7 @@ class AddExpenseBloc extends BaseCubit {
 
   void addExpense() {
     emit(Loading());
-    _addExpenseUseCase.launch(groupId, groupExpense).then((value) {
+    _addExpenseUseCase.launch(group.id, groupExpense).then((value) {
       emit(AddExpenseSuccess());
     }).catchError((err) {
       showError(err);

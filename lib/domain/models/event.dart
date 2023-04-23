@@ -1,6 +1,8 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:collection/collection.dart';
 
 abstract class Event {
@@ -39,6 +41,10 @@ class GroupExpense extends Event {
   late Person payerState = _payer;
   late String descriptionState = _description;
 
+  late List<SharedExpense> sharedExpenses = [
+    SharedExpense.newInstance(individualExpenses.map((e) => e.person).toList())
+  ];
+
   GroupExpense(
       {required String id,
       required Person createdBy,
@@ -52,15 +58,30 @@ class GroupExpense extends Event {
         _description = description,
         super(id, createdBy, timestamp);
 
-  num get total =>
-      individualExpenses.map((e) => e.expenseState).sum +
-      sharedExpense.expenseState;
+  num get total {
+    return individualExpenses.map((e) => e.expenseState).sum +
+        sharedExpenses.map((e) => e.expenseState).sum;
+  }
+
+  num getSharedExpensesForPerson(Person person) {
+    return sharedExpenses
+        .map((sharedExpense) => sharedExpense.participantsState
+            .where((participant) => participant.uid == person.uid)
+            .map((person) => IndividualExpense(
+                person: person, expense: sharedExpense.sharedExpenseDivided)))
+        .flatMap()
+        .map((e) => e.expenseState)
+        .sum;
+  }
 
   num get sharedExpensePerParticipant {
     try {
-      final numOfParticipants = individualExpenses
-          .where((element) => element.isParticipantState)
-          .length;
+      final sharedExpensesPerPerson = sharedExpenses.map((sharedExpense) =>
+          sharedExpense.participantsState.map((person) => IndividualExpense(
+              person: person, expense: sharedExpense.sharedExpenseDivided)));
+
+      final numOfParticipants =
+          [...individualExpenses, ...sharedExpensesPerPerson].length;
       return sharedExpense.expenseState / numOfParticipants;
     } catch (e) {
       print("qqq e=$e");
@@ -88,7 +109,6 @@ class GroupExpense extends Event {
             payer: user,
             sharedExpense: 0,
             timestamp: DateTime.now().millisecondsSinceEpoch);
-
 
   @override
   String toString() {

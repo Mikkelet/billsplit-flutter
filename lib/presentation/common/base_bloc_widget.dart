@@ -4,16 +4,13 @@ import 'package:billsplit_flutter/presentation/dialogs/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BaseBlocWidget<T extends BaseCubit> extends StatelessWidget {
+class BaseBlocWidget<T extends BaseCubit> extends BlocProvider<T> {
   final T Function(BuildContext) create;
   final Function(UiState)? listener;
-  final Widget child;
 
   const BaseBlocWidget(
-      {super.key,
-      required this.create,
-      this.listener,
-      required this.child});
+      {super.key, required this.create, this.listener, required super.child})
+      : super(create: create);
 
   @override
   Widget build(BuildContext context) {

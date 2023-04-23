@@ -114,8 +114,6 @@ class DebtCalculator {
             element.createdBy.uid == debtee.uid);
         final accPayments = paymentsToPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount + accPayments);
-      } else {
-        print("- no debt");
       }
       return Pair(debtee, debtAmount);
     });

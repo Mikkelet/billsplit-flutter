@@ -51,28 +51,24 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                 textEditingController: textController,
                 onChange: (value) {
                   widget.individualExpense.expenseState = value;
-                  context.read<AddExpenseBloc>().onExpensesUpdated();
-                  setState(() {});
+                  cubit.onExpensesUpdated();
                 },
               ),
             ),
             if (_shouldShowSharedExpense(widget.individualExpense, cubit))
               Text(
+                  key: Key(getTotalForUser(cubit).fmt2dec()),
                   "\$${getTotalForUser(cubit).fmt2dec()}"),
-            if (!_isSharedExpense(widget.individualExpense, cubit))
-              Checkbox(
-                  value: widget.individualExpense.isParticipantState,
-                  onChanged: (value) {
-                    cubit.onParticipantClicked(widget.individualExpense, value);
-                  })
           ],
         ),
       ],
     );
   }
-  
-  num getTotalForUser(AddExpenseBloc cubit){
-    return widget.individualExpense.expenseState + cubit.groupExpense.sharedExpensePerParticipant; 
+
+  num getTotalForUser(AddExpenseBloc cubit) {
+    return widget.individualExpense.expenseState +
+        cubit.groupExpense
+            .getSharedExpensesForPerson(widget.individualExpense.person);
   }
 
   bool _isPayer(IndividualExpense individualExpense, AddExpenseBloc cubit) {

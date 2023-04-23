@@ -9,7 +9,9 @@ class DescriptionTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     return TextField(
-      onChanged: (value){
+      controller: TextEditingController()
+        ..text = cubit.groupExpense.descriptionState,
+      onChanged: (value) {
         cubit.groupExpense.descriptionState = value;
       },
       decoration: const InputDecoration(

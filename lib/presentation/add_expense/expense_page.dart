@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
+import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expense_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
@@ -21,7 +22,7 @@ class AddExpensePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => AddExpenseBloc(group.id, expense),
+      create: (context) => AddExpenseBloc(group, expense),
       child: BlocListener<AddExpenseBloc, UiState>(
         listener: (context, state) {
           if (state is AddExpenseSuccess) {
@@ -48,12 +49,11 @@ class AddExpensePage extends StatelessWidget {
                   }
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 80),
+                        horizontal: 16.0),
                     child: Center(
                       child: Column(children: [
-                        RoundedListItem(
-                            child:
-                                IndividualExpenseView(expense.sharedExpense)),
+                        ...expense.sharedExpenses
+                            .map((e) => SharedExpenseView(sharedExpense: e)),
                         const SizedBox(height: 8),
                         RoundedListItem(
                           child: Column(
