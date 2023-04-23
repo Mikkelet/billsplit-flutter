@@ -16,7 +16,7 @@ class ExpenseEventView extends StatelessWidget {
   Widget build(BuildContext context) {
     final description = groupExpense.descriptionState.isNotEmpty
         ? groupExpense.descriptionState
-        : "${groupExpense.payerState.nameState} added a new expense";
+        : "${groupExpense.createdBy.nameState} added a new expense";
     return ClickableListItem(
       onClick: () {
         final cubit = context.read<GroupBloc>();
@@ -30,7 +30,8 @@ class ExpenseEventView extends StatelessWidget {
           Text(
             "\$${groupExpense.total.fmt2dec()}",
             style: Theme.of(context).textTheme.titleLarge,
-          )
+          ),
+          Text("paid by ${groupExpense.payerState.nameState}")
         ],
       ),
     );

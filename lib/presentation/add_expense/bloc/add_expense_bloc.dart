@@ -9,7 +9,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 class AddExpenseBloc extends BaseCubit {
   final String groupId;
   final GroupExpense groupExpense;
-  late final _addExpenseUseCase = AddEventUseCase(groupId, groupExpense);
+  late final _addExpenseUseCase = AddEventUseCase();
 
   AddExpenseBloc(this.groupId, this.groupExpense) : super.withState(Main());
 
@@ -19,7 +19,7 @@ class AddExpenseBloc extends BaseCubit {
 
   void addExpense() {
     emit(Loading());
-    _addExpenseUseCase.launch().then((value) {
+    _addExpenseUseCase.launch(groupId, groupExpense).then((value) {
       emit(AddExpenseSuccess());
     }).catchError((err) {
       showError(err);

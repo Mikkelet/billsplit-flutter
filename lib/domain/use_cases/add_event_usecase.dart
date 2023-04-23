@@ -14,41 +14,43 @@ import 'package:billsplit_flutter/utils/pair.dart';
 class AddEventUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
-  final String _groupId;
-  final Event _event;
 
-  AddEventUseCase(this._groupId, this._event);
+  AddEventUseCase();
 
-  Future launch() async {
-    final debtForGroup = (await _getDebtWithAddedEvent())
+  Future launch(String groupId, Event event) async {
+    final debtForGroup = (await _getDebtWithAddedEvent(groupId, event))
         .map((e) => DebtDTO(e.first, e.second))
         .toList();
 
-
-    final response = await _apiService.addEvent(_groupId, _event.toEventDTO(), debtForGroup);
+    final response =
+        await _apiService.addEvent(groupId, event.toEventDTO(), debtForGroup);
 
     final EventDTO eventDto = response.event!;
 
     if (eventDto is GroupExpenseDTO) {
-      final expenseDb = eventDto.toDb(_groupId);
+      final expenseDb = eventDto.toDb(groupId);
       await _database.groupExpenseDAO.insert(expenseDb);
     } else if (eventDto is PaymentDTO) {
-      final paymentDb = eventDto.toDb(_groupId);
+      final paymentDb = eventDto.toDb(groupId);
       await _database.paymentsDAO.insert(paymentDb);
     }
+
+    // update group
+    final groupResponse = await _apiService.getGroup(groupId);
+    await _database.groupsDAO.insertGroup(groupResponse.group.toDb());
   }
 
-  Future<Iterable<Pair<String, num>>> _getDebtWithAddedEvent() async {
-    final groupDb = (await _database.groupsDAO.getGroup(_groupId)).toGroup();
+  Future<Iterable<Pair<String, num>>> _getDebtWithAddedEvent(
+      String groupId, Event event) async {
+    final groupDb = (await _database.groupsDAO.getGroup(groupId)).toGroup();
     final people = groupDb.people.toList();
-    final groupExpenses =
-        (await _database.groupExpenseDAO.watch(_groupId).first)
-            .toGroupExpenses();
+    final groupExpenses = (await _database.groupExpenseDAO.watch(groupId).first)
+        .toGroupExpenses();
     List<GroupExpense> groupExpensesWithEvent = groupExpenses.toList();
-    if (_event is GroupExpense) {
-      groupExpensesWithEvent = [...groupExpenses, _event as GroupExpense];
+    if (event is GroupExpense) {
+      groupExpensesWithEvent = [...groupExpenses, event];
     }
-    final payments = (await _database.paymentsDAO.watch(_groupId).first)
+    final payments = (await _database.paymentsDAO.watch(groupId).first)
         .toPayments()
         .toList();
     final debt = DebtCalculator(people, groupExpensesWithEvent, payments)

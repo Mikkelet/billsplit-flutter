@@ -22,22 +22,28 @@ class EventView extends StatelessWidget {
             isCreatedByUser
                 ? const SizedBox()
                 : Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ProfilePictureView(person: event.createdBy),
-                ),
+                    padding: const EdgeInsets.all(4.0),
+                    child: ProfilePictureView(person: event.createdBy),
+                  ),
             Flexible(
               child: ExpenseEventView(groupExpense: event as GroupExpense),
             ),
             isCreatedByUser
                 ? Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ProfilePictureView(person: event.createdBy),
-                )
+                    padding: const EdgeInsets.all(4.0),
+                    child: ProfilePictureView(person: event.createdBy),
+                  )
                 : const SizedBox(),
           ],
         );
       }
-      return Container();
+      if (event is Payment) {
+        return Center(
+          child: Text(
+              "${(event as Payment).createdBy.nameState} paid \$${(event as Payment).amount}  to ${(event as Payment).paidTo.nameState}"),
+        );
+      }
+      return const SizedBox();
     });
   }
 }

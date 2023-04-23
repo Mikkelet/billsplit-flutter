@@ -92,6 +92,7 @@ class DebtCalculator {
     });
   }
 
+  // POSSIBLE USES PAYMENTS TWICE, SINCE THEY'RE ALREADY INCLUDED
   Iterable<Pair<Person, num>> calculateDebtsAfterPayments(Person person) {
     // get debts owed by person
     final effectiveDebt = calculateEffectiveDebt(person);

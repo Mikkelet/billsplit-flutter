@@ -17,8 +17,8 @@ class ObserveDebtsUseCase {
       final response = await _database.groupsDAO.getGroup(groupId);
       final group = response.toGroup();
       final calculator = DebtCalculator.fromCombined(group.people, event);
-      final user = await _authProvider.authListener().first;
-      final debts = calculator.calculateDebtsAfterPayments(Person(user!, ""));
+      final user = _authProvider.user!;
+      final debts = calculator.calculateEffectiveDebt(user);
       return debts.where((element) => element.second != 0);
     });
   }

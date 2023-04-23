@@ -22,6 +22,11 @@ class Payment extends Event {
       required this.paidTo,
       required this.amount})
       : super(id, createdBy, timestamp);
+
+  @override
+  String toString() {
+    return "Payment(id=$id, createdBy=$createdBy, paidTo=$paidTo, amount=$amount)";
+  }
 }
 
 class GroupExpense extends Event {
@@ -83,4 +88,10 @@ class GroupExpense extends Event {
             payer: user,
             sharedExpense: 0,
             timestamp: DateTime.now().millisecondsSinceEpoch);
+
+
+  @override
+  String toString() {
+    return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpense=${sharedExpense.expenseState}, payer=$payerState)";
+  }
 }

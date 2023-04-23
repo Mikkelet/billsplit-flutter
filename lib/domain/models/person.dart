@@ -27,6 +27,11 @@ class Person {
     return uid == other.uid;
   }
 
+  @override
+  String toString() {
+    return "Person(id=$uid, name=$_name)";
+  }
+
   void resetChanges(){
     pfpUrlState = _pfpUrl;
     nameState = _name;
