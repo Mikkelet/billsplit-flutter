@@ -62,7 +62,7 @@ class AddExpensePage extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
                                       onPressed: () {
-                                        cubit.groupExpense.addNewSharedExpense();
+                                        cubit.groupExpense.addNewSharedExpense([...group.people]);
                                         cubit.onExpensesUpdated();
                                       },
                                       icon: const Icon(Icons.add))),

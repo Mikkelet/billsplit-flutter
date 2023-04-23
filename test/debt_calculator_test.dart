@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:collection/collection.dart';
 
 final samplePeopleShera = [
@@ -22,12 +23,16 @@ final sampleGroup = Group(
 
 final sampleIndividualExpenses = samplePeopleShera
     .toList()
-    .mapIndexed((i, p) => IndividualExpense(person: p, expense: i * 100, isParticipant: true));
+    .mapIndexed((i, p) => IndividualExpense(person: p, expense: i * 100));
 
-final sampleSharedExpense = sampleIndividualExpenses.length * 200;
+final sampleSharedExpense = [
+  SharedExpense(
+      expense: sampleIndividualExpenses.length * 200,
+      participants: samplePeopleShera,
+      description: "")
+];
 
 List<GroupExpense> get sampleSharedExpenses {
-  final shared = sampleSharedExpense;
   return [
     GroupExpense(
         id: "0",
@@ -36,7 +41,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[0],
         timestamp: 1,
         individualExpenses: sampleIndividualExpenses.toList(),
-        sharedExpense: shared),
+        sharedExpenses: sampleSharedExpense),
     GroupExpense(
       id: "1",
       createdBy: samplePeopleShera[2],
@@ -44,7 +49,7 @@ List<GroupExpense> get sampleSharedExpenses {
       payer: samplePeopleShera[1],
       timestamp: 2,
       individualExpenses: sampleIndividualExpenses.toList(),
-      sharedExpense: shared,
+      sharedExpenses: sampleSharedExpense,
     ),
     GroupExpense(
         id: "2",
@@ -53,7 +58,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         timestamp: 3,
         individualExpenses: sampleIndividualExpenses.toList(),
-        sharedExpense: shared),
+        sharedExpenses: sampleSharedExpense),
     GroupExpense(
         id: "3",
         createdBy: samplePeopleShera[0],
@@ -61,7 +66,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         timestamp: 4,
         individualExpenses: sampleIndividualExpenses.toList(),
-        sharedExpense: shared),
+        sharedExpenses: sampleSharedExpense),
     GroupExpense(
         id: "4",
         createdBy: samplePeopleShera[0],
@@ -69,7 +74,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         timestamp: 5,
         individualExpenses: sampleIndividualExpenses.toList(),
-        sharedExpense: shared),
+        sharedExpenses: sampleSharedExpense),
   ];
 }
 
@@ -142,7 +147,8 @@ void main() {
   print("\n=== After Payments ===");
   print("");
   samplePayments.forEach((it) {
-    print("${it.createdBy.nameState} paid \$${it.amount} to ${it.paidTo.nameState}");
+    print(
+        "${it.createdBy.nameState} paid \$${it.amount} to ${it.paidTo.nameState}");
   });
   print("");
   samplePeopleShera.forEach((person) {

@@ -8,9 +8,8 @@ part 'individual_expense_dto.g.dart';
 class IndividualExpenseDTO {
   final PersonDTO person;
   final num expense;
-  final bool isParticipant;
 
-  IndividualExpenseDTO(this.person, this.expense, this.isParticipant);
+  IndividualExpenseDTO(this.person, this.expense);
 
   factory IndividualExpenseDTO.fromJson(Json json) => _$IndividualExpenseDTOFromJson(json);
   Json toJson() => _$IndividualExpenseDTOToJson(this);

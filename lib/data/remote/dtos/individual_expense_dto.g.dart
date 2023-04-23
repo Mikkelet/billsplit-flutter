@@ -11,7 +11,6 @@ IndividualExpenseDTO _$IndividualExpenseDTOFromJson(
     IndividualExpenseDTO(
       PersonDTO.fromJson(json['person'] as Map<String, dynamic>),
       json['expense'] as num,
-      json['isParticipant'] as bool,
     );
 
 Map<String, dynamic> _$IndividualExpenseDTOToJson(
@@ -19,5 +18,4 @@ Map<String, dynamic> _$IndividualExpenseDTOToJson(
     <String, dynamic>{
       'person': instance.person.toJson(),
       'expense': instance.expense,
-      'isParticipant': instance.isParticipant,
     };

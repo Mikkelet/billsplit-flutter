@@ -29,9 +29,10 @@ class DebtCalculator {
       final payedForExpensesWithoutPayee = payedForGroupExpenses
           .where((expense) => expense.payerState.uid == person.uid);
       // Update individual expenses to include the shared expense
-      final payedForIndividualExpenses = payedForExpensesWithoutPayee
-          .map((expense) => expense.getIndividualWithShared())
-          .flatMap();
+      final Iterable<IndividualExpense> payedForIndividualExpenses =
+          payedForExpensesWithoutPayee
+              .map((expense) => expense.getIndividualWithShared())
+              .flatMap();
       // get list of distinct indebted
       final distinctById = {
         for (var e in payedForIndividualExpenses) e.person.uid: e.person
@@ -166,7 +167,8 @@ class DebtCalculator {
     print("\n=== After Payments ===");
     print("");
     for (var it in payments) {
-      print("${it.createdBy.nameState} paid \$${it.amount} to ${it.paidTo.nameState}");
+      print(
+          "${it.createdBy.nameState} paid \$${it.amount} to ${it.paidTo.nameState}");
     }
     print("");
     for (var person in people) {
@@ -175,9 +177,11 @@ class DebtCalculator {
         final otherPerson = element.first;
         final debt = element.second;
         if (debt > 0) {
-          print("\t${otherPerson.nameState} owes \$$debt to ${person.nameState}");
+          print(
+              "\t${otherPerson.nameState} owes \$$debt to ${person.nameState}");
         } else if (debt < 0) {
-          print("\t${person.nameState} owes \$$debt to ${otherPerson.nameState}");
+          print(
+              "\t${person.nameState} owes \$$debt to ${otherPerson.nameState}");
         }
       });
     }
@@ -185,27 +189,26 @@ class DebtCalculator {
 }
 
 extension GroupExpenseExt on GroupExpense {
-  num getSharedExpense() =>
-      sharedExpense.expenseState /
-      individualExpenses.where((element) => element.isParticipantState).length;
 
   Iterable<IndividualExpense> getIndividualWithShared() =>
       individualExpenses.map((e) {
-        final expense = e.isParticipantState
-            ? e.expenseState + getSharedExpense()
-            : e.expenseState;
+        final expense = e.expenseState + getSharedExpensesForPerson(e.person);
         return IndividualExpense(
-            person: e.person, expense: expense, isParticipant: e.isParticipantState);
+            person: e.person,
+            expense: expense);
       });
 }
 
 extension PaymentExt on Payment {
   GroupExpense toExpense() => GroupExpense(
-      id: id,
-      createdBy: createdBy,
-      timestamp: timestamp,
-      description: "",
-      payer: createdBy,
-      individualExpenses: [IndividualExpense(person: paidTo, expense: amount)],
-      sharedExpense: 0);
+        id: id,
+        createdBy: createdBy,
+        timestamp: timestamp,
+        description: "",
+        payer: createdBy,
+        sharedExpenses: [],
+        individualExpenses: [
+          IndividualExpense(person: paidTo, expense: amount)
+        ],
+      );
 }

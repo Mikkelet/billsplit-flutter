@@ -33,8 +33,6 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
               PayerView(
                 person: widget.individualExpense.person,
                 isPayer: _isPayer(widget.individualExpense, cubit),
-                isSharedExpense:
-                    _isSharedExpense(widget.individualExpense, cubit),
                 onClick: () {
                   cubit.onPayerSelected(widget.individualExpense.person);
                 },
@@ -48,7 +46,6 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                 },
               ),
             ),
-            if (_shouldShowSharedExpense(widget.individualExpense, cubit))
               Text(
                   key: Key(getTotalForUser(cubit).fmt2dec()),
                   "\$${getTotalForUser(cubit).fmt2dec()}"),
@@ -66,18 +63,6 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
 
   bool _isPayer(IndividualExpense individualExpense, AddExpenseBloc cubit) {
     return cubit.groupExpense.payerState.uid == individualExpense.person.uid;
-  }
-
-  bool _shouldShowSharedExpense(
-      IndividualExpense individualExpense, AddExpenseBloc cubit) {
-    return !_isSharedExpense(individualExpense, cubit) &&
-        widget.individualExpense.isParticipantState;
-  }
-
-  bool _isSharedExpense(
-      IndividualExpense individualExpense, AddExpenseBloc cubit) {
-    return widget.individualExpense.person.uid ==
-        cubit.groupExpense.sharedExpense.person.uid;
   }
 
   @override

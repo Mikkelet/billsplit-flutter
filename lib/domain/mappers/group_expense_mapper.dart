@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/individual_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
+import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 
 extension GroupExpensesDtoExt on Iterable<GroupExpenseDTO> {
@@ -21,7 +22,7 @@ extension GroupExpenseDtoExt on GroupExpenseDTO {
       timestamp: timeStamp,
       description: description,
       payer: payee.toPerson(),
-      sharedExpense: sharedExpense,
+      sharedExpenses: sharedExpenses.toSharedExpense(),
       individualExpenses:
           individualExpenses.map((e) => e.toExpense()).toList());
 }

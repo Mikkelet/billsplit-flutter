@@ -28,10 +28,10 @@ GroupExpenseDTO _$GroupExpenseDTOFromJson(Map<String, dynamic> json) =>
       json['type'] as String,
       json['description'] as String,
       PersonDTO.fromJson(json['payee'] as Map<String, dynamic>),
-      json['sharedExpense'] as num,
       (json['individualExpenses'] as List<dynamic>)
-          .map((e) => IndividualExpenseDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .map((e) => IndividualExpenseDTO.fromJson(e as Map<String, dynamic>)),
+      (json['sharedExpenses'] as List<dynamic>)
+          .map((e) => SharedExpenseDTO.fromJson(e as Map<String, dynamic>)),
     );
 
 Map<String, dynamic> _$GroupExpenseDTOToJson(GroupExpenseDTO instance) =>
@@ -42,9 +42,9 @@ Map<String, dynamic> _$GroupExpenseDTOToJson(GroupExpenseDTO instance) =>
       'timeStamp': instance.timeStamp,
       'description': instance.description,
       'payee': instance.payee.toJson(),
-      'sharedExpense': instance.sharedExpense,
       'individualExpenses':
           instance.individualExpenses.map((e) => e.toJson()).toList(),
+      'sharedExpenses': instance.sharedExpenses.map((e) => e.toJson()).toList(),
     };
 
 PaymentDTO _$PaymentDTOFromJson(Map<String, dynamic> json) => PaymentDTO(

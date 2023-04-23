@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
+import 'package:billsplit_flutter/data/remote/dtos/shared_expense_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -48,8 +49,8 @@ class EventDTO {
 class GroupExpenseDTO extends EventDTO {
   final String description;
   final PersonDTO payee;
-  final num sharedExpense;
-  final List<IndividualExpenseDTO> individualExpenses;
+  final Iterable<IndividualExpenseDTO> individualExpenses;
+  final Iterable<SharedExpenseDTO> sharedExpenses;
 
   GroupExpenseDTO(
       super.id,
@@ -58,8 +59,8 @@ class GroupExpenseDTO extends EventDTO {
       super.type,
       this.description,
       this.payee,
-      this.sharedExpense,
-      this.individualExpenses);
+      this.individualExpenses,
+      this.sharedExpenses);
 
   factory GroupExpenseDTO.fromJson(Json json) =>
       _$GroupExpenseDTOFromJson(json);

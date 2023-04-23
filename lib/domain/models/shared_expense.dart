@@ -1,19 +1,17 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 
 class SharedExpense {
-  final String id;
   final num _expense;
-  final List<Person> _participants;
+  final Iterable<Person> _participants;
   final String _description;
 
   late num expenseState = _expense;
-  late List<Person> participantsState = _participants;
+  late List<Person> participantsState = _participants.toList();
   late String descriptionState = _description;
 
   SharedExpense(
-      {required this.id,
-      required num expense,
-      required List<Person> participants,
+      {required num expense,
+      required Iterable<Person> participants,
       required String description})
       : _description = description,
         _expense = expense,
@@ -35,6 +33,6 @@ class SharedExpense {
     }
   }
 
-  SharedExpense.newInstance(List<Person> participants)
-      : this(id: "", participants: participants, description: "", expense: 0);
+  SharedExpense.newInstance(Iterable<Person> participants)
+      : this(participants: participants, description: "", expense: 0);
 }

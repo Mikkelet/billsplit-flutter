@@ -33,28 +33,25 @@ class Payment extends Event {
 
 class GroupExpense extends Event {
   final Person _payer;
-  final IndividualExpense sharedExpense;
-  final List<IndividualExpense> individualExpenses;
+  final Iterable<IndividualExpense> individualExpenses;
   final String _description;
+  final Iterable<SharedExpense> _sharedExpenses;
 
   // modifiable values
   late Person payerState = _payer;
   late String descriptionState = _description;
-
-  late List<SharedExpense> sharedExpenses = [
-    SharedExpense.newInstance(individualExpenses.map((e) => e.person).toList())
-  ];
+  late List<SharedExpense> sharedExpenses = _sharedExpenses.toList();
 
   GroupExpense(
       {required String id,
       required Person createdBy,
       required num timestamp,
       required String description,
+      required Iterable<SharedExpense> sharedExpenses,
       required Person payer,
-      required num sharedExpense,
       required this.individualExpenses})
-      : sharedExpense = IndividualExpense.sharedExpense(sharedExpense),
-        _payer = payer,
+      : _payer = payer,
+        _sharedExpenses = sharedExpenses,
         _description = description,
         super(id, createdBy, timestamp);
 
@@ -74,29 +71,14 @@ class GroupExpense extends Event {
         .sum;
   }
 
-  num get sharedExpensePerParticipant {
-    try {
-      final sharedExpensesPerPerson = sharedExpenses.map((sharedExpense) =>
-          sharedExpense.participantsState.map((person) => IndividualExpense(
-              person: person, expense: sharedExpense.sharedExpenseDivided)));
-
-      final numOfParticipants =
-          [...individualExpenses, ...sharedExpensesPerPerson].length;
-      return sharedExpense.expenseState / numOfParticipants;
-    } catch (e) {
-      print("qqq e=$e");
-      return 0;
-    }
-  }
-
   GroupExpense.dummy(num seed)
       : this(
             id: "GE$seed",
             createdBy: Person.dummy(seed),
             description: "",
             individualExpenses: [],
+            sharedExpenses: [],
             payer: Person.dummy(seed),
-            sharedExpense: 0,
             timestamp: 0);
 
   GroupExpense.newExpense(Person user, Group group)
@@ -106,18 +88,17 @@ class GroupExpense extends Event {
             description: "",
             individualExpenses:
                 group.people.map((e) => IndividualExpense(person: e)).toList(),
+            sharedExpenses: [SharedExpense.newInstance(group.people)],
             payer: user,
-            sharedExpense: 0,
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
   @override
   String toString() {
-    return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpense=${sharedExpense.expenseState}, payer=$payerState)";
+    return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpenses=$sharedExpenses, payer=$payerState)";
   }
 
-  void addNewSharedExpense() {
-    sharedExpenses.add(SharedExpense.newInstance(
-        individualExpenses.map((e) => e.person).toList()));
+  void addNewSharedExpense(Iterable<Person> people) {
+    sharedExpenses.add(SharedExpense.newInstance(people));
   }
 
   void removeSharedExpense(SharedExpense sharedExpense) {

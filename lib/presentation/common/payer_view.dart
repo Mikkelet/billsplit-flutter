@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 class PayerView extends StatelessWidget {
   final Person person;
   final bool isPayer;
-  final bool isSharedExpense;
   final Function() onClick;
 
   static const double iconSize = 64;
@@ -15,8 +14,7 @@ class PayerView extends StatelessWidget {
       {Key? key,
       required this.person,
       required this.isPayer,
-      required this.onClick,
-      this.isSharedExpense = false})
+      required this.onClick})
       : super(key: key);
 
   @override
@@ -27,7 +25,7 @@ class PayerView extends StatelessWidget {
         children: [
           IconButton(
             iconSize: iconSize,
-            onPressed: isSharedExpense ? null : onClick,
+            onPressed: onClick,
             padding: EdgeInsets.zero,
             icon: ProfilePictureView(person: person, size: iconSize),
           ),
