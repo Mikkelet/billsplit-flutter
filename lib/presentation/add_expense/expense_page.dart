@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -44,75 +45,101 @@ class AddExpensePage extends StatelessWidget {
                       icon: const Icon(Icons.check))
                 ],
               ),
-              body: SingleChildScrollView(
-                child: Builder(builder: (context) {
-                  if (state is Loading) {
-                    return const Center(child: CircularProgressIndicator());
+              body: WillPopScope(
+                onWillPop: () async {
+                  if (groupExpense.isChanged) {
+                    return await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomDialog(
+                            text:
+                                "You have made changes to the expense. Either apply the changes or cancel.",
+                            primaryText: "Keep editting",
+                            onPrimaryClick: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            secondaryText: "Reset changes",
+                            onSecondaryClick: () {
+                              groupExpense.resetChanges();
+                              Navigator.of(context).pop(true);
+                            },
+                          );
+                        });
                   }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 24),
-                    child: Center(
-                      child: Column(children: [
-                        RoundedListItem(
-                          child: Column(
-                            children: [
-                              ...groupExpense.sharedExpensesState.map(
-                                  (e) => SharedExpenseView(sharedExpense: e)),
-                              Align(
-                                  alignment: Alignment.centerRight,
-                                  child: IconButton(
-                                      onPressed: () {
-                                        cubit.groupExpense.addNewSharedExpense(
-                                            [...group.people]);
-                                        cubit.onExpensesUpdated();
-                                      },
-                                      icon: const Icon(Icons.add))),
-                            ],
+                  return true;
+                },
+                child: SingleChildScrollView(
+                  child: Builder(builder: (context) {
+                    if (state is Loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 24),
+                      child: Center(
+                        child: Column(children: [
+                          RoundedListItem(
+                            child: Column(
+                              children: [
+                                ...groupExpense.sharedExpensesState.map(
+                                    (e) => SharedExpenseView(sharedExpense: e)),
+                                Align(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                        onPressed: () {
+                                          cubit.groupExpense
+                                              .addNewSharedExpense(
+                                                  [...group.people]);
+                                          cubit.onExpensesUpdated();
+                                        },
+                                        icon: const Icon(Icons.add))),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        RoundedListItem(
-                          child: Column(
-                            children: [
-                              ...groupExpense.individualExpenses.mapIndexed(
-                                (i, e) {
-                                  final isMiddleElement = i > 0 ;
-                                  if (isMiddleElement) {
-                                    return Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 8),
-                                        child: IndividualExpenseView(e));
-                                  }
-                                  return IndividualExpenseView(e);
-                                },
-                              ),
-                            ],
+                          const SizedBox(height: 8),
+                          RoundedListItem(
+                            child: Column(
+                              children: [
+                                ...groupExpense.individualExpenses.mapIndexed(
+                                  (i, e) {
+                                    final isMiddleElement = i > 0;
+                                    if (isMiddleElement) {
+                                      return Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 32),
+                                          child: IndividualExpenseView(e));
+                                    }
+                                    return IndividualExpenseView(e);
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        RoundedListItem(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Total"),
-                              Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Text(
-                                    "\$${groupExpense.total.fmt2dec()}",
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  )),
-                            ],
+                          const SizedBox(height: 8),
+                          RoundedListItem(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Total"),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Text(
+                                      "\$${groupExpense.total.fmt2dec()}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    )),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        const RoundedListItem(child: DescriptionTextField())
-                      ]),
-                    ),
-                  );
-                }),
+                          const SizedBox(height: 8),
+                          const RoundedListItem(child: DescriptionTextField())
+                        ]),
+                      ),
+                    );
+                  }),
+                ),
               ),
             );
           },

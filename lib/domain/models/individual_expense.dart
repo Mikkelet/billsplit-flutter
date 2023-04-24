@@ -22,6 +22,10 @@ class IndividualExpense {
 
 
   bool get isChanged {
-    return _expense == expenseState;
+    return _expense != expenseState;
+  }
+
+  void resetChanges() {
+    expenseState = _expense;
   }
 }

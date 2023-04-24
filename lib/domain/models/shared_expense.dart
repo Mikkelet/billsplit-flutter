@@ -38,8 +38,21 @@ class SharedExpense {
       : this(participants: participants, description: "", expense: 0);
 
   bool get isChanged {
-    return _expense == expenseState &&
-        _description == descriptionState &&
-        _participants.toList().equals(participantsState);
+    return _expense != expenseState ||
+        _description != descriptionState ||
+        !_participants.toList().equals(participantsState);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! SharedExpense) return false;
+    return descriptionState == other.descriptionState &&
+        participantsState.equals(other.participantsState) &&
+        expenseState == other.expenseState;
+  }
+
+  @override
+  String toString() {
+    return "SharedExpense(expense=$expenseState, participants=$participantsState, description=$descriptionState)";
   }
 }

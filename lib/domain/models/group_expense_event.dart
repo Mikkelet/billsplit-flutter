@@ -48,11 +48,20 @@ class GroupExpense extends Event {
   }
 
   bool get isChanged {
-    return _payer.uid == payerState.uid &&
-        _description == descriptionState &&
-        individualExpenses.every((element) => element.isChanged) &&
-        sharedExpensesState.every((element) => element.isChanged) &&
-        sharedExpensesState.equals(_sharedExpenses.toList());
+    return _payer.uid != payerState.uid ||
+        _description != descriptionState ||
+        !sharedExpensesState.equals(_sharedExpenses.toList()) ||
+        individualExpenses.any((element) => element.isChanged) ||
+        sharedExpensesState.any((element) => element.isChanged);
+  }
+
+  void resetChanges() {
+    descriptionState = _description;
+    payerState = _payer;
+    sharedExpensesState = _sharedExpenses.toList();
+    for (var element in individualExpenses) {
+      element.resetChanges();
+    }
   }
 
   GroupExpense.dummy(num seed)
