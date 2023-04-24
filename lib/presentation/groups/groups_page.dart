@@ -22,6 +22,7 @@ class GroupsPage extends StatelessWidget {
       create: (context) => GroupsBloc()..loadGroups(),
       child: Scaffold(
         appBar: AppBar(
+          title: const Text("Splitsby"),
           actions: [
             Builder(builder: (context) {
               final cubit = context.read<GroupsBloc>();

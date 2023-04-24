@@ -11,6 +11,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -92,8 +93,15 @@ class AddServicePage extends StatelessWidget {
                         RoundedListItem(
                           child: Column(
                             children: [
-                              ...service.participants
-                                  .map((e) => ServiceParticipantView(person: e))
+                              ...service.participants.mapIndexed((i, e) {
+                                if (i > 0) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: ServiceParticipantView(person: e),
+                                  );
+                                }
+                                return ServiceParticipantView(person: e);
+                              })
                             ],
                           ),
                         )

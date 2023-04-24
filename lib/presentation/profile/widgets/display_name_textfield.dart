@@ -23,7 +23,6 @@ class _DisplayNameTextFieldState extends State<DisplayNameTextField> {
         return BlocListener<ProfileCubit, UiState>(
           listener: (context, state) {
             if (state is DisplayNameUpdated || state is Failure) {
-              print("qqq trigger listener");
               setState(() {
                 isEditing = false;
               });
@@ -35,7 +34,10 @@ class _DisplayNameTextFieldState extends State<DisplayNameTextField> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(cubit.user.nameState),
+                    Text(
+                      cubit.user.nameState,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                     IconButton(
                       onPressed: () {
                         setState(() {
@@ -53,6 +55,7 @@ class _DisplayNameTextFieldState extends State<DisplayNameTextField> {
                 children: [
                   Flexible(
                     child: TextField(
+                      autofocus: true,
                       decoration:
                           const InputDecoration(border: InputBorder.none),
                       maxLines: 1,

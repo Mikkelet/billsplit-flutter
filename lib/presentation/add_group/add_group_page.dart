@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/presentation/add_group/bloc/add_group_cubit.dart';
 import 'package:billsplit_flutter/presentation/add_group/bloc/add_group_state.dart';
 import 'package:billsplit_flutter/presentation/add_group/widgets/add_people_to_group_view.dart';
@@ -21,7 +20,6 @@ class AddGroupPage extends StatelessWidget {
       create: (context) => AddGroupCubit(),
       listener: (state) {
         if (state is GroupAdded) {
-          print("qqq group=${state.group.toDTO().toJson()}");
           Navigator.of(context).pop();
           Navigator.of(context).push(GroupPage.getRoute(state.group));
         }
@@ -48,6 +46,7 @@ class AddGroupPage extends StatelessWidget {
                     Container(height: 40),
                     RoundedListItem(
                         child: TextField(
+                      autofocus: true,
                       controller: nameTextController,
                       onChanged: (value) {
                         cubit.groupName = value;

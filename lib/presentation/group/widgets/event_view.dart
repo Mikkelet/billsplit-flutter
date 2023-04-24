@@ -40,9 +40,19 @@ class EventView extends StatelessWidget {
         );
       }
       if (event is Payment) {
+        final text = "${(event as Payment).createdBy.nameState} paid \$${(event as Payment).amount} to ${(event as Payment).paidTo.nameState}";
         return Center(
-          child: Text(
-              "${(event as Payment).createdBy.nameState} paid \$${(event as Payment).amount}  to ${(event as Payment).paidTo.nameState}"),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onBackground
+                      .withAlpha(125)),
+            ),
+          ),
         );
       }
       return const SizedBox();
