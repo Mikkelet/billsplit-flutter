@@ -1,14 +1,16 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
+import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
 class DebtCalculator {
-  final List<Person> people;
-  final List<GroupExpense> expenses;
-  final List<Payment> payments;
+  final Iterable<Person> people;
+  final Iterable<GroupExpense> expenses;
+  final Iterable<Payment> payments;
   late final expensesAndPayments = [
     ...expenses,
     ...payments.map((e) => e.toExpense())
@@ -17,8 +19,8 @@ class DebtCalculator {
   DebtCalculator(this.people, this.expenses, this.payments);
 
   DebtCalculator.fromCombined(Iterable<Person> people, Iterable<Event> events)
-      : this(people.toList(), events.whereType<GroupExpense>().toList(),
-            events.whereType<Payment>().toList());
+      : this(people, events.whereType<GroupExpense>(),
+            events.whereType<Payment>());
 
   Iterable<Pair<Person, Iterable<Pair<Person, num>>>> calculateDebts() {
     return people.map((person) {
@@ -33,12 +35,12 @@ class DebtCalculator {
           payedForExpensesWithoutPayee
               .map((expense) => expense.getIndividualWithShared())
               .flatMap();
-      // get list of distinct indebted
+      // get Iterable of distinct indebted
       final distinctById = {
         for (var e in payedForIndividualExpenses) e.person.uid: e.person
       }.values;
       final accExpensesByIe = distinctById.map((indebted) {
-        // for each distinct indebted, filter a list of their individual debts
+        // for each distinct indebted, filter a Iterable of their individual debts
         final debtsByIndebted = payedForIndividualExpenses
             .where((element) => element.person.uid == indebted.uid);
         // accumulate all their debts
@@ -189,13 +191,10 @@ class DebtCalculator {
 }
 
 extension GroupExpenseExt on GroupExpense {
-
   Iterable<IndividualExpense> getIndividualWithShared() =>
       individualExpenses.map((e) {
         final expense = e.expenseState + getSharedExpensesForPerson(e.person);
-        return IndividualExpense(
-            person: e.person,
-            expense: expense);
+        return IndividualExpense(person: e.person, expense: expense);
       });
 }
 

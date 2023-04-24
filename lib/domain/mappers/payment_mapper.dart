@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
-import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/payment_event.dart';
 
 extension PaymentsDto on Iterable<PaymentDTO> {
   List<PaymentDb> toDb(String groupId) => map((e) => e.toDb(groupId)).toList();

@@ -22,34 +22,49 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(widget.individualExpense.person.nameState,
-            textAlign: TextAlign.left),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-              PayerView(
-                person: widget.individualExpense.person,
-                isPayer: _isPayer(widget.individualExpense, cubit),
-                onClick: () {
-                  cubit.onPayerSelected(widget.individualExpense.person);
-                },
+        PayerView(
+          person: widget.individualExpense.person,
+          isPayer: _isPayer(widget.individualExpense, cubit),
+          onClick: () {
+            cubit.onPayerSelected(widget.individualExpense.person);
+          },
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (cubit.groupExpense.payerState.uid ==
+                  widget.individualExpense.person.uid)
+                Text("${widget.individualExpense.person.nameState} is paying",
+                    textAlign: TextAlign.left)
+              else
+                Text(widget.individualExpense.person.nameState,
+                    textAlign: TextAlign.left),
+              Row(
+                children: [
+                  Expanded(
+                    child: ExpenseTextField(
+                      textEditingController: textController,
+                      onChange: (value) {
+                        widget.individualExpense.expenseState = value;
+                        cubit.onExpensesUpdated();
+                      },
+                    ),
+                  ),
+                  if (getTotalForUser(cubit) > 0)
+                    Text(
+                      "\$${getTotalForUser(cubit).fmt2dec()}",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                ],
               ),
-            Flexible(
-              child: ExpenseTextField(
-                textEditingController: textController,
-                onChange: (value) {
-                  widget.individualExpense.expenseState = value;
-                  cubit.onExpensesUpdated();
-                },
-              ),
-            ),
-              Text(
-                  key: Key(getTotalForUser(cubit).fmt2dec()),
-                  "\$${getTotalForUser(cubit).fmt2dec()}"),
-          ],
+            ],
+          ),
         ),
       ],
     );

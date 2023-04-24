@@ -1,4 +1,6 @@
 import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
+import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/events/expense_event_view.dart';

@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
@@ -11,6 +11,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,13 +57,14 @@ class AddExpensePage extends StatelessWidget {
                         RoundedListItem(
                           child: Column(
                             children: [
-                              ...groupExpense.sharedExpenses.map(
+                              ...groupExpense.sharedExpensesState.map(
                                   (e) => SharedExpenseView(sharedExpense: e)),
                               Align(
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
                                       onPressed: () {
-                                        cubit.groupExpense.addNewSharedExpense([...group.people]);
+                                        cubit.groupExpense.addNewSharedExpense(
+                                            [...group.people]);
                                         cubit.onExpensesUpdated();
                                       },
                                       icon: const Icon(Icons.add))),
@@ -73,11 +75,17 @@ class AddExpensePage extends StatelessWidget {
                         RoundedListItem(
                           child: Column(
                             children: [
-                              ...groupExpense.individualExpenses.map(
-                                (e) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: IndividualExpenseView(e),
-                                ),
+                              ...groupExpense.individualExpenses.mapIndexed(
+                                (i, e) {
+                                  final isMiddleElement = i > 0 ;
+                                  if (isMiddleElement) {
+                                    return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 8),
+                                        child: IndividualExpenseView(e));
+                                  }
+                                  return IndividualExpenseView(e);
+                                },
                               ),
                             ],
                           ),
@@ -87,8 +95,15 @@ class AddExpensePage extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("TOTAL"),
-                              Text("\$${groupExpense.total.fmt2dec()}"),
+                              const Text("Total"),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
+                                  child: Text(
+                                    "\$${groupExpense.total.fmt2dec()}",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  )),
                             ],
                           ),
                         ),

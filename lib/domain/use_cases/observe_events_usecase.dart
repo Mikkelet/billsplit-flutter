@@ -3,6 +3,8 @@ import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/group_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
+import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:rxdart/rxdart.dart';
 

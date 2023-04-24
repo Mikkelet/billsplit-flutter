@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/models/event.dart';
+import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:flutter/material.dart';
 
 class PaymentView extends StatelessWidget {

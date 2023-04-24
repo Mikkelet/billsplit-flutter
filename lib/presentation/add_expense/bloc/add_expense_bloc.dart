@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';

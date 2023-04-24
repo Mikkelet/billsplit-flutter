@@ -9,8 +9,8 @@ import 'package:http/retry.dart';
 
 class NetworkClient {
   static String baseUrl = Platform.isAndroid
-      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v1/"
-      : "http://localhost:5000/billsplittapp/us-central1/v1/";
+      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
+      : "http://localhost:5000/billsplittapp/us-central1/v2/";
 
   final _client = RetryClient(http.Client());
   final _authProvider = getIt<AuthProvider>();

@@ -7,17 +7,21 @@ class IndividualExpense {
   // modifiable values
   late num expenseState = _expense;
 
-  IndividualExpense(
-      {required this.person, num expense = 0})
+  IndividualExpense({required this.person, num expense = 0})
       : _expense = expense;
 
   IndividualExpense.sharedExpense(num sharedExpense)
       : this(
-            person: Person("", "Shared", pfpUrl: "https://i.imgur.com/S1HrKqU.png"),
-            expense: sharedExpense);
+      person: Person("", "Shared", pfpUrl: "https://i.imgur.com/S1HrKqU.png"),
+      expense: sharedExpense);
 
   @override
   String toString() {
     return "IndividualExpense(person=$person, expense=$expenseState)";
+  }
+
+
+  bool get isChanged {
+    return _expense == expenseState;
   }
 }

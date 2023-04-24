@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:collection/collection.dart';
 
 class SharedExpense {
   final num _expense;
@@ -35,4 +36,10 @@ class SharedExpense {
 
   SharedExpense.newInstance(Iterable<Person> participants)
       : this(participants: participants, description: "", expense: 0);
+
+  bool get isChanged {
+    return _expense == expenseState &&
+        _description == descriptionState &&
+        _participants.toList().equals(participantsState);
+  }
 }
