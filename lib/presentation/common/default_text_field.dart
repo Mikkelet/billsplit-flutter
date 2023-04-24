@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class ExpenseTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final void Function(num) onChange;
+  final bool canBeZero;
 
   ExpenseTextField(
       {Key? key,
       required this.textEditingController,
-      required this.onChange})
+      required this.onChange,
+      this.canBeZero = true})
       : super(key: key) {
     textEditingController.addListener(() {
       onChange(_parseInputToNum());
@@ -19,13 +21,13 @@ class ExpenseTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: textEditingController,
-
       style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(4),
+          contentPadding: const EdgeInsets.all(4),
           isDense: true,
           border: InputBorder.none,
-          errorText: _errorText(), icon: const Icon(Icons.attach_money)),
+          errorText: _errorText(),
+          icon: const Icon(Icons.attach_money)),
       keyboardType: TextInputType.number,
     );
   }
@@ -35,6 +37,7 @@ class ExpenseTextField extends StatelessWidget {
     if (text.isEmpty) return "Enter a number";
     try {
       final number = num.parse(text);
+      if(!canBeZero && number == 0) return "Expense cannot be 0";
       if (number < 0) return "Input must be positive";
       return null;
     } catch (e) {
