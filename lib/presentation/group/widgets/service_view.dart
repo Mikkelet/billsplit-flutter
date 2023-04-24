@@ -32,11 +32,14 @@ class ServiceView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(service.nameState),
+                Text(
+                  service.nameState,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
                 Text(
                   "\$${service.monthlyExpenseState} is paid by by ${service.payerState.nameState}",
                   softWrap: false,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

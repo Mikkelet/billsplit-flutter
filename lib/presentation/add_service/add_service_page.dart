@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -75,66 +76,82 @@ class _AddServicePageState extends State<AddServicePage> {
                     icon: const Icon(Icons.check))
               ]);
             }),
-            body: SingleChildScrollView(
-              child: Builder(builder: (context) {
-                if (state is Loading) {
-                  return const Center(child: CircularProgressIndicator());
+            body: WillPopScope(
+              onWillPop: () async {
+                if (widget.service.isChanged) {
+                  return await showDialog(
+                    context: context,
+                    builder: (context) => ResetChangesDialog(
+                      () {
+                        widget.service.resetChanges();
+                      },
+                    ),
+                  );
                 }
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
-                  child: Column(
-                    children: [
-                      RoundedListItem(
-                        child: TextField(
-                          controller: _nameTextController,
-                          onChanged: (value) {
-                            widget.service.nameState = value;
-                          },
-                          decoration: InputDecoration(
-                              errorText: nameErrorText,
-                              border: InputBorder.none,
-                              hintText: "Netflix, rent, etc"),
+                return true;
+              },
+              child: SingleChildScrollView(
+                child: Builder(builder: (context) {
+                  if (state is Loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 40),
+                    child: Column(
+                      children: [
+                        RoundedListItem(
+                          child: TextField(
+                            controller: _nameTextController,
+                            onChanged: (value) {
+                              widget.service.nameState = value;
+                            },
+                            decoration: InputDecoration(
+                                errorText: nameErrorText,
+                                border: InputBorder.none,
+                                hintText: "Netflix, rent, etc"),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      RoundedListItem(
-                        child: ExpenseTextField(
-                            textEditingController: _expenseTextController,
-                            canBeZero: !showCannotBe0ZeroError,
-                            onChange: (value) {
-                              widget.service.monthlyExpenseState = value;
-                              cubit.monthlyExpenseUpdated();
-                            }),
-                      ),
-                      const SizedBox(height: 8),
-                      RoundedListItem(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              "Participants will pay \$${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: ExpenseTextField(
+                              textEditingController: _expenseTextController,
+                              canBeZero: !showCannotBe0ZeroError,
+                              onChange: (value) {
+                                widget.service.monthlyExpenseState = value;
+                                cubit.monthlyExpenseUpdated();
+                              }),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      RoundedListItem(
-                        child: Column(
-                          children: [
-                            ...widget.service.participants.mapIndexed((i, e) {
-                              if (i > 0) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: ServiceParticipantView(person: e),
-                                );
-                              }
-                              return ServiceParticipantView(person: e);
-                            })
-                          ],
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                "Participants will pay \$${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              }),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Column(
+                            children: [
+                              ...widget.service.participantsState
+                                  .mapIndexed((i, e) {
+                                if (i > 0) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: ServiceParticipantView(person: e),
+                                  );
+                                }
+                                return ServiceParticipantView(person: e);
+                              })
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ),
             ),
           );
         },
@@ -161,7 +178,7 @@ class _AddServicePageState extends State<AddServicePage> {
   num _getMonthlyServicePerPerson() {
     try {
       return widget.service.monthlyExpenseState /
-          widget.service.participants.length;
+          widget.service.participantsState.length;
     } catch (e) {
       return 0;
     }

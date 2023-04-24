@@ -10,7 +10,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -49,22 +49,13 @@ class AddExpensePage extends StatelessWidget {
                 onWillPop: () async {
                   if (groupExpense.isChanged) {
                     return await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomDialog(
-                            text:
-                                "You have made changes to the expense. Either apply the changes or cancel.",
-                            primaryText: "Keep editting",
-                            onPrimaryClick: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            secondaryText: "Reset changes",
-                            onSecondaryClick: () {
-                              groupExpense.resetChanges();
-                              Navigator.of(context).pop(true);
-                            },
-                          );
-                        });
+                      context: context,
+                      builder: (context) => ResetChangesDialog(
+                        () {
+                          groupExpense.resetChanges();
+                        },
+                      ),
+                    );
                   }
                   return true;
                 },
