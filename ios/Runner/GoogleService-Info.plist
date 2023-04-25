@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>469876198103-0ctg6l333jsm7onagvpllqrt8ercjs91.apps.googleusercontent.com</string>
+	<string>469876198103-db9i89patfeg6jkbu128dhejtjkk5v8u.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.469876198103-0ctg6l333jsm7onagvpllqrt8ercjs91</string>
+	<string>com.googleusercontent.apps.469876198103-db9i89patfeg6jkbu128dhejtjkk5v8u</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>469876198103-37j14ctjitf2gp7rvana3stcpt4dt5l3.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.billsplitFlutter</string>
+	<string>com.mikkelthygesen.splitsby</string>
 	<key>PROJECT_ID</key>
 	<string>billsplittapp</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:469876198103:ios:85faf39eb5c9ca376dfe92</string>
+	<string>1:469876198103:ios:7a9ad3db28d3524a6dfe92</string>
 </dict>
 </plist>
