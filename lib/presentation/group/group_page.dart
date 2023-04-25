@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/add_service/add_service_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -32,10 +33,11 @@ class GroupPage extends StatelessWidget {
         builder: (cubit, state) {
           return Scaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            floatingActionButton: Builder(
-              builder: (context) {
+            floatingActionButton: builder(
+              () {
                 if (state is GroupState) {
-                  if (state.nav == GroupPageNav.debt) return const SizedBox();
+                  if (state.nav == GroupPageNav.debt) return null;
+                  if (state.nav == GroupPageNav.settings) return null;
                   String text = state.nav == GroupPageNav.events
                       ? "Add expense"
                       : "Add service";

@@ -29,21 +29,27 @@ class CustomDialog extends StatelessWidget {
               Text(text),
               const SizedBox(height: 16),
               SimpleButton(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme.of(context).colorScheme.primary,
                   onClick: onPrimaryClick,
                   child: Text(
                     primaryText ?? "OK",
                     style: TextStyle(
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
+                        color: Theme.of(context).colorScheme.onPrimary),
                   )),
               if (secondaryText != null) const SizedBox(height: 8),
               if (secondaryText != null)
                 SimpleButton(
-                    onClick: () {
-                      onSecondaryClick?.call();
-                    },
-                    child: Text("$secondaryText"))
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  onClick: () {
+                    onSecondaryClick?.call();
+                  },
+                  child: Text(
+                    "$secondaryText",
+                    style: TextStyle(
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer),
+                  ),
+                )
             ],
           ),
         ),
