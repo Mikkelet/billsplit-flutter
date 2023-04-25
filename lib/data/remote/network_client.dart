@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
@@ -99,8 +100,13 @@ class NetworkClient {
     print('Request body:$body');
     print("Request headers: $headers");
 
-    final response =
-        await _client.delete(url, body: json.encode(body), headers: headers);
+    Response response;
+    if (body == null) {
+      response = await _client.delete(url, headers: headers);
+    } else {
+      response =
+          await _client.delete(url, body: json.encode(body), headers: headers);
+    }
     print("Request body: ${response.body}");
     print("Response headers: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');

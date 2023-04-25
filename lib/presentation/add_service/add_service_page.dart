@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -65,6 +66,8 @@ class _AddServicePageState extends State<AddServicePage> {
       listener: (state) {
         if (state is ServiceAdded) {
           Navigator.of(context).pop();
+        } else if (state is ServiceDeleted) {
+          Navigator.of(context).pop();
         }
       },
       create: (context) => AddServiceBloc(service, widget.group),
@@ -73,6 +76,29 @@ class _AddServicePageState extends State<AddServicePage> {
           return Scaffold(
             appBar: builder(() {
               return AppBar(leading: const BackButton(), actions: [
+                if (service.id.isNotEmpty)
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => CustomDialog(
+                          text:
+                              "Are you sure you want to delete this subscription service?",
+                          primaryText: "No, keep it",
+                          onPrimaryClick: () {
+                            Navigator.of(context).pop();
+                          },
+                          secondaryText: "Yes, delete it",
+                          onSecondaryClick: () {
+                            Navigator.of(context).pop();
+                            cubit.deleteService(service);
+                          },
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.delete),
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                 IconButton(
                     onPressed: () {
                       if (isValid()) {
