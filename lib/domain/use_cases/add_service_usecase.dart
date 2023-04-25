@@ -9,8 +9,13 @@ class AddServiceUseCase {
   final _database = getIt<SplitsbyDatabase>();
 
   Future launch(String groupId, SubscriptionService service) async {
-    final responseServiceDto =
-        await _apiService.addService(groupId, service.toDTO());
-    await _database.servicesDao.insert(responseServiceDto.toDb(groupId));
+    if (service.id.isEmpty) {
+      final responseServiceDto =
+          await _apiService.addService(groupId, service.toDTO());
+      await _database.servicesDao.insert(responseServiceDto.toDb(groupId));
+    } else {
+      await _apiService.updateService(groupId, service.toDTO());
+      await _database.servicesDao.insert(service.toDTO().toDb(groupId));
+    }
   }
 }

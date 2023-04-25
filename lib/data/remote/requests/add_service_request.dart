@@ -6,10 +6,9 @@ part 'add_service_request.g.dart';
 
 @JsonSerializable(createFactory: false)
 class AddServiceRequest {
-  final String groupId;
   final ServiceDTO service;
 
-  AddServiceRequest(this.groupId, this.service);
+  AddServiceRequest(this.service);
 
   Json toJson() => _$AddServiceRequestToJson(this);
 }

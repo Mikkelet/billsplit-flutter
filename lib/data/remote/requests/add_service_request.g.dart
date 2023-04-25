@@ -8,7 +8,6 @@ part of 'add_service_request.dart';
 
 Map<String, dynamic> _$AddServiceRequestToJson(AddServiceRequest instance) =>
     <String, dynamic>{
-      'groupId': instance.groupId,
       'service': instance.service.toJson(),
     };
 

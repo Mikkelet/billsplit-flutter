@@ -42,15 +42,18 @@ class ApiService {
   }
 
   Future<ServiceDTO> addService(String groupId, ServiceDTO service) async {
-    final data = AddServiceRequest(groupId, service);
-    final response = await _client.post("service", data.toJson());
+    final data = AddServiceRequest(service);
+    final response = await _client.post("group/$groupId/service", data.toJson());
     return AddServiceResponse.fromJson(response).service;
   }
 
-  Future<ServiceDTO> updateService(String groupId, ServiceDTO service) async {
-    final data = AddServiceRequest(groupId, service);
-    final response = await _client.put("service", data.toJson());
-    return AddServiceResponse.fromJson(response).service;
+  Future updateService(String groupId, ServiceDTO service) async {
+    final data = AddServiceRequest(service);
+    await _client.put("group/$groupId/service", data.toJson());
+  }
+
+  Future deleteService(String groupId, String serviceId) async {
+    await _client.delete("group/$groupId/service/$serviceId");
   }
   
   Future<GroupDTO> leaveGroup(String groupId) async {
