@@ -16,6 +16,7 @@ final samplePeopleShera = [
 final sampleGroup = Group(
     id: "GROUP0",
     name: "My group",
+    pastMembers: [],
     people: samplePeopleShera,
     createdBy: samplePeopleShera.first,
     timestamp: 0,

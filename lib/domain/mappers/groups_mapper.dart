@@ -22,6 +22,7 @@ extension GroupDtoExt on GroupDTO {
           name: name,
           people: people.toPeople(),
           createdBy: createdBy.toPerson(),
+          pastMembers: pastMembers.toPeople(),
           timestamp: timeStamp,
           latestEvent: null,
           debts: debts.toDebts());
@@ -35,6 +36,7 @@ extension GroupExt on Group {
           id: id,
           name: name,
           people: people.toDTO(),
+          pastMembers: pastMembers.toDTO(),
           createdBy: createdBy.toDTO(),
           timeStamp: timestamp,
           debts: debts.map((e) => e.toDTO()).toList(),

@@ -11,6 +11,7 @@ class GroupDTO {
   final String id;
   final String name;
   final List<PersonDTO> people;
+  final List<PersonDTO> pastMembers;
   final PersonDTO createdBy;
   final num timeStamp;
   final List<DebtDTO> debts;
@@ -20,6 +21,7 @@ class GroupDTO {
       {required this.id,
       required this.name,
       required this.people,
+      required this.pastMembers,
       required this.createdBy,
       required this.timeStamp,
       required this.debts,

@@ -44,7 +44,7 @@ class AddEventUseCase {
   Future<Iterable<Pair<String, num>>> _getDebtWithAddedEvent(
       String groupId, Event event) async {
     final groupDb = (await _database.groupsDAO.getGroup(groupId)).toGroup();
-    final people = groupDb.people.toList();
+    final people = groupDb.allPeople.toList();
     final groupExpenses = (await _database.groupExpenseDAO.watch(groupId).first)
         .toGroupExpenses();
     Iterable<GroupExpense> groupExpensesWithEvent = groupExpenses;

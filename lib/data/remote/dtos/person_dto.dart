@@ -15,11 +15,3 @@ class PersonDTO {
 
   Json toJson() => _$PersonDTOToJson(this);
 }
-
-/**
- * data class PersonDTO(
-    val id: String,
-    val name: String,
-    val pfpUrl: String
-    ) {
- */

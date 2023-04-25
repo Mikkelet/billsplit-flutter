@@ -6,6 +6,7 @@ class Group {
   final String id;
   final String name;
   final List<Person> people;
+  final List<Person> pastMembers;
   final Person createdBy;
   final num timestamp;
   final Event? latestEvent;
@@ -14,16 +15,20 @@ class Group {
   Group({required this.id,
     required this.name,
     required this.people,
+    required this.pastMembers,
     required this.createdBy,
     required this.timestamp,
     required this.latestEvent,
     required this.debts});
+
+  Iterable<Person> get allPeople => [...people, ...pastMembers];
 
   Group.newGroup(Person createdBy, String name, List<Person> people) : this(
     id: "",
     createdBy: createdBy,
     name: name,
     people: people,
+    pastMembers: [],
     timestamp: DateTime
         .now()
         .millisecondsSinceEpoch,
@@ -35,6 +40,7 @@ class Group {
       : this(
       id: "G$seed",
       name: "Group $seed",
+      pastMembers: [],
       people: [],
       createdBy: Person.dummy(2),
       timestamp: 0,
