@@ -26,6 +26,8 @@
 	<string>$(PRODUCT_COPYRIGHT)</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app can access your gallery</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

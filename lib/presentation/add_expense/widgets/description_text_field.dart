@@ -2,20 +2,35 @@ import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DescriptionTextField extends StatelessWidget {
-  const DescriptionTextField({Key? key}) : super(key: key);
+class DescriptionTextField extends StatefulWidget {
+  final String initialText;
+
+  const DescriptionTextField({Key? key, required this.initialText})
+      : super(key: key);
+
+  @override
+  State<DescriptionTextField> createState() => _DescriptionTextFieldState();
+}
+
+class _DescriptionTextFieldState extends State<DescriptionTextField> {
+  late final textController = TextEditingController(text: widget.initialText);
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     return TextField(
-      controller: TextEditingController()
-        ..text = cubit.groupExpense.descriptionState,
+      controller: textController,
       onChanged: (value) {
         cubit.groupExpense.descriptionState = value;
       },
-      decoration: const InputDecoration(
-          border: InputBorder.none, hintText: "What did you pay for?"),
+      decoration: InputDecoration(
+          border: InputBorder.none, hintText: "What is ${cubit.groupExpense.payerState.nameState} paying for?"),
     );
   }
 }

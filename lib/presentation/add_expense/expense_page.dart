@@ -125,7 +125,8 @@ class AddExpensePage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const RoundedListItem(child: DescriptionTextField())
+                          RoundedListItem(child: DescriptionTextField(initialText: groupExpense.descriptionState,)),
+                          const SizedBox(height: 120),
                         ]),
                       ),
                     );

@@ -4,13 +4,15 @@ class ExpenseTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final void Function(num) onChange;
   final bool canBeZero;
+  final bool autoFocus;
 
-  ExpenseTextField(
-      {Key? key,
-      required this.textEditingController,
-      required this.onChange,
-      this.canBeZero = true})
-      : super(key: key) {
+  ExpenseTextField({
+    Key? key,
+    required this.textEditingController,
+    required this.onChange,
+    this.canBeZero = true,
+    this.autoFocus = false,
+  }) : super(key: key) {
     textEditingController.addListener(() {
       onChange(_parseInputToNum());
       _onChange();
@@ -22,6 +24,7 @@ class ExpenseTextField extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       style: Theme.of(context).textTheme.bodyLarge,
+      autofocus: autoFocus,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(4),
           isDense: true,
@@ -37,7 +40,7 @@ class ExpenseTextField extends StatelessWidget {
     if (text.isEmpty) return "Enter a number";
     try {
       final number = num.parse(text);
-      if(!canBeZero && number == 0) return "Expense cannot be 0";
+      if (!canBeZero && number == 0) return "Expense cannot be 0";
       if (number < 0) return "Input must be positive";
       return null;
     } catch (e) {

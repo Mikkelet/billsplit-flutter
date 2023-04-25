@@ -17,6 +17,12 @@ class _DisplayNameTextFieldState extends State<DisplayNameTextField> {
   final _nameTextController = TextEditingController();
 
   @override
+  void dispose() {
+    _nameTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseBlocBuilder<ProfileCubit>(
       builder: (cubit, state) {

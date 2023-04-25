@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
@@ -17,9 +18,9 @@ import 'package:flutter/material.dart';
 
 class AddServicePage extends StatefulWidget {
   final SubscriptionService service;
-  final String groupId;
+  final Group group;
 
-  const AddServicePage({Key? key, required this.service, required this.groupId})
+  const AddServicePage({Key? key, required this.service, required this.group})
       : super(key: key);
 
   @override
@@ -30,13 +31,13 @@ class AddServicePage extends StatefulWidget {
     if (subscriptionService == null) {
       return MaterialPageRoute(
           builder: (context) => AddServicePage(
-              groupId: group.id,
+              group: group,
               service:
                   SubscriptionService.newService(group: group, user: user)));
     }
     return MaterialPageRoute(
         builder: (context) =>
-            AddServicePage(groupId: group.id, service: subscriptionService));
+            AddServicePage(group: group, service: subscriptionService));
   }
 }
 
@@ -51,14 +52,22 @@ class _AddServicePageState extends State<AddServicePage> {
   String? nameErrorText;
 
   @override
+  void dispose() {
+    _nameTextController.dispose();
+    _expenseTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final service = widget.service;
     return BaseBlocWidget(
       listener: (state) {
         if (state is ServiceAdded) {
           Navigator.of(context).pop();
         }
       },
-      create: (context) => AddServiceBloc(widget.service, widget.groupId),
+      create: (context) => AddServiceBloc(service, widget.group),
       child: BaseBlocBuilder<AddServiceBloc>(
         builder: (cubit, state) {
           return Scaffold(
@@ -78,12 +87,12 @@ class _AddServicePageState extends State<AddServicePage> {
             }),
             body: WillPopScope(
               onWillPop: () async {
-                if (widget.service.isChanged) {
+                if (service.isChanged) {
                   return await showDialog(
                     context: context,
                     builder: (context) => ResetChangesDialog(
                       () {
-                        widget.service.resetChanges();
+                        service.resetChanges();
                       },
                     ),
                   );
@@ -91,66 +100,97 @@ class _AddServicePageState extends State<AddServicePage> {
                 return true;
               },
               child: SingleChildScrollView(
-                child: Builder(builder: (context) {
-                  if (state is Loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 40),
-                    child: Column(
-                      children: [
-                        RoundedListItem(
-                          child: TextField(
-                            controller: _nameTextController,
-                            onChanged: (value) {
-                              widget.service.nameState = value;
-                            },
-                            decoration: InputDecoration(
-                                errorText: nameErrorText,
-                                border: InputBorder.none,
-                                hintText: "Netflix, rent, etc"),
+                child: Builder(
+                  builder: (context) {
+                    if (state is Loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 40),
+                      child: Column(
+                        children: [
+                          RoundedListItem(
+                            child: TextField(
+                              controller: _nameTextController,
+                              onChanged: (value) {
+                                service.nameState = value;
+                              },
+                              decoration: InputDecoration(
+                                  errorText: nameErrorText,
+                                  border: InputBorder.none,
+                                  hintText: "Netflix, rent, etc"),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        RoundedListItem(
-                          child: ExpenseTextField(
-                              textEditingController: _expenseTextController,
-                              canBeZero: !showCannotBe0ZeroError,
-                              onChange: (value) {
-                                widget.service.monthlyExpenseState = value;
-                                cubit.monthlyExpenseUpdated();
-                              }),
-                        ),
-                        const SizedBox(height: 8),
-                        RoundedListItem(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                                "Participants will pay \$${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                          const SizedBox(height: 8),
+                          RoundedListItem(
+                            child: ExpenseTextField(
+                                textEditingController: _expenseTextController,
+                                canBeZero: !showCannotBe0ZeroError,
+                                onChange: (value) {
+                                  service.monthlyExpenseState = value;
+                                  cubit.monthlyExpenseUpdated();
+                                }),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        RoundedListItem(
-                          child: Column(
-                            children: [
-                              ...widget.service.participantsState
-                                  .mapIndexed((i, e) {
-                                if (i > 0) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: ServiceParticipantView(person: e),
-                                  );
-                                }
-                                return ServiceParticipantView(person: e);
-                              })
-                            ],
+                          const SizedBox(height: 8),
+                          RoundedListItem(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                  "Participants will pay \$${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                }),
+                          const SizedBox(height: 8),
+                          RoundedListItem(
+                            child: Column(
+                              children: [
+                                ...service.participantsState.mapIndexed(
+                                  (i, e) {
+                                    if (i > 0) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child:
+                                            ServiceParticipantView(person: e),
+                                      );
+                                    }
+                                    return ServiceParticipantView(person: e);
+                                  },
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            ParticipantsPickerDialog(
+                                          participants:
+                                              service.participantsState,
+                                          people: cubit.group.people,
+                                        ),
+                                      );
+                                      if (!service.participantsState
+                                          .contains(service.payerState)) {
+                                        service.payerState =
+                                            service.participantsState.first;
+                                      }
+                                      if (service.participantsState.isEmpty) {
+                                        service.participantsState
+                                            .add(service.payerState);
+                                      }
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(Icons.group),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           );
