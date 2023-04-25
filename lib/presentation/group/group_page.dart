@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/debts_view.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/events_view.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/group_bottom_nav.dart';
+import 'package:billsplit_flutter/presentation/group/widgets/group_settings.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/services_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,11 @@ class GroupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<GroupBloc>(
+      listener: (state) {
+        if (state is GroupLeft) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+      },
       create: (context) => GroupBloc(group)..loadGroup(),
       child: BaseBlocBuilder<GroupBloc>(
         builder: (cubit, state) {
@@ -50,6 +56,13 @@ class GroupPage extends StatelessWidget {
             appBar: AppBar(
                 elevation: 0,
                 title: Text(group.name),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        cubit.showSettings();
+                      },
+                      icon: const Icon(Icons.settings))
+                ],
                 leading: const BackButton()),
             bottomNavigationBar: const GroupBottomNav(),
             body: Builder(builder: (context) {
@@ -65,6 +78,8 @@ class GroupPage extends StatelessWidget {
                         return const ServicesView();
                       case GroupPageNav.debt:
                         return const DebtsView();
+                      case GroupPageNav.settings:
+                        return const GroupSettings();
                       default:
                         return const EventsView();
                     }

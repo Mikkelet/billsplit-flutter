@@ -3,7 +3,8 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 enum GroupPageNav {
   events,
   services,
-  debt;
+  debt,
+  settings;
 
   static GroupPageNav fromIndex(int index) {
     switch (index) {
@@ -30,3 +31,5 @@ class SyncingGroup extends GroupState {
 class GroupLoaded extends GroupState {
   GroupLoaded(super.nav);
 }
+
+class GroupLeft extends Main{}

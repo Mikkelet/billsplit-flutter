@@ -22,7 +22,7 @@ extension GroupDtoExt on GroupDTO {
           name: name,
           people: people.toPeople(),
           createdBy: createdBy.toPerson(),
-          pastMembers: pastMembers.toPeople(),
+          pastMembers: pastMembers?.toPeople() ?? [],
           timestamp: timeStamp,
           latestEvent: null,
           debts: debts.toDebts());

@@ -15,6 +15,10 @@ class GroupsDAO extends DatabaseAccessor<SplitsbyDatabase>
   Future<void> insertGroup(GroupDb group) =>
       into(groupsTable).insert(group, mode: InsertMode.insertOrReplace);
 
+  Future deleteGroup(GroupDb group) =>
+      (delete(groupsTable)..where((tbl) => tbl.groupId.equals(group.groupId)))
+          .go();
+
   Future<void> clearTable() => delete(groupsTable).go();
 
   Future<List<GroupDb>> getGroups() => select(groupsTable).get();

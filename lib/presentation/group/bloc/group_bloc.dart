@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart';
@@ -17,6 +18,7 @@ class GroupBloc extends BaseCubit {
   final _observeEventsUseCase = ObserveEventsUseCase();
   final _observeServicesUseCase = ObserveServicesUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
+  final _leaveGroupUseCase = LeaveGroupUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
@@ -53,5 +55,18 @@ class GroupBloc extends BaseCubit {
     navIndex = nav;
     final newState = GroupLoaded(navIndex);
     emit(newState);
+  }
+
+  void showSettings() {
+    showPage(GroupPageNav.settings);
+  }
+
+  void leaveGroup() {
+    showLoading();
+    _leaveGroupUseCase.launch(group.id).then((value) {
+      emit(GroupLeft());
+    }).catchError((err){
+      showError(err);
+    });
   }
 }

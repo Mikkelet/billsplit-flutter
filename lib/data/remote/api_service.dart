@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart'
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/leave_group_request.dart';
 
 import 'dtos/debts_dto.dart';
 
@@ -50,6 +51,11 @@ class ApiService {
     final data = AddServiceRequest(groupId, service);
     final response = await _client.put("service", data.toJson());
     return AddServiceResponse.fromJson(response).service;
+  }
+  
+  Future<GroupDTO> leaveGroup(String groupId) async {
+    final response = await _client.get("leaveGroup/$groupId");
+    return LeaveGroupRequest.fromJson(response).group;
   }
 
   Future<FriendDTO> addFriendEmail(String email) => _addFriend("email", email);

@@ -19,13 +19,14 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
       if (state is GroupLoaded) {
         navIndex = state.nav.index;
       }
+      const destinations = [
+        NavigationDestination(icon: Icon(Icons.add), label: "Events"),
+        NavigationDestination(icon: Icon(Icons.ac_unit), label: "Services"),
+        NavigationDestination(icon: Icon(Icons.ad_units), label: "Debt")
+      ];
       return NavigationBar(
-        selectedIndex: navIndex,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.add), label: "Events"),
-          NavigationDestination(icon: Icon(Icons.ac_unit), label: "Services"),
-          NavigationDestination(icon: Icon(Icons.ad_units), label: "Debt")
-        ],
+        selectedIndex: navIndex > destinations.length - 1 ? 0 : navIndex,
+        destinations: destinations,
         onDestinationSelected: (index) {
           _onItemSelected(context, index);
         },
