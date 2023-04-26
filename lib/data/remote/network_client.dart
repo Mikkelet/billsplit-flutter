@@ -9,7 +9,9 @@ import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
-  static String baseUrl = "https://us-central1-billsplittapp.cloudfunctions.net/v2/";
+  static String baseUrl = Platform.isAndroid
+      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
+      : "http://localhost:5000/billsplittapp/us-central1/v2/";
   //https://us-central1-billsplittapp.cloudfunctions.net/v2
 
   final _client = RetryClient(http.Client());
