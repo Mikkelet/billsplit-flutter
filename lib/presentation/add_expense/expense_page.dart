@@ -82,6 +82,10 @@ class AddExpensePage extends StatelessWidget {
                       child: Center(
                         child: Column(children: [
                           RoundedListItem(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(30),
+                              bottom: Radius.circular(10),
+                            ),
                             child: Column(
                               children: [
                                 ...groupExpense.sharedExpensesState.map(
@@ -90,7 +94,10 @@ class AddExpensePage extends StatelessWidget {
                                     alignment: Alignment.centerRight,
                                     child: IconButton(
                                         onPressed: () {
-                                          cubit.groupExpense.addNewSharedExpense(withParticipants: cubit.group.people);
+                                          cubit.groupExpense
+                                              .addNewSharedExpense(
+                                                  withParticipants:
+                                                      cubit.group.people);
                                           cubit.onExpensesUpdated();
                                         },
                                         icon: const Icon(Icons.add))),
@@ -99,6 +106,9 @@ class AddExpensePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           RoundedListItem(
+                            borderRadius: const BorderRadius.vertical(
+                                bottom: Radius.circular(30),
+                                top: Radius.circular(10)),
                             child: Column(
                               children: [
                                 ...groupExpense.individualExpenses.mapIndexed(
@@ -124,9 +134,8 @@ class AddExpensePage extends StatelessWidget {
                                 const Text("Total"),
                                 Text(
                                   "\$${groupExpense.total.fmt2dec()}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ],
                             ),
