@@ -2,16 +2,18 @@ import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
-  final String text;
+  final String? title;
+  final String? text;
   final String? primaryText;
   final String? secondaryText;
-  final Function() onPrimaryClick;
+  final Function()? onPrimaryClick;
   final Function()? onSecondaryClick;
 
   const CustomDialog({
-    required this.text,
-    required this.onPrimaryClick,
-    required this.primaryText,
+    this.title,
+    this.text,
+    this.onPrimaryClick,
+    this.primaryText,
     this.onSecondaryClick,
     this.secondaryText,
     super.key,
@@ -26,11 +28,15 @@ class CustomDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(text),
+              Text(title ?? "", style: Theme.of(context).textTheme.titleLarge),
+              Text(text ?? "", style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: 16),
               SimpleButton(
                   color: Theme.of(context).colorScheme.primary,
-                  onClick: onPrimaryClick,
+                  onClick: onPrimaryClick ??
+                      () {
+                        Navigator.of(context).pop();
+                      },
                   child: Text(
                     primaryText ?? "OK",
                     style: TextStyle(

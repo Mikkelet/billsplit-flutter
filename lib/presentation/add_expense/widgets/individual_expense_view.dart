@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/common/payer_view.dart';
-import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,14 +46,8 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                     textAlign: TextAlign.left),
               Row(
                 children: [
-                  Expanded(
-                    child: ExpenseTextField(
-                      textEditingController: textController,
-                      onChange: (value) {
-                        widget.individualExpense.expenseState = value;
-                        cubit.onExpensesUpdated();
-                      },
-                    ),
+                  const Expanded(
+                    child: SizedBox(),
                   ),
                   if (getTotalForUser(cubit) > 0)
                     Text(

@@ -41,10 +41,26 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
             ...widget.people.map(
               (person) => Row(
                 children: [
-                  ProfilePictureView(person: person),
-                  const SizedBox(width: 16),
-                  Text(person.nameState),
-                  const Expanded(child: SizedBox()),
+                  Expanded(
+                    child: InkWell(
+                      onTap: (){
+                        widget.participants.clear();
+                        widget.participants.add(person);
+                        setState(() {});
+                      },
+                      child: Row(
+                        children: [
+                          ProfilePictureView(person: person),
+                          const SizedBox(width: 16),
+                          Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(person.nameState)),
+                          const Expanded(child: SizedBox()),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 32),
                   Checkbox(
                       value: widget.participants.contains(person),
                       onChanged: (isParticipant) {
@@ -77,7 +93,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                 const Expanded(child: SizedBox()),
                 IconButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(widget.participants);
                     },
                     color: Theme.of(context).colorScheme.primary,
                     icon: const Icon(Icons.check))

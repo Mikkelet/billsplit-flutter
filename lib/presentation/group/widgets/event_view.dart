@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/widgets/events/expense_event_view.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,7 +41,7 @@ class EventView extends StatelessWidget {
         );
       }
       if (event is Payment) {
-        final text = "${(event as Payment).createdBy.nameState} paid \$${(event as Payment).amount} to ${(event as Payment).paidTo.nameState}";
+        final text = "${(event as Payment).createdBy.nameState} paid \$${(event as Payment).amount.fmt2dec()} to ${(event as Payment).paidTo.nameState}";
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),

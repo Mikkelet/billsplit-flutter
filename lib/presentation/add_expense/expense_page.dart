@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
@@ -39,10 +40,21 @@ class AddExpensePage extends StatelessWidget {
               appBar: AppBar(
                 actions: [
                   IconButton(
-                      onPressed: () {
+                    onPressed: () {
+                      if (groupExpense.total > 0) {
                         cubit.addExpense();
-                      },
-                      icon: const Icon(Icons.check))
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const CustomDialog(
+                            title: "Please enter an expense",
+                            text: "Total expenses cannot be \$0",
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.check),
+                  )
                 ],
               ),
               body: WillPopScope(
@@ -112,20 +124,20 @@ class AddExpensePage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text("Total"),
-                                Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    child: Text(
-                                      "\$${groupExpense.total.fmt2dec()}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    )),
+                                Text(
+                                  "\$${groupExpense.total.fmt2dec()}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium,
+                                ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 8),
-                          RoundedListItem(child: DescriptionTextField(initialText: groupExpense.descriptionState,)),
+                          RoundedListItem(
+                              child: DescriptionTextField(
+                            initialText: groupExpense.descriptionState,
+                          )),
                           const SizedBox(height: 120),
                         ]),
                       ),

@@ -1,17 +1,16 @@
+
 import 'package:flutter/material.dart';
 
 class ExpenseTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final void Function(num) onChange;
   final bool canBeZero;
-  final bool autoFocus;
 
   ExpenseTextField({
     Key? key,
     required this.textEditingController,
     required this.onChange,
     this.canBeZero = true,
-    this.autoFocus = false,
   }) : super(key: key) {
     textEditingController.addListener(() {
       onChange(_parseInputToNum());
@@ -22,16 +21,24 @@ class ExpenseTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLength: 7,
+      textAlign: TextAlign.end,
       controller: textEditingController,
       style: Theme.of(context).textTheme.bodyLarge,
-      autofocus: autoFocus,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(4),
-          isDense: true,
-          border: InputBorder.none,
-          errorText: _errorText(),
-          icon: const Icon(Icons.attach_money)),
-      keyboardType: TextInputType.number,
+        isDense: true,
+        hintText: "0",
+        border: InputBorder.none,
+        errorText: _errorText(),
+        prefixText: "\$",
+        counterText: "",
+        prefixIconConstraints: const BoxConstraints(),
+      ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      textInputAction: TextInputAction.done,
+      onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
     );
   }
 
@@ -40,8 +47,8 @@ class ExpenseTextField extends StatelessWidget {
     if (text.isEmpty) return "Enter a number";
     try {
       final number = num.parse(text);
-      if (!canBeZero && number == 0) return "Expense cannot be 0";
-      if (number < 0) return "Input must be positive";
+      if (!canBeZero && number == 0) return "Expense is 0";
+      if (number < 0) return "Input < 0";
       return null;
     } catch (e) {
       return "Invalid input";
@@ -55,6 +62,8 @@ class ExpenseTextField extends StatelessWidget {
       final input = num.parse(text);
       if (input < 0) {
         inputAsNumber = 0;
+      } else if (input > MAX_INPUT) {
+        inputAsNumber = MAX_INPUT;
       } else {
         inputAsNumber = input;
       }
@@ -68,15 +77,12 @@ class ExpenseTextField extends StatelessWidget {
   void _onChange() {
     final text = textEditingController.text;
 
-    // prevents numbers starting with 0
-    if (text.isEmpty) {
-      textEditingController.text = "0";
-      textEditingController.selection =
-          TextSelection.collapsed(offset: textEditingController.text.length);
-    } else if (text.startsWith("0") && text.length > 1) {
-      textEditingController.text = text.replaceFirst("0", "");
+    if (text.startsWith("0")) {
+      textEditingController.text = "";
       textEditingController.selection =
           TextSelection.collapsed(offset: textEditingController.text.length);
     }
   }
+
+  static const MAX_INPUT = 9999999;
 }
