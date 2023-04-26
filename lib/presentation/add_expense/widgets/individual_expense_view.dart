@@ -21,6 +21,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
+    final nameShort = getShortName(widget.individualExpense.person.nameState);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,20 +44,19 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                 children: [
                   if (cubit.groupExpense.payerState.uid ==
                       widget.individualExpense.person.uid)
-                    Text("${widget.individualExpense.person.nameState} is paying")
+                    Text("$nameShort is paying")
                   else
-                    Text(widget.individualExpense.person.nameState),
-                  const Expanded(
-                    child: SizedBox(),
-                  ),
-                  if (getTotalForUser(cubit) > 0)
-                    Expanded(
-                      child: Text(
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        "\$${getTotalForUser(cubit).fmt2dec()}",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
+                    Text(nameShort),
+                  const Expanded(child: SizedBox()),
+                  if (getTotalForUser(cubit).toString().length > 7)
+                    Text(
+                      "\$${getTotalForUser(cubit).fmt2dec().substring(0, 7)}...",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    )
+                  else if (getTotalForUser(cubit) > 0)
+                    Text(
+                      "\$${getTotalForUser(cubit).fmt2dec()}",
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                 ],
               ),
@@ -65,6 +65,26 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
         ),
       ],
     );
+  }
+
+  String getShortName(String name) {
+    final nameSplit = name.split(" ");
+    final firstName = nameSplit[0];
+    String nameCandidate;
+    if (nameSplit.length > 1) {
+      final lastName = nameSplit[1];
+      final initial = lastName[0];
+      if (firstName.length > 7) {
+        final firstNameShort = firstName.substring(0, 6);
+        nameCandidate = "$firstNameShort $initial.";
+      } else {
+        nameCandidate = "$firstName $initial.";
+      }
+    } else {
+      nameCandidate = firstName;
+    }
+    if (nameCandidate.length > 10) return getShortName(nameCandidate);
+    return nameCandidate;
   }
 
   num getTotalForUser(AddExpenseBloc cubit) {

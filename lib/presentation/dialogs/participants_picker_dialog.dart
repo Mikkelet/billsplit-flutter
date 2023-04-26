@@ -35,6 +35,35 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        const SizedBox(
+          height: 4,
+        ),
+        Row(
+          children: [
+            const Expanded(
+              child: Text(
+                "tip: tap a friend's name to select only them!",
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
+            ),
+            Checkbox(
+              tristate: true,
+              value: (widget.participants.length == widget.people.length)
+                  ? true
+                  : null,
+              onChanged: (value) {
+                if (value == false) {
+                  widget.participants.clear();
+                  widget.participants.addAll(widget.people);
+                  setState(() {});
+                }
+              },
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 4,
+        ),
         ...widget.people.map(
           (person) => Row(
             children: [
@@ -67,8 +96,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                       showMin1PersonError = true;
                     } else {
                       showMin1PersonError = false;
-                      changeParticipantStatus(
-                          person, isParticipant ?? false);
+                      changeParticipantStatus(person, isParticipant ?? false);
                     }
                     setState(() {});
                   })
