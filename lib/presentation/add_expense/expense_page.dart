@@ -1,8 +1,10 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
+import 'package:billsplit_flutter/presentation/add_expense/widgets/add_shared_expense_view.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expense_view.dart';
@@ -89,18 +91,52 @@ class AddExpensePage extends StatelessWidget {
                             child: Column(
                               children: [
                                 ...groupExpense.sharedExpensesState.map(
-                                    (e) => SharedExpenseView(sharedExpense: e)),
+                                  (e) => SharedExpenseView(sharedExpense: e),
+                                ),
                                 Align(
-                                    alignment: Alignment.centerRight,
-                                    child: IconButton(
-                                        onPressed: () {
-                                          cubit.groupExpense
-                                              .addNewSharedExpense(
-                                                  withParticipants:
-                                                      cubit.group.people);
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        onPressed: (){
+                                          groupExpense.addNewSharedExpense(withParticipants: group.people);
                                           cubit.onExpensesUpdated();
                                         },
-                                        icon: const Icon(Icons.add))),
+                                        icon: const Icon(Icons.bolt),
+                                      ),
+                                      IconButton(
+                                        onPressed: () async {
+                                          final sharedExpense =
+                                              SharedExpense.newInstance(
+                                                  [...cubit.group.people]);
+                                          try {
+                                            final response = await showDialog(
+                                              context: context,
+                                              builder: (context) => Dialog(
+                                                child: AddSharedExpenseView(
+                                                  onConfirm: () {},
+                                                  group: cubit.group,
+                                                  sharedExpense: sharedExpense,
+                                                ),
+                                              ),
+                                            );
+                                            if (response != null) {
+                                              sharedExpense.participantsState =
+                                                  response;
+                                              groupExpense.sharedExpensesState
+                                                  .add(sharedExpense);
+                                              cubit.onExpensesUpdated();
+                                            }
+                                          } catch (e) {
+                                            // no op
+                                          }
+                                        },
+                                        icon: const Icon(Icons.add),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),

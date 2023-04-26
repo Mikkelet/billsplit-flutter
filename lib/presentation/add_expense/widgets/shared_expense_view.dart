@@ -1,7 +1,7 @@
-import 'dart:math';
 
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
+import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
@@ -21,15 +21,6 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
   late final textController =
       TextEditingController(text: "${widget.sharedExpense.expenseState}");
 
-  static const randomMenuItems = [
-    "Burger",
-    "Fries",
-    "Wine",
-    "Soda",
-    "Chicken nuggets"
-  ];
-  final randomNumber = Random().nextInt(randomMenuItems.length);
-
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
@@ -40,18 +31,8 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
           children: [
             Expanded(
               flex: 3,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: randomMenuItems[randomNumber],
-                  isDense: true,
-                  border: InputBorder.none,
-                ),
-                controller: TextEditingController(
-                    text: widget.sharedExpense.descriptionState),
-                onChanged: (value) {
-                  widget.sharedExpense.descriptionState = value;
-                },
-              ),
+              child: SharedExpenseDescriptionView(
+                  sharedExpense: widget.sharedExpense),
             ),
             Expanded(
               flex: 1,
@@ -70,25 +51,35 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
           child: MaterialButton(
             padding: EdgeInsets.zero,
             onPressed: () async {
-              widget.sharedExpense.participantsState = await showDialog(
+              final response = await showDialog(
                 context: context,
                 builder: (context) {
-                  return ParticipantsPickerDialog(
-                    participants: [...widget.sharedExpense.participantsState],
-                    people: cubit.group.people,
-                    extraAction: IconButton(
-                      onPressed: () {
-                        cubit.groupExpense
-                            .removeSharedExpense(widget.sharedExpense);
-                        Navigator.of(context).pop();
-                        cubit.onExpensesUpdated();
-                      },
-                      icon: Icon(Icons.delete,
-                          color: Theme.of(context).colorScheme.error),
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ParticipantsPickerDialog(
+                        participants: [
+                          ...widget.sharedExpense.participantsState
+                        ],
+                        people: cubit.group.people,
+                        extraAction: IconButton(
+                          onPressed: () {
+                            cubit.groupExpense
+                                .removeSharedExpense(widget.sharedExpense);
+                            Navigator.of(context).pop();
+                            cubit.onExpensesUpdated();
+                          },
+                          icon: Icon(Icons.delete,
+                              color: Theme.of(context).colorScheme.error),
+                        ),
+                      ),
                     ),
                   );
                 },
               );
+              if (response != null) {
+                widget.sharedExpense.participantsState = response;
+              }
               cubit.onExpensesUpdated();
             },
             visualDensity: VisualDensity.compact,

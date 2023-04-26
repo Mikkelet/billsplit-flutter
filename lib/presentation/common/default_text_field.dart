@@ -30,7 +30,7 @@ class ExpenseTextField extends StatelessWidget {
         hintText: "0",
         border: InputBorder.none,
         errorText: _errorText(),
-        prefixText: "\$",
+        prefixIcon: const Icon(Icons.attach_money_outlined),
         counterText: "",
         prefixIconConstraints: const BoxConstraints(),
       ),

@@ -32,82 +32,77 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ...widget.people.map(
-              (person) => Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        widget.participants.clear();
-                        widget.participants.add(person);
-                        setState(() {});
-                      },
-                      child: Row(
-                        children: [
-                          ProfilePictureView(person: person),
-                          const SizedBox(width: 16),
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(person.nameState)),
-                          const Expanded(child: SizedBox()),
-                        ],
-                      ),
-                    ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...widget.people.map(
+          (person) => Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    widget.participants.clear();
+                    widget.participants.add(person);
+                    setState(() {});
+                  },
+                  child: Row(
+                    children: [
+                      ProfilePictureView(person: person),
+                      const SizedBox(width: 16),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(person.nameState)),
+                      const Expanded(child: SizedBox()),
+                    ],
                   ),
-                  const SizedBox(width: 32),
-                  Checkbox(
-                      value: widget.participants.contains(person),
-                      onChanged: (isParticipant) {
-                        if (isParticipant == false &&
-                            widget.participants.length == 1) {
-                          // cannot have 0 participants
-                          showMin1PersonError = true;
-                        } else {
-                          showMin1PersonError = false;
-                          changeParticipantStatus(
-                              person, isParticipant ?? false);
-                        }
-                        setState(() {});
-                      })
-                ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            if (showMin1PersonError)
-              Text(
-                "Must include at least one person",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.error),
-              ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (widget.extraAction != null) widget.extraAction!,
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: Theme.of(context).colorScheme.primary,
-                    icon: const Icon(Icons.close)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(widget.participants);
-                    },
-                    color: Theme.of(context).colorScheme.primary,
-                    icon: const Icon(Icons.check))
-              ],
-            )
-          ],
+              const SizedBox(width: 32),
+              Checkbox(
+                  value: widget.participants.contains(person),
+                  onChanged: (isParticipant) {
+                    if (isParticipant == false &&
+                        widget.participants.length == 1) {
+                      // cannot have 0 participants
+                      showMin1PersonError = true;
+                    } else {
+                      showMin1PersonError = false;
+                      changeParticipantStatus(
+                          person, isParticipant ?? false);
+                    }
+                    setState(() {});
+                  })
+            ],
+          ),
         ),
-      ),
+        const SizedBox(height: 16),
+        if (showMin1PersonError)
+          Text(
+            "Must include at least one person",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Theme.of(context).colorScheme.error),
+          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (widget.extraAction != null) widget.extraAction!,
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Theme.of(context).colorScheme.primary,
+                icon: const Icon(Icons.close)),
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop(widget.participants);
+                },
+                color: Theme.of(context).colorScheme.primary,
+                icon: const Icon(Icons.check))
+          ],
+        )
+      ],
     );
   }
 }

@@ -24,13 +24,13 @@ class _DescriptionTextFieldState extends State<DescriptionTextField> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return TextField(
-      controller: textController,
-      onChanged: (value) {
-        cubit.groupExpense.descriptionState = value;
-      },
-      decoration: InputDecoration(
-          border: InputBorder.none, hintText: "What is ${cubit.groupExpense.payerState.nameState} paying for?"),
-    );
+      return TextField(
+        controller: textController,
+        onChanged: (value) {
+          cubit.groupExpense.descriptionState = value;
+        },
+        decoration: InputDecoration(
+            border: InputBorder.none, hintText: "What is ${cubit.groupExpense.payerState.nameState} paying for?"),
+      );
   }
 }
