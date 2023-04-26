@@ -90,8 +90,10 @@ class GroupExpense extends Event {
     return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpenses=$sharedExpensesState, payer=$payerState)";
   }
 
-  void addNewSharedExpense(Iterable<Person> people) {
-    sharedExpensesState.add(SharedExpense.newInstance(people));
+  void addNewSharedExpense({required Iterable<Person> withParticipants}) {
+    final se = SharedExpense.newInstance([...individualExpenses.map((e) => e.person).toList()]);
+    se.participantsState = withParticipants.toList();
+    sharedExpensesState.add(se);
   }
 
   void removeSharedExpense(SharedExpense sharedExpense) {

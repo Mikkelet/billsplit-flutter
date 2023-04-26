@@ -90,9 +90,7 @@ class AddExpensePage extends StatelessWidget {
                                     alignment: Alignment.centerRight,
                                     child: IconButton(
                                         onPressed: () {
-                                          cubit.groupExpense
-                                              .addNewSharedExpense(
-                                                  [...group.people]);
+                                          cubit.groupExpense.addNewSharedExpense(withParticipants: cubit.group.people);
                                           cubit.onExpensesUpdated();
                                         },
                                         icon: const Icon(Icons.add))),
@@ -109,7 +107,7 @@ class AddExpensePage extends StatelessWidget {
                                     if (isMiddleElement) {
                                       return Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 32),
+                                              const EdgeInsets.only(top: 16),
                                           child: IndividualExpenseView(e));
                                     }
                                     return IndividualExpenseView(e);

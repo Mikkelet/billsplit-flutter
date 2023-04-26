@@ -38,20 +38,21 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(flex: 3,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: randomMenuItems[randomNumber],
-                    isDense: true,
-                    border: InputBorder.none,
-                  ),
-                  controller: TextEditingController(
-                      text: widget.sharedExpense.descriptionState),
-                  onChanged: (value) {
-                    widget.sharedExpense.descriptionState = value;
-                    cubit.onExpensesUpdated();
-                  },
-                )),
+            Expanded(
+              flex: 3,
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: randomMenuItems[randomNumber],
+                  isDense: true,
+                  border: InputBorder.none,
+                ),
+                controller: TextEditingController(
+                    text: widget.sharedExpense.descriptionState),
+                onChanged: (value) {
+                  widget.sharedExpense.descriptionState = value;
+                },
+              ),
+            ),
             Expanded(
               flex: 1,
               child: ExpenseTextField(
@@ -75,17 +76,15 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                   return ParticipantsPickerDialog(
                     participants: [...widget.sharedExpense.participantsState],
                     people: cubit.group.people,
-                    extraAction: TextButton(
+                    extraAction: IconButton(
                       onPressed: () {
                         cubit.groupExpense
                             .removeSharedExpense(widget.sharedExpense);
                         Navigator.of(context).pop();
+                        cubit.onExpensesUpdated();
                       },
-                      child: Text(
-                        "Remove",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.error),
-                      ),
+                      icon: Icon(Icons.delete,
+                          color: Theme.of(context).colorScheme.error),
                     ),
                   );
                 },

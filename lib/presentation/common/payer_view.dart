@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 class PayerView extends StatelessWidget {
   final Person person;
   final bool isPayer;
+  final double size;
   final Function() onClick;
-
-  static const double iconSize = 64;
-  static const double selectedIconSize = 40;
 
   const PayerView(
       {Key? key,
       required this.person,
       required this.isPayer,
-      required this.onClick})
+      required this.onClick,
+      this.size = 64})
       : super(key: key);
 
   @override
@@ -24,16 +23,16 @@ class PayerView extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           IconButton(
-            iconSize: iconSize,
+            iconSize: size,
             onPressed: onClick,
             padding: EdgeInsets.zero,
-            icon: ProfilePictureView(person: person, size: iconSize),
+            icon: ProfilePictureView(person: person, size: size),
           ),
           if (isPayer)
-            const Icon(
+            Icon(
               color: Colors.greenAccent,
               Icons.attach_money_rounded,
-              size: selectedIconSize,
+              size: size * 0.8,
             )
         ],
       ),

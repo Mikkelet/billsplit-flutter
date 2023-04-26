@@ -43,15 +43,20 @@ class GroupView extends StatelessWidget {
                             softWrap: false,
                             overflow: TextOverflow.ellipsis),
                       ),
-                      _debtView(context, yourDebts)
+                      Flexible(child: _debtView(context, yourDebts))
                     ],
                   ),
                   Row(
                     children: [
-                      ...group.people.map((e) => Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: ProfilePictureView(person: e, size: 30,),
-                      ))
+                      ...group.people.map(
+                        (e) => Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: ProfilePictureView(
+                            person: e,
+                            size: 30,
+                          ),
+                        ),
+                      )
                     ],
                   )
                 ],

@@ -43,7 +43,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         widget.participants.clear();
                         widget.participants.add(person);
                         setState(() {});
@@ -88,9 +88,15 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                     .copyWith(color: Theme.of(context).colorScheme.error),
               ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                widget.extraAction ?? const SizedBox(),
-                const Expanded(child: SizedBox()),
+                if (widget.extraAction != null) widget.extraAction!,
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    color: Theme.of(context).colorScheme.primary,
+                    icon: const Icon(Icons.close)),
                 IconButton(
                     onPressed: () {
                       Navigator.of(context).pop(widget.participants);

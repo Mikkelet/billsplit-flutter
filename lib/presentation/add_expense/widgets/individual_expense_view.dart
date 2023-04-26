@@ -28,6 +28,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
         PayerView(
           person: widget.individualExpense.person,
           isPayer: _isPayer(widget.individualExpense, cubit),
+          size: 40,
           onClick: () {
             cubit.onPayerSelected(widget.individualExpense.person);
           },
@@ -37,15 +38,14 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (cubit.groupExpense.payerState.uid ==
-                  widget.individualExpense.person.uid)
-                Text("${widget.individualExpense.person.nameState} is paying",
-                    textAlign: TextAlign.left)
-              else
-                Text(widget.individualExpense.person.nameState,
-                    textAlign: TextAlign.left),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  if (cubit.groupExpense.payerState.uid ==
+                      widget.individualExpense.person.uid)
+                    Text("${widget.individualExpense.person.nameState} is paying")
+                  else
+                    Text(widget.individualExpense.person.nameState),
                   const Expanded(
                     child: SizedBox(),
                   ),

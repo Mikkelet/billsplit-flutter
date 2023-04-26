@@ -186,12 +186,12 @@ class _AddServicePageState extends State<AddServicePage> {
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
                                     onPressed: () async {
-                                      await showDialog(
+                                      service.participantsState = await showDialog(
                                         context: context,
                                         builder: (context) =>
                                             ParticipantsPickerDialog(
                                           participants:
-                                              service.participantsState,
+                                              [...service.participantsState],
                                           people: cubit.group.people,
                                         ),
                                       );
