@@ -32,6 +32,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             Expanded(
               flex: 3,
               child: SharedExpenseDescriptionView(
+                showIcon: false,
                   sharedExpense: widget.sharedExpense),
             ),
             Expanded(

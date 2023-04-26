@@ -50,7 +50,7 @@ class DebtView extends StatelessWidget {
               child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(text, style: TextStyle(color: color)),
+              Expanded(child: Text(text, style: TextStyle(color: color))),
               if (isDebt && state is! Loading)
                 SimpleButton(
                   onClick: () {

@@ -28,7 +28,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
         PayerView(
           person: widget.individualExpense.person,
           isPayer: _isPayer(widget.individualExpense, cubit),
-          size: 40,
+          size: 50,
           onClick: () {
             cubit.onPayerSelected(widget.individualExpense.person);
           },
@@ -50,9 +50,13 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                     child: SizedBox(),
                   ),
                   if (getTotalForUser(cubit) > 0)
-                    Text(
-                      "\$${getTotalForUser(cubit).fmt2dec()}",
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Expanded(
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        "\$${getTotalForUser(cubit).fmt2dec()}",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
                 ],
               ),

@@ -71,11 +71,15 @@ class GroupView extends StatelessWidget {
   Widget _debtView(BuildContext context, num debt) {
     if (debt > 0) {
       return Text("\$${debt.fmt2dec()}",
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
           style:
               Theme.of(context).textTheme.bodyLarge?.apply(color: Colors.red));
     }
     if (debt < 0) {
       return Text("\$${debt.abs().fmt2dec()}",
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
           style: Theme.of(context)
               .textTheme
               .bodyLarge

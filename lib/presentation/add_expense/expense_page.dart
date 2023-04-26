@@ -62,7 +62,7 @@ class AddExpensePage extends StatelessWidget {
               body: WillPopScope(
                 onWillPop: () async {
                   if (groupExpense.isChanged) {
-                    return await showDialog(
+                    final response = await showDialog(
                       context: context,
                       builder: (context) => ResetChangesDialog(
                         () {
@@ -70,6 +70,7 @@ class AddExpensePage extends StatelessWidget {
                         },
                       ),
                     );
+                    return response ?? false;
                   }
                   return true;
                 },
@@ -168,10 +169,13 @@ class AddExpensePage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text("Total"),
-                                Text(
-                                  "\$${groupExpense.total.fmt2dec()}",
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                                Expanded(
+                                  child: Text(
+                                    "\$${groupExpense.total.fmt2dec()}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
                                 ),
                               ],
                             ),
