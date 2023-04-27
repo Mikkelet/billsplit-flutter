@@ -40,10 +40,10 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
         ),
         Row(
           children: [
-            const Expanded(
+            Expanded(
               child: Text(
                 "tip: tap a friend's name to select only them!",
-                style: TextStyle(fontStyle: FontStyle.italic),
+                style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).disabledColor),
               ),
             ),
             Checkbox(
@@ -117,7 +117,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
           children: [
             if (widget.extraAction != null) widget.extraAction! else const SizedBox(),
             IconButton(
-                onPressed: showMin1PersonError ? null : () {
+                onPressed: () {
                   Navigator.of(context).pop(widget.participants);
                 },
                 disabledColor: Theme.of(context).disabledColor,
