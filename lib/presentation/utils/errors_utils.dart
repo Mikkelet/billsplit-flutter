@@ -21,7 +21,7 @@ extension ExceptionExt on Exception {
     switch (runtimeType) {
       case FirebaseAuthException:
       default:
-        return UiException(0, "$runtimeType($this)");
+        return UiException(0, "$runtimeType: $this");
     }
   }
 }

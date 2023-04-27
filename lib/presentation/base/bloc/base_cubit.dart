@@ -19,6 +19,8 @@ abstract class BaseCubit extends Cubit<UiState> {
   void showError(dynamic err) {
     if (err is Error) {
       emit(Failure(UiException(-1, err.toString())));
+    } else if(err is UiException){
+      emit(Failure(err));
     } else if (err is Exception) {
       print("qqq err: ${(err).toString()}");
       emit(Failure(err.toUiException()));

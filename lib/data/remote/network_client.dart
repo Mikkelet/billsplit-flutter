@@ -2,15 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
+import 'package:billsplit_flutter/data/remote/errors/billsplit_error.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
-  static String releaseBaseUrl = "https://us-central1-billsplittapp.cloudfunctions.net/v2/";
-  static String baseUrl = releaseBaseUrl;
+  static bool debug = true;
+  static String debugBaseUrl = Platform.isAndroid
+      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
+      : "http://localhost:5000/billsplittapp/us-central1/v2/";
+  static String releaseBaseUrl =
+      "https://us-central1-billsplittapp.cloudfunctions.net/v2/";
+  static String baseUrl = debug ? debugBaseUrl : releaseBaseUrl;
 
   final _client = RetryClient(http.Client());
   final _authProvider = getIt<AuthProvider>();
@@ -31,6 +38,9 @@ class NetworkClient {
     print('Response body:${response.body}');
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
+    }
+    if (!response.statusCode.toString().startsWith("2")) {
+      throw UiException(response.statusCode, response.body.toString());
     }
     return response.toJson();
   }
@@ -57,6 +67,10 @@ class NetworkClient {
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }
+    if (!response.statusCode.toString().startsWith("2")) {
+      final error = BillSplitError.fromJson(response.toJson());
+      throw UiException(error.code, error.message);
+    }
     return response.toJson();
   }
 
@@ -82,6 +96,10 @@ class NetworkClient {
     }
     if (response.statusCode == 204) {
       return null;
+    }
+    if (!response.statusCode.toString().startsWith("2")) {
+      final error = BillSplitError.fromJson(response.toJson());
+      throw UiException(error.code, error.message);
     }
     return response.toJson();
   }
@@ -114,6 +132,10 @@ class NetworkClient {
     }
     if (response.statusCode == 204) {
       return null;
+    }
+    if (!response.statusCode.toString().startsWith("2")) {
+      final error = BillSplitError.fromJson(response.toJson());
+      throw UiException(error.code, error.message);
     }
     return response.toJson();
   }
