@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:flutter/material.dart';
@@ -88,27 +88,10 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             visualDensity: VisualDensity.compact,
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ...(widget.sharedExpense.participantsState.length > 4
-                          ? widget.sharedExpense.participantsState.take(4)
-                          : widget.sharedExpense.participantsState)
-                      .map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: ProfilePictureView(
-                        person: e,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  if (widget.sharedExpense.participantsState.length > 4)
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Icon(Icons.more_horiz, size: 16),
-                    ),
-                ],
+              child: ProfilePictureStack(
+                people: widget.sharedExpense.participantsState,
+                size: 30,
+                limit: 4,
               ),
             ),
           ),
