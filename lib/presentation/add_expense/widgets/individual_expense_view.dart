@@ -16,14 +16,15 @@ class IndividualExpenseView extends StatefulWidget {
 
 class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   late final textController =
-  TextEditingController(text: "${widget.individualExpense.expenseState}");
+      TextEditingController(text: "${widget.individualExpense.expenseState}");
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    final nameShort = getShortName(widget.individualExpense.person.nameState);
+    final nameShort = widget.individualExpense.person
+        .nameState; //getShortName(widget.individualExpense.person.nameState);
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         PayerView(
@@ -42,36 +43,45 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (cubit.groupExpense.payerState.uid ==
-                      widget.individualExpense.person.uid)
-                    Text("$nameShort is paying")
-                  else
-                    Text(nameShort),
-                  const Expanded(child: SizedBox()),
-                  Builder(builder: (context) {
-                    final totalForUser = getTotalForUser(cubit).fmt2dec();
-                    if (totalForUser.length > 13) {
-                      return Text(
-                        "\$${totalForUser.substring(
-                            0, totalForUser.length-1)}...",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .titleMedium,
-                      );
-                    } else {
-                      if (getTotalForUser(cubit) > 0) {
-                        return Text(
-                          "\$${getTotalForUser(cubit).fmt2dec()}",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium,
-                        );
-                      }
-                      return const SizedBox();
-                    }
-                  })
+                  Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Builder(
+                        builder: (context) {
+                          if (cubit.groupExpense.payerState.uid ==
+                              widget.individualExpense.person.uid) {
+                            return Text("$nameShort is paying", maxLines: 2);
+                          } else {
+                            return Text(nameShort, maxLines: 2);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Builder(builder: (context) {
+                        final totalForUser = getTotalForUser(cubit).fmt2dec();
+                        if (totalForUser.length > 13) {
+                          return Text(
+                            "\$${totalForUser.substring(0, totalForUser.length - 1)}...",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          );
+                        } else {
+                          if (getTotalForUser(cubit) > 0) {
+                            return Text(
+                              "\$${getTotalForUser(cubit).fmt2dec()}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            );
+                          }
+                          return const SizedBox();
+                        }
+                      }),
+                    ),
+                  )
                 ],
               ),
             ],
