@@ -38,29 +38,33 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
         const SizedBox(
           height: 4,
         ),
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                "tip: tap a friend's name to select only them!",
-                style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).disabledColor),
+        if (widget.people.length >= 3)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text(
+                  "tip: tap a friend's name to select only them!",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Theme.of(context).disabledColor),
+                ),
               ),
-            ),
-            Checkbox(
-              tristate: true,
-              value: (widget.participants.length == widget.people.length)
-                  ? true
-                  : null,
-              onChanged: (value) {
-                if (value == false) {
-                  widget.participants.clear();
-                  widget.participants.addAll(widget.people);
-                  setState(() {});
-                }
-              },
-            )
-          ],
-        ),
+              Checkbox(
+                tristate: true,
+                value: (widget.participants.length == widget.people.length)
+                    ? true
+                    : null,
+                onChanged: (value) {
+                  if (value == false) {
+                    widget.participants.clear();
+                    widget.participants.addAll(widget.people);
+                    setState(() {});
+                  }
+                },
+              )
+            ],
+          ),
         const SizedBox(
           height: 4,
         ),
@@ -115,7 +119,10 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (widget.extraAction != null) widget.extraAction! else const SizedBox(),
+            if (widget.extraAction != null)
+              widget.extraAction!
+            else
+              const SizedBox(),
             IconButton(
                 onPressed: () {
                   Navigator.of(context).pop(widget.participants);

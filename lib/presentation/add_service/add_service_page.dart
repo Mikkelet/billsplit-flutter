@@ -11,6 +11,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -189,11 +190,16 @@ class _AddServicePageState extends State<AddServicePage> {
                                       service.participantsState = await showDialog(
                                         context: context,
                                         builder: (context) =>
-                                            ParticipantsPickerDialog(
+                                            DialogWithCloseButton(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(16),
+                                                child: ParticipantsPickerDialog(
                                           participants:
-                                              [...service.participantsState],
+                                                  [...service.participantsState],
                                           people: cubit.group.people,
                                         ),
+                                              ),
+                                            ),
                                       );
                                       if (!service.participantsState
                                           .contains(service.payerState)) {

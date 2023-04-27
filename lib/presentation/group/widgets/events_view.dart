@@ -42,18 +42,26 @@ class EventsView extends StatelessWidget {
                           event is! Payment;
 
                   return Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Builder(builder: (context) {
                       if (event is GroupExpense) {
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _createdByProfilePicture(event.createdBy,
-                                shouldShowProfilePictureLeft, isLatestIndex),
-                            Flexible(
-                                child: ExpenseEventView(groupExpense: event)),
-                            _createdByProfilePicture(event.createdBy,
-                                shouldShowProfilePictureRight, isLatestIndex),
+                            if (shouldShowProfilePictureLeft)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: _createdByProfilePicture(
+                                    event.createdBy, isLatestIndex),
+                              ),
+                              Flexible(
+                                  child: ExpenseEventView(groupExpense: event)),
+                            if (shouldShowProfilePictureRight)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: _createdByProfilePicture(
+                                    event.createdBy, isLatestIndex),
+                              ),
                           ],
                         );
                       }
@@ -65,23 +73,14 @@ class EventsView extends StatelessWidget {
     });
   }
 
-  Widget _createdByProfilePicture(Person person, bool shouldShow,
-      bool isLatestIndex) {
-    if (shouldShow) {
-      if (isLatestIndex) {
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: ProfilePictureView(person: person),
-        );
-
-      } else {
-        return const Padding(
-          padding: EdgeInsets.all(4.0),
-          child: SizedBox(height: 40, width: 40,),
-        );
-      }
+  Widget _createdByProfilePicture(Person person, bool isLatestIndex) {
+    if (isLatestIndex) {
+      return ProfilePictureView(person: person);
     } else {
-      return const SizedBox();
+      return const SizedBox(
+        height: 40,
+        width: 40,
+      );
     }
   }
 

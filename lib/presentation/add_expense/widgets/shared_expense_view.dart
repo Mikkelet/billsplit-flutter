@@ -1,4 +1,3 @@
-
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expense_description_view.dart';
@@ -13,7 +12,8 @@ class SharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
   final bool autoFocus;
 
-  const SharedExpenseView({super.key, required this.sharedExpense, this.autoFocus = false});
+  const SharedExpenseView(
+      {super.key, required this.sharedExpense, this.autoFocus = false});
 
   @override
   State<SharedExpenseView> createState() => _SharedExpenseViewState();
@@ -34,8 +34,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             Expanded(
               flex: 3,
               child: SharedExpenseDescriptionView(
-                showIcon: false,
-                  sharedExpense: widget.sharedExpense),
+                  showIcon: false, sharedExpense: widget.sharedExpense),
             ),
             Expanded(
               flex: 1,
@@ -104,10 +103,11 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                       ),
                     ),
                   ),
-                  if (widget.sharedExpense.participantsState.length > 3)
+                  if (widget.sharedExpense.participantsState.length > 4)
                     const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.more_horiz, size: 16)),
+                      padding: EdgeInsets.all(8),
+                      child: Icon(Icons.more_horiz, size: 16),
+                    ),
                 ],
               ),
             ),
