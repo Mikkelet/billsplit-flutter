@@ -30,4 +30,9 @@ class AddExpenseBloc extends BaseCubit {
     groupExpense.payerState = person;
     emit(Main());
   }
+
+  void onQuickAddSharedExpense() {
+    final sharedExpense = groupExpense.addNewSharedExpense(withParticipants: group.people);
+    emit(QuickAddSharedExpense(sharedExpense));
+  }
 }

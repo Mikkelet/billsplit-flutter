@@ -35,6 +35,7 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ExpenseTextField(
+              autoFocus: true,
               textEditingController: textController,
               onChange: (value) {
                 widget.sharedExpense.expenseState = value;

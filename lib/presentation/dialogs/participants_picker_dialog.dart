@@ -115,17 +115,12 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (widget.extraAction != null) widget.extraAction!,
+            if (widget.extraAction != null) widget.extraAction! else const SizedBox(),
             IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                color: Theme.of(context).colorScheme.primary,
-                icon: const Icon(Icons.close)),
-            IconButton(
-                onPressed: () {
+                onPressed: showMin1PersonError ? null : () {
                   Navigator.of(context).pop(widget.participants);
                 },
+                disabledColor: Theme.of(context).disabledColor,
                 color: Theme.of(context).colorScheme.primary,
                 icon: const Icon(Icons.check))
           ],

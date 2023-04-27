@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/add_expense/widgets/add_shared_expense_view.dart';
@@ -13,6 +14,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
@@ -92,7 +94,12 @@ class AddExpensePage extends StatelessWidget {
                             child: Column(
                               children: [
                                 ...groupExpense.sharedExpensesState.map(
-                                  (e) => SharedExpenseView(sharedExpense: e),
+                                  (e) => SharedExpenseView(sharedExpense: e, autoFocus: builder((){
+                                    if(state is QuickAddSharedExpense){
+                                      return state.sharedExpense == e;
+                                    }
+                                    return false;
+                                  })),
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
@@ -100,9 +107,8 @@ class AddExpensePage extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       IconButton(
-                                        onPressed: (){
-                                          groupExpense.addNewSharedExpense(withParticipants: group.people);
-                                          cubit.onExpensesUpdated();
+                                        onPressed: () {
+                                          cubit.onQuickAddSharedExpense();
                                         },
                                         icon: const Icon(Icons.bolt),
                                       ),
@@ -114,7 +120,7 @@ class AddExpensePage extends StatelessWidget {
                                           try {
                                             final response = await showDialog(
                                               context: context,
-                                              builder: (context) => Dialog(
+                                              builder: (context) => DialogWithCloseButton(
                                                 child: AddSharedExpenseView(
                                                   onConfirm: () {},
                                                   group: cubit.group,
@@ -173,6 +179,7 @@ class AddExpensePage extends StatelessWidget {
                                   child: Text(
                                     "\$${groupExpense.total.fmt2dec()}",
                                     overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.end,
                                     style:
                                         Theme.of(context).textTheme.titleMedium,
                                   ),

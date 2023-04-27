@@ -4,14 +4,16 @@ import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc
 import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
+  final bool autoFocus;
 
-  const SharedExpenseView({super.key, required this.sharedExpense});
+  const SharedExpenseView({super.key, required this.sharedExpense, this.autoFocus = false});
 
   @override
   State<SharedExpenseView> createState() => _SharedExpenseViewState();
@@ -38,6 +40,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             Expanded(
               flex: 1,
               child: ExpenseTextField(
+                autoFocus: widget.autoFocus,
                 onChange: (value) {
                   widget.sharedExpense.expenseState = value;
                   cubit.onExpensesUpdated();
@@ -55,7 +58,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
               final response = await showDialog(
                 context: context,
                 builder: (context) {
-                  return Dialog(
+                  return DialogWithCloseButton(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: ParticipantsPickerDialog(

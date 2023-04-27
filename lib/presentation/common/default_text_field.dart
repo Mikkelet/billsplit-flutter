@@ -5,12 +5,14 @@ class ExpenseTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final void Function(num) onChange;
   final bool canBeZero;
+  final bool autoFocus;
 
   ExpenseTextField({
     Key? key,
     required this.textEditingController,
     required this.onChange,
     this.canBeZero = true,
+    this.autoFocus = false,
   }) : super(key: key) {
     textEditingController.addListener(() {
       onChange(_parseInputToNum());
@@ -21,6 +23,7 @@ class ExpenseTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: autoFocus,
       maxLength: 7,
       textAlign: TextAlign.end,
       controller: textEditingController,
@@ -30,7 +33,7 @@ class ExpenseTextField extends StatelessWidget {
         hintText: "0",
         border: InputBorder.none,
         errorText: _errorText(),
-        prefixIcon: const Icon(Icons.attach_money_outlined),
+        prefixIcon: Icon(Icons.attach_money_outlined),
         counterText: "",
         prefixIconConstraints: const BoxConstraints(),
       ),

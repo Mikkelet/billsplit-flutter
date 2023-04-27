@@ -16,7 +16,7 @@ class IndividualExpenseView extends StatefulWidget {
 
 class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   late final textController =
-      TextEditingController(text: "${widget.individualExpense.expenseState}");
+  TextEditingController(text: "${widget.individualExpense.expenseState}");
 
   @override
   Widget build(BuildContext context) {
@@ -48,16 +48,30 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                   else
                     Text(nameShort),
                   const Expanded(child: SizedBox()),
-                  if (getTotalForUser(cubit).toString().length > 7)
-                    Text(
-                      "\$${getTotalForUser(cubit).fmt2dec().substring(0, 7)}...",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    )
-                  else if (getTotalForUser(cubit) > 0)
-                    Text(
-                      "\$${getTotalForUser(cubit).fmt2dec()}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  Builder(builder: (context) {
+                    final totalForUser = getTotalForUser(cubit).fmt2dec();
+                    if (totalForUser.length > 13) {
+                      return Text(
+                        "\$${totalForUser.substring(
+                            0, totalForUser.length-1)}...",
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleMedium,
+                      );
+                    } else {
+                      if (getTotalForUser(cubit) > 0) {
+                        return Text(
+                          "\$${getTotalForUser(cubit).fmt2dec()}",
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleMedium,
+                        );
+                      }
+                      return const SizedBox();
+                    }
+                  })
                 ],
               ),
             ],

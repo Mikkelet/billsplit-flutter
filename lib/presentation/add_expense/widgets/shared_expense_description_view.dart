@@ -52,12 +52,14 @@ class _SharedExpenseDescriptionViewState
       },
       textAlign: widget.alignRight ? TextAlign.end : TextAlign.start,
       decoration: InputDecoration(
-        prefixIcon: const Padding(
-            padding: EdgeInsets.only(right: 8), child: Icon(Icons.edit)),
+        prefixIcon: widget.showIcon
+            ? const Padding(
+                padding: EdgeInsets.only(right: 8), child: Icon(Icons.edit))
+            : null,
         isDense: true,
         prefixIconConstraints: const BoxConstraints(),
         border: InputBorder.none,
-        hintText: "fx. ${randomMenuItems[randomNumber]}",
+        hintText: "ex. ${randomMenuItems[randomNumber]}",
       ),
     );
   }
