@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  cupertino_will_pop_scope:
+    dependency: "direct main"
+    description:
+      name: cupertino_will_pop_scope
+      sha256: d312103538bee026428d785cc3c06093b34c2793249229b1ddc49a1d8a43901f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   dart_service_announcement:
     dependency: transitive
     description:

@@ -26,7 +26,7 @@ class ExpenseEventView extends StatelessWidget {
       },
       child: Column(
         children: [
-          Text(description, style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: fontStyle)),
+          Text(description,textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: fontStyle)),
           const SizedBox(height: 8),
           Text(
             "\$${groupExpense.total.fmt2dec()}",

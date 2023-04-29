@@ -1,6 +1,6 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -30,35 +30,26 @@ class GroupView extends StatelessWidget {
             _onClick(context);
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
             child: Center(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
+                        flex: 2,
                         child: Text(group.name,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context).textTheme.titleLarge,
                             softWrap: false,
                             overflow: TextOverflow.ellipsis),
                       ),
-                      Flexible(child: _debtView(context, yourDebts))
+                      Flexible(flex: 1,child: _debtView(context, yourDebts))
                     ],
                   ),
-                  Row(
-                    children: [
-                      ...group.people.map(
-                        (e) => Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: ProfilePictureView(
-                            person: e,
-                            size: 30,
-                          ),
-                        ),
-                      )
-                    ],
-                  )
+                  const SizedBox(height: 8),
+                  ProfilePictureStack(people: group.people, size: 30, limit: 6,)
                 ],
               ),
             ),
