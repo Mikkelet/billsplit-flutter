@@ -26,6 +26,7 @@ class ExpenseTextField extends StatelessWidget {
       autofocus: autoFocus,
       maxLength: 7,
       textAlign: TextAlign.end,
+      maxLines: 1,
       controller: textEditingController,
       style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(
@@ -33,7 +34,7 @@ class ExpenseTextField extends StatelessWidget {
         hintText: "0",
         border: InputBorder.none,
         errorText: _errorText(),
-        prefixIcon: Icon(Icons.attach_money_outlined),
+        prefixIcon: const Icon(Icons.attach_money_outlined),
         counterText: "",
         prefixIconConstraints: const BoxConstraints(),
       ),

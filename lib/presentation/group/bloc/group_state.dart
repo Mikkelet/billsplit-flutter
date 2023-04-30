@@ -33,3 +33,5 @@ class GroupLoaded extends GroupState {
 }
 
 class GroupLeft extends Main{}
+
+class DebtAdded extends Main{}

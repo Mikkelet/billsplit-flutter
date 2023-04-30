@@ -1,11 +1,8 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
-import 'package:billsplit_flutter/presentation/dialogs/error_dialog.dart';
-import 'package:billsplit_flutter/presentation/group/bloc/debt_cubit.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
+import 'package:billsplit_flutter/presentation/group/widgets/pay_custom_debt_view.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -32,47 +29,29 @@ class DebtView extends StatelessWidget {
       return const SizedBox();
     }
     final groupCubit = context.read<GroupBloc>();
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<GroupBloc>(create: (context) => groupCubit),
-        BlocProvider<DebtCubit>(create: (context) => DebtCubit()),
-      ],
-      child: BlocListener<DebtCubit, UiState>(
-        listener: (context, state) {
-          if (state is Failure) {
-            showDialog(
+    return RoundedListItem(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(child: Text(text, style: TextStyle(color: color))),
+        SimpleButton(
+          onClick: () {
+            showModalBottomSheet(
                 context: context,
-                builder: (context) => ErrorDialog(state.error));
-          }
-        },
-        child: BaseBlocBuilder<DebtCubit>(builder: (debtCubit, state) {
-          return RoundedListItem(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: Text(text, style: TextStyle(color: color))),
-              if (isDebt && state is! Loading)
-                SimpleButton(
-                  onClick: () {
-                    debtCubit.payDebt(groupCubit.group.id, debt);
-                  },
-                  child: Text(
-                    "Pay",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSecondary),
-                  ),
-                )
-              else if (state is Loading)
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-            ],
-          ));
-        }),
-      ),
-    );
+                builder: (context) => PayCustomDebtView(
+                      debt: debt,
+                      groupId: groupCubit.group.id,
+                    ));
+          },
+          child: Text(
+            "Pay",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+          ),
+        )
+      ],
+    ));
   }
 }
