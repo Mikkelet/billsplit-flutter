@@ -8,9 +8,13 @@ import 'package:flutter/material.dart';
 class AddSharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
   final Group group;
+  final Function() onSubmit;
 
   const AddSharedExpenseView(
-      {Key? key, required this.sharedExpense, required this.group})
+      {Key? key,
+      required this.sharedExpense,
+      required this.group,
+      required this.onSubmit})
       : super(key: key);
 
   @override
@@ -22,6 +26,14 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
       TextEditingController(text: "${widget.sharedExpense.expenseState}");
 
   @override
+  void initState() {
+    textController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final group = widget.group;
     return SingleChildScrollView(
@@ -30,6 +42,15 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: _isReadyToSubmit() ? widget.onSubmit : null,
+                  icon: const Icon(Icons.check),
+                )
+              ],
+            ),
             SharedExpenseDescriptionView(
                 autoFocus: true,
                 sharedExpense: widget.sharedExpense,
@@ -43,11 +64,25 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
             ),
             const SizedBox(height: 16),
             ParticipantsPickerDialog(
-                participants: widget.sharedExpense.participantsState,
-                people: group.people),
+              participants: widget.sharedExpense.participantsState,
+              showSubmit: false,
+              people: group.people,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  bool _isReadyToSubmit() {
+    final sharedExpense = widget.sharedExpense;
+    return sharedExpense.expenseState > 0 &&
+        sharedExpense.participantsState.isNotEmpty;
   }
 }

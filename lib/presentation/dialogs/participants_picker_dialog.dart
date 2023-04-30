@@ -6,12 +6,14 @@ class ParticipantsPickerDialog extends StatefulWidget {
   final List<Person> participants;
   final Iterable<Person> people;
   final Widget? extraAction;
+  final bool showSubmit;
 
   const ParticipantsPickerDialog({
     Key? key,
     required this.participants,
     required this.people,
     this.extraAction,
+    this.showSubmit = true,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,9 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
     }
   }
 
+  bool _isEveryoneSelected() =>
+      widget.people.length == widget.participants.length;
+
   bool showMin1PersonError = false;
 
   @override
@@ -35,9 +40,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(
-          height: 4,
-        ),
+        const SizedBox(height: 4),
         if (widget.people.length >= 3)
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -52,22 +55,20 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
               ),
               Checkbox(
                 tristate: true,
-                value: (widget.participants.length == widget.people.length)
-                    ? true
-                    : null,
-                onChanged: (value) {
-                  if (value == false) {
-                    widget.participants.clear();
-                    widget.participants.addAll(widget.people);
-                    setState(() {});
-                  }
-                },
+                value: (_isEveryoneSelected()) ? true : null,
+                onChanged: _isEveryoneSelected()
+                    ? null
+                    : (value) {
+                        if (value == false) {
+                          widget.participants.clear();
+                          widget.participants.addAll(widget.people);
+                          setState(() {});
+                        }
+                      },
               )
             ],
           ),
-        const SizedBox(
-          height: 4,
-        ),
+        const SizedBox(height: 4),
         ...widget.people.map(
           (person) => Row(
             children: [
@@ -107,7 +108,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         if (showMin1PersonError)
           Text(
             "Must include at least one person",
@@ -116,6 +117,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                 .bodyMedium!
                 .copyWith(color: Theme.of(context).colorScheme.error),
           ),
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -123,13 +125,15 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
               widget.extraAction!
             else
               const SizedBox(),
-            IconButton(
+            if (widget.showSubmit)
+              IconButton(
                 onPressed: () {
                   Navigator.of(context).pop(widget.participants);
                 },
                 disabledColor: Theme.of(context).disabledColor,
                 color: Theme.of(context).colorScheme.primary,
-                icon: const Icon(Icons.check))
+                icon: const Icon(Icons.check),
+              )
           ],
         )
       ],
