@@ -87,6 +87,12 @@ class AddExpensePage extends StatelessWidget {
                       child: Center(
                         child: Column(children: [
                           RoundedListItem(
+                            child: DescriptionTextField(
+                              initialText: groupExpense.descriptionState,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          RoundedListItem(
                             borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(30),
                               bottom: Radius.circular(10),
@@ -125,7 +131,6 @@ class AddExpensePage extends StatelessWidget {
                                               builder: (context) =>
                                                   DialogWithCloseButton(
                                                 child: AddSharedExpenseView(
-                                                  onConfirm: () {},
                                                   group: cubit.group,
                                                   sharedExpense: sharedExpense,
                                                 ),
@@ -190,11 +195,6 @@ class AddExpensePage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          RoundedListItem(
-                              child: DescriptionTextField(
-                            initialText: groupExpense.descriptionState,
-                          )),
                           const SizedBox(height: 120),
                         ]),
                       ),

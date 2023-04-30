@@ -34,12 +34,14 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             Expanded(
               flex: 3,
               child: SharedExpenseDescriptionView(
-                  showIcon: false, sharedExpense: widget.sharedExpense),
+                autoFocus: widget.autoFocus,
+                showIcon: false,
+                sharedExpense: widget.sharedExpense,
+              ),
             ),
             Expanded(
               flex: 1,
               child: ExpenseTextField(
-                autoFocus: widget.autoFocus,
                 onChange: (value) {
                   widget.sharedExpense.expenseState = value;
                   cubit.onExpensesUpdated();

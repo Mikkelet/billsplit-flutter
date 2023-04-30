@@ -8,13 +8,9 @@ import 'package:flutter/material.dart';
 class AddSharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
   final Group group;
-  final Function() onConfirm;
 
   const AddSharedExpenseView(
-      {Key? key,
-      required this.sharedExpense,
-      required this.group,
-      required this.onConfirm})
+      {Key? key, required this.sharedExpense, required this.group})
       : super(key: key);
 
   @override
@@ -34,20 +30,18 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SharedExpenseDescriptionView(
+                autoFocus: true,
+                sharedExpense: widget.sharedExpense,
+                showIcon: true,
+                alignRight: true),
             ExpenseTextField(
-              autoFocus: true,
               textEditingController: textController,
               onChange: (value) {
                 widget.sharedExpense.expenseState = value;
               },
             ),
-            SharedExpenseDescriptionView(
-                sharedExpense: widget.sharedExpense,
-                showIcon: true,
-                alignRight: true),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             ParticipantsPickerDialog(
                 participants: widget.sharedExpense.participantsState,
                 people: group.people),

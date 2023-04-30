@@ -143,6 +143,7 @@ class _AddServicePageState extends State<AddServicePage> {
                               onChanged: (value) {
                                 service.nameState = value;
                               },
+                              textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
                                   errorText: nameErrorText,
                                   border: InputBorder.none,

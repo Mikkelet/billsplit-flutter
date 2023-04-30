@@ -51,6 +51,7 @@ class AddGroupPage extends StatelessWidget {
                       onChanged: (value) {
                         cubit.groupName = value;
                       },
+                      textInputAction: TextInputAction.done,
                       decoration: const InputDecoration(
                           border: InputBorder.none, hintText: "New group"),
                     )),
@@ -66,8 +67,9 @@ class AddGroupPage extends StatelessWidget {
                               .toList(),
                           Container(height: 12),
                           const Align(
-                              alignment: Alignment.centerRight,
-                              child: AddPeopleToGroupView()),
+                            alignment: Alignment.centerRight,
+                            child: AddPeopleToGroupView(),
+                          ),
                         ],
                       ),
                     ),

@@ -7,12 +7,14 @@ class SharedExpenseDescriptionView extends StatefulWidget {
   final SharedExpense sharedExpense;
   final bool showIcon;
   final bool alignRight;
+  final bool autoFocus;
 
   const SharedExpenseDescriptionView(
       {Key? key,
       required this.sharedExpense,
       this.showIcon = false,
-      this.alignRight = false})
+      this.alignRight = false,
+      required this.autoFocus})
       : super(key: key);
 
   @override
@@ -50,7 +52,9 @@ class _SharedExpenseDescriptionViewState
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
+      textInputAction: TextInputAction.next,
       textAlign: widget.alignRight ? TextAlign.end : TextAlign.start,
+      autofocus: widget.autoFocus,
       decoration: InputDecoration(
         prefixIcon: widget.showIcon
             ? const Padding(

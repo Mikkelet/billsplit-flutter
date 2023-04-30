@@ -26,6 +26,7 @@ class _DescriptionTextFieldState extends State<DescriptionTextField> {
     final cubit = context.read<AddExpenseBloc>();
       return TextField(
         controller: textController,
+        textInputAction: TextInputAction.next,
         onChanged: (value) {
           cubit.groupExpense.descriptionState = value;
         },
