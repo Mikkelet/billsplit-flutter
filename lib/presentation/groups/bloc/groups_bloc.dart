@@ -23,4 +23,12 @@ class GroupsBloc extends BaseCubit {
       showError(error);
     });
   }
+
+  Future refreshGroups() async {
+    try {
+      await _getGroupsUseCase.launch();
+    } catch (e) {
+      showError(e);
+    }
+  }
 }

@@ -50,31 +50,36 @@ class GroupsPage extends StatelessWidget {
         body: BaseBlocBuilder<GroupsBloc>(
           builder: (cubit, state) {
             return Center(
-              child: DefaultStreamBuilder(
-                stream: cubit.getGroupStream(),
-                body: (groups) {
-                  if (state is Loading && groups.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (groups.isEmpty) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(64.0),
-                        child: Text(
-                          "Here you can see your groups! Click below to add one!",
-                        ),
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                      controller: scrollingController,
-                      itemCount: groups.length,
-                      padding: const EdgeInsets.symmetric(vertical: 40),
-                      itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: GroupView(group: groups[index]),
-                          ));
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await cubit.refreshGroups();
                 },
+                child: DefaultStreamBuilder(
+                  stream: cubit.getGroupStream(),
+                  body: (groups) {
+                    if (state is Loading && groups.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (groups.isEmpty) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(64.0),
+                          child: Text(
+                            "Here you can see your groups! Click below to add one!",
+                          ),
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                        controller: scrollingController,
+                        itemCount: groups.length,
+                        padding: const EdgeInsets.symmetric(vertical: 40),
+                        itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: GroupView(group: groups[index]),
+                            ));
+                  },
+                ),
               ),
             );
           },

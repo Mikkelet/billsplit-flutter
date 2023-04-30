@@ -22,42 +22,47 @@ class FriendsPage extends StatelessWidget {
         body: Builder(
           builder: (context) {
             final cubit = context.read<FriendsCubit>();
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 16),
-                    const AddFriendTextField(),
-                    const SizedBox(height: 16),
-                    DefaultStreamBuilder(
-                      stream: cubit.friendsStream(),
-                      body: (friends) {
-                        if (cubit.state is Loading && friends.isEmpty) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (friends.isEmpty) {
-                          return const Text("No friends");
-                        }
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ...friends
-                                .map(
-                                  (e) => Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: FriendView(friend: e),
-                                  ),
-                                )
-                                .toList()
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 40),
-                  ],
+            return RefreshIndicator(
+              onRefresh: () async {
+                await cubit.refreshFriends();
+              },
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 16),
+                      const AddFriendTextField(),
+                      const SizedBox(height: 16),
+                      DefaultStreamBuilder(
+                        stream: cubit.friendsStream(),
+                        body: (friends) {
+                          if (cubit.state is Loading && friends.isEmpty) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (friends.isEmpty) {
+                            return const Text("No friends");
+                          }
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ...friends
+                                  .map(
+                                    (e) => Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: FriendView(friend: e),
+                                    ),
+                                  )
+                                  .toList()
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
                 ),
               ),
             );
