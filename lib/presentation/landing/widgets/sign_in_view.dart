@@ -1,12 +1,13 @@
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/landing/bloc/landing_bloc.dart';
+import 'package:billsplit_flutter/presentation/landing/widgets/password_textfield.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInView extends StatefulWidget {
-  SignInView({Key? key}) : super(key: key);
+  const SignInView({Key? key}) : super(key: key);
 
   @override
   State<SignInView> createState() => _SignInViewState();
@@ -15,8 +16,36 @@ class SignInView extends StatefulWidget {
 class _SignInViewState extends State<SignInView> {
   final emailFieldController = TextEditingController();
   final passwordFieldController = TextEditingController();
+  bool showPassword = false;
   String? emailError;
   String? passwordError;
+
+  @override
+  void initState() {
+    emailFieldController.addListener(() {
+      _resetEmailError();
+    });
+    passwordFieldController.addListener(() {
+      _resetPasswordError();
+    });
+    super.initState();
+  }
+
+  _resetEmailError() {
+    if (emailError != null) {
+      setState(() {
+        emailError = null;
+      });
+    }
+  }
+
+  _resetPasswordError() {
+    if (passwordError != null) {
+      setState(() {
+        passwordError = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +58,8 @@ class _SignInViewState extends State<SignInView> {
             Container(height: 120),
             Align(
               alignment: Alignment.centerLeft,
-              child:
-                  Text("Sign in", style: Theme.of(context).textTheme.displayMedium),
+              child: Text("Sign in",
+                  style: Theme.of(context).textTheme.displayMedium),
             ),
             Container(height: 32),
             RoundedListItem(
@@ -44,16 +73,12 @@ class _SignInViewState extends State<SignInView> {
             )),
             const SizedBox(height: 16),
             RoundedListItem(
-                child: TextField(
-              controller: passwordFieldController,
-              decoration: InputDecoration(
-                  errorText: passwordError,
-                  border: InputBorder.none,
-                  hintText: "Password (min. 6 characters)"),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            )),
+              child: PasswordTextField(
+                controller: passwordFieldController,
+                error: passwordError,
+                hintText: "Repeat password",
+              ),
+            ),
             const SizedBox(height: 16),
             SimpleButton(
               onClick: () {

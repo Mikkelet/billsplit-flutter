@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/landing/bloc/landing_bloc.dart';
+import 'package:billsplit_flutter/presentation/landing/widgets/password_textfield.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,44 @@ class _SignUpViewState extends State<SignUpView> {
   String? emailError;
   String? passwordError;
   String? repeatPasswordError;
+
+  @override
+  void initState() {
+    emailFieldController.addListener(() {
+      _resetEmailError();
+    });
+    passwordFieldController.addListener(() {
+      _resetPasswordError();
+    });
+    repeatPasswordFieldController.addListener(() {
+      _resetRepeatPasswordError();
+    });
+    super.initState();
+  }
+
+  _resetEmailError() {
+    if (emailError != null) {
+      setState(() {
+        emailError = null;
+      });
+    }
+  }
+
+  _resetRepeatPasswordError() {
+    if (repeatPasswordError != null) {
+      setState(() {
+        repeatPasswordError = null;
+      });
+    }
+  }
+
+  _resetPasswordError() {
+    if (passwordError != null) {
+      setState(() {
+        passwordError = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,36 +85,27 @@ class _SignUpViewState extends State<SignUpView> {
             )),
             const SizedBox(height: 16),
             RoundedListItem(
-                child: TextField(
-              controller: passwordFieldController,
-              decoration: InputDecoration(
-                  errorText: passwordError,
-                  border: InputBorder.none,
-                  hintText: "Password (min. 6 characters)"),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            )),
+              child: PasswordTextField(
+                controller: passwordFieldController,
+                error: passwordError,
+                hintText: "Enter password (min. 6 characters)",
+              ),
+            ),
             const SizedBox(height: 16),
             RoundedListItem(
-                child: TextField(
-              controller: repeatPasswordFieldController,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Repeat password",
-                  errorText: repeatPasswordError),
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-            )),
+              child: PasswordTextField(
+                controller: repeatPasswordFieldController,
+                error: repeatPasswordError,
+                hintText: "Repeat password",
+              ),
+            ),
             const SizedBox(height: 16),
             SimpleButton(
               onClick: () {
                 if (validateFields()) {
                   _onPressed(context);
                 }
-                setState(() {
-                });
+                setState(() {});
               },
               child: const Text("Sign up"),
             ),
