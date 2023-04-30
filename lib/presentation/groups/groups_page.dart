@@ -19,7 +19,7 @@ class GroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => GroupsBloc()..loadGroups(),
+      create: (context) => GroupsBloc()..loadProfile(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Splitsby"),

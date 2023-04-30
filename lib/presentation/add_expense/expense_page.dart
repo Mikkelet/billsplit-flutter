@@ -94,12 +94,14 @@ class AddExpensePage extends StatelessWidget {
                             child: Column(
                               children: [
                                 ...groupExpense.sharedExpensesState.map(
-                                  (e) => SharedExpenseView(sharedExpense: e, autoFocus: builder((){
-                                    if(state is QuickAddSharedExpense){
-                                      return state.sharedExpense == e;
-                                    }
-                                    return false;
-                                  })),
+                                  (e) => SharedExpenseView(
+                                      sharedExpense: e,
+                                      autoFocus: builder(() {
+                                        if (state is QuickAddSharedExpense) {
+                                          return state.sharedExpense == e;
+                                        }
+                                        return false;
+                                      })),
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,
@@ -120,7 +122,8 @@ class AddExpensePage extends StatelessWidget {
                                           try {
                                             final response = await showDialog(
                                               context: context,
-                                              builder: (context) => DialogWithCloseButton(
+                                              builder: (context) =>
+                                                  DialogWithCloseButton(
                                                 child: AddSharedExpenseView(
                                                   onConfirm: () {},
                                                   group: cubit.group,
