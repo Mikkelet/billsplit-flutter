@@ -32,6 +32,7 @@ class DebtView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(child: Text(text, style: TextStyle(color: color))),
+        const SizedBox(width: 32),
         if (isDebt)
           SimpleButton(
             onClick: () {

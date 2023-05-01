@@ -22,7 +22,7 @@ class PayCustomDebtView extends StatefulWidget {
 
 class _PayCustomDebtViewState extends State<PayCustomDebtView> {
   late final TextEditingController controller =
-      TextEditingController(text: widget.debt.second.fmt2dec());
+      TextEditingController(text: widget.debt.second.fmtTextField());
   late num amount = widget.debt.second;
 
   @override

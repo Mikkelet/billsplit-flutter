@@ -17,7 +17,7 @@ class ExpenseTextField extends StatelessWidget {
     this.maxValue,
   }) : super(key: key) {
     textEditingController.addListener(() {
-      onChange(_parseInputToNum());
+      onChange(parseInput);
       _onChange();
     });
   }
@@ -71,7 +71,7 @@ class ExpenseTextField extends StatelessWidget {
     }
   }
 
-  num _parseInputToNum() {
+  num get parseInput {
     final text = textEditingController.text;
     num inputAsNumber = 0;
     try {
@@ -90,31 +90,29 @@ class ExpenseTextField extends StatelessWidget {
     return inputAsNumber;
   }
 
+  String get text => textEditingController.text;
+  set text(String text) => textEditingController.text = text;
+
   void _onChange() {
-    final text = textEditingController.text;
-    final inputNum = _parseInputToNum();
-
-    if (maxValue != null &&
-            inputNum > (maxValue ?? 0) &&
-            inputNum.fmt2dec() != maxValue!.fmt2dec() ||
-        text.length > maxValue!.fmt2dec().length) {
-      textEditingController.text = maxValue!.fmt2dec();
-      textEditingController.selection =
-          TextSelection.collapsed(offset: textEditingController.text.length);
-    }
-
     if (text == "0") {
-      textEditingController.text = "";
+      text = "";
       textEditingController.selection =
-          TextSelection.collapsed(offset: textEditingController.text.length);
+          TextSelection.collapsed(offset: text.length);
     }
-
-    if (text.contains(",")) {
-      textEditingController.text = text.replaceAll(",", ".");
+    if (maxValue != null &&
+        parseInput > (maxValue ?? 0) &&
+        (parseInput.fmt2dec() != maxValue!.fmt2dec() ||
+            text.length > maxValue!.fmt2dec().length)) {
+      text = maxValue!.fmt2dec();
       textEditingController.selection =
-          TextSelection.collapsed(offset: textEditingController.text.length);
+          TextSelection.collapsed(offset: text.length);
+    }
+    if (text.contains(",")) {
+      text = text.replaceAll(",", ".");
+      textEditingController.selection =
+          TextSelection.collapsed(offset: text.length);
     }
   }
 
-  static const maxInput = 9999999;
+  static const maxInput = 9999999.99; // max 7 chars + 2 decimals
 }
