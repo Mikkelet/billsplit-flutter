@@ -43,39 +43,43 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
       },
       create: (context) => DebtCubit(),
       child: BaseBlocBuilder<DebtCubit>(builder: (cubit, state) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 100,
-                child: ExpenseTextField(
-                  textEditingController: controller,
-                  onChange: (value) {
-                    amount = value;
-                  },
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: ExpenseTextField(
+                    autoFocus: true,
+                    textEditingController: controller,
+                    onChange: (value) {
+                      amount = value;
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (state is Loading) const CircularProgressIndicator(),
-                  if (state is Main)
-                    IconButton(
-                      onPressed: amount == 0
-                          ? null
-                          : () {
-                              cubit.payDebt(widget.groupId,
-                                  Pair(widget.debt.first, amount));
-                            },
-                      icon: const Icon(Icons.check),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 32),
-            ],
+                const SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (state is Loading) const CircularProgressIndicator(),
+                    if (state is Main)
+                      IconButton(
+                        onPressed: amount == 0
+                            ? null
+                            : () {
+                                cubit.payDebt(widget.groupId,
+                                    Pair(widget.debt.first, amount));
+                              },
+                        icon: const Icon(Icons.check),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         );
       }),

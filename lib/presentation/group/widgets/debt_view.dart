@@ -37,11 +37,13 @@ class DebtView extends StatelessWidget {
         SimpleButton(
           onClick: () {
             showModalBottomSheet(
-                context: context,
-                builder: (context) => PayCustomDebtView(
-                      debt: debt,
-                      groupId: groupCubit.group.id,
-                    ));
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => PayCustomDebtView(
+                debt: debt,
+                groupId: groupCubit.group.id,
+              ),
+            );
           },
           child: Text(
             "Pay",
