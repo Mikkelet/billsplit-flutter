@@ -38,7 +38,11 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
     final group = widget.group;
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 16,
+            left: 16,
+            right: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

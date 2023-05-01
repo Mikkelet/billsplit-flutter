@@ -35,7 +35,6 @@ class DebtView extends StatelessWidget {
         if (isDebt)
           SimpleButton(
             onClick: () {
-              print("qqq $debt");
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
