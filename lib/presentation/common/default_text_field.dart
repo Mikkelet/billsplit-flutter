@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ExpenseTextField extends StatelessWidget {
@@ -6,6 +5,7 @@ class ExpenseTextField extends StatelessWidget {
   final void Function(num) onChange;
   final bool canBeZero;
   final bool autoFocus;
+  final num? maxValue;
 
   ExpenseTextField({
     Key? key,
@@ -13,6 +13,7 @@ class ExpenseTextField extends StatelessWidget {
     required this.onChange,
     this.canBeZero = true,
     this.autoFocus = false,
+    this.maxValue,
   }) : super(key: key) {
     textEditingController.addListener(() {
       onChange(_parseInputToNum());
@@ -37,6 +38,14 @@ class ExpenseTextField extends StatelessWidget {
         prefixIcon: const Icon(Icons.attach_money_outlined),
         counterText: "",
         prefixIconConstraints: const BoxConstraints(),
+        suffix: maxValue != null
+            ? TextButton(
+                onPressed: () {
+                  textEditingController.text = "$maxValue";
+                },
+                child: const Text("max"),
+              )
+            : null,
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       textInputAction: TextInputAction.done,
@@ -80,8 +89,15 @@ class ExpenseTextField extends StatelessWidget {
 
   void _onChange() {
     final text = textEditingController.text;
+    final inputNum = _parseInputToNum();
 
-    if (text.startsWith("0")) {
+    if (maxValue != null && inputNum > (maxValue ?? 0)) {
+      textEditingController.text = "$maxValue";
+      textEditingController.selection =
+          TextSelection.collapsed(offset: textEditingController.text.length);
+    }
+
+    if (text == "0") {
       textEditingController.text = "";
       textEditingController.selection =
           TextSelection.collapsed(offset: textEditingController.text.length);

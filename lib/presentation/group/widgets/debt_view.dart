@@ -25,8 +25,6 @@ class DebtView extends StatelessWidget {
       text =
           "${debt.first.nameState} owes you \$${debt.second.abs().fmt2dec()}";
       color = Colors.green;
-    } else {
-      return const SizedBox();
     }
     final groupCubit = context.read<GroupBloc>();
     return RoundedListItem(
@@ -34,25 +32,27 @@ class DebtView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(child: Text(text, style: TextStyle(color: color))),
-        SimpleButton(
-          onClick: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (context) => PayCustomDebtView(
-                debt: debt,
-                groupId: groupCubit.group.id,
-              ),
-            );
-          },
-          child: Text(
-            "Pay",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
-          ),
-        )
+        if (isDebt)
+          SimpleButton(
+            onClick: () {
+              print("qqq $debt");
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => PayCustomDebtView(
+                  debt: debt,
+                  groupId: groupCubit.group.id,
+                ),
+              );
+            },
+            child: Text(
+              "Pay",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+            ),
+          )
       ],
     ));
   }

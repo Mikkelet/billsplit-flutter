@@ -6,6 +6,6 @@ class Pair<T, V> {
 
   @override
   String toString() {
-    return "Paid(first=$first, second=$second)";
+    return "Pair(first=$first, second=$second)";
   }
 }

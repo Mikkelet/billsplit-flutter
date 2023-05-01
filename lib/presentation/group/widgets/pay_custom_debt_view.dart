@@ -51,8 +51,9 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: 100,
+                  width: 200,
                   child: ExpenseTextField(
+                    maxValue: widget.debt.second,
                     autoFocus: true,
                     textEditingController: controller,
                     onChange: (value) {
