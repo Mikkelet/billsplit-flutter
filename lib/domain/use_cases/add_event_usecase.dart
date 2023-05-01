@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
+import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 
 class AddEventUseCase {
@@ -51,9 +52,13 @@ class AddEventUseCase {
     if (event is GroupExpense) {
       groupExpensesWithEvent = [...groupExpenses, event];
     }
-    final payments = (await _database.paymentsDAO.watch(groupId).first)
-        .toPayments()
-        .toList();
+
+    final paymentsDb = await _database.paymentsDAO.watch(groupId).first;
+    Iterable<Payment> payments = paymentsDb.toPayments();
+    if (event is Payment) {
+      payments = [...payments, event];
+    }
+
     final debt = DebtCalculator(people, groupExpensesWithEvent, payments)
         .calculateEffectiveDebtForGroup();
     return debt;
