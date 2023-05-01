@@ -36,20 +36,21 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
   @override
   Widget build(BuildContext context) {
     final group = widget.group;
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-        top: 16,
-        left: 16,
-        right: 16,
-      ),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          top: 16,
+          left: 16,
+          right: 16,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const CloseButton(),
                 IconButton(
                   onPressed: _isReadyToSubmit() ? widget.onSubmit : null,
                   icon: const Icon(Icons.check),

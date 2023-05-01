@@ -193,7 +193,7 @@ class DebtCalculator {
 extension GroupExpenseExt on GroupExpense {
   Iterable<IndividualExpense> getIndividualWithShared() =>
       individualExpenses.map((e) {
-        final expense = e.expenseState + getSharedExpensesForPerson(e.person);
+        final num expense = e.expenseState + getSharedExpensesForPerson(e.person);
         return IndividualExpense(person: e.person, expense: expense);
       });
 }

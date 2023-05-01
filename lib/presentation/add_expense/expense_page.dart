@@ -126,6 +126,7 @@ class AddExpensePage extends StatelessWidget {
                                                   [...cubit.group.people]);
                                           showModalBottomSheet(
                                             enableDrag: true,
+                                            isScrollControlled: true,
                                             context: context,
                                             builder: (context) =>
                                                 AddSharedExpenseView(
