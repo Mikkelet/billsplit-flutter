@@ -55,7 +55,10 @@ class _SharedExpenseDescriptionViewState
       textInputAction: TextInputAction.next,
       textAlign: widget.alignRight ? TextAlign.end : TextAlign.start,
       autofocus: widget.autoFocus,
+      maxLines: 1,
+      maxLength: 20,
       decoration: InputDecoration(
+        counterText: "",
         prefixIcon: widget.showIcon
             ? const Padding(
                 padding: EdgeInsets.only(right: 8), child: Icon(Icons.edit))

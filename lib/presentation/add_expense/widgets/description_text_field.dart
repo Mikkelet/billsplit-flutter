@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DescriptionTextField extends StatefulWidget {
@@ -24,14 +25,19 @@ class _DescriptionTextFieldState extends State<DescriptionTextField> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-      return TextField(
-        controller: textController,
-        textInputAction: TextInputAction.next,
-        onChanged: (value) {
-          cubit.groupExpense.descriptionState = value;
-        },
-        decoration: InputDecoration(
-            border: InputBorder.none, hintText: "What is ${cubit.groupExpense.payerState.nameState} paying for?"),
-      );
+    return TextField(
+      controller: textController,
+      textInputAction: TextInputAction.next,
+      maxLines: 1,
+      maxLength: 30,
+      onChanged: (value) {
+        cubit.groupExpense.descriptionState = value;
+      },
+      decoration: InputDecoration(
+          counterText: "",
+          border: InputBorder.none,
+          hintText:
+              "What is ${cubit.groupExpense.payerState.nameState} paying for?"),
+    );
   }
 }
