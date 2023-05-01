@@ -12,12 +12,15 @@ class GroupBottomNav extends StatefulWidget {
 }
 
 class _GroupBottomNavState extends State<GroupBottomNav> {
+  int navIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
-      int navIndex = 0;
       if (state is GroupLoaded) {
-        navIndex = state.nav.index;
+        if (state.nav.index != navIndex) {
+          navIndex = state.nav.index;
+        }
       }
       const destinations = [
         NavigationDestination(icon: Icon(Icons.add), label: "Events"),
@@ -35,6 +38,7 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
   }
 
   void _onItemSelected(BuildContext context, int index) {
+    if (index == navIndex) return;
     final cubit = context.read<GroupBloc>();
     cubit.showPage(GroupPageNav.fromIndex(index));
   }
