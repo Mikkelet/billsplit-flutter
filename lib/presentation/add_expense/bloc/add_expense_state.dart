@@ -9,5 +9,4 @@ class QuickAddSharedExpense extends Main {
   final SharedExpense sharedExpense;
 
   QuickAddSharedExpense(this.sharedExpense);
-
 }

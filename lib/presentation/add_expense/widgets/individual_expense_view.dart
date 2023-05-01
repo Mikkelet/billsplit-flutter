@@ -59,6 +59,13 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                       ),
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      cubit.addExpenseForUser(widget.individualExpense.person);
+                    },
+                    color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
+                    icon: const Icon(Icons.bolt_sharp),
+                  ),
                   Expanded(
                     flex: 1,
                     child: Align(
