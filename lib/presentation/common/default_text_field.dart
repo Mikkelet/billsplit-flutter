@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseTextField extends StatelessWidget {
@@ -41,7 +42,9 @@ class ExpenseTextField extends StatelessWidget {
         suffix: maxValue != null
             ? TextButton(
                 onPressed: () {
-                  textEditingController.text = "$maxValue";
+                  textEditingController.text = maxValue!.fmt2dec();
+                  textEditingController.selection = TextSelection.collapsed(
+                      offset: textEditingController.text.length);
                 },
                 child: const Text("max"),
               )
@@ -75,14 +78,14 @@ class ExpenseTextField extends StatelessWidget {
       final input = num.parse(text);
       if (input < 0) {
         inputAsNumber = 0;
-      } else if (input > MAX_INPUT) {
-        inputAsNumber = MAX_INPUT;
+      } else if (input > maxInput) {
+        inputAsNumber = maxInput;
       } else {
         inputAsNumber = input;
       }
     } catch (e) {
+      print("$e: $inputAsNumber");
       inputAsNumber = 0;
-      print(e);
     }
     return inputAsNumber;
   }
@@ -91,8 +94,11 @@ class ExpenseTextField extends StatelessWidget {
     final text = textEditingController.text;
     final inputNum = _parseInputToNum();
 
-    if (maxValue != null && inputNum > (maxValue ?? 0)) {
-      textEditingController.text = "$maxValue";
+    if (maxValue != null &&
+            inputNum > (maxValue ?? 0) &&
+            inputNum.fmt2dec() != maxValue!.fmt2dec() ||
+        text.length > maxValue!.fmt2dec().length) {
+      textEditingController.text = maxValue!.fmt2dec();
       textEditingController.selection =
           TextSelection.collapsed(offset: textEditingController.text.length);
     }
@@ -102,7 +108,13 @@ class ExpenseTextField extends StatelessWidget {
       textEditingController.selection =
           TextSelection.collapsed(offset: textEditingController.text.length);
     }
+
+    if (text.contains(",")) {
+      textEditingController.text = text.replaceAll(",", ".");
+      textEditingController.selection =
+          TextSelection.collapsed(offset: textEditingController.text.length);
+    }
   }
 
-  static const MAX_INPUT = 9999999;
+  static const maxInput = 9999999;
 }

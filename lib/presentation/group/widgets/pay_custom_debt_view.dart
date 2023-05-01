@@ -87,5 +87,3 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
     );
   }
 }
-
-//debtCubit.payDebt(groupCubit.group.id, debt);
