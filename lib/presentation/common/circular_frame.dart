@@ -13,7 +13,7 @@ class CircularFrame extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(2),
         ),
         child: child,

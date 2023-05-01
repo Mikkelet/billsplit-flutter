@@ -16,7 +16,7 @@ class GroupView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
-    final yourDebts = group.debts
+    final yourDebts = group.debtState
             .where((element) => element.userId == cubit.user.uid)
             .firstOrNull
             ?.owes ??
@@ -41,15 +41,19 @@ class GroupView extends StatelessWidget {
                       Flexible(
                         flex: 2,
                         child: Text(group.name,
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context).textTheme.bodyLarge,
                             softWrap: false,
                             overflow: TextOverflow.ellipsis),
                       ),
-                      Flexible(flex: 1,child: _debtView(context, yourDebts))
+                      Flexible(flex: 1, child: _debtView(context, yourDebts))
                     ],
                   ),
                   const SizedBox(height: 8),
-                  ProfilePictureStack(people: group.people, size: 30, limit: 6,)
+                  ProfilePictureStack(
+                    people: group.people,
+                    size: 30,
+                    limit: 6,
+                  )
                 ],
               ),
             ),

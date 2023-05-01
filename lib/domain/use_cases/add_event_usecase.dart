@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/data/remote/api_service.dart';
 import 'package:billsplit_flutter/data/remote/dtos/debts_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
+import 'package:billsplit_flutter/domain/mappers/debts_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/group_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
@@ -38,19 +39,23 @@ class AddEventUseCase {
     }
 
     // update group
-    final groupResponse = await _apiService.getGroup(groupId);
-    await _database.groupsDAO.insertGroup(groupResponse.group.toDb());
+    final groupResponse = await _database.groupsDAO.getGroup(groupId);
+    final group = groupResponse.toGroup();
+    group.debtState = debtForGroup.toDebts();
+    group.latestEventState = eventDto.toEvent();
+    await _database.groupsDAO.insertGroup(group.toDb());
   }
 
   Future<Iterable<Pair<String, num>>> _getDebtWithAddedEvent(
       String groupId, Event event) async {
-    final groupDb = (await _database.groupsDAO.getGroup(groupId)).toGroup();
-    final people = groupDb.allPeople.toList();
-    final groupExpenses = (await _database.groupExpenseDAO.watch(groupId).first)
-        .toGroupExpenses();
-    Iterable<GroupExpense> groupExpensesWithEvent = groupExpenses;
+    final groupDb = await _database.groupsDAO.getGroup(groupId);
+    final group = groupDb.toGroup();
+    final people = group.allPeople.toList();
+    final groupExpenseDb = await _database.groupExpenseDAO.watch(groupId).first;
+    final groupExpense = groupExpenseDb.toGroupExpenses();
+    Iterable<GroupExpense> groupExpensesWithEvent = groupExpense;
     if (event is GroupExpense) {
-      groupExpensesWithEvent = [...groupExpenses, event];
+      groupExpensesWithEvent = [...groupExpense, event];
     }
 
     final paymentsDb = await _database.paymentsDAO.watch(groupId).first;

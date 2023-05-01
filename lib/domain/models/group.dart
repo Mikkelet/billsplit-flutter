@@ -9,41 +9,48 @@ class Group {
   final List<Person> pastMembers;
   final Person createdBy;
   final num timestamp;
-  final Event? latestEvent;
-  final List<Debt> debts;
+  final Event? _latestEvent;
+  final List<Debt> _debts;
 
-  Group({required this.id,
-    required this.name,
-    required this.people,
-    required this.pastMembers,
-    required this.createdBy,
-    required this.timestamp,
-    required this.latestEvent,
-    required this.debts});
+  // modifiable values
+  late String nameState = name;
+  late Event? latestEventState = _latestEvent;
+  late Iterable<Debt> debtState = _debts;
+
+  Group(
+      {required this.id,
+      required this.name,
+      required this.people,
+      required this.pastMembers,
+      required this.createdBy,
+      required this.timestamp,
+      required Event? latestEvent,
+      required Iterable<Debt> debts})
+      : _latestEvent = latestEvent,
+        _debts = debts.toList();
 
   Iterable<Person> get allPeople => [...people, ...pastMembers];
 
-  Group.newGroup(Person createdBy, String name, List<Person> people) : this(
-    id: "",
-    createdBy: createdBy,
-    name: name,
-    people: people,
-    pastMembers: [],
-    timestamp: DateTime
-        .now()
-        .millisecondsSinceEpoch,
-    latestEvent: null,
-    debts: [],
-  );
+  Group.newGroup(Person createdBy, String name, List<Person> people)
+      : this(
+          id: "",
+          createdBy: createdBy,
+          name: name,
+          people: people,
+          pastMembers: [],
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+          latestEvent: null,
+          debts: [],
+        );
 
   Group.mock(num seed)
       : this(
-      id: "G$seed",
-      name: "Group $seed",
-      pastMembers: [],
-      people: [],
-      createdBy: Person.dummy(2),
-      timestamp: 0,
-      latestEvent: null,
-      debts: []);
+            id: "G$seed",
+            name: "Group $seed",
+            pastMembers: [],
+            people: [],
+            createdBy: Person.dummy(2),
+            timestamp: 0,
+            latestEvent: null,
+            debts: []);
 }
