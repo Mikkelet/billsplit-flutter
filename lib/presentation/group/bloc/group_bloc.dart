@@ -12,6 +12,7 @@ import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:collection/collection.dart';
 
 class GroupBloc extends BaseCubit {
   final _getGroupUseCase = GetGroupUseCase();
@@ -23,14 +24,15 @@ class GroupBloc extends BaseCubit {
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
 
-  GroupBloc(this.group)
-      : super.withState(SyncingGroup(GroupPageNav.events));
+  GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
 
-  Stream<List<Event>> getEventsStream() =>
-      _observeEventsUseCase.observe(group.id).map((event) => event.toList());
+  Stream<List<Event>> getEventsStream() => _observeEventsUseCase
+      .observe(group.id)
+      .map((event) => event.toList().sortedBy((e) => e.timestamp).reversed.toList());
 
   Stream<List<SubscriptionService>> getServicesStream() =>
-      _observeServicesUseCase.observe(group.id).map((event) => event.toList());
+      _observeServicesUseCase.observe(group.id).map(
+          (event) => event.toList().sortedBy((element) => element.nameState));
 
   Stream<Iterable<Pair<Person, num>>> getDebtsStream() =>
       _observeDebtsUseCase.observe(group.id);
@@ -65,7 +67,7 @@ class GroupBloc extends BaseCubit {
     showLoading();
     _leaveGroupUseCase.launch(group.id).then((value) {
       emit(GroupLeft());
-    }).catchError((err){
+    }).catchError((err) {
       showError(err);
     });
   }

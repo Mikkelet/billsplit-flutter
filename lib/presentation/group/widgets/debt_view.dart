@@ -28,32 +28,31 @@ class DebtView extends StatelessWidget {
     }
     final groupCubit = context.read<GroupBloc>();
     return RoundedListItem(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(child: Text(text, style: TextStyle(color: color))),
-        const SizedBox(width: 32),
-        if (isDebt)
-          SimpleButton(
-            onClick: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) => PayCustomDebtView(
-                  debt: debt,
-                  groupId: groupCubit.group.id,
-                ),
-              );
-            },
-            child: Text(
-              "Pay",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
-            ),
-          )
-      ],
-    ));
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(child: Text(text, style: TextStyle(color: color))),
+          const SizedBox(width: 32),
+          if (isDebt)
+            SimpleButton(
+              onClick: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => PayCustomDebtView(
+                    debt: debt,
+                    groupId: groupCubit.group.id,
+                  ),
+                );
+              },
+              child: Text(
+                "Pay",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary),
+              ),
+            )
+        ],
+      ),
+    );
   }
 }
