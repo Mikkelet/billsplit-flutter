@@ -50,6 +50,7 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                const SizedBox(height: 32),
                 SizedBox(
                   width: 200,
                   child: ExpenseTextField(
@@ -61,7 +62,7 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
                     },
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

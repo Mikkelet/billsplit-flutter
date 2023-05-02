@@ -65,6 +65,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                               cubit.addExpenseForUser(
                                   widget.individualExpense.person);
                             },
+                            visualDensity: VisualDensity.compact,
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
