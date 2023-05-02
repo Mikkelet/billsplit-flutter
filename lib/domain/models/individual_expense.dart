@@ -20,6 +20,11 @@ class IndividualExpense {
     return "IndividualExpense(person=$person, expense=$expenseState)";
   }
 
+  @override
+  bool operator ==(Object other) {
+    if(other is! IndividualExpense) return false;
+    return person == other.person;
+  }
 
   bool get isChanged {
     return _expense != expenseState;
@@ -28,4 +33,8 @@ class IndividualExpense {
   void resetChanges() {
     expenseState = _expense;
   }
+
+  @override
+  int get hashCode => person.uid.hashCode;
+
 }

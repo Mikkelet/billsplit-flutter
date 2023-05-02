@@ -16,7 +16,8 @@ class ObserveDebtsUseCase {
     return _observeEventsUseCase.observe(groupId).asyncMap((event) async {
       final response = await _database.groupsDAO.getGroup(groupId);
       final group = response.toGroup();
-      final calculator = DebtCalculator.fromCombined(group.people, event);
+      final calculator = DebtCalculator.fromCombined(
+          {...group.people, ...group.pastMembers}, event);
       final user = _authProvider.user!;
       final debts = calculator.calculateEffectiveDebt(user);
       return debts.where((element) => element.second != 0);

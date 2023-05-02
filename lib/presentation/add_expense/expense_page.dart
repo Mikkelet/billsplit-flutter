@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
+import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
@@ -87,12 +88,15 @@ class AddExpensePage extends StatelessWidget {
                       child: Center(
                         child: Column(
                           children: [
+                            // Description
                             RoundedListItem(
                               child: DescriptionTextField(
                                 initialText: groupExpense.descriptionState,
                               ),
                             ),
                             const SizedBox(height: 8),
+
+                            // Shared Expenses
                             RoundedListItem(
                               borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(30),
@@ -115,12 +119,15 @@ class AddExpensePage extends StatelessWidget {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
+                                        // Quick add expense
                                         IconButton(
                                           onPressed: () {
                                             cubit.onQuickAddSharedExpense();
                                           },
                                           icon: const Icon(Icons.bolt),
                                         ),
+
+                                        // Add expense
                                         IconButton(
                                           onPressed: () async {
                                             final sharedExpense =
@@ -153,6 +160,8 @@ class AddExpensePage extends StatelessWidget {
                                 ],
                               ),
                             ),
+
+                            // Tips and tricks
                             ClosableTipView(
                               padding: const EdgeInsets.only(
                                   left: 16, right: 16, top: 8),
@@ -167,13 +176,16 @@ class AddExpensePage extends StatelessWidget {
                               },
                             ),
                             const SizedBox(height: 8),
+
+                            // Individual expenses
                             RoundedListItem(
                               borderRadius: const BorderRadius.vertical(
                                   bottom: Radius.circular(30),
                                   top: Radius.circular(10)),
                               child: Column(
                                 children: [
-                                  ...groupExpense.individualExpenses.mapIndexed(
+                                  ...getParticipatingPeople()
+                                      .mapIndexed(
                                     (i, e) {
                                       final isMiddleElement = i > 0;
                                       if (isMiddleElement) {
@@ -221,6 +233,13 @@ class AddExpensePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Iterable<IndividualExpense> getParticipatingPeople(){
+    final pastMembers = groupExpense.individualExpenses;
+    final currentMembers = group.people.map((e) => IndividualExpense(person: e));
+    print("${<IndividualExpense>{...pastMembers, ...currentMembers}}");
+    return <IndividualExpense>{...pastMembers, ...currentMembers};
   }
 
   static Route getRoute(Person user, Group group, GroupExpense? expense) {
