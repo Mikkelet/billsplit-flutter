@@ -110,7 +110,7 @@ class ExpenseTextField extends StatelessWidget {
           TextSelection.collapsed(offset: text.length);
     }
     if (isInputOverMaxValue()) {
-      text = maxValue!.fmt2dec();
+      text = maxValue!.fmtTextField();
       textEditingController.selection =
           TextSelection.collapsed(offset: text.length);
     }
