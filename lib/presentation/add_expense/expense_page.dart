@@ -85,126 +85,132 @@ class AddExpensePage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 24),
                       child: Center(
-                        child: Column(children: [
-                          RoundedListItem(
-                            child: DescriptionTextField(
-                              initialText: groupExpense.descriptionState,
+                        child: Column(
+                          children: [
+                            RoundedListItem(
+                              child: DescriptionTextField(
+                                initialText: groupExpense.descriptionState,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          RoundedListItem(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(30),
-                              bottom: Radius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                ...groupExpense.sharedExpensesState.map(
-                                  (e) => SharedExpenseView(
-                                      sharedExpense: e,
-                                      autoFocus: builder(() {
-                                        if (state is QuickAddSharedExpense) {
-                                          return state.sharedExpense == e;
-                                        }
-                                        return false;
-                                      })),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          cubit.onQuickAddSharedExpense();
-                                        },
-                                        icon: const Icon(Icons.bolt),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          final sharedExpense =
-                                              SharedExpense.newInstance(
-                                                  [...cubit.group.people]);
-                                          showModalBottomSheet(
-                                            enableDrag: true,
-                                            isScrollControlled: true,
-                                            context: context,
-                                            builder: (context) =>
-                                                AddSharedExpenseView(
-                                              onSubmit: () {
-                                                cubit.groupExpense
-                                                    .sharedExpensesState
-                                                    .add(sharedExpense);
-                                                Navigator.of(context).pop();
-                                                cubit.onExpensesUpdated();
-                                              },
-                                              group: cubit.group,
-                                              sharedExpense: sharedExpense,
-                                            ),
-                                          );
-                                        },
-                                        icon: const Icon(Icons.add),
-                                      ),
-                                    ],
+                            const SizedBox(height: 8),
+                            RoundedListItem(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(30),
+                                bottom: Radius.circular(10),
+                              ),
+                              child: Column(
+                                children: [
+                                  ...groupExpense.sharedExpensesState.map(
+                                    (e) => SharedExpenseView(
+                                        sharedExpense: e,
+                                        autoFocus: builder(() {
+                                          if (state is QuickAddSharedExpense) {
+                                            return state.sharedExpense == e;
+                                          }
+                                          return false;
+                                        })),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ClosableTipView(
-                            padding: const EdgeInsets.only(
-                                left: 16, right: 16, top: 8),
-                            tip:
-                                "Tip: long press a user to quick-add an expense for them",
-                            hasSeen: cubit.sharedPrefs
-                                .hasSeenHoldToAddIndividualExpenseTip,
-                            onClose: () {
-                              cubit.sharedPrefs
-                                  .hasSeenHoldToAddIndividualExpenseTip = true;
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          RoundedListItem(
-                            borderRadius: const BorderRadius.vertical(
-                                bottom: Radius.circular(30),
-                                top: Radius.circular(10)),
-                            child: Column(
-                              children: [
-                                ...groupExpense.individualExpenses.mapIndexed(
-                                  (i, e) {
-                                    final isMiddleElement = i > 0;
-                                    if (isMiddleElement) {
-                                      return Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 16),
-                                          child: IndividualExpenseView(e));
-                                    }
-                                    return IndividualExpenseView(e);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          RoundedListItem(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Total"),
-                                Expanded(
-                                  child: Text(
-                                    "\$${groupExpense.total.fmt2dec()}",
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.end,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            cubit.onQuickAddSharedExpense();
+                                          },
+                                          icon: const Icon(Icons.bolt),
+                                        ),
+                                        IconButton(
+                                          onPressed: () async {
+                                            final sharedExpense =
+                                                SharedExpense.newInstance(
+                                                    [...cubit.group.people]);
+                                            showModalBottomSheet(
+                                              enableDrag: true,
+                                              isScrollControlled: true,
+                                              useSafeArea: true,
+                                              context: context,
+                                              builder: (context) =>
+                                                  AddSharedExpenseView(
+                                                onSubmit: () {
+                                                  cubit.groupExpense
+                                                      .sharedExpensesState
+                                                      .add(sharedExpense);
+                                                  Navigator.of(context).pop();
+                                                  cubit.onExpensesUpdated();
+                                                },
+                                                group: cubit.group,
+                                                sharedExpense: sharedExpense,
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(Icons.add),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 120),
-                        ]),
+                            ClosableTipView(
+                              padding: const EdgeInsets.only(
+                                  left: 16, right: 16, top: 8),
+                              tip:
+                                  "Tip: long press a user to quick-add an expense for them",
+                              hasSeen: cubit.sharedPrefs
+                                  .hasSeenHoldToAddIndividualExpenseTip,
+                              onClose: () {
+                                cubit.sharedPrefs
+                                        .hasSeenHoldToAddIndividualExpenseTip =
+                                    true;
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            RoundedListItem(
+                              borderRadius: const BorderRadius.vertical(
+                                  bottom: Radius.circular(30),
+                                  top: Radius.circular(10)),
+                              child: Column(
+                                children: [
+                                  ...groupExpense.individualExpenses.mapIndexed(
+                                    (i, e) {
+                                      final isMiddleElement = i > 0;
+                                      if (isMiddleElement) {
+                                        return Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 16),
+                                            child: IndividualExpenseView(e));
+                                      }
+                                      return IndividualExpenseView(e);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            RoundedListItem(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Total"),
+                                  Expanded(
+                                    child: Text(
+                                      "\$${groupExpense.total.fmt2dec()}",
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 120),
+                          ],
+                        ),
                       ),
                     );
                   }),

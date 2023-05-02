@@ -80,7 +80,7 @@ class GroupPage extends StatelessWidget {
                       case GroupPageNav.debt:
                         return const DebtsView();
                       case GroupPageNav.settings:
-                        return const GroupSettings();
+                        return GroupSettings();
                       default:
                         return const EventsView();
                     }

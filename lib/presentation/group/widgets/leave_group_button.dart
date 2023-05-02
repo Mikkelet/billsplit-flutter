@@ -29,7 +29,10 @@ class LeaveGroupButton extends StatelessWidget {
           ),
         );
       },
-      child: const Text("Leave group"),
+      child: Text(
+        "Leave group",
+        style: TextStyle(color: Theme.of(context).colorScheme.onError),
+      ),
     );
   }
 }

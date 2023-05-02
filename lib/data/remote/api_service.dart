@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
+import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/service_dto.dart';
 import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_event_request.dart';
@@ -81,6 +82,13 @@ class ApiService {
     final body = AddGroupRequest(group);
     final response = await _client.post("group", body.toJson());
     return AddGroupResponse.fromJson(response).group;
+  }
+
+  Future addPersonToGroup(String groupId, PersonDTO person) async {
+    final body = {
+      "userId": person.id
+    };
+    await _client.post("group/$groupId/user", body);
   }
 
   void onDestroy() {

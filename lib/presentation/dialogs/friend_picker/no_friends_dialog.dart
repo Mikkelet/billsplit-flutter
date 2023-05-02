@@ -1,15 +1,18 @@
 import 'package:billsplit_flutter/presentation/add_group/bloc/add_group_cubit.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
+import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_cubit.dart';
 import 'package:billsplit_flutter/presentation/friends/friends_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NoFriendsDialog extends StatelessWidget {
-  final AddGroupCubit cubit;
 
-  const NoFriendsDialog({Key? key, required this.cubit}) : super(key: key);
+  const NoFriendsDialog({Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<FriendPickerCubit>();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -17,7 +20,10 @@ class NoFriendsDialog extends StatelessWidget {
         children: [
           Text(
             "No friends",
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleLarge,
           ),
           const SizedBox(height: 16),
           Row(
@@ -25,13 +31,19 @@ class NoFriendsDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SimpleButton(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .primaryContainer,
                   onClick: () {
                     Navigator.of(context).pop();
                   },
                   child: const Text("OK")),
               SimpleButton(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .primaryContainer,
                   onClick: () {
                     Navigator.of(context).push(FriendsPage.getRoute());
                   },
@@ -42,9 +54,12 @@ class NoFriendsDialog extends StatelessWidget {
                 }
                 return IconButton(
                     icon: const Icon(Icons.refresh),
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme
+                        .of(context)
+                        .colorScheme
+                        .primary,
                     onPressed: () {
-                      cubit.loadFriends();
+                      cubit.onLoadFriends();
                     });
               })
             ],

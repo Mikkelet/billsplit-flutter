@@ -4,12 +4,14 @@ import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
+import 'package:billsplit_flutter/domain/use_cases/add_person_to_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
@@ -20,15 +22,16 @@ class GroupBloc extends BaseCubit {
   final _observeServicesUseCase = ObserveServicesUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
   final _leaveGroupUseCase = LeaveGroupUseCase();
+  final _addPersonToGroupUseCase = AddPersonToGroupUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
 
   GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
 
-  Stream<List<Event>> getEventsStream() => _observeEventsUseCase
-      .observe(group.id)
-      .map((event) => event.toList().sortedBy((e) => e.timestamp).reversed.toList());
+  Stream<List<Event>> getEventsStream() =>
+      _observeEventsUseCase.observe(group.id).map((event) =>
+          event.toList().sortedBy((e) => e.timestamp).reversed.toList());
 
   Stream<List<SubscriptionService>> getServicesStream() =>
       _observeServicesUseCase.observe(group.id).map(
@@ -69,6 +72,15 @@ class GroupBloc extends BaseCubit {
       emit(GroupLeft());
     }).catchError((err) {
       showError(err);
+    });
+  }
+
+  void addPersonToGroup(Person person) {
+    emit(AddingPersonToGroup());
+    _addPersonToGroupUseCase.launch(group, person).then((value) {
+      emit(Main());
+    }).catchError((onError) {
+      showError(onError);
     });
   }
 }

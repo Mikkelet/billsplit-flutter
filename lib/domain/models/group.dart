@@ -13,7 +13,6 @@ class Group {
   final List<Debt> _debts;
 
   // modifiable values
-  late String nameState = name;
   late Event? latestEventState = _latestEvent;
   late Iterable<Debt> debtState = _debts;
 
