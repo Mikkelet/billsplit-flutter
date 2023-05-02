@@ -12,6 +12,7 @@ import 'package:billsplit_flutter/presentation/add_expense/widgets/shared_expens
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/closable_tips_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
@@ -149,6 +150,18 @@ class AddExpensePage extends StatelessWidget {
                                 ),
                               ],
                             ),
+                          ),
+                          ClosableTipView(
+                            padding: const EdgeInsets.only(
+                                left: 16, right: 16, top: 8),
+                            tip:
+                                "Tip: long press a user to quick-add an expense for them",
+                            hasSeen: cubit.sharedPrefs
+                                .hasSeenHoldToAddIndividualExpenseTip,
+                            onClose: () {
+                              cubit.sharedPrefs
+                                  .hasSeenHoldToAddIndividualExpenseTip = true;
+                            },
                           ),
                           const SizedBox(height: 8),
                           RoundedListItem(
