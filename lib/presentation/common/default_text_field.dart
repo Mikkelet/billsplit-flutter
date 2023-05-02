@@ -42,7 +42,7 @@ class ExpenseTextField extends StatelessWidget {
         suffix: maxValue != null
             ? TextButton(
                 onPressed: () {
-                  textEditingController.text = maxValue!.fmt2dec();
+                  textEditingController.text = maxValue!.fmtTextField();
                   textEditingController.selection = TextSelection.collapsed(
                       offset: textEditingController.text.length);
                 },
@@ -72,7 +72,6 @@ class ExpenseTextField extends StatelessWidget {
   }
 
   num get parseInput {
-    final text = textEditingController.text;
     num inputAsNumber = 0;
     try {
       final input = num.parse(text);
@@ -89,9 +88,6 @@ class ExpenseTextField extends StatelessWidget {
     }
     return inputAsNumber;
   }
-
-  String get text => textEditingController.text;
-  set text(String text) => textEditingController.text = text;
 
   void _onChange() {
     if (text == "0") {
@@ -113,6 +109,9 @@ class ExpenseTextField extends StatelessWidget {
           TextSelection.collapsed(offset: text.length);
     }
   }
+
+  String get text => textEditingController.text;
+  set text(String text) => textEditingController.text = text;
 
   static const maxInput = 9999999.99; // max 7 chars + 2 decimals
 }

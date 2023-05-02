@@ -49,22 +49,33 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                       alignment: Alignment.centerLeft,
                       child: Builder(
                         builder: (context) {
+                          String buttonText = nameShort;
                           if (cubit.groupExpense.payerState.uid ==
                               widget.individualExpense.person.uid) {
-                            return Text("$nameShort is paying", maxLines: 2);
-                          } else {
-                            return Text(nameShort, maxLines: 2);
+                            buttonText = "$nameShort is paying";
                           }
+                          return MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            onPressed: () {
+                              cubit.onPayerSelected(
+                                  widget.individualExpense.person);
+                            },
+                            onLongPress: () {
+                              cubit.addExpenseForUser(
+                                  widget.individualExpense.person);
+                            },
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                buttonText,
+                                maxLines: 2,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      cubit.addExpenseForUser(widget.individualExpense.person);
-                    },
-                    color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100),
-                    icon: const Icon(Icons.bolt_sharp),
                   ),
                   Expanded(
                     flex: 1,
