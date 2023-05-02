@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 class ClosableTipView extends StatefulWidget {
   final String tip;
   final EdgeInsets padding;
+  final bool hasSeen;
+  final Function() onClose;
 
   const ClosableTipView(
-      {Key? key, required this.tip, this.padding = EdgeInsets.zero})
+      {Key? key,
+      required this.tip,
+      this.padding = EdgeInsets.zero,
+      required this.hasSeen,
+      required this.onClose})
       : super(key: key);
 
   @override
@@ -13,11 +19,11 @@ class ClosableTipView extends StatefulWidget {
 }
 
 class _ClosableTipViewState extends State<ClosableTipView> {
-  bool showTip = true;
+  late bool hasSeen = widget.hasSeen;
 
   @override
   Widget build(BuildContext context) {
-    if (showTip == false) return const SizedBox();
+    if (hasSeen) return const SizedBox();
     return Padding(
       padding: widget.padding,
       child: Row(
@@ -34,8 +40,9 @@ class _ClosableTipViewState extends State<ClosableTipView> {
           ),
           IconButton(
             onPressed: () {
+              widget.onClose();
               setState(() {
-                showTip = false;
+                hasSeen = true;
               });
             },
             icon: const Icon(Icons.close_outlined),

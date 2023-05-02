@@ -150,11 +150,18 @@ class AddExpensePage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const ClosableTipView(
-                              padding:
-                                  EdgeInsets.only(left: 16, right: 16, top: 8),
-                              tip:
-                                  "Tip: long press a user to quick-add an expense for them"),
+                          ClosableTipView(
+                            padding: const EdgeInsets.only(
+                                left: 16, right: 16, top: 8),
+                            tip:
+                                "Tip: long press a user to quick-add an expense for them",
+                            hasSeen: cubit.sharedPrefs
+                                .hasSeenHoldToAddIndividualExpenseTip,
+                            onClose: () {
+                              cubit.sharedPrefs
+                                  .hasSeenHoldToAddIndividualExpenseTip = true;
+                            },
+                          ),
                           const SizedBox(height: 8),
                           RoundedListItem(
                             borderRadius: const BorderRadius.vertical(

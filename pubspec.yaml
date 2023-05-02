@@ -28,6 +28,7 @@ dependencies:
   firebase_storage: ^11.1.1
   image_picker: ^0.8.7+4
   cupertino_will_pop_scope: ^1.2.1
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   json_serializable: ^6.6.1
