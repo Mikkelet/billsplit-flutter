@@ -15,7 +15,6 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/closable_tips_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
@@ -45,19 +44,12 @@ class AddExpensePage extends StatelessWidget {
               appBar: AppBar(
                 actions: [
                   IconButton(
-                    onPressed: () {
-                      if (groupExpense.total > 0) {
-                        cubit.addExpense();
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) => const CustomDialog(
-                            title: "Please enter an expense",
-                            text: "Total expenses cannot be \$0",
-                          ),
-                        );
-                      }
-                    },
+                    onPressed:
+                        cubit.groupExpense.isChanged && groupExpense.total > 0
+                            ? () {
+                                cubit.addExpense();
+                              }
+                            : null,
                     icon: const Icon(Icons.check),
                   )
                 ],
@@ -184,8 +176,7 @@ class AddExpensePage extends StatelessWidget {
                                   top: Radius.circular(10)),
                               child: Column(
                                 children: [
-                                  ...getParticipatingPeople()
-                                      .mapIndexed(
+                                  ...getParticipatingPeople().mapIndexed(
                                     (i, e) {
                                       final isMiddleElement = i > 0;
                                       if (isMiddleElement) {
@@ -235,9 +226,10 @@ class AddExpensePage extends StatelessWidget {
     );
   }
 
-  Iterable<IndividualExpense> getParticipatingPeople(){
+  Iterable<IndividualExpense> getParticipatingPeople() {
     final pastMembers = groupExpense.individualExpenses;
-    final currentMembers = group.people.map((e) => IndividualExpense(person: e));
+    final currentMembers =
+        group.people.map((e) => IndividualExpense(person: e));
     print("${<IndividualExpense>{...pastMembers, ...currentMembers}}");
     return <IndividualExpense>{...pastMembers, ...currentMembers};
   }

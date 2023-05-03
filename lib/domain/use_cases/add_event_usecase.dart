@@ -42,7 +42,9 @@ class AddEventUseCase {
     final groupResponse = await _database.groupsDAO.getGroup(groupId);
     final group = groupResponse.toGroup();
     group.debtState = debtForGroup.toDebts();
-    group.latestEventState = eventDto.toEvent();
+    if (eventDto.toEvent() != null) {
+      group.latestEventState = eventDto.toEvent();
+    }
     await _database.groupsDAO.insertGroup(group.toDb());
   }
 

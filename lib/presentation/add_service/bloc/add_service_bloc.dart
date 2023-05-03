@@ -15,7 +15,7 @@ class AddServiceBloc extends BaseCubit {
 
   AddServiceBloc(this.service, this.group) : super();
 
-  void monthlyExpenseUpdated() {
+  void onServiceUpdated() {
     emit(Main());
   }
 

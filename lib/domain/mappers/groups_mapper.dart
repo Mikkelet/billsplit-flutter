@@ -45,8 +45,8 @@ extension GroupExt on Group {
   GroupDb toDb() => toDTO().toDb();
 }
 
-extension GroupDbsExt on List<GroupDb> {
-  Iterable<Group> toGroups() => map((e) => e.toGroup()).toList();
+extension GroupDbsExt on Iterable<GroupDb> {
+  Iterable<Group> toGroups() => map((e) => e.toGroup());
 }
 
 extension GroupDbExt on GroupDb {

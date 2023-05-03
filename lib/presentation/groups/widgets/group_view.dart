@@ -53,7 +53,8 @@ class GroupView extends StatelessWidget {
                     people: group.people,
                     size: 30,
                     limit: 6,
-                  )
+                  ),
+                  Text("${DateTime.fromMillisecondsSinceEpoch(group.latestEventState?.timestamp.toInt() ?? 0)}")
                 ],
               ),
             ),

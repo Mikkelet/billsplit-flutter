@@ -101,15 +101,19 @@ class _AddServicePageState extends State<AddServicePage> {
                     color: Theme.of(context).colorScheme.error,
                   ),
                 IconButton(
-                    onPressed: () {
-                      if (isValid()) {
-                        cubit.submitService();
-                      } else {
-                        showCannotBe0ZeroError = true;
-                        setState(() {});
-                      }
-                    },
-                    icon: const Icon(Icons.check))
+                  onPressed:
+                      service.isChanged && service.monthlyExpenseState > 0
+                          ? () {
+                              if (isValid()) {
+                                cubit.submitService();
+                              } else {
+                                showCannotBe0ZeroError = true;
+                                setState(() {});
+                              }
+                            }
+                          : null,
+                  icon: const Icon(Icons.check),
+                )
               ]);
             }),
             body: WillPopScope(
@@ -142,10 +146,17 @@ class _AddServicePageState extends State<AddServicePage> {
                               controller: _nameTextController,
                               onChanged: (value) {
                                 service.nameState = value;
+                                cubit.onServiceUpdated();
                               },
                               textInputAction: TextInputAction.next,
+                              maxLines: 1,
+                              maxLength: 30,
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               decoration: InputDecoration(
                                   errorText: nameErrorText,
+                                  counterText: "",
                                   border: InputBorder.none,
                                   hintText: "Netflix, rent, etc"),
                             ),
@@ -157,7 +168,7 @@ class _AddServicePageState extends State<AddServicePage> {
                                 canBeZero: !showCannotBe0ZeroError,
                                 onChange: (value) {
                                   service.monthlyExpenseState = value;
-                                  cubit.monthlyExpenseUpdated();
+                                  cubit.onServiceUpdated();
                                 }),
                           ),
                           const SizedBox(height: 8),
@@ -188,19 +199,21 @@ class _AddServicePageState extends State<AddServicePage> {
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
                                     onPressed: () async {
-                                      service.participantsState = await showDialog(
+                                      service.participantsState =
+                                          await showDialog(
                                         context: context,
                                         builder: (context) =>
                                             DialogWithCloseButton(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(16),
-                                                child: ParticipantsPickerDialog(
-                                          participants:
-                                                  [...service.participantsState],
-                                          people: cubit.group.people,
-                                        ),
-                                              ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: ParticipantsPickerDialog(
+                                              participants: [
+                                                ...service.participantsState
+                                              ],
+                                              people: cubit.group.people,
                                             ),
+                                          ),
+                                        ),
                                       );
                                       if (!service.participantsState
                                           .contains(service.payerState)) {
@@ -218,7 +231,13 @@ class _AddServicePageState extends State<AddServicePage> {
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          const SizedBox(height: 8),
+                          Builder(builder: (context) {
+                            final nextMonth = DateTime.now().month; // index starts at 1
+                            final monthString = monthNames[nextMonth]; // index starts at 0, so we get the next month by just getting the index
+                            return Text("Next expense will be submittted on 1st of $monthString");
+                          })
                         ],
                       ),
                     );

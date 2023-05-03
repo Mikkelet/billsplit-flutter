@@ -1,6 +1,5 @@
 import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DescriptionTextField extends StatefulWidget {
@@ -32,6 +31,7 @@ class _DescriptionTextFieldState extends State<DescriptionTextField> {
       maxLength: 30,
       onChanged: (value) {
         cubit.groupExpense.descriptionState = value;
+        cubit.onExpensesUpdated();
       },
       decoration: InputDecoration(
           counterText: "",
