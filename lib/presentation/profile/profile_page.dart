@@ -14,7 +14,6 @@ import 'package:image_picker/image_picker.dart';
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<ProfileCubit>(
@@ -102,7 +101,6 @@ class ProfilePage extends StatelessWidget {
   }
 
   Future _updateProfilePicture(ProfileCubit cubit) async {
-    print("qqq click");
     final picker = ImagePicker();
     final file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
@@ -111,5 +109,5 @@ class ProfilePage extends StatelessWidget {
   }
 
   static Route<ProfilePage> getRoute() =>
-      MaterialPageRoute(builder: (context) => ProfilePage());
+      MaterialPageRoute(builder: (context) => const ProfilePage());
 }
