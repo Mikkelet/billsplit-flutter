@@ -13,6 +13,7 @@ import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
@@ -28,7 +29,7 @@ class GroupBloc extends BaseCubit {
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
-  EditGroupNameState editGroupNameState = EditGroupNameState.display;
+  UpdateTextFieldState editGroupNameState = UpdateTextFieldState.display;
 
   GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
 
@@ -89,23 +90,23 @@ class GroupBloc extends BaseCubit {
 
   editGroupName(bool isEditing) {
     if (isEditing) {
-      _updateEditGroupNameState(EditGroupNameState.isEditing);
+      _updateEditGroupNameState(UpdateTextFieldState.isEditing);
     } else {
-      _updateEditGroupNameState(EditGroupNameState.display);
+      _updateEditGroupNameState(UpdateTextFieldState.display);
     }
   }
 
-  _updateEditGroupNameState(EditGroupNameState state) {
+  _updateEditGroupNameState(UpdateTextFieldState state) {
     editGroupNameState = state;
     emit(Main());
   }
 
   updateGroupName() {
-    _updateEditGroupNameState(EditGroupNameState.isUpdating);
+    _updateEditGroupNameState(UpdateTextFieldState.isUpdating);
     _addGroupUseCase.launch(group).then((value) {
-      _updateEditGroupNameState(EditGroupNameState.display);
+      _updateEditGroupNameState(UpdateTextFieldState.display);
     }).catchError((error) {
-      _updateEditGroupNameState(EditGroupNameState.display);
+      _updateEditGroupNameState(UpdateTextFieldState.display);
     });
   }
 }

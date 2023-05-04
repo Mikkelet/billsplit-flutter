@@ -22,24 +22,20 @@ class GroupSettings extends StatelessWidget {
           const SizedBox(height: 32),
           RoundedListItem(
             child: UpdatableTextField(
-              initState: cubit.group.nameState,
-              isEditing:
-                  cubit.editGroupNameState == EditGroupNameState.isEditing,
-              isUpdating:
-                  cubit.editGroupNameState == EditGroupNameState.isUpdating,
-              onEditPressed: () {
-                cubit.editGroupName(true);
-              },
-              onCancelPressed: () {
-                cubit.editGroupName(false);
-              },
-              onUpdateClicked: () {
-                cubit.updateGroupName();
-              },
-              onChange: (val){
-                cubit.group.nameState = val;
-              }
-            ),
+                initState: cubit.group.nameState,
+                state: cubit.editGroupNameState,
+                onEditPressed: () {
+                  cubit.editGroupName(true);
+                },
+                onCancelPressed: () {
+                  cubit.editGroupName(false);
+                },
+                onUpdateClicked: () {
+                  cubit.updateGroupName();
+                },
+                onChange: (val) {
+                  cubit.group.nameState = val;
+                }),
           ),
           const SizedBox(height: 16),
           RoundedListItem(

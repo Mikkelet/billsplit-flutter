@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
+enum UpdateTextFieldState { isUpdating, isEditing, display }
+
 class UpdatableTextField extends StatefulWidget {
   final String initState;
-  final bool isUpdating;
-  final bool isEditing;
+  final UpdateTextFieldState state;
   final Function() onUpdateClicked;
   final Function() onEditPressed;
   final Function() onCancelPressed;
   final Function(String) onChange;
+  final int charLimit;
 
   const UpdatableTextField(
       {Key? key,
       required this.initState,
       required this.onUpdateClicked,
-      required this.isUpdating,
-      required this.isEditing,
       required this.onEditPressed,
       required this.onCancelPressed,
-      required this.onChange})
+      required this.onChange,
+      this.charLimit = 40,
+      required this.state})
       : super(key: key);
 
   @override
@@ -36,9 +38,11 @@ class _UpdatableTextField extends State<UpdatableTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final showDisplay = widget.state == UpdateTextFieldState.display;
+    final isLoading = widget.state == UpdateTextFieldState.isUpdating;
     return Builder(
       builder: (context) {
-        if (!widget.isEditing && !widget.isUpdating) {
+        if (showDisplay) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -63,9 +67,11 @@ class _UpdatableTextField extends State<UpdatableTextField> {
               child: TextField(
                 autofocus: true,
                 decoration: const InputDecoration(
-                    border: InputBorder.none, counterText: ""),
+                  border: InputBorder.none,
+                  counterText: "",
+                ),
                 maxLines: 1,
-                maxLength: 20,
+                maxLength: widget.charLimit,
                 controller: controller,
                 onChanged: (val) {
                   currentState = val;
@@ -73,12 +79,16 @@ class _UpdatableTextField extends State<UpdatableTextField> {
                 },
               ),
             ),
-            if (widget.isUpdating)
+            if (isLoading)
               const CircularProgressIndicator()
             else ...[
               IconButton(
                 onPressed: () {
-                  widget.onUpdateClicked();
+                  if (currentState != widget.initState) {
+                    widget.onUpdateClicked();
+                  } else {
+                    widget.onCancelPressed();
+                  }
                 },
                 icon: const Icon(Icons.check),
                 color: Colors.green,
