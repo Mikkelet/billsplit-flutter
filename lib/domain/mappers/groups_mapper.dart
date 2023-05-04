@@ -16,31 +16,29 @@ extension GroupDtosExt on Iterable<GroupDTO> {
 }
 
 extension GroupDtoExt on GroupDTO {
-  Group toGroup() =>
-      Group(
-          id: id,
-          name: name,
-          people: people.toPeople(),
-          createdBy: createdBy.toPerson(),
-          pastMembers: pastMembers?.toPeople() ?? [],
-          timestamp: timeStamp,
-          latestEvent: latestEvent.toEvent(),
-          debts: debts.toDebts());
+  Group toGroup() => Group(
+      id: id,
+      name: name,
+      people: people.toPeople(),
+      createdBy: createdBy.toPerson(),
+      pastMembers: pastMembers?.toPeople() ?? [],
+      timestamp: timeStamp,
+      latestEvent: latestEvent.toEvent(),
+      debts: debts.toDebts());
 
   GroupDb toDb() => GroupDb(groupId: id, group: json.encode(this));
 }
 
 extension GroupExt on Group {
-  GroupDTO toDTO() =>
-      GroupDTO(
-          id: id,
-          name: name,
-          people: people.toDTO(),
-          pastMembers: pastMembers.toDTO(),
-          createdBy: createdBy.toDTO(),
-          timeStamp: timestamp,
-          debts: debtState.map((e) => e.toDTO()).toList(),
-          latestEvent: latestEventState?.toEventDTO());
+  GroupDTO toDTO() => GroupDTO(
+      id: id,
+      name: nameState,
+      people: people.toDTO(),
+      pastMembers: pastMembers.toDTO(),
+      createdBy: createdBy.toDTO(),
+      timeStamp: timestamp,
+      debts: debtState.map((e) => e.toDTO()).toList(),
+      latestEvent: latestEventState?.toEventDTO());
 
   GroupDb toDb() => toDTO().toDb();
 }

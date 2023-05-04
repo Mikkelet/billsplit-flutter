@@ -17,7 +17,7 @@ class LeaveGroupButton extends StatelessWidget {
         await showDialog(
           context: context,
           builder: (context) => CustomDialog(
-            text: "Are you sure you want to leave ${cubit.group.name}?",
+            text: "Are you sure you want to leave ${cubit.group.nameState}?",
             onPrimaryClick: () {
               Navigator.of(context).pop();
             },

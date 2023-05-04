@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/group/bloc/group_state.dart';
@@ -9,31 +10,35 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class GroupSettings extends StatefulWidget {
+class GroupSettings extends StatelessWidget {
   const GroupSettings({Key? key}) : super(key: key);
-
-  @override
-  State<GroupSettings> createState() => _GroupSettingsState();
-}
-
-class _GroupSettingsState extends State<GroupSettings> {
-  final groupNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
-    groupNameController.text = cubit.group.name;
     return SingleChildScrollView(
       child: Column(
         children: [
           const SizedBox(height: 32),
           RoundedListItem(
-            child: TextField(
-              maxLines: 1,
-              maxLength: 40,
-              controller: groupNameController,
-              decoration: const InputDecoration(
-                  counterText: "", border: InputBorder.none),
+            child: UpdatableTextField(
+              initState: cubit.group.nameState,
+              isEditing:
+                  cubit.editGroupNameState == EditGroupNameState.isEditing,
+              isUpdating:
+                  cubit.editGroupNameState == EditGroupNameState.isUpdating,
+              onEditPressed: () {
+                cubit.editGroupName(true);
+              },
+              onCancelPressed: () {
+                cubit.editGroupName(false);
+              },
+              onUpdateClicked: () {
+                cubit.updateGroupName();
+              },
+              onChange: (val){
+                cubit.group.nameState = val;
+              }
             ),
           ),
           const SizedBox(height: 16),
@@ -79,11 +84,5 @@ class _GroupSettingsState extends State<GroupSettings> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    groupNameController.dispose();
-    super.dispose();
   }
 }

@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
+import 'package:billsplit_flutter/domain/use_cases/add_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_person_to_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
@@ -23,9 +24,11 @@ class GroupBloc extends BaseCubit {
   final _observeDebtsUseCase = ObserveDebtsUseCase();
   final _leaveGroupUseCase = LeaveGroupUseCase();
   final _addPersonToGroupUseCase = AddPersonToGroupUseCase();
+  final _addGroupUseCase = AddGroupUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
+  EditGroupNameState editGroupNameState = EditGroupNameState.display;
 
   GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
 
@@ -81,6 +84,28 @@ class GroupBloc extends BaseCubit {
       emit(Main());
     }).catchError((onError) {
       showError(onError);
+    });
+  }
+
+  editGroupName(bool isEditing) {
+    if (isEditing) {
+      _updateEditGroupNameState(EditGroupNameState.isEditing);
+    } else {
+      _updateEditGroupNameState(EditGroupNameState.display);
+    }
+  }
+
+  _updateEditGroupNameState(EditGroupNameState state) {
+    editGroupNameState = state;
+    emit(Main());
+  }
+
+  updateGroupName() {
+    _updateEditGroupNameState(EditGroupNameState.isUpdating);
+    _addGroupUseCase.launch(group).then((value) {
+      _updateEditGroupNameState(EditGroupNameState.display);
+    }).catchError((error) {
+      _updateEditGroupNameState(EditGroupNameState.display);
     });
   }
 }

@@ -56,7 +56,7 @@ class GroupPage extends StatelessWidget {
             ),
             appBar: AppBar(
                 elevation: 0,
-                title: Text(group.name),
+                title: Text(group.nameState),
                 actions: [
                   IconButton(
                       onPressed: () {

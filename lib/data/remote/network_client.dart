@@ -11,7 +11,7 @@ import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
-  static bool debug = false;
+  static bool debug = true;
   static String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
       : "http://localhost:5000/billsplittapp/us-central1/v2/";

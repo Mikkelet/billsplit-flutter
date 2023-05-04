@@ -40,7 +40,7 @@ class GroupView extends StatelessWidget {
                     children: [
                       Flexible(
                         flex: 2,
-                        child: Text(group.name,
+                        child: Text(group.nameState,
                             style: Theme.of(context).textTheme.bodyLarge,
                             softWrap: false,
                             overflow: TextOverflow.ellipsis),

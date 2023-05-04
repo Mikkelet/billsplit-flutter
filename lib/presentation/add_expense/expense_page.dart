@@ -98,6 +98,7 @@ class AddExpensePage extends StatelessWidget {
                                 children: [
                                   ...groupExpense.sharedExpensesState.map(
                                     (e) => SharedExpenseView(
+                                        key: Key("${e.hashCode}"),
                                         sharedExpense: e,
                                         autoFocus: builder(() {
                                           if (state is QuickAddSharedExpense) {

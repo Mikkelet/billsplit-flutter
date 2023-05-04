@@ -62,9 +62,12 @@ class _DisplayNameTextFieldState extends State<DisplayNameTextField> {
                   Flexible(
                     child: TextField(
                       autofocus: true,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        counterText: ""
+                      ),
                       maxLines: 1,
+                      maxLength: 20,
                       controller: _nameTextController
                         ..text = cubit.user.nameState,
                       onChanged: (val) {

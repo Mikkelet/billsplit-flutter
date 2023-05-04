@@ -4,7 +4,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 
 class Group {
   final String id;
-  final String name;
+  final String _name;
   final List<Person> people;
   final List<Person> pastMembers;
   final Person createdBy;
@@ -13,12 +13,13 @@ class Group {
   final List<Debt> _debts;
 
   // modifiable values
+  late String nameState = _name;
   late Event? latestEventState = _latestEvent;
   late Iterable<Debt> debtState = _debts;
 
   Group(
       {required this.id,
-      required this.name,
+      required String name,
       required this.people,
       required this.pastMembers,
       required this.createdBy,
@@ -26,6 +27,7 @@ class Group {
       required Event? latestEvent,
       required Iterable<Debt> debts})
       : _latestEvent = latestEvent,
+        _name = name,
         _debts = debts.toList();
 
   Iterable<Person> get allPeople => [...people, ...pastMembers];
