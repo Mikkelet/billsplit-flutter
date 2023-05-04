@@ -7,14 +7,14 @@ PODS:
   - Firebase/Storage (10.7.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.7.0)
-  - firebase_auth (4.4.2):
+  - firebase_auth (4.5.0):
     - Firebase/Auth (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.10.0):
+  - firebase_core (2.11.0):
     - Firebase/CoreOnly (= 10.7.0)
     - Flutter
-  - firebase_storage (11.1.1):
+  - firebase_storage (11.1.2):
     - Firebase/Storage (= 10.7.0)
     - firebase_core
     - Flutter
@@ -86,6 +86,8 @@ PODS:
     - sqlite3/fts5
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
+  - vibration (1.7.5):
+    - Flutter
 
 DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -97,6 +99,7 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
+  - vibration (from `.symlinks/plugins/vibration/ios`)
 
 SPEC REPOS:
   trunk:
@@ -133,12 +136,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   sqlite3_flutter_libs:
     :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
+  vibration:
+    :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
-  firebase_auth: 98778cde4127b34d2d006f8bd049d3a8131f37bd
-  firebase_core: 18d44f087248303a4a8f05d0099a000c46e3c77a
-  firebase_storage: caf39437ad5db21ea75fd3dca77a21cd9178d158
+  firebase_auth: 1eb69de8f57040c5c78bb3267412e9cb395fd08c
+  firebase_core: dee76ded6c693fdb38b8ea39aef7129e32e587a3
+  firebase_storage: f6fb3e54e886182b5ab5cf514da1d9ceb196fa2f
   FirebaseAppCheckInterop: e69dde5cd51b88ee1b4339d6766b691272256f9b
   FirebaseAuth: dd64c01631df724b09f33e584625775c52f7d71f
   FirebaseAuthInterop: e53c08e60a02de17d1ab77c5032db8ae22d3a799
@@ -157,6 +162,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   sqlite3: d31b2b69d59bd1b4ab30e5c92eb18fd8e82fa392
   sqlite3_flutter_libs: 78f93cb854d4680595bc2c63c57209a104b2efb1
+  vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
 PODFILE CHECKSUM: 6a98da1b20aa594743d4d02f8342ee64bdef67fc
 
