@@ -180,6 +180,12 @@ class _AddServicePageState extends State<AddServicePage> {
                             ),
                           ),
                           const SizedBox(height: 8),
+                          Builder(builder: (context) {
+                            final nextMonth = DateTime.now().month; // index starts at 1
+                            final monthString = monthNames[nextMonth]; // index starts at 0, so we get the next month by just getting the index
+                            return Text("Next expense will be submittted on 1st of $monthString");
+                          }),
+                          const SizedBox(height: 8),
                           RoundedListItem(
                             child: Column(
                               children: [
@@ -233,11 +239,6 @@ class _AddServicePageState extends State<AddServicePage> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Builder(builder: (context) {
-                            final nextMonth = DateTime.now().month; // index starts at 1
-                            final monthString = monthNames[nextMonth]; // index starts at 0, so we get the next month by just getting the index
-                            return Text("Next expense will be submittted on 1st of $monthString");
-                          })
                         ],
                       ),
                     );
