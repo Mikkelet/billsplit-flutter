@@ -11,6 +11,7 @@ class DisplayNameTextField extends StatelessWidget {
     return BaseBlocBuilder<ProfileCubit>(
       builder: (cubit, state) => UpdatableTextField(
         initState: cubit.user.nameState,
+        charLimit: 20,
         state: cubit.updateDisplayNameState,
         onUpdateClicked: () {
           cubit.updateDisplayName();
