@@ -46,9 +46,13 @@ class _UpdatableTextField extends State<UpdatableTextField> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                currentState,
-                style: Theme.of(context).textTheme.bodyLarge,
+              Flexible(
+                child: Text(
+                  currentState,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
               IconButton(
                 onPressed: () {
