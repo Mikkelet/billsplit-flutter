@@ -13,9 +13,6 @@ class GetGroupUseCase {
 
   Future launch(String groupId) async {
     final response = await _apiService.getGroup(groupId);
-    print(response.group);
-    print(response.events);
-    print(response.services);
     await _database.groupsDAO.insertGroup(response.group.toDb());
 
     await _database.servicesDao.clearForGroup(groupId);
