@@ -12,6 +12,7 @@ import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart'
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/leave_group_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/update_user_request.dart';
 
 import 'dtos/debts_dto.dart';
 
@@ -44,7 +45,8 @@ class ApiService {
 
   Future<ServiceDTO> addService(String groupId, ServiceDTO service) async {
     final data = AddServiceRequest(service);
-    final response = await _client.post("group/$groupId/service", data.toJson());
+    final response =
+        await _client.post("group/$groupId/service", data.toJson());
     return AddServiceResponse.fromJson(response).service;
   }
 
@@ -56,7 +58,7 @@ class ApiService {
   Future deleteService(String groupId, String serviceId) async {
     await _client.delete("group/$groupId/service/$serviceId");
   }
-  
+
   Future<GroupDTO> leaveGroup(String groupId) async {
     final response = await _client.get("leaveGroup/$groupId");
     return LeaveGroupRequest.fromJson(response).group;
@@ -85,10 +87,13 @@ class ApiService {
   }
 
   Future addPersonToGroup(String groupId, PersonDTO person) async {
-    final body = {
-      "userId": person.id
-    };
+    final body = {"userId": person.id};
     await _client.post("group/$groupId/user", body);
+  }
+
+  Future updateFCMToken(String? fcmToken) async {
+    final updateData = UpdateUserRequest.updateFCMToken(fcmToken);
+    await _client.put("user", updateData);
   }
 
   void onDestroy() {

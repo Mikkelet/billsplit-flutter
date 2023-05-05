@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
-void setup() {
+void setupGetIt() {
   // Data
   getIt.registerSingleton<FirebaseProvider>(FirebaseProvider());
   getIt.registerSingleton<SplitsbyDatabase>(SplitsbyDatabase());

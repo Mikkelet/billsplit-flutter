@@ -15,5 +15,6 @@ class InitializeAuthUseCase {
     await _storageProvider.initialize(_firebase.firebaseApp);
     await _authProvider.init(_firebase.firebaseApp);
     await _sharedPrefs.init();
+    print("Splitsby initialised");
   }
 }

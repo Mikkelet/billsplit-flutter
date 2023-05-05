@@ -11,13 +11,14 @@ import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
-  static bool debug = false;
+  static bool debug = true;
   static String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
       : "http://localhost:5000/billsplittapp/us-central1/v2/";
+  static String devUrl = "http://192.168.8.227:5000/billsplittapp/us-central1/v2/";
   static String releaseBaseUrl =
       "https://us-central1-billsplittapp.cloudfunctions.net/v2/";
-  static String baseUrl = debug ? debugBaseUrl : releaseBaseUrl;
+  static String baseUrl = debug ? devUrl : releaseBaseUrl;
 
   final _client = RetryClient(http.Client());
   final _authProvider = getIt<AuthProvider>();
@@ -27,11 +28,15 @@ class NetworkClient {
   }
 
   Future<Json> get(String path, {bool refreshToken = false}) async {
+    print("qqq baseUrl=$baseUrl$path");
     final url = Uri.parse("$baseUrl$path");
     final token = refreshToken
         ? await _authProvider.getToken(true)
         : await _authProvider.getToken(false);
-    final response = await _client.get(url, headers: {"Authorization": token});
+    final headers = {
+      HttpHeaders.authorizationHeader: token,
+    };
+    final response = await _client.get(url, headers: headers);
     print("Request: ${response.request}");
     print("Request: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');
@@ -88,9 +93,11 @@ class NetworkClient {
 
     final response =
         await _client.put(url, body: json.encode(body), headers: headers);
-    print("Request body: ${response.body}");
+    print("Request: ${response.request}");
     print("Response headers: ${response.request?.headers}");
     print('Response status: ${response.statusCode}');
+    print('Response body:${response.body}');
+
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }

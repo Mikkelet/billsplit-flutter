@@ -8,17 +8,44 @@ class SharedPrefs {
   }
 
   // hasSeenHoldToAddIndividualExpenseTip
-  bool get hasSeenHoldToAddIndividualExpenseTip {
-    return sharedPrefs.getBool(hasSeenHoldToAddIndividualExpenseTipKey) ??
-        false;
+  bool get hasSeenHoldToAddIndividualExpenseTip =>
+      sharedPrefs.getBool(hasSeenHoldToAddIndividualExpenseTipKey) ?? false;
+
+  set hasSeenHoldToAddIndividualExpenseTip(bool value) =>
+      sharedPrefs.setBool(hasSeenHoldToAddIndividualExpenseTipKey, value);
+
+  // hasSeenPushNotificationPermissionRationale
+  bool get hasSeenPushNotificationPermissionRationale =>
+      sharedPrefs.getBool(hasSeenPushNotificationPermissionRationaleKey) ??
+      false;
+
+  set hasSeenPushNotificationPermissionRationale(bool value) =>
+      sharedPrefs.setBool(hasSeenPushNotificationPermissionRationaleKey, value);
+
+  // groupsSubscriptions
+  List<String> get groupSubscriptions =>
+      sharedPrefs.getStringList(groupSubscriptionsKey) ?? [];
+
+  set groupSubscriptions(List<String> groupIds) =>
+      sharedPrefs.setStringList(groupSubscriptionsKey, groupIds);
+
+  void subscribeToGroup(String groupId) {
+    groupSubscriptions = [...groupSubscriptions, groupId];
   }
 
-  set hasSeenHoldToAddIndividualExpenseTip(bool value) {
-    sharedPrefs.setBool(hasSeenHoldToAddIndividualExpenseTipKey, value);
-  }
+  // groupsUnsubscriptions
+  List<String> get groupsUnsubscriptions =>
+      sharedPrefs.getStringList(groupUnsubscriptionsKey) ?? [];
 
-  //
+  void unsubscribeFromGroup(String groupId) {
+    sharedPrefs.setStringList(
+        groupUnsubscriptionsKey, [...groupsUnsubscriptions, groupId]);
+  }
 
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
+  static const hasSeenPushNotificationPermissionRationaleKey =
+      "hasSeenPushNotificationPermissionRationale";
+  static const groupSubscriptionsKey = "groupSubscriptionsKey";
+  static const groupUnsubscriptionsKey = "groupUnsubscriptionsKey";
 }

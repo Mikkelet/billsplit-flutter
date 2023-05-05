@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BaseBlocWidget<T extends BaseCubit> extends BlocProvider<T> {
   final T Function(BuildContext) create;
-  final Function(UiState)? listener;
+  final Function(BuildContext, T, UiState)? listener;
 
   const BaseBlocWidget(
       {super.key, required this.create, this.listener, required super.child})
@@ -23,7 +23,7 @@ class BaseBlocWidget<T extends BaseCubit> extends BlocProvider<T> {
                   context: context,
                   builder: (context) => ErrorDialog(state.error));
             } else {
-              listener?.call(state);
+              listener?.call(context, context.read<T>(), state);
             }
           },
           child: child),

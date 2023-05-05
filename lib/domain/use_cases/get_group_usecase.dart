@@ -11,7 +11,7 @@ class GetGroupUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
 
-  Future launch(String groupId) async {
+  Future<void> launch(String groupId) async {
     final response = await _apiService.getGroup(groupId);
     await _database.groupsDAO.insertGroup(response.group.toDb());
 

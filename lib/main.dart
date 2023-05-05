@@ -1,17 +1,23 @@
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
-import 'package:billsplit_flutter/presentation/groups/groups_page.dart';
-import 'package:billsplit_flutter/presentation/landing/landing_page.dart';
-import 'package:billsplit_flutter/presentation/main_nav_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
+import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
+import 'package:billsplit_flutter/presentation/main_cubit.dart';
+import 'package:billsplit_flutter/presentation/main_state.dart';
+import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/common/base_bloc_widget.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setup();
-  runApp(const MyApp());
+  setupGetIt();
+  // Set the background messaging handler early on, as a named top-level function
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  runApp(const BillSplitApp());
 }
 
 enum NavRoute {
@@ -20,8 +26,8 @@ enum NavRoute {
   loading,
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BillSplitApp extends StatelessWidget {
+  const BillSplitApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +40,21 @@ class MyApp extends StatelessWidget {
       ),
       home: BaseBlocWidget(
         create: (context) => MainCubit()..initialize(),
+        listener: (context, cubit, state) async {
+          if (state is GroupOpenedFromNotification) {
+            Navigator.of(context).push(GroupPage.getRoute(state.group));
+          }
+          if (state is ShowNotificationPermission) {
+            final settings = await FirebaseMessaging.instance.requestPermission(
+              announcement: true,
+              criticalAlert: true,
+            );
+            if (settings.authorizationStatus ==
+                AuthorizationStatus.authorized) {
+              cubit.onNotificationPermissionAccepted();
+            }
+          }
+        },
         child: BaseBlocBuilder<MainCubit>(
           builder: (cubit, state) {
             if (state is Loading) {
