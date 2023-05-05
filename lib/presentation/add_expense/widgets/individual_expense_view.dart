@@ -23,7 +23,7 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     final nameShort = widget.individualExpense.person
-        .nameState; //getShortName(widget.individualExpense.person.nameState);
+        .nameState;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,26 +111,6 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
         ),
       ],
     );
-  }
-
-  String getShortName(String name) {
-    final nameSplit = name.split(" ");
-    final firstName = nameSplit[0];
-    String nameCandidate;
-    if (nameSplit.length > 1) {
-      final lastName = nameSplit[1];
-      final initial = lastName[0];
-      if (firstName.length > 7) {
-        final firstNameShort = firstName.substring(0, 6);
-        nameCandidate = "$firstNameShort $initial.";
-      } else {
-        nameCandidate = "$firstName $initial.";
-      }
-    } else {
-      nameCandidate = firstName;
-    }
-    if (nameCandidate.length > 10) return getShortName(nameCandidate);
-    return nameCandidate;
   }
 
   num getTotalForUser(AddExpenseBloc cubit) {
