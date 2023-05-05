@@ -3,8 +3,8 @@ import 'package:billsplit_flutter/presentation/add_expense/bloc/add_expense_bloc
 import 'package:billsplit_flutter/presentation/common/payer_view.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vibration/vibration.dart';
 
 class IndividualExpenseView extends StatefulWidget {
   final IndividualExpense individualExpense;
@@ -63,11 +63,8 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                                   widget.individualExpense.person);
                             },
                             onLongPress: () {
-                              Vibration.hasVibrator().then((value) {
-                                if(value ?? false) {
-                                  Vibration.vibrate(duration: 50, amplitude: 128);
-                                }
-                              });
+                              HapticFeedback.heavyImpact();
+
                               cubit.addExpenseForUser(
                                   widget.individualExpense.person);
                             },
