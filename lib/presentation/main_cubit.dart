@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/domain/use_cases/initialize_auth_usecase.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'base/bloc/base_state.dart';
 
@@ -23,21 +24,27 @@ class MainCubit extends BaseCubit {
   MainCubit() : super.withState(Loading());
 
   Stream<String?> observeAuthState() {
-    return _observeAuthStateUseCase.observe();
+    return _observeAuthStateUseCase.observe().doOnData((auth) {
+      if (auth != null) {
+        initializePushNotification();
+      }
+    });
   }
 
   void initialize() {
     showLoading();
     _initialiseAuth();
+    _initialiseOnMessageOpened();
   }
 
-  void _initializePushNotification() {
+  void initializePushNotification() {
     _getFCMTokenPermission.launch().then((permissionState) {
-      if (permissionState == AuthorizationStatus.notDetermined) {
-        emit(ShowNotificationPermission());
-      } else if (permissionState == AuthorizationStatus.authorized) {
-        _initialiseOnMessageOpened();
-      }
+      final hasSeenRationale =
+          sharedPrefs.hasSeenPushNotificationPermissionRationale;
+      final showRationale = !hasSeenRationale &&
+          (permissionState == AuthorizationStatus.notDetermined ||
+              permissionState == AuthorizationStatus.denied);
+      if (showRationale) emit(ShowNotificationPermissionRationale());
     });
   }
 
@@ -64,19 +71,10 @@ class MainCubit extends BaseCubit {
 
   void _initialiseAuth() {
     _initializeAuthUseCase.initialize().then((value) {
-      showGroups();
-      _initializePushNotification();
+      emit(Main());
     }).catchError((err) {
       showError(err);
     });
-  }
-
-  void showGroups() async {
-    emit(Main());
-  }
-
-  void onNotificationPermissionAccepted() {
-    _initializePushNotification();
   }
 
   @override

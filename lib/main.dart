@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
+import 'package:billsplit_flutter/presentation/features/permissions/notifications_rationale.dart';
 import 'package:billsplit_flutter/presentation/main_cubit.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
@@ -44,15 +45,8 @@ class BillSplitApp extends StatelessWidget {
           if (state is GroupOpenedFromNotification) {
             Navigator.of(context).push(GroupPage.getRoute(state.group));
           }
-          if (state is ShowNotificationPermission) {
-            final settings = await FirebaseMessaging.instance.requestPermission(
-              announcement: true,
-              criticalAlert: true,
-            );
-            if (settings.authorizationStatus ==
-                AuthorizationStatus.authorized) {
-              cubit.onNotificationPermissionAccepted();
-            }
+          if (state is ShowNotificationPermissionRationale) {
+            Navigator.of(context).push(NotificationsRationale.getRoute());
           }
         },
         child: BaseBlocBuilder<MainCubit>(
@@ -67,7 +61,6 @@ class BillSplitApp extends StatelessWidget {
                 builder: (context, snapshot) {
                   final uid = snapshot.data;
                   if (uid == null) {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
                     return const LandingPage();
                   }
                   return GroupsPage();
