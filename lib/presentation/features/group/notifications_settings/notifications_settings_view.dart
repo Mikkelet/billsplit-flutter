@@ -14,6 +14,7 @@ class NotificationsSettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Notification settings"),
         leading: const BackButton(),
       ),
       body: SingleChildScrollView(
