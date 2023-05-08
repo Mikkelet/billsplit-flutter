@@ -22,4 +22,9 @@ class GroupNotificationSetting {
       _$GroupNotificationSettingFromJson(json);
 
   Json toJson() => _$GroupNotificationSettingToJson(this);
+
+  @override
+  String toString() {
+    return "GroupNotificationSetting(groupId=$groupId, addExpenseSetting=$addExpenseSetting, updateExpenseSetting=$updateExpenseSetting, newServiceSetting=$newServiceSetting)";
+  }
 }

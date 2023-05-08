@@ -19,8 +19,9 @@ enum NotificationTopic {
       return "New expenses";
     } else if (this == NotificationTopic.updateExpense) {
       return "Expense updates";
+    } else {
+      return "New services";
     }
-    return "New services";
   }
 
   bool getSetting(GroupNotificationSetting settings) {
@@ -28,7 +29,18 @@ enum NotificationTopic {
       return settings.addExpenseSetting;
     } else if (this == NotificationTopic.updateExpense) {
       return settings.updateExpenseSetting;
+    } else {
+      return settings.newServiceSetting;
     }
-    return settings.newServiceSetting;
+  }
+
+  void updateSetting(GroupNotificationSetting settings, bool subscribe) {
+    if (this == NotificationTopic.newExpense) {
+      settings.addExpenseSetting = subscribe;
+    } else if (this == NotificationTopic.updateExpense) {
+      settings.updateExpenseSetting = subscribe;
+    } else {
+      settings.newServiceSetting = subscribe;
+    }
   }
 }

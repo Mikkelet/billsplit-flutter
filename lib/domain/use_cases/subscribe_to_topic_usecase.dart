@@ -15,19 +15,13 @@ class ToggleTopicSubscriptionUseCase {
       await FirebaseMessaging.instance
           .unsubscribeFromTopic(topic.getTopicId(groupId));
     }
+
     final GroupNotificationSetting updatedSetting = _sharedPrefs
         .groupNotificationSettings
         .firstWhere((element) => element.groupId == groupId);
     final groupWithoutUpdatedSetting = _sharedPrefs.groupNotificationSettings
         .where((element) => element.groupId != groupId);
-    if (topic == NotificationTopic.newExpense) {
-      updatedSetting.newServiceSetting = subscribe;
-    } else if (topic == NotificationTopic.updateExpense) {
-      updatedSetting.updateExpenseSetting = subscribe;
-    } else {
-      updatedSetting.newServiceSetting = subscribe;
-    }
-
+    topic.updateSetting(updatedSetting, subscribe);
     _sharedPrefs.groupNotificationSettings = [
       ...groupWithoutUpdatedSetting,
       updatedSetting

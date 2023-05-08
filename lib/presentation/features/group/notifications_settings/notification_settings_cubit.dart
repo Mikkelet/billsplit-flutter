@@ -15,6 +15,7 @@ class NotificationSettingsCubit extends BaseCubit {
   void initialise() {
     final settings = sharedPrefs.groupNotificationSettings
         .firstWhere((element) => element.groupId == _group.id);
+    print("qqq topic=${_topic.name}, sub=${_topic.getSetting(settings)}");
     isSubscribed = _topic.getSetting(settings);
     emit(Main());
   }
@@ -22,8 +23,7 @@ class NotificationSettingsCubit extends BaseCubit {
   void onSubscribeToTopic(bool subscribe) {
     showLoading();
     _toggleSubscriptionUseCase.launch(_group.id, _topic, subscribe).then((_) {
-      isSubscribed = subscribe;
-      emit(Main());
+      initialise();
     }).catchError((error) {
       showError(error);
     });

@@ -16,24 +16,26 @@ class NotificationSettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<NotificationSettingsCubit>(
-        create: (context) =>
-            NotificationSettingsCubit(topic, group)..initialise(),
-        child:
-            BaseBlocBuilder<NotificationSettingsCubit>(builder: (cubit, state) {
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(topic.getTopicName()),
-              if (state is Main)
-                Checkbox(
-                    value: cubit.isSubscribed,
-                    onChanged: (value) {
-                      cubit.onSubscribeToTopic(value ?? true);
-                    }),
-              if (state is Loading) const CircularProgressIndicator(),
-            ],
-          );
-        }));
+      create: (context) =>
+          NotificationSettingsCubit(topic, group)..initialise(),
+      child:
+          BaseBlocBuilder<NotificationSettingsCubit>(builder: (cubit, state) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(topic.getTopicName()),
+            if (state is Main)
+              Checkbox(
+                  value: cubit.isSubscribed,
+                  onChanged: (value) {
+                    if (value == null) return;
+                    cubit.onSubscribeToTopic(value);
+                  }),
+            if (state is Loading) const CircularProgressIndicator(),
+          ],
+        );
+      }),
+    );
   }
 }
