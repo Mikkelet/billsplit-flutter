@@ -1,51 +1,46 @@
+import 'dart:convert';
+
+import 'package:billsplit_flutter/data/local/preferences/models/group_notification_setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
-  late SharedPreferences sharedPrefs;
+  late SharedPreferences _sharedPrefs;
 
   Future init() async {
-    sharedPrefs = await SharedPreferences.getInstance();
+    _sharedPrefs = await SharedPreferences.getInstance();
   }
 
   // hasSeenHoldToAddIndividualExpenseTip
   bool get hasSeenHoldToAddIndividualExpenseTip =>
-      sharedPrefs.getBool(hasSeenHoldToAddIndividualExpenseTipKey) ?? false;
+      _sharedPrefs.getBool(hasSeenHoldToAddIndividualExpenseTipKey) ?? false;
 
   set hasSeenHoldToAddIndividualExpenseTip(bool value) =>
-      sharedPrefs.setBool(hasSeenHoldToAddIndividualExpenseTipKey, value);
+      _sharedPrefs.setBool(hasSeenHoldToAddIndividualExpenseTipKey, value);
 
   // hasSeenPushNotificationPermissionRationale
   bool get hasSeenPushNotificationPermissionRationale =>
-      sharedPrefs.getBool(hasSeenPushNotificationPermissionRationaleKey) ??
+      _sharedPrefs.getBool(hasSeenPushNotificationPermissionRationaleKey) ??
       false;
 
-  set hasSeenPushNotificationPermissionRationale(bool value) =>
-      sharedPrefs.setBool(hasSeenPushNotificationPermissionRationaleKey, value);
+  set hasSeenPushNotificationPermissionRationale(bool value) => _sharedPrefs
+      .setBool(hasSeenPushNotificationPermissionRationaleKey, value);
 
-  // groupsSubscriptions
-  List<String> get groupSubscriptions =>
-      sharedPrefs.getStringList(groupSubscriptionsKey) ?? [];
-
-  set groupSubscriptions(List<String> groupIds) =>
-      sharedPrefs.setStringList(groupSubscriptionsKey, groupIds);
-
-  void subscribeToGroup(String groupId) {
-    groupSubscriptions = [...groupSubscriptions, groupId];
+  // get Group Notification settings
+  Iterable<GroupNotificationSetting> get groupNotificationSettings {
+    final settingsJson = _sharedPrefs.getStringList(groupSubscriptionsKey);
+    if (settingsJson == null) return [];
+    return settingsJson
+        .map((e) => GroupNotificationSetting.fromJson(jsonDecode(e)));
   }
 
-  // groupsUnsubscriptions
-  List<String> get groupsUnsubscriptions =>
-      sharedPrefs.getStringList(groupUnsubscriptionsKey) ?? [];
-
-  void unsubscribeFromGroup(String groupId) {
-    sharedPrefs.setStringList(
-        groupUnsubscriptionsKey, [...groupsUnsubscriptions, groupId]);
+  set groupNotificationSettings(Iterable<GroupNotificationSetting> settings) {
+    final settingsJson = settings.map((e) => jsonEncode(e.toJson()));
+    _sharedPrefs.setStringList(groupSubscriptionsKey, settingsJson.toList());
   }
 
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
   static const hasSeenPushNotificationPermissionRationaleKey =
       "hasSeenPushNotificationPermissionRationale";
-  static const groupSubscriptionsKey = "groupSubscriptionsKey";
-  static const groupUnsubscriptionsKey = "groupUnsubscriptionsKey";
+  static const groupSubscriptionsKey = "groupNotificationSettings";
 }

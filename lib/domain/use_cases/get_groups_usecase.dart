@@ -1,8 +1,10 @@
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
+import 'package:billsplit_flutter/data/local/preferences/models/group_notification_setting.dart';
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/data/remote/api_service.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
+import 'package:billsplit_flutter/presentation/features/group/notifications_settings/notification_topics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class GetGroupsUseCase {
@@ -14,21 +16,32 @@ class GetGroupsUseCase {
     final response = await _apiService.getGroups();
     await _database.groupsDAO.clearTable();
     await _database.groupsDAO.insertGroups(response.groups.toDb());
+    subscribeToGroupTopics(response.groups.map((e) => e.id).toSet());
+  }
 
-    // Subscribe to new groups if not unsubscribed
-    // we find the difference in ids between remote and local
-    // then find the difference between missing ids and unsubs
-    final groupIds = response.groups.map((e) => e.id).toSet();
-    final missingSubscriptions = groupIds
-        .difference(_prefs.groupSubscriptions.toSet())
-        .difference(_prefs.groupsUnsubscriptions.toSet());
-    for (var groupId in missingSubscriptions) {
-      FirebaseMessaging.instance
-          .subscribeToTopic("group-$groupId")
-          .catchError((e) {
-        print("qqq $e");
-      });
+  // Store new groups in group notification settings with default value as true
+  // we find the difference in ids between remote and local
+  // then find the difference between missing ids and unsubs
+  void subscribeToGroupTopics(Set<String> remoteGroupIds) {
+    final localGroupIdSubs =
+        _prefs.groupNotificationSettings.map((e) => e.groupId);
+    final missingSubscriptions =
+        remoteGroupIds.difference(localGroupIdSubs.toSet());
+    for (var topic in NotificationTopic.values) {
+      for (var groupId in missingSubscriptions) {
+        FirebaseMessaging.instance
+            .subscribeToTopic(topic.getTopicId(groupId))
+            .whenComplete(() {
+          final newGroupSettings = missingSubscriptions
+              .map((groupId) => GroupNotificationSetting.fromNewGroup(groupId));
+          _prefs.groupNotificationSettings = [
+            ..._prefs.groupNotificationSettings,
+            ...newGroupSettings
+          ];
+        }).catchError((e) {
+          print("qqq $e");
+        });
+      }
     }
-    _prefs.groupSubscriptions = groupIds.toList();
   }
 }
