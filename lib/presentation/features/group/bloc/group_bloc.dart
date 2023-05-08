@@ -101,11 +101,13 @@ class GroupBloc extends BaseCubit {
     emit(Main());
   }
 
-  updateGroupName() {
+  updateGroupName(String newName) {
+    group.nameState = newName;
     _updateEditGroupNameState(UpdateTextFieldState.isUpdating);
     _addGroupUseCase.launch(group).then((value) {
       _updateEditGroupNameState(UpdateTextFieldState.display);
     }).catchError((error) {
+      group.reset();
       _updateEditGroupNameState(UpdateTextFieldState.display);
     });
   }

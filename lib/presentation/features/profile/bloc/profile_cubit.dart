@@ -42,9 +42,10 @@ class ProfileCubit extends BaseCubit {
     emit(Main());
   }
 
-  updateDisplayName() {
+  updateDisplayName(String newName) {
     _updateDisplayNameState(UpdateTextFieldState.isUpdating);
-    _updateDisplayNameUseCase.launch(user.nameState).then((value) {
+    _updateDisplayNameUseCase.launch(newName).then((value) {
+      user.nameState = newName;
       _updateDisplayNameState(UpdateTextFieldState.display);
     }).catchError((error) {
       showError(error);

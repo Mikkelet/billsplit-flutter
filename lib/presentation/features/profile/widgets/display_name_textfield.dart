@@ -9,23 +9,23 @@ class DisplayNameTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocBuilder<ProfileCubit>(
-      builder: (cubit, state) => UpdatableTextField(
-        initState: cubit.user.nameState,
-        charLimit: 20,
-        state: cubit.updateDisplayNameState,
-        onUpdateClicked: () {
-          cubit.updateDisplayName();
-        },
-        onEditPressed: () {
-          cubit.editDisplayName(true);
-        },
-        onCancelPressed: () {
-          cubit.editDisplayName(false);
-        },
-        onChange: (value) {
-          cubit.user.nameState = value;
-        },
-      ),
+      builder: (cubit, state) {
+        print("qqq userName=${cubit.user.nameState}");
+        return UpdatableTextField(
+          initState: cubit.user.nameState,
+          state: cubit.updateDisplayNameState,
+          charLimit: 20,
+          onEditPressed: () {
+            cubit.editDisplayName(true);
+          },
+          onCancelPressed: () {
+            cubit.editDisplayName(false);
+          },
+          onUpdateClicked: (value) {
+            cubit.updateDisplayName(value);
+          },
+        );
+      },
     );
   }
 }

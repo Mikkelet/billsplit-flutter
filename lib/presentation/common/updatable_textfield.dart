@@ -5,10 +5,9 @@ enum UpdateTextFieldState { isUpdating, isEditing, display }
 class UpdatableTextField extends StatefulWidget {
   final String initState;
   final UpdateTextFieldState state;
-  final Function() onUpdateClicked;
+  final Function(String) onUpdateClicked;
   final Function() onEditPressed;
   final Function() onCancelPressed;
-  final Function(String) onChange;
   final int charLimit;
 
   const UpdatableTextField(
@@ -17,7 +16,6 @@ class UpdatableTextField extends StatefulWidget {
       required this.onUpdateClicked,
       required this.onEditPressed,
       required this.onCancelPressed,
-      required this.onChange,
       this.charLimit = 40,
       required this.state})
       : super(key: key);
@@ -79,7 +77,6 @@ class _UpdatableTextField extends State<UpdatableTextField> {
                 controller: controller,
                 onChanged: (val) {
                   currentState = val;
-                  widget.onChange(val);
                 },
               ),
             ),
@@ -89,7 +86,7 @@ class _UpdatableTextField extends State<UpdatableTextField> {
               IconButton(
                 onPressed: () {
                   if (currentState != widget.initState) {
-                    widget.onUpdateClicked();
+                    widget.onUpdateClicked(controller.text);
                   } else {
                     widget.onCancelPressed();
                   }
@@ -99,6 +96,8 @@ class _UpdatableTextField extends State<UpdatableTextField> {
               ),
               IconButton(
                 onPressed: () {
+                  currentState = widget.initState;
+                  controller.text = widget.initState;
                   widget.onCancelPressed();
                 },
                 icon: const Icon(Icons.close),

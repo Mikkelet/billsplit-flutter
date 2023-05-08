@@ -54,4 +54,10 @@ class Group {
             timestamp: 0,
             latestEvent: null,
             debts: []);
+
+  void reset() {
+    nameState = _name;
+    debtState = _debts;
+    latestEventState = _latestEvent;
+  }
 }
