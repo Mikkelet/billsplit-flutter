@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/features/permissions/notification
 import 'package:billsplit_flutter/presentation/main_cubit.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
+import 'package:eraser/eraser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +28,20 @@ enum NavRoute {
   loading,
 }
 
-class BillSplitApp extends StatelessWidget {
+class BillSplitApp extends StatefulWidget {
   const BillSplitApp({super.key});
+
+  @override
+  State<BillSplitApp> createState() => _BillSplitAppState();
+}
+
+class _BillSplitAppState extends State<BillSplitApp>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,5 +85,19 @@ class BillSplitApp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Eraser.clearAllAppNotifications();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

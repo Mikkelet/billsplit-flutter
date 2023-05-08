@@ -9,7 +9,7 @@ import '../../firebase_options.dart';
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
-  showFlutterNotification(message);
+  //showFlutterNotification(message);
 }
 
 late AndroidNotificationChannel channel;
