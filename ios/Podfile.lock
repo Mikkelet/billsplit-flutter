@@ -1,4 +1,6 @@
 PODS:
+  - eraser (0.0.1):
+    - Flutter
   - Firebase/Auth (10.7.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.7.0)
@@ -122,6 +124,7 @@ PODS:
     - sqlite3/rtree
 
 DEPENDENCIES:
+  - eraser (from `.symlinks/plugins/eraser/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -155,6 +158,8 @@ SPEC REPOS:
     - sqlite3
 
 EXTERNAL SOURCES:
+  eraser:
+    :path: ".symlinks/plugins/eraser/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -179,6 +184,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
 
 SPEC CHECKSUMS:
+  eraser: 23d701c0ff53a9d042581459b752fd76a6ad6ca4
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
   firebase_auth: 1eb69de8f57040c5c78bb3267412e9cb395fd08c
   firebase_core: dee76ded6c693fdb38b8ea39aef7129e32e587a3
@@ -201,9 +207,9 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   sqlite3: d31b2b69d59bd1b4ab30e5c92eb18fd8e82fa392
   sqlite3_flutter_libs: 78f93cb854d4680595bc2c63c57209a104b2efb1
