@@ -10,3 +10,5 @@ class QuickAddSharedExpense extends Main {
 
   QuickAddSharedExpense(this.sharedExpense);
 }
+
+class ExpenseDeleted extends Main{}

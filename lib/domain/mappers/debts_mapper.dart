@@ -9,8 +9,8 @@ extension DebtsExt on Debt {
   DebtDTO toDTO() => DebtDTO(userId, owes);
 }
 
-extension DebtDtosExt on List<DebtDTO> {
-  List<Debt> toDebts() => map((e) => e.toDebt()).toList();
+extension DebtDtosExt on Iterable<DebtDTO> {
+  Iterable<Debt> toDebts() => map((e) => e.toDebt());
 }
 
 extension DebtDtoExt on DebtDTO {

@@ -27,4 +27,9 @@ class GroupExpenseDAO extends DatabaseAccessor<SplitsbyDatabase>
   Future clearForGroup(String groupId) =>
       (delete(groupExpenseTable)..where((tbl) => tbl.groupId.equals(groupId)))
           .go();
+
+  Future deleteExpense(String id) async {
+    (delete(groupExpenseTable)..where((tbl) => tbl.id.equals(id)))
+        .go();
+  }
 }

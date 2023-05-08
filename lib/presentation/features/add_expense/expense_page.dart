@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_view.dart';
@@ -37,12 +38,35 @@ class AddExpensePage extends StatelessWidget {
           if (state is AddExpenseSuccess) {
             Navigator.of(context).pop();
           }
+          if(state is ExpenseDeleted){
+            Navigator.of(context).pop();
+          }
         },
         child: BaseBlocBuilder<AddExpenseBloc>(
           builder: (cubit, state) {
             return Scaffold(
               appBar: AppBar(
                 actions: [
+                  IconButton(
+                    onPressed: () {
+                      showDialog(context: context, builder: (context){
+                        return CustomDialog(
+                          title: "Are you sure you want to delete",
+                          primaryText: "No",
+                          secondaryText: "Yes",
+                          onPrimaryClick: (){
+                            Navigator.of(context).pop();
+                          },
+                          onSecondaryClick: (){
+                            Navigator.of(context).pop();
+                            cubit.deleteExpense();
+                          },
+                        );
+                      });
+                    },
+                    icon: const Icon(Icons.delete),
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                   IconButton(
                     onPressed:
                         cubit.groupExpense.isChanged && groupExpense.total > 0

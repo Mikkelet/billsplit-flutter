@@ -18,8 +18,6 @@ class AddEventUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
 
-  AddEventUseCase();
-
   Future launch(String groupId, Event event) async {
     final debtForGroup = (await _getDebtWithAddedEvent(groupId, event))
         .map((e) => DebtDTO(e.first, e.second))
