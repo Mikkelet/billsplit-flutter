@@ -10,7 +10,6 @@ class DisplayNameTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocBuilder<ProfileCubit>(
       builder: (cubit, state) {
-        print("qqq userName=${cubit.user.nameState}");
         return UpdatableTextField(
           initState: cubit.user.nameState,
           state: cubit.updateDisplayNameState,
