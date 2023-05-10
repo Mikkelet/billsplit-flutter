@@ -37,22 +37,26 @@ class _NotificationsRationaleState extends State<NotificationsRationale> {
                 const Text(
                     "To keep up with the latest expenses, we would need your permission to send you notifications!"),
                 const SizedBox(height: 32),
-                if (permissionDecided != null)
-                  Text("Permission: $permissionDecided"),
+                if (permissionDecided == AuthorizationStatus.authorized)
+                  const Text("Accepted!",
+                      style: TextStyle(color: Colors.green)),
+                if (permissionDecided == AuthorizationStatus.denied)
+                  const Text("Denied", style: TextStyle(color: Colors.red)),
                 if (permissionDecided != null) const SizedBox(height: 32),
-                SimpleButton(onClick: () async {
-                  prefs.hasSeenPushNotificationPermissionRationale = true;
-                  final permission =
-                      await FirebaseMessaging.instance.requestPermission(
-                    announcement: true,
-                  );
-                  setPermissionDecided(permission.authorizationStatus);
-                }, child: Builder(builder: (context) {
-                  final text = permissionDecided == null
-                      ? "Request permission"
-                      : "Retry Permission";
-                  return Text(text);
-                })),
+                if (permissionDecided == AuthorizationStatus.denied)
+                  SimpleButton(onClick: () async {
+                    prefs.hasSeenPushNotificationPermissionRationale = true;
+                    final permission =
+                        await FirebaseMessaging.instance.requestPermission(
+                      announcement: true,
+                    );
+                    setPermissionDecided(permission.authorizationStatus);
+                  }, child: Builder(builder: (context) {
+                    final text = permissionDecided == null
+                        ? "Request permission"
+                        : "I changed my mind";
+                    return Text(text);
+                  })),
                 const SizedBox(height: 32),
                 if (permissionDecided != null) const BackButton()
               ],
