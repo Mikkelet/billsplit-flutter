@@ -27,21 +27,28 @@ class GetGroupsUseCase {
         _prefs.groupNotificationSettings.map((e) => e.groupId);
     final missingSubscriptions =
         remoteGroupIds.difference(localGroupIdSubs.toSet());
+
+    final List<Future> subFutures = [];
     for (var topic in NotificationTopic.values) {
       for (var groupId in missingSubscriptions) {
-        FirebaseMessaging.instance
+        final futureSub = FirebaseMessaging.instance
             .subscribeToTopic(topic.getTopicId(groupId))
-            .whenComplete(() {
-          final newGroupSettings = missingSubscriptions
-              .map((groupId) => GroupNotificationSetting.fromNewGroup(groupId));
-          _prefs.groupNotificationSettings = [
-            ..._prefs.groupNotificationSettings,
-            ...newGroupSettings
-          ];
+            .then((value) {
         }).catchError((e) {
           print("qqq $e");
         });
+        subFutures.add(futureSub);
       }
     }
+    Future.forEach(subFutures, (element) {}).whenComplete(() {
+      final newGroupSettings = missingSubscriptions
+          .map((groupId) => GroupNotificationSetting.fromNewGroup(groupId));
+      print("qqq newGroups=${newGroupSettings.length}");
+      print("qqq totalGroup=${[..._prefs.groupNotificationSettings, ...newGroupSettings]}");
+      _prefs.groupNotificationSettings = [
+        ..._prefs.groupNotificationSettings,
+        ...newGroupSettings
+      ];
+    });
   }
 }

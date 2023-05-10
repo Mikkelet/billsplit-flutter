@@ -74,6 +74,7 @@ class _BillSplitAppState extends State<BillSplitApp>
                 builder: (context, snapshot) {
                   final uid = snapshot.data;
                   if (uid == null) {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                     return const LandingPage();
                   }
                   return GroupsPage();
