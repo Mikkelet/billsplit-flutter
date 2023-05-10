@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
@@ -206,6 +207,7 @@ extension PaymentExt on Payment {
         description: "",
         payer: createdBy,
         sharedExpenses: [],
+        syncState: SyncState.synced,
         individualExpenses: [
           IndividualExpense(person: paidTo, expense: amount)
         ],

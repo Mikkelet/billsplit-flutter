@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:collection/collection.dart';
 
@@ -12,6 +13,7 @@ class GroupExpense extends Event {
   final Iterable<IndividualExpense> individualExpenses;
   final String _description;
   final Iterable<SharedExpense> _sharedExpenses;
+  final SyncState syncState;
 
   // modifiable values
   late Person payerState = _payer;
@@ -25,6 +27,7 @@ class GroupExpense extends Event {
       required String description,
       required Iterable<SharedExpense> sharedExpenses,
       required Person payer,
+      required this.syncState,
       required this.individualExpenses})
       : _payer = payer,
         _sharedExpenses = sharedExpenses,
@@ -71,6 +74,7 @@ class GroupExpense extends Event {
             description: "",
             individualExpenses: [],
             sharedExpenses: [],
+            syncState: SyncState.synced,
             payer: Person.dummy(seed),
             timestamp: 0);
 
@@ -82,6 +86,7 @@ class GroupExpense extends Event {
             individualExpenses:
                 group.people.map((e) => IndividualExpense(person: e)).toList(),
             sharedExpenses: [SharedExpense.newInstance(group.people)],
+            syncState: SyncState.synced,
             payer: user,
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
@@ -90,8 +95,10 @@ class GroupExpense extends Event {
     return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpenses=$sharedExpensesState, payer=$payerState)";
   }
 
-  SharedExpense addNewSharedExpense({required Iterable<Person> withParticipants}) {
-    final se = SharedExpense.newInstance([...individualExpenses.map((e) => e.person).toList()]);
+  SharedExpense addNewSharedExpense(
+      {required Iterable<Person> withParticipants}) {
+    final se = SharedExpense.newInstance(
+        [...individualExpenses.map((e) => e.person).toList()]);
     se.participantsState = withParticipants.toList();
     sharedExpensesState.add(se);
     return se;

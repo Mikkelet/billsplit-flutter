@@ -7,4 +7,7 @@ class GroupExpenseTable extends Table {
   TextColumn get groupId => text()();
 
   TextColumn get groupExpense => text()();
+
+  IntColumn get syncState => integer()();
+
 }

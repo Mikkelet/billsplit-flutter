@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
+import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_person_to_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
@@ -26,6 +28,7 @@ class GroupBloc extends BaseCubit {
   final _leaveGroupUseCase = LeaveGroupUseCase();
   final _addPersonToGroupUseCase = AddPersonToGroupUseCase();
   final _addGroupUseCase = AddGroupUseCase();
+  final _addExpenseUseCase = AddEventUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
@@ -110,5 +113,9 @@ class GroupBloc extends BaseCubit {
       group.reset();
       _updateEditGroupNameState(UpdateTextFieldState.display);
     });
+  }
+
+  void retryAddExpense(GroupExpense expense) {
+    _addExpenseUseCase.launch(group.id, expense);
   }
 }

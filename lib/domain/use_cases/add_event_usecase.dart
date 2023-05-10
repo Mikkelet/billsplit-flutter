@@ -12,6 +12,8 @@ import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
+import 'package:billsplit_flutter/utils/constants.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 
 class AddEventUseCase {
@@ -19,31 +21,48 @@ class AddEventUseCase {
   final _database = getIt<SplitsbyDatabase>();
 
   Future launch(String groupId, Event event) async {
-    final debtForGroup = (await _getDebtWithAddedEvent(groupId, event))
-        .map((e) => DebtDTO(e.first, e.second))
-        .toList();
-
-    final response =
-        await _apiService.addEvent(groupId, event.toEventDTO(), debtForGroup);
-
-    final EventDTO eventDto = response.event!;
-
-    if (eventDto is GroupExpenseDTO) {
-      final expenseDb = eventDto.toDb(groupId);
+    // store pending event in db, will be updated later
+    String tempId = event.id.isEmpty ? "$tempIdPrefix-${event.hashCode}" : event.id;
+    if (event is GroupExpense) {
+      final expenseDb = event.toDb(groupId, SyncState.pending, tempId: tempId);
       await _database.groupExpenseDAO.insert(expenseDb);
-    } else if (eventDto is PaymentDTO) {
-      final paymentDb = eventDto.toDb(groupId);
-      await _database.paymentsDAO.insert(paymentDb);
+      await Future.delayed(const Duration(seconds: 2));
     }
 
-    // update group
-    final groupResponse = await _database.groupsDAO.getGroup(groupId);
-    final group = groupResponse.toGroup();
-    group.debtState = debtForGroup.toDebts();
-    if (eventDto.toEvent() != null) {
-      group.latestEventState = eventDto.toEvent();
+    try {
+      final debtForGroup = (await _getDebtWithAddedEvent(groupId, event))
+          .map((e) => DebtDTO(e.first, e.second))
+          .toList();
+
+      final response =
+          await _apiService.addEvent(groupId, event.toEventDTO(), debtForGroup);
+
+      final EventDTO eventDto = response.event!;
+
+      if (eventDto is GroupExpenseDTO) {
+        final expenseDb = eventDto.toDb(groupId, SyncState.synced);
+        await _database.groupExpenseDAO.deleteExpense(tempId);
+        await _database.groupExpenseDAO.insert(expenseDb);
+      } else if (eventDto is PaymentDTO) {
+        final paymentDb = eventDto.toDb(groupId);
+        await _database.paymentsDAO.insert(paymentDb);
+      }
+
+      // update group
+      final groupResponse = await _database.groupsDAO.getGroup(groupId);
+      final group = groupResponse.toGroup();
+      group.debtState = debtForGroup.toDebts();
+      if (eventDto.toEvent() != null) {
+        group.latestEventState = eventDto.toEvent();
+      }
+      await _database.groupsDAO.insertGroup(group.toDb());
+    } catch (e) {
+      if (event is GroupExpense) {
+        final expenseDb = event.toDb(groupId, SyncState.failed, tempId: tempId);
+        await _database.groupExpenseDAO.insert(expenseDb);
+      }
+      rethrow;
     }
-    await _database.groupsDAO.insertGroup(group.toDb());
   }
 
   Future<Iterable<Pair<String, num>>> _getDebtWithAddedEvent(

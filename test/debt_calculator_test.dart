@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:collection/collection.dart';
 
 final samplePeopleShera = [
@@ -43,6 +44,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[0],
         timestamp: 1,
         individualExpenses: sampleIndividualExpenses.toList(),
+        syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
       id: "1",
@@ -51,6 +53,7 @@ List<GroupExpense> get sampleSharedExpenses {
       payer: samplePeopleShera[1],
       timestamp: 2,
       individualExpenses: sampleIndividualExpenses.toList(),
+      syncState: SyncState.synced,
       sharedExpenses: sampleSharedExpense,
     ),
     GroupExpense(
@@ -60,6 +63,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         timestamp: 3,
         individualExpenses: sampleIndividualExpenses.toList(),
+        syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
         id: "3",
@@ -68,6 +72,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         timestamp: 4,
         individualExpenses: sampleIndividualExpenses.toList(),
+        syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
         id: "4",
@@ -76,6 +81,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         timestamp: 5,
         individualExpenses: sampleIndividualExpenses.toList(),
+        syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
   ];
 }

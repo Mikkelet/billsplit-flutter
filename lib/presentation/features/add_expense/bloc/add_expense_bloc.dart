@@ -20,12 +20,8 @@ class AddExpenseBloc extends BaseCubit {
   }
 
   void addExpense() {
-    emit(Loading());
-    _addExpenseUseCase.launch(group.id, groupExpense).then((value) {
-      emit(AddExpenseSuccess());
-    }).catchError((err) {
-      showError(err);
-    });
+    _addExpenseUseCase.launch(group.id, groupExpense);
+    emit(AddExpenseSuccess());
   }
 
   void onPayerSelected(Person person) {

@@ -5,6 +5,8 @@ import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
+import 'package:billsplit_flutter/utils/constants.dart';
 
 extension EventDTOsExt on List<EventDTO?> {
   List<Event> toEvents() => map((e) => e.toEvent()).whereType<Event>().toList();
@@ -23,6 +25,7 @@ extension EventDTOExt on EventDTO? {
             (this as GroupExpenseDTO).sharedExpenses.toSharedExpense(),
         individualExpenses:
             (this as GroupExpenseDTO).individualExpenses.toExpenses(),
+        syncState: SyncState.synced
       );
     }
     return null;
@@ -32,8 +35,9 @@ extension EventDTOExt on EventDTO? {
 extension EventExt on Event {
   EventDTO toEventDTO() {
     if (this is GroupExpense) {
+      final realId = id.startsWith(tempIdPrefix) ? "" : id;
       return GroupExpenseDTO(
-        id,
+        realId,
         createdBy.toDTO(),
         timestamp,
         "expense",

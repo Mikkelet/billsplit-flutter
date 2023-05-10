@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/local/database/tables/group_expense_db.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:drift/drift.dart';
 
 part 'group_expense_dao.g.dart';
@@ -24,12 +25,13 @@ class GroupExpenseDAO extends DatabaseAccessor<SplitsbyDatabase>
 
   Future clearTable() => delete(groupExpenseTable).go();
 
-  Future clearForGroup(String groupId) =>
-      (delete(groupExpenseTable)..where((tbl) => tbl.groupId.equals(groupId)))
-          .go();
+  Future clearForGroup(String groupId) => (delete(groupExpenseTable)
+        ..where((tbl) =>
+            tbl.groupId.equals(groupId) &
+            tbl.syncState.equals(SyncState.synced.index)))
+      .go();
 
   Future deleteExpense(String id) async {
-    (delete(groupExpenseTable)..where((tbl) => tbl.id.equals(id)))
-        .go();
+    (delete(groupExpenseTable)..where((tbl) => tbl.id.equals(id))).go();
   }
 }

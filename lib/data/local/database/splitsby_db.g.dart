@@ -213,8 +213,14 @@ class $GroupExpenseTableTable extends GroupExpenseTable
   late final GeneratedColumn<String> groupExpense = GeneratedColumn<String>(
       'group_expense', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _syncStateMeta =
+      const VerificationMeta('syncState');
   @override
-  List<GeneratedColumn> get $columns => [id, groupId, groupExpense];
+  late final GeneratedColumn<int> syncState = GeneratedColumn<int>(
+      'sync_state', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, groupId, groupExpense, syncState];
   @override
   String get aliasedName => _alias ?? 'group_expense_table';
   @override
@@ -243,6 +249,12 @@ class $GroupExpenseTableTable extends GroupExpenseTable
     } else if (isInserting) {
       context.missing(_groupExpenseMeta);
     }
+    if (data.containsKey('sync_state')) {
+      context.handle(_syncStateMeta,
+          syncState.isAcceptableOrUnknown(data['sync_state']!, _syncStateMeta));
+    } else if (isInserting) {
+      context.missing(_syncStateMeta);
+    }
     return context;
   }
 
@@ -258,6 +270,8 @@ class $GroupExpenseTableTable extends GroupExpenseTable
           .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
       groupExpense: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}group_expense'])!,
+      syncState: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sync_state'])!,
     );
   }
 
@@ -271,14 +285,19 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
   final String id;
   final String groupId;
   final String groupExpense;
+  final int syncState;
   const GroupExpenseDb(
-      {required this.id, required this.groupId, required this.groupExpense});
+      {required this.id,
+      required this.groupId,
+      required this.groupExpense,
+      required this.syncState});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['group_id'] = Variable<String>(groupId);
     map['group_expense'] = Variable<String>(groupExpense);
+    map['sync_state'] = Variable<int>(syncState);
     return map;
   }
 
@@ -287,6 +306,7 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
       id: Value(id),
       groupId: Value(groupId),
       groupExpense: Value(groupExpense),
+      syncState: Value(syncState),
     );
   }
 
@@ -297,6 +317,7 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
       id: serializer.fromJson<String>(json['id']),
       groupId: serializer.fromJson<String>(json['groupId']),
       groupExpense: serializer.fromJson<String>(json['groupExpense']),
+      syncState: serializer.fromJson<int>(json['syncState']),
     );
   }
   @override
@@ -306,66 +327,79 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
       'id': serializer.toJson<String>(id),
       'groupId': serializer.toJson<String>(groupId),
       'groupExpense': serializer.toJson<String>(groupExpense),
+      'syncState': serializer.toJson<int>(syncState),
     };
   }
 
   GroupExpenseDb copyWith(
-          {String? id, String? groupId, String? groupExpense}) =>
+          {String? id,
+          String? groupId,
+          String? groupExpense,
+          int? syncState}) =>
       GroupExpenseDb(
         id: id ?? this.id,
         groupId: groupId ?? this.groupId,
         groupExpense: groupExpense ?? this.groupExpense,
+        syncState: syncState ?? this.syncState,
       );
   @override
   String toString() {
     return (StringBuffer('GroupExpenseDb(')
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
-          ..write('groupExpense: $groupExpense')
+          ..write('groupExpense: $groupExpense, ')
+          ..write('syncState: $syncState')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, groupId, groupExpense);
+  int get hashCode => Object.hash(id, groupId, groupExpense, syncState);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is GroupExpenseDb &&
           other.id == this.id &&
           other.groupId == this.groupId &&
-          other.groupExpense == this.groupExpense);
+          other.groupExpense == this.groupExpense &&
+          other.syncState == this.syncState);
 }
 
 class GroupExpenseTableCompanion extends UpdateCompanion<GroupExpenseDb> {
   final Value<String> id;
   final Value<String> groupId;
   final Value<String> groupExpense;
+  final Value<int> syncState;
   final Value<int> rowid;
   const GroupExpenseTableCompanion({
     this.id = const Value.absent(),
     this.groupId = const Value.absent(),
     this.groupExpense = const Value.absent(),
+    this.syncState = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   GroupExpenseTableCompanion.insert({
     required String id,
     required String groupId,
     required String groupExpense,
+    required int syncState,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         groupId = Value(groupId),
-        groupExpense = Value(groupExpense);
+        groupExpense = Value(groupExpense),
+        syncState = Value(syncState);
   static Insertable<GroupExpenseDb> custom({
     Expression<String>? id,
     Expression<String>? groupId,
     Expression<String>? groupExpense,
+    Expression<int>? syncState,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (groupId != null) 'group_id': groupId,
       if (groupExpense != null) 'group_expense': groupExpense,
+      if (syncState != null) 'sync_state': syncState,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -374,11 +408,13 @@ class GroupExpenseTableCompanion extends UpdateCompanion<GroupExpenseDb> {
       {Value<String>? id,
       Value<String>? groupId,
       Value<String>? groupExpense,
+      Value<int>? syncState,
       Value<int>? rowid}) {
     return GroupExpenseTableCompanion(
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
       groupExpense: groupExpense ?? this.groupExpense,
+      syncState: syncState ?? this.syncState,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -395,6 +431,9 @@ class GroupExpenseTableCompanion extends UpdateCompanion<GroupExpenseDb> {
     if (groupExpense.present) {
       map['group_expense'] = Variable<String>(groupExpense.value);
     }
+    if (syncState.present) {
+      map['sync_state'] = Variable<int>(syncState.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -407,6 +446,7 @@ class GroupExpenseTableCompanion extends UpdateCompanion<GroupExpenseDb> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('groupExpense: $groupExpense, ')
+          ..write('syncState: $syncState, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
