@@ -1,5 +1,9 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/signin_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -50,65 +54,69 @@ class _SignInViewState extends State<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<LandingBloc>();
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            Container(height: 120),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Sign in",
-                  style: Theme.of(context).textTheme.displayMedium),
+    final landingCubit = context.read<LandingBloc>();
+    return BaseBlocWidget(
+      create: (context) => SignInCubit(),
+      child: BaseBlocBuilder<SignInCubit>(builder: (signInCubit, signInState) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                Container(height: 120),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Sign in",
+                      style: Theme.of(context).textTheme.displayMedium),
+                ),
+                Container(height: 32),
+                RoundedListItem(
+                    child: TextField(
+                  controller: emailFieldController,
+                  decoration: InputDecoration(
+                    errorText: emailError,
+                    hintText: "Email",
+                    border: InputBorder.none,
+                  ),
+                )),
+                const SizedBox(height: 16),
+                RoundedListItem(
+                  child: PasswordTextField(
+                    controller: passwordFieldController,
+                    error: passwordError,
+                    hintText: "Repeat password",
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (signInState is Loading)
+                  const CircularProgressIndicator()
+                else
+                  SimpleButton(
+                    onClick: () {
+                      if (validateFields()) {
+                        final String email = emailFieldController.value.text;
+                        final String password =
+                            passwordFieldController.value.text;
+                        signInCubit.signIn(email, password);
+                      }
+                      setState(() {});
+                    },
+                    child: const Text("Sign in"),
+                  ),
+                const SizedBox(height: 16),
+                MaterialButton(
+                  onPressed: () {
+                    landingCubit.showSignUp();
+                  },
+                  child: const Text("Create an account"),
+                ),
+                const SizedBox(height: 32),
+              ],
             ),
-            Container(height: 32),
-            RoundedListItem(
-                child: TextField(
-              controller: emailFieldController,
-              decoration: InputDecoration(
-                errorText: emailError,
-                hintText: "Email",
-                border: InputBorder.none,
-              ),
-            )),
-            const SizedBox(height: 16),
-            RoundedListItem(
-              child: PasswordTextField(
-                controller: passwordFieldController,
-                error: passwordError,
-                hintText: "Repeat password",
-              ),
-            ),
-            const SizedBox(height: 16),
-            SimpleButton(
-              onClick: () {
-                if (validateFields()) {
-                  _onPressed(context);
-                }
-                setState(() {});
-              },
-              child: const Text("Sign in"),
-            ),
-            const SizedBox(height: 16),
-            MaterialButton(
-              onPressed: () {
-                cubit.showSignUp();
-              },
-              child: const Text("Create an account"),
-            ),
-            const SizedBox(height: 32),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
-  }
-
-  _onPressed(BuildContext context) {
-    final String email = emailFieldController.value.text;
-    final String password = passwordFieldController.value.text;
-    final cubit = context.read<LandingBloc>();
-    cubit.signIn(email, password);
   }
 
   bool validateFields() {

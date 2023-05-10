@@ -9,7 +9,7 @@ class BaseBlocWidget<T extends BaseCubit> extends BlocProvider<T> {
   final Function(BuildContext, T, UiState)? listener;
 
   const BaseBlocWidget(
-      {super.key, required this.create, this.listener, required super.child})
+      {super.key, required this.create, this.listener, super.child})
       : super(create: create);
 
   @override
