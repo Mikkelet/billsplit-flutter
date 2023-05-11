@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/signin_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/forgot_password_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -67,18 +68,21 @@ class _SignInViewState extends State<SignInView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Sign in",
-                      style: Theme.of(context).textTheme.displayMedium),
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .displayMedium),
                 ),
                 Container(height: 32),
                 RoundedListItem(
                     child: TextField(
-                  controller: emailFieldController,
-                  decoration: InputDecoration(
-                    errorText: emailError,
-                    hintText: "Email",
-                    border: InputBorder.none,
-                  ),
-                )),
+                      controller: emailFieldController,
+                      decoration: InputDecoration(
+                        errorText: emailError,
+                        hintText: "Email",
+                        border: InputBorder.none,
+                      ),
+                    )),
                 const SizedBox(height: 16),
                 RoundedListItem(
                   child: PasswordTextField(
@@ -104,11 +108,13 @@ class _SignInViewState extends State<SignInView> {
                     child: const Text("Sign in"),
                   ),
                 const SizedBox(height: 16),
+                ForgotPasswordButton(emailController: emailFieldController),
+                const SizedBox(height: 32),
                 MaterialButton(
                   onPressed: () {
                     landingCubit.showSignUp();
                   },
-                  child: const Text("Create an account"),
+                  child: const Text("Create an account ▶"),
                 ),
                 const SizedBox(height: 32),
               ],

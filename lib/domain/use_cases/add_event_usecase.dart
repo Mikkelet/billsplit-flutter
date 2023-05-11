@@ -19,6 +19,7 @@ import 'package:billsplit_flutter/utils/pair.dart';
 class AddEventUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
+  bool shouldFail = true;
 
   Future launch(String groupId, Event event) async {
     // store pending event in db, will be updated later
@@ -30,6 +31,10 @@ class AddEventUseCase {
     }
 
     try {
+      if(shouldFail){
+        shouldFail = false;
+        throw Exception("error!");
+      }
       final debtForGroup = (await _getDebtWithAddedEvent(groupId, event))
           .map((e) => DebtDTO(e.first, e.second))
           .toList();

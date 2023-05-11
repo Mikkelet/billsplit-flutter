@@ -32,7 +32,7 @@ class ExpenseEventView extends StatelessWidget {
         ClickableListItem(
           color: builder(() {
             if (groupExpense.syncState == SyncState.pending) {
-              return Colors.grey.shade300;
+              return Theme.of(context).highlightColor;
             }
             if (groupExpense.syncState == SyncState.failed) {
               return Colors.redAccent;
