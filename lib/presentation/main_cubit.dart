@@ -26,6 +26,8 @@ class MainCubit extends BaseCubit {
   Stream<String?> observeAuthState() {
     return _observeAuthStateUseCase.observe().doOnData((auth) {
       if (auth != null) {
+        print("qqq subscribing to user-$auth");
+        FirebaseMessaging.instance.subscribeToTopic("user-$auth");
         initializePushNotification();
       }
     });
