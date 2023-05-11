@@ -5,6 +5,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../firebase_options.dart';
 
+const notificationChannelId = "splitsby_notifications";
+const notificationChannelTitle = "Splitsby Notifications";
+const notificationChannelDesc = "This channel is used for general notifications.";
+
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -23,11 +27,11 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
   channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
+     notificationChannelId, // id
+    notificationChannelTitle, // title
     description:
-        'This channel is used for important notifications.', // description
-    importance: Importance.high,
+        notificationChannelDesc, // description
+    importance: Importance.defaultImportance,
   );
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -41,18 +45,11 @@ Future<void> setupFlutterNotifications() async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
-  /// Update the iOS foreground notification presentation options to allow
-  /// heads up notifications.
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
   isFlutterLocalNotificationsInitialized = true;
 }
 
 void showFlutterNotification(RemoteMessage message) {
-  //print("qqq data=${message.data}, from=${message.from}");
+  print("qqq data=${message.data}, from=${message.from}, android=${message.notification?.android != null}");
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null && !kIsWeb) {
@@ -71,5 +68,5 @@ void showFlutterNotification(RemoteMessage message) {
         ),
       ),
     );
-  }
+  }else print("qqq cannot send notication");
 }

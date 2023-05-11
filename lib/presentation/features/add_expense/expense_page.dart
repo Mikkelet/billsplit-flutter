@@ -52,14 +52,14 @@ class AddExpensePage extends StatelessWidget {
                       showDialog(context: context, builder: (context){
                         return CustomDialog(
                           title: "Are you sure you want to delete",
-                          primaryText: "No",
-                          secondaryText: "Yes",
+                          primaryText: "Delete",
+                          secondaryText: "Cancel",
                           onPrimaryClick: (){
                             Navigator.of(context).pop();
+                            cubit.deleteExpense();
                           },
                           onSecondaryClick: (){
                             Navigator.of(context).pop();
-                            cubit.deleteExpense();
                           },
                         );
                       });
