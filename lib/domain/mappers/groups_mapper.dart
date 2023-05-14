@@ -19,14 +19,15 @@ extension GroupDtoExt on GroupDTO {
   Group toGroup() => Group(
       id: id,
       name: name,
+      defaultCurrency: defaultCurrency,
       people: people.toPeople(),
       createdBy: createdBy.toPerson(),
       pastMembers: pastMembers?.toPeople() ?? [],
-      timestamp: timeStamp,
+      timestamp: timestamp,
       latestEvent: latestEvent.toEvent(),
       debts: debts.toDebts());
 
-  GroupDb toDb() => GroupDb(groupId: id, group: json.encode(this));
+  GroupDb toDb() => GroupDb(groupId: id, group: json.encode(toJson()));
 }
 
 extension GroupExt on Group {
@@ -34,9 +35,10 @@ extension GroupExt on Group {
       id: id,
       name: nameState,
       people: people.toDTO(),
+      defaultCurrency: defaultCurrencyState,
       pastMembers: pastMembers.toDTO(),
       createdBy: createdBy.toDTO(),
-      timeStamp: timestamp,
+      timestamp: timestamp,
       debts: debtState.map((e) => e.toDTO()).toList(),
       latestEvent: latestEventState?.toEventDTO());
 

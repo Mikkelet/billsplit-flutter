@@ -13,17 +13,19 @@ class GroupDTO {
   final List<PersonDTO> people;
   final List<PersonDTO>? pastMembers;
   final PersonDTO createdBy;
-  final num timeStamp;
+  final num timestamp;
   final List<DebtDTO> debts;
   final EventDTO? latestEvent;
+  final String defaultCurrency;
 
   GroupDTO(
       {required this.id,
+      required this.defaultCurrency,
       required this.name,
       required this.people,
       required this.pastMembers,
       required this.createdBy,
-      required this.timeStamp,
+      required this.timestamp,
       required this.debts,
       required this.latestEvent});
 

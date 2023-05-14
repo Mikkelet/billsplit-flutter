@@ -7,6 +7,8 @@ class ObserveGroupsUseCase {
   final _database = getIt<SplitsbyDatabase>();
 
   Stream<Iterable<Group>> observe() {
-    return _database.groupsDAO.watchGroups().map((event) => event.toGroups());
+    return _database.groupsDAO
+        .watchGroups()
+        .map((groupDbs) => groupDbs.toGroups());
   }
 }

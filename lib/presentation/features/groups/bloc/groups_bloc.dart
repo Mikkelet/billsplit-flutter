@@ -14,8 +14,10 @@ class GroupsBloc extends BaseCubit {
   GroupsBloc() : super();
 
   Stream<List<Group>> getGroupStream() =>
-      _observeGroupsUseCase.observe().map((event) => event.sortedBy<num>(
-          (group) => group.latestEventState?.timestamp ?? 0).reversed.toList());
+      _observeGroupsUseCase.observe().map((event) => event
+          .sortedBy<num>((group) => group.latestEventState?.timestamp ?? 0)
+          .reversed
+          .toList());
 
   void loadProfile() async {
     emit(Loading());

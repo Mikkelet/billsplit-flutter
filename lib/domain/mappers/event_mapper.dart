@@ -1,5 +1,5 @@
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
-import 'package:billsplit_flutter/domain/mappers/individual_expense_mapper.dart';
+import 'package:billsplit_flutter/domain/mappers/currency_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
@@ -16,17 +16,15 @@ extension EventDTOExt on EventDTO? {
   Event? toEvent() {
     if (this is GroupExpenseDTO) {
       return GroupExpense(
-        id: this!.id,
-        timestamp: this!.timeStamp,
-        description: (this as GroupExpenseDTO).description,
-        createdBy: this!.createdBy.toPerson(),
-        payer: (this as GroupExpenseDTO).payee.toPerson(),
-        sharedExpenses:
-            (this as GroupExpenseDTO).sharedExpenses.toSharedExpense(),
-        individualExpenses:
-            (this as GroupExpenseDTO).individualExpenses.toExpenses(),
-        syncState: SyncState.synced
-      );
+          id: this!.id,
+          timestamp: this!.timestamp,
+          description: (this as GroupExpenseDTO).description,
+          createdBy: this!.createdBy.toPerson(),
+          payer: (this as GroupExpenseDTO).payee.toPerson(),
+          sharedExpenses:
+              (this as GroupExpenseDTO).sharedExpenses.toSharedExpense(),
+          syncState: SyncState.synced,
+          currency: (this as GroupExpenseDTO).currency.toCurrency());
     }
     return null;
   }
@@ -37,17 +35,20 @@ extension EventExt on Event {
     if (this is GroupExpense) {
       final realId = id.startsWith(tempIdPrefix) ? "" : id;
       return GroupExpenseDTO(
-        realId,
-        createdBy.toDTO(),
-        timestamp,
-        "expense",
-        (this as GroupExpense).descriptionState,
-        (this as GroupExpense).payerState.toDTO(),
-        (this as GroupExpense).individualExpenses.toDTOs(),
-        (this as GroupExpense).sharedExpensesState.toDTO(),
-      );
+          id: realId,
+          createdBy: createdBy.toDTO(),
+          timestamp: timestamp,
+          description: (this as GroupExpense).descriptionState,
+          payee: (this as GroupExpense).payerState.toDTO(),
+          sharedExpenses: (this as GroupExpense).sharedExpensesState.toDTO(),
+          currency: (this as GroupExpense).currencyState.toDTO());
     }
-    return PaymentDTO(id, createdBy.toDTO(), timestamp, "payment",
-        (this as Payment).paidTo.toDTO(), (this as Payment).amount);
+    return PaymentDTO(
+        id: id,
+        createdBy: createdBy.toDTO(),
+        timestamp: timestamp,
+        paidTo: (this as Payment).paidTo.toDTO(),
+        currency: (this as Payment).currency.toDTO(),
+        amount: (this as Payment).amount);
   }
 }

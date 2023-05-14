@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
@@ -48,5 +49,10 @@ class AddExpenseBloc extends BaseCubit {
     }).catchError((err) {
       showError(err);
     });
+  }
+
+  void updateCurrency(Currency currency) {
+    groupExpense.currencyState = currency;
+    onExpensesUpdated();
   }
 }

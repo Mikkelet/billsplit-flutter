@@ -159,9 +159,14 @@ class DebtCalculator {
       }
     });
     print("\n=== Effect Debt ===");
-    expenses.map((e) => e.individualExpenses).flatMap().forEach((ie) {
-      print("${ie.person.nameState} owes:");
-      final person = ie.person;
+    expenses
+        .map((e) => e.sharedExpensesState)
+        .flatMap()
+        .map((e) => e.participantsState)
+        .flatMap()
+        .toSet()
+        .forEach((person) {
+      print("${person.nameState} owes:");
       final debt = calculateEffectiveDebt(person);
       for (var it in debt) {
         print("\tto ${it.first.nameState}: \$${it.second}");
@@ -192,24 +197,24 @@ class DebtCalculator {
 }
 
 extension GroupExpenseExt on GroupExpense {
-  Iterable<IndividualExpense> getIndividualWithShared() =>
-      individualExpenses.map((e) {
-        final num expense = e.expenseState + getSharedExpensesForPerson(e.person);
-        return IndividualExpense(person: e.person, expense: expense);
-      });
+  Iterable<IndividualExpense> getIndividualWithShared() {
+    final people =
+        sharedExpensesState.map((e) => e.participantsState).flatMap().toSet();
+    return people.map((e) {
+      final num expense = getSharedExpensesForPerson(e);
+      return IndividualExpense(person: e, expense: expense);
+    });
+  }
 }
 
 extension PaymentExt on Payment {
   GroupExpense toExpense() => GroupExpense(
-        id: id,
-        createdBy: createdBy,
-        timestamp: timestamp,
-        description: "",
-        payer: createdBy,
-        sharedExpenses: [],
-        syncState: SyncState.synced,
-        individualExpenses: [
-          IndividualExpense(person: paidTo, expense: amount)
-        ],
-      );
+      id: id,
+      createdBy: createdBy,
+      timestamp: timestamp,
+      description: "",
+      payer: createdBy,
+      sharedExpenses: [],
+      syncState: SyncState.synced,
+      currency: currency);
 }

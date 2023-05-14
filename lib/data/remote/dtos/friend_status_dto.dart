@@ -18,6 +18,7 @@ class FriendStatusDTO {
       _$FriendStatusDTOFromJson(json);
 
   Json toJson() => _$FriendStatusDTOToJson(this);
+
 }
 
 class Accepted extends FriendStatusDTO {

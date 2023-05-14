@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
-import 'package:billsplit_flutter/data/remote/dtos/friend_status_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/friend.dart';
 
@@ -17,7 +16,7 @@ extension FriendDTOExt on FriendDTO {
 
   Friend toFriend() {
     final FriendStatus friendStatus;
-    if (status.typeClass is Accepted) {
+    if (status == FriendDTO.statusAccepted) {
       friendStatus = FriendStatus.accepted;
     } else if (createdBy == friend.id) {
       friendStatus = FriendStatus.requestReceived;

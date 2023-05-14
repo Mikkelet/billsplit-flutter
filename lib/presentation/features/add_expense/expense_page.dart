@@ -1,9 +1,11 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
-import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
@@ -38,7 +40,7 @@ class AddExpensePage extends StatelessWidget {
           if (state is AddExpenseSuccess) {
             Navigator.of(context).pop();
           }
-          if(state is ExpenseDeleted){
+          if (state is ExpenseDeleted) {
             Navigator.of(context).pop();
           }
         },
@@ -49,20 +51,22 @@ class AddExpensePage extends StatelessWidget {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      showDialog(context: context, builder: (context){
-                        return CustomDialog(
-                          title: "Are you sure you want to delete",
-                          primaryText: "Delete",
-                          secondaryText: "Cancel",
-                          onPrimaryClick: (){
-                            Navigator.of(context).pop();
-                            cubit.deleteExpense();
-                          },
-                          onSecondaryClick: (){
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomDialog(
+                              title: "Are you sure you want to delete",
+                              primaryText: "Delete",
+                              secondaryText: "Cancel",
+                              onPrimaryClick: () {
+                                Navigator.of(context).pop();
+                                cubit.deleteExpense();
+                              },
+                              onSecondaryClick: () {
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          });
                     },
                     icon: const Icon(Icons.delete),
                     color: Theme.of(context).colorScheme.error,
@@ -108,6 +112,25 @@ class AddExpensePage extends StatelessWidget {
                             RoundedListItem(
                               child: DescriptionTextField(
                                 initialText: groupExpense.descriptionState,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+
+                            //
+                            ClickableListItem(
+                              onClick: () async {
+                                final response = await showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        const CurrencyPickerDialog());
+                                if (response is Currency) {
+                                  cubit.updateCurrency(response);
+                                }
+                              },
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                cubit.groupExpense.currencyState.symbol
+                                    .toUpperCase(),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -251,12 +274,13 @@ class AddExpensePage extends StatelessWidget {
     );
   }
 
-  Iterable<IndividualExpense> getParticipatingPeople() {
-    final pastMembers = groupExpense.individualExpenses;
-    final currentMembers =
-        group.people.map((e) => IndividualExpense(person: e));
-    print("${<IndividualExpense>{...pastMembers, ...currentMembers}}");
-    return <IndividualExpense>{...pastMembers, ...currentMembers};
+  Iterable<Person> getParticipatingPeople() {
+    final Iterable<Person> pastMembers = [
+      ...groupExpense.sharedExpensesState
+          .map((e) => e.participantsState)
+          .toList()
+    ].flatMap().toSet();
+    return <Person>{...pastMembers, ...group.people};
   }
 
   static Route getRoute(Person user, Group group, GroupExpense? expense) {

@@ -1,3 +1,5 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
@@ -11,15 +13,17 @@ class DebtCubit extends BaseCubit {
 
   DebtCubit();
 
-  payDebt(String groupId, Pair<Person, num> debt) {
+  payDebt(Group group, Pair<Person, num> debt) {
+    final currency = Currency(symbol: group.defaultCurrencyState, rate: 1);
     final payment = Payment(
         id: "",
+        currency: currency,
         createdBy: user,
         timestamp: DateTime.now().millisecondsSinceEpoch,
         paidTo: debt.first,
         amount: debt.second);
     emit(Loading());
-    _addEventUseCase.launch(groupId, payment).then((_) {
+    _addEventUseCase.launch(group.id, payment).then((_) {
       emit(DebtAdded());
     }).catchError((error) {
       showError(error);

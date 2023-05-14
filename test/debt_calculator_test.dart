@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/data/debt_calculator.dart';
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
@@ -18,6 +19,7 @@ final sampleGroup = Group(
     id: "GROUP0",
     name: "My group",
     pastMembers: [],
+    defaultCurrency: "usd",
     people: samplePeopleShera,
     createdBy: samplePeopleShera.first,
     timestamp: 0,
@@ -43,7 +45,7 @@ List<GroupExpense> get sampleSharedExpenses {
         description: "Taking down the fire nation",
         payer: samplePeopleShera[0],
         timestamp: 1,
-        individualExpenses: sampleIndividualExpenses.toList(),
+        currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
@@ -51,8 +53,8 @@ List<GroupExpense> get sampleSharedExpenses {
       createdBy: samplePeopleShera[2],
       description: "Beach day",
       payer: samplePeopleShera[1],
+      currency: Currency(symbol: "usd", rate: 1),
       timestamp: 2,
-      individualExpenses: sampleIndividualExpenses.toList(),
       syncState: SyncState.synced,
       sharedExpenses: sampleSharedExpense,
     ),
@@ -62,7 +64,7 @@ List<GroupExpense> get sampleSharedExpenses {
         description: "Appa haircut",
         payer: samplePeopleShera[2],
         timestamp: 3,
-        individualExpenses: sampleIndividualExpenses.toList(),
+        currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
@@ -71,7 +73,7 @@ List<GroupExpense> get sampleSharedExpenses {
         description: "",
         payer: samplePeopleShera[2],
         timestamp: 4,
-        individualExpenses: sampleIndividualExpenses.toList(),
+        currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
@@ -80,7 +82,7 @@ List<GroupExpense> get sampleSharedExpenses {
         description: "Foods",
         payer: samplePeopleShera[2],
         timestamp: 5,
-        individualExpenses: sampleIndividualExpenses.toList(),
+        currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),
   ];
@@ -96,12 +98,14 @@ List<Payment> get samplePayments {
       id: "",
       createdBy: person2,
       timestamp: 6,
+      currency: Currency(symbol: "usd", rate: 1),
       paidTo: person3,
       amount: 500,
     ),
     Payment(
       id: "",
       createdBy: person1,
+      currency: Currency(symbol: "usd", rate: 1),
       timestamp: 7,
       paidTo: person3,
       amount: 200,
@@ -109,6 +113,7 @@ List<Payment> get samplePayments {
     Payment(
       id: "",
       createdBy: person2,
+      currency: Currency(symbol: "usd", rate: 1),
       timestamp: 8,
       paidTo: person1,
       amount: 100,

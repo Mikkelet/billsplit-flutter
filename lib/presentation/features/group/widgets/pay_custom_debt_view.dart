@@ -9,11 +9,13 @@ import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../domain/models/group.dart';
+
 class PayCustomDebtView extends StatefulWidget {
-  final String groupId;
+  final Group group;
   final Pair<Person, num> debt;
 
-  const PayCustomDebtView({Key? key, required this.debt, required this.groupId})
+  const PayCustomDebtView({Key? key, required this.debt, required this.group})
       : super(key: key);
 
   @override
@@ -72,7 +74,7 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
                         onPressed: amount == 0
                             ? null
                             : () {
-                                cubit.payDebt(widget.groupId,
+                                cubit.payDebt(widget.group,
                                     Pair(widget.debt.first, amount));
                               },
                         icon: const Icon(Icons.check),

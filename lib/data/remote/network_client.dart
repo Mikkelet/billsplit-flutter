@@ -11,14 +11,14 @@ import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
-  static bool debug = false;
+  static bool debug = true;
   static String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
       : "http://localhost:5000/billsplittapp/us-central1/v2/";
   static String devUrl = "http://192.168.8.227:5000/billsplittapp/us-central1/v2/";
   static String releaseBaseUrl =
       "https://us-central1-billsplittapp.cloudfunctions.net/v2/";
-  static String baseUrl = debug ? devUrl : releaseBaseUrl;
+  static String baseUrl = debug ? debugBaseUrl : releaseBaseUrl;
 
   final _client = RetryClient(http.Client());
   final _authProvider = getIt<AuthProvider>();

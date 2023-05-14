@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
@@ -10,33 +11,34 @@ import 'shared_expense.dart';
 
 class GroupExpense extends Event {
   final Person _payer;
-  final Iterable<IndividualExpense> individualExpenses;
   final String _description;
   final Iterable<SharedExpense> _sharedExpenses;
   final SyncState syncState;
+  final Currency _currency;
 
   // modifiable values
   late Person payerState = _payer;
   late String descriptionState = _description;
   late List<SharedExpense> sharedExpensesState = _sharedExpenses.toList();
+  late Currency currencyState = _currency;
 
-  GroupExpense(
-      {required String id,
-      required Person createdBy,
-      required num timestamp,
-      required String description,
-      required Iterable<SharedExpense> sharedExpenses,
-      required Person payer,
-      required this.syncState,
-      required this.individualExpenses})
-      : _payer = payer,
+  GroupExpense({
+    required String id,
+    required Person createdBy,
+    required num timestamp,
+    required String description,
+    required Iterable<SharedExpense> sharedExpenses,
+    required Person payer,
+    required Currency currency,
+    required this.syncState,
+  })  : _payer = payer,
         _sharedExpenses = sharedExpenses,
         _description = description,
+        _currency = currency,
         super(id, createdBy, timestamp);
 
   num get total {
-    return individualExpenses.map((e) => e.expenseState).sum +
-        sharedExpensesState.map((e) => e.expenseState).sum;
+    return sharedExpensesState.map((e) => e.expenseState).sum;
   }
 
   num getSharedExpensesForPerson(Person person) {
@@ -54,7 +56,6 @@ class GroupExpense extends Event {
     return _payer.uid != payerState.uid ||
         _description != descriptionState ||
         !sharedExpensesState.equals(_sharedExpenses.toList()) ||
-        individualExpenses.any((element) => element.isChanged) ||
         sharedExpensesState.any((element) => element.isChanged);
   }
 
@@ -62,9 +63,6 @@ class GroupExpense extends Event {
     descriptionState = _description;
     payerState = _payer;
     sharedExpensesState = _sharedExpenses.toList();
-    for (var element in individualExpenses) {
-      element.resetChanges();
-    }
   }
 
   GroupExpense.dummy(num seed)
@@ -72,10 +70,10 @@ class GroupExpense extends Event {
             id: "GE$seed",
             createdBy: Person.dummy(seed),
             description: "",
-            individualExpenses: [],
             sharedExpenses: [],
             syncState: SyncState.synced,
             payer: Person.dummy(seed),
+            currency: Currency(symbol: "usd", rate: 1),
             timestamp: 0);
 
   GroupExpense.newExpense(Person user, Group group)
@@ -83,11 +81,10 @@ class GroupExpense extends Event {
             id: "",
             createdBy: user,
             description: "",
-            individualExpenses:
-                group.people.map((e) => IndividualExpense(person: e)).toList(),
             sharedExpenses: [SharedExpense.newInstance(group.people)],
             syncState: SyncState.synced,
             payer: user,
+            currency: Currency(symbol: "usd", rate: 1),
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
   @override
@@ -97,8 +94,10 @@ class GroupExpense extends Event {
 
   SharedExpense addNewSharedExpense(
       {required Iterable<Person> withParticipants}) {
-    final se = SharedExpense.newInstance(
-        [...individualExpenses.map((e) => e.person).toList()]);
+    final Iterable<Person> currentParticipants = [
+      ...sharedExpensesState.map((e) => e.participantsState).toList()
+    ].flatMap().toSet();
+    final se = SharedExpense.newInstance(currentParticipants);
     se.participantsState = withParticipants.toList();
     sharedExpensesState.add(se);
     return se;

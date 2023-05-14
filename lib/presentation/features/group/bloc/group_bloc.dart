@@ -52,7 +52,9 @@ class GroupBloc extends BaseCubit {
     _getGroupUseCase
         .launch(group.id)
         .then((value) => emit(GroupLoaded(navIndex)))
-        .catchError((err) {
+        .catchError((err, ss) {
+      print(ss);
+
       showError(err);
     });
   }

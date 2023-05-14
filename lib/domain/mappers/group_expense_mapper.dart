@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
+import 'package:billsplit_flutter/domain/mappers/currency_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
-import 'package:billsplit_flutter/domain/mappers/individual_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
+
+import '../models/currency.dart';
 
 extension GroupExpensesDtoExt on Iterable<GroupExpenseDTO> {
   Iterable<GroupExpenseDb> toDb(String groupId) =>
@@ -24,13 +26,12 @@ extension GroupExpenseDtoExt on GroupExpenseDTO {
   GroupExpense toGroupExpense() => GroupExpense(
       id: id,
       createdBy: createdBy.toPerson(),
-      timestamp: timeStamp,
+      timestamp: timestamp,
       description: description,
       payer: payee.toPerson(),
+      currency: Currency(symbol: "usd", rate: 1),
       syncState: SyncState.synced,
-      sharedExpenses: sharedExpenses.toSharedExpense(),
-      individualExpenses:
-          individualExpenses.map((e) => e.toExpense()).toList());
+      sharedExpenses: sharedExpenses.toSharedExpense());
 }
 
 extension GroupExpensesDbExt on Iterable<GroupExpenseDb> {
@@ -46,12 +47,12 @@ extension GroupExpenseDbExt on GroupExpenseDb {
     return GroupExpense(
         id: id,
         createdBy: dto.createdBy.toPerson(),
-        timestamp: dto.timeStamp,
+        timestamp: dto.timestamp,
         description: dto.description,
         sharedExpenses: dto.sharedExpenses.toSharedExpense(),
         payer: dto.payee.toPerson(),
         syncState: SyncState.fromId(syncState),
-        individualExpenses: dto.individualExpenses.toExpenses());
+        currency: dto.currency.toCurrency());
   }
 }
 

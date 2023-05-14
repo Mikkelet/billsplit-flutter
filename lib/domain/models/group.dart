@@ -11,11 +11,13 @@ class Group {
   final num timestamp;
   final Event? _latestEvent;
   final List<Debt> _debts;
+  final String _defaultCurrency;
 
   // modifiable values
   late String nameState = _name;
   late Event? latestEventState = _latestEvent;
   late Iterable<Debt> debtState = _debts;
+  late String defaultCurrencyState = _defaultCurrency;
 
   Group(
       {required this.id,
@@ -25,9 +27,11 @@ class Group {
       required this.createdBy,
       required this.timestamp,
       required Event? latestEvent,
+      required String defaultCurrency,
       required Iterable<Debt> debts})
       : _latestEvent = latestEvent,
         _name = name,
+        _defaultCurrency = defaultCurrency,
         _debts = debts.toList();
 
   Iterable<Person> get allPeople => [...people, ...pastMembers];
@@ -41,6 +45,7 @@ class Group {
           pastMembers: [],
           timestamp: DateTime.now().millisecondsSinceEpoch,
           latestEvent: null,
+          defaultCurrency: "usd",
           debts: [],
         );
 
@@ -52,6 +57,7 @@ class Group {
             people: [],
             createdBy: Person.dummy(2),
             timestamp: 0,
+            defaultCurrency: "usd",
             latestEvent: null,
             debts: []);
 

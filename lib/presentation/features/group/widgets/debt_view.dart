@@ -41,7 +41,7 @@ class DebtView extends StatelessWidget {
                   isScrollControlled: true,
                   builder: (context) => PayCustomDebtView(
                     debt: debt,
-                    groupId: groupCubit.group.id,
+                    group: groupCubit.group,
                   ),
                 );
               },

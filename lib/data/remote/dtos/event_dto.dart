@@ -1,9 +1,8 @@
+import 'package:billsplit_flutter/data/remote/dtos/currency_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/shared_expense_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'individual_expense_dto.dart';
 
 part 'event_dto.g.dart';
 
@@ -13,9 +12,13 @@ class EventDTO {
   final String type;
   final String id;
   final PersonDTO createdBy;
-  final num timeStamp;
+  final num timestamp;
 
-  EventDTO(this.id, this.createdBy, this.timeStamp, this.type);
+  EventDTO(
+      {required this.id,
+      required this.createdBy,
+      required this.timestamp,
+      required this.type});
 
   static EventDTO? fromJson(Json json) {
     try {
@@ -49,18 +52,19 @@ class EventDTO {
 class GroupExpenseDTO extends EventDTO {
   final String description;
   final PersonDTO payee;
-  final Iterable<IndividualExpenseDTO> individualExpenses;
+  final CurrencyDTO currency;
   final Iterable<SharedExpenseDTO> sharedExpenses;
 
   GroupExpenseDTO(
-      super.id,
-      super.createdBy,
-      super.timeStamp,
-      super.type,
-      this.description,
-      this.payee,
-      this.individualExpenses,
-      this.sharedExpenses);
+      {required String id,
+      required PersonDTO createdBy,
+      required num timestamp,
+      String type = "expense",
+      required this.description,
+      required this.currency,
+      required this.payee,
+      required this.sharedExpenses})
+      : super(id: id, createdBy: createdBy, timestamp: timestamp, type: type);
 
   factory GroupExpenseDTO.fromJson(Json json) =>
       _$GroupExpenseDTOFromJson(json);
@@ -73,9 +77,22 @@ class GroupExpenseDTO extends EventDTO {
 class PaymentDTO extends EventDTO {
   final PersonDTO paidTo;
   final num amount;
+  final CurrencyDTO currency;
 
-  PaymentDTO(super.id, super.createdBy, super.timeStamp, super.type,
-      this.paidTo, this.amount);
+  PaymentDTO(
+      {required String id,
+      required PersonDTO createdBy,
+      required num timestamp,
+        String type = "payment",
+      required this.currency,
+      required this.paidTo,
+      required this.amount})
+      : super(
+          id: id,
+          createdBy: createdBy,
+          timestamp: timestamp,
+          type: type,
+        );
 
   factory PaymentDTO.fromJson(Json json) => _$PaymentDTOFromJson(json);
 

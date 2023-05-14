@@ -5,13 +5,15 @@ class ClickableListItem extends StatelessWidget {
   final Widget child;
   final Color? color;
   final EdgeInsets? padding;
+  final Alignment? alignment;
 
   const ClickableListItem(
       {super.key,
       required this.onClick,
       required this.child,
       this.color,
-      this.padding});
+      this.padding,
+      this.alignment});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,9 @@ class ClickableListItem extends StatelessWidget {
       elevation: 0,
       highlightElevation: 0,
       child: Padding(
-        padding: padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-        child: child,
+        padding:
+            padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
+        child: Align(alignment: alignment ?? Alignment.center, child: child),
       ),
     );
   }

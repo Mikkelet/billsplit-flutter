@@ -5,9 +5,7 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
   final Widget Function(T) body;
 
   const DefaultStreamBuilder(
-      {Key? key,
-      required this.stream,
-      required this.body})
+      {Key? key, required this.stream, required this.body})
       : super(key: key);
 
   @override
@@ -18,6 +16,10 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+          if (snapshot.hasError) {
+            print("snapshot error=${snapshot.error}");
+          }
+          print("snapshot data=${snapshot.data}");
           if (!snapshot.hasData) {
             return const Center(child: Text("No data"));
           }

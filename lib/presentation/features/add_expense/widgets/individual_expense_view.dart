@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/models/individual_expense.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/common/payer_view.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -6,34 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class IndividualExpenseView extends StatefulWidget {
-  final IndividualExpense individualExpense;
+class IndividualExpenseView extends StatelessWidget {
+  final Person person;
 
-  const IndividualExpenseView(this.individualExpense, {super.key});
-
-  @override
-  State<IndividualExpenseView> createState() => _IndividualExpenseViewState();
-}
-
-class _IndividualExpenseViewState extends State<IndividualExpenseView> {
-  late final textController =
-      TextEditingController(text: "${widget.individualExpense.expenseState}");
+  const IndividualExpenseView(this.person, {super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    final nameShort = widget.individualExpense.person
-        .nameState;
+    final nameShort = person.nameState;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         PayerView(
-          person: widget.individualExpense.person,
-          isPayer: _isPayer(widget.individualExpense, cubit),
+          person: person,
+          isPayer: _isPayer(person, cubit),
           size: 50,
           onClick: () {
-            cubit.onPayerSelected(widget.individualExpense.person);
+            cubit.onPayerSelected(person);
           },
         ),
         const SizedBox(width: 8),
@@ -52,21 +43,19 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
                         builder: (context) {
                           String buttonText = nameShort;
                           if (cubit.groupExpense.payerState.uid ==
-                              widget.individualExpense.person.uid) {
+                              person.uid) {
                             buttonText = "$nameShort is paying";
                           }
                           return MaterialButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             onPressed: () {
-                              cubit.onPayerSelected(
-                                  widget.individualExpense.person);
+                              cubit.onPayerSelected(person);
                             },
                             onLongPress: () {
                               HapticFeedback.heavyImpact();
 
-                              cubit.addExpenseForUser(
-                                  widget.individualExpense.person);
+                              cubit.addExpenseForUser(person);
                             },
                             visualDensity: VisualDensity.compact,
                             child: Align(
@@ -114,18 +103,10 @@ class _IndividualExpenseViewState extends State<IndividualExpenseView> {
   }
 
   num getTotalForUser(AddExpenseBloc cubit) {
-    return widget.individualExpense.expenseState +
-        cubit.groupExpense
-            .getSharedExpensesForPerson(widget.individualExpense.person);
+    return cubit.groupExpense.getSharedExpensesForPerson(person);
   }
 
-  bool _isPayer(IndividualExpense individualExpense, AddExpenseBloc cubit) {
-    return cubit.groupExpense.payerState.uid == individualExpense.person.uid;
-  }
-
-  @override
-  void dispose() {
-    textController.dispose();
-    super.dispose();
+  bool _isPayer(Person person, AddExpenseBloc cubit) {
+    return cubit.groupExpense.payerState.uid == person.uid;
   }
 }
