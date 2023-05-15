@@ -60,6 +60,9 @@ class GroupView extends StatelessWidget {
     final convertDebt = cubit.convertToDefault(debt);
     final String currency =
         cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
+    if (convertDebt == 0) {
+      return const SizedBox();
+    }
     return Row(
       children: [
         const SizedBox(width: 64),
