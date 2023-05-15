@@ -38,9 +38,20 @@ class SharedPrefs {
     _sharedPrefs.setStringList(groupSubscriptionsKey, settingsJson.toList());
   }
 
+  // exchange rates
+  Map<String, num> get latestExchangeRates {
+    final json = _sharedPrefs.getString(latestExchangeRatesKey) ?? "";
+    return jsonDecode(json) as Map<String, num>;
+  }
+
+  set latestExchangeRates(Map<String, num> rates) {
+    _sharedPrefs.setString(latestExchangeRatesKey, jsonEncode(rates));
+  }
+
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
   static const hasSeenPushNotificationPermissionRationaleKey =
       "hasSeenPushNotificationPermissionRationale";
   static const groupSubscriptionsKey = "groupNotificationSettings";
+  static const latestExchangeRatesKey = "latestExchangeRates";
 }

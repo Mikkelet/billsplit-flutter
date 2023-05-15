@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/data/remote/requests/add_friend_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/delete_expense_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_exchange_rates_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
@@ -104,6 +105,11 @@ class ApiService {
 
   void onDestroy() {
     _client.onDestroy();
+  }
+
+  Future<Map<String, num>> getExchangeRates() async {
+    final response = await _client.get("rates");
+    return GetExchangeRatesRequest.fromJson(response).rates;
   }
 
 }

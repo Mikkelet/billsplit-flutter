@@ -7,6 +7,7 @@ class ExpenseTextField extends StatelessWidget {
   final bool canBeZero;
   final bool autoFocus;
   final num? maxValue;
+  final String currency;
 
   ExpenseTextField({
     Key? key,
@@ -15,6 +16,7 @@ class ExpenseTextField extends StatelessWidget {
     this.canBeZero = true,
     this.autoFocus = false,
     this.maxValue,
+    this.currency = "DKK",
   }) : super(key: key) {
     textEditingController.addListener(() {
       onChange(parseInput);
@@ -36,7 +38,8 @@ class ExpenseTextField extends StatelessWidget {
         hintText: "0",
         border: InputBorder.none,
         errorText: _errorText(),
-        prefixIcon: const Icon(Icons.attach_money_outlined),
+        prefixStyle: const TextStyle(fontSize: 10),
+        prefixText: currency.toUpperCase(),
         counterText: "",
         prefixIconConstraints: const BoxConstraints(),
         suffix: maxValue != null
@@ -91,7 +94,7 @@ class ExpenseTextField extends StatelessWidget {
     return inputAsNumber;
   }
 
-  bool isInputMaxValue(){
+  bool isInputMaxValue() {
     if (maxValue == null) return true;
     return parseInput.fmt2dec() == maxValue!.fmt2dec();
   }

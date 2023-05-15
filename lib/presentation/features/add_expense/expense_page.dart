@@ -116,7 +116,7 @@ class AddExpensePage extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
 
-                            //
+                            // Currency
                             ClickableListItem(
                               onClick: () async {
                                 final response = await showDialog(
@@ -127,6 +127,7 @@ class AddExpensePage extends StatelessWidget {
                                   cubit.updateCurrency(response);
                                 }
                               },
+                              enabled: cubit.groupExpense.id.isEmpty,
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 cubit.groupExpense.currencyState.symbol

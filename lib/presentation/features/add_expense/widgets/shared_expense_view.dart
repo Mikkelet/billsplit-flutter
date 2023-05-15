@@ -32,7 +32,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 3,
+              flex: 8,
               child: SharedExpenseDescriptionView(
                 autoFocus: widget.autoFocus,
                 showIcon: false,
@@ -40,8 +40,9 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
               ),
             ),
             Expanded(
-              flex: 1,
+              flex: 5,
               child: ExpenseTextField(
+                currency: cubit.groupExpense.currencyState.symbol,
                 onChange: (value) {
                   widget.sharedExpense.expenseState = value;
                   cubit.onExpensesUpdated();
