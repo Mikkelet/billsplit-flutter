@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/data/currency_converter.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
@@ -9,10 +10,11 @@ import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
 class DebtCalculator {
+  final currencyConverter = CurrencyConverter();
   final Iterable<Person> people;
   final Iterable<GroupExpense> expenses;
   final Iterable<Payment> payments;
-  late final expensesAndPayments = [
+  late final List<GroupExpense> expensesAndPayments = [
     ...expenses,
     ...payments.map((e) => e.toExpense())
   ];
@@ -23,6 +25,7 @@ class DebtCalculator {
       : this(people, events.whereType<GroupExpense>(),
             events.whereType<Payment>());
 
+  /// Returns a list of people mapped to a list of debts in USD to other people
   Iterable<Pair<Person, Iterable<Pair<Person, num>>>> calculateDebts() {
     return people.map((person) {
       // get expenses payed for by person
@@ -45,7 +48,7 @@ class DebtCalculator {
         final debtsByIndebted = payedForIndividualExpenses
             .where((element) => element.person.uid == indebted.uid);
         // accumulate all their debts
-        final totalDebt = debtsByIndebted.map((e) => e.expenseState).sum;
+        final totalDebt = debtsByIndebted.map((e) => e.expense).sum;
         return Pair(indebted, totalDebt);
       });
       return Pair(person, accExpensesByIe);
@@ -202,7 +205,8 @@ extension GroupExpenseExt on GroupExpense {
         sharedExpensesState.map((e) => e.participantsState).flatMap().toSet();
     return people.map((e) {
       final num expense = getSharedExpensesForPerson(e);
-      return IndividualExpense(person: e, expense: expense);
+      return IndividualExpense(
+          person: e, expense: expense, currency: currencyState.symbol);
     });
   }
 }

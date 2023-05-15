@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
+  static bool allowNetworkLogging = false;
   static bool debug = true;
   static String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
@@ -28,7 +29,9 @@ class NetworkClient {
   }
 
   Future<Json> get(String path, {bool refreshToken = false}) async {
-    print("qqq baseUrl=$baseUrl$path");
+    if(allowNetworkLogging) {
+      print("qqq baseUrl=$baseUrl$path");
+    }
     final url = Uri.parse("$baseUrl$path");
     final token = refreshToken
         ? await _authProvider.getToken(true)
@@ -37,10 +40,12 @@ class NetworkClient {
       HttpHeaders.authorizationHeader: token,
     };
     final response = await _client.get(url, headers: headers);
-    print("Request: ${response.request}");
-    print("Request: ${response.request?.headers}");
-    print('Response status: ${response.statusCode}');
-    print('Response body:${response.body}');
+    if(allowNetworkLogging) {
+      print("Request: ${response.request}");
+      print("Request: ${response.request?.headers}");
+      print('Response status: ${response.statusCode}');
+      print('Response body:${response.body}');
+    }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }
@@ -59,16 +64,17 @@ class NetworkClient {
       HttpHeaders.authorizationHeader: token,
       HttpHeaders.contentTypeHeader: "application/json"
     };
-    print('Request body:$body');
-    print("Request headers: $headers");
 
     final response =
         await _client.post(url, body: json.encode(body), headers: headers);
-    print("Request: ${response.request}");
-    print("Response headers: ${response.request?.headers}");
-    print('Response status: ${response.statusCode}');
-    print('Response body:${response.body}');
-
+    if(allowNetworkLogging) {
+      print('Request body:$body');
+      print("Request headers: $headers");
+      print("Request: ${response.request}");
+      print("Response headers: ${response.request?.headers}");
+      print('Response status: ${response.statusCode}');
+      print('Response body:${response.body}');
+    }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }
@@ -88,16 +94,17 @@ class NetworkClient {
       HttpHeaders.authorizationHeader: token,
       HttpHeaders.contentTypeHeader: "application/json"
     };
-    print('Request body:$body');
-    print("Request headers: $headers");
-
     final response =
         await _client.put(url, body: json.encode(body), headers: headers);
-    print("Request: ${response.request}");
-    print("Response headers: ${response.request?.headers}");
-    print('Response status: ${response.statusCode}');
-    print('Response body:${response.body}');
+    if(allowNetworkLogging) {
+      print('Request body:$body');
+      print("Request headers: $headers");
 
+      print("Request: ${response.request}");
+      print("Response headers: ${response.request?.headers}");
+      print('Response status: ${response.statusCode}');
+      print('Response body:${response.body}');
+    }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }
@@ -121,8 +128,6 @@ class NetworkClient {
       HttpHeaders.authorizationHeader: token,
       HttpHeaders.contentTypeHeader: "application/json"
     };
-    print('Request body:$body');
-    print("Request headers: $headers");
 
     Response response;
     if (body == null) {
@@ -131,9 +136,13 @@ class NetworkClient {
       response =
           await _client.delete(url, body: json.encode(body), headers: headers);
     }
-    print("Request body: ${response.body}");
-    print("Response headers: ${response.request?.headers}");
-    print('Response status: ${response.statusCode}');
+    if(allowNetworkLogging) {
+      print('Request body:$body');
+      print("Request headers: $headers");
+      print("Request body: ${response.body}");
+      print("Response headers: ${response.request?.headers}");
+      print('Response status: ${response.statusCode}');
+    }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
     }

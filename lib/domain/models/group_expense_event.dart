@@ -46,9 +46,11 @@ class GroupExpense extends Event {
         .map((sharedExpense) => sharedExpense.participantsState
             .where((participant) => participant.uid == person.uid)
             .map((person) => IndividualExpense(
-                person: person, expense: sharedExpense.sharedExpenseDivided)))
+                currency: currencyState.symbol,
+                person: person,
+                expense: sharedExpense.sharedExpenseDivided)))
         .flatMap()
-        .map((e) => e.expenseState)
+        .map((e) => e.expense)
         .sum;
   }
 

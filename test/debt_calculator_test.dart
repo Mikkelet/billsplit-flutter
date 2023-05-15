@@ -26,9 +26,8 @@ final sampleGroup = Group(
     debts: [],
     latestEvent: null);
 
-final sampleIndividualExpenses = samplePeopleShera
-    .toList()
-    .mapIndexed((i, p) => IndividualExpense(person: p, expense: i * 100));
+final sampleIndividualExpenses = samplePeopleShera.toList().mapIndexed(
+    (i, p) => IndividualExpense(currency: "usd", person: p, expense: i * 100));
 
 final sampleSharedExpense = [
   SharedExpense(

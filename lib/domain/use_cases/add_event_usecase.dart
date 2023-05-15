@@ -22,7 +22,8 @@ class AddEventUseCase {
 
   Future launch(String groupId, Event event) async {
     // store pending event in db, will be updated later
-    String tempId = event.id.isEmpty ? "$tempIdPrefix-${event.hashCode}" : event.id;
+    String tempId =
+        event.id.isEmpty ? "$tempIdPrefix-${event.hashCode}" : event.id;
     if (event is GroupExpense) {
       final expenseDb = event.toDb(groupId, SyncState.pending, tempId: tempId);
       await _database.groupExpenseDAO.insert(expenseDb);
@@ -71,19 +72,11 @@ class AddEventUseCase {
     final group = groupDb.toGroup();
     final people = group.allPeople.toList();
     final groupExpenseDb = await _database.groupExpenseDAO.watch(groupId).first;
-    final groupExpense = groupExpenseDb.toGroupExpenses();
-    Iterable<GroupExpense> groupExpensesWithEvent = groupExpense;
-    if (event is GroupExpense) {
-      groupExpensesWithEvent = [...groupExpense, event];
-    }
-
+    final groupExpenses = groupExpenseDb.toGroupExpenses();
     final paymentsDb = await _database.paymentsDAO.watch(groupId).first;
     Iterable<Payment> payments = paymentsDb.toPayments();
-    if (event is Payment) {
-      payments = [...payments, event];
-    }
 
-    final debt = DebtCalculator(people, groupExpensesWithEvent, payments)
+    final debt = DebtCalculator(people, groupExpenses, payments)
         .calculateEffectiveDebtForGroup();
     return debt;
   }

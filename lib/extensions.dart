@@ -15,7 +15,7 @@ extension ListExt<T, V> on List<T> {
 
 extension Sum on List<IndividualExpense> {
   num sumExpenses() {
-    return map((e) => e.expenseState).reduce((value, element) => value += element);
+    return map((e) => e.expense).reduce((value, element) => value += element);
   }
 }
 
