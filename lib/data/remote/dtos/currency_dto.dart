@@ -6,7 +6,7 @@ part 'currency_dto.g.dart';
 @JsonSerializable()
 class CurrencyDTO {
   final String symbol;
-  final double rateSnapshot;
+  final num rateSnapshot;
 
   CurrencyDTO({required this.symbol, required this.rateSnapshot});
 

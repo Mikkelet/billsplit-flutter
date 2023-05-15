@@ -41,17 +41,30 @@ class SharedPrefs {
   // exchange rates
   Map<String, num> get latestExchangeRates {
     final json = _sharedPrefs.getString(latestExchangeRatesKey) ?? "";
-    return jsonDecode(json) as Map<String, num>;
+    final decode = jsonDecode(json);
+    final cast = (decode as Map).map(
+        (key, value) => MapEntry<String, num>(key as String, value as num));
+    return cast;
   }
 
   set latestExchangeRates(Map<String, num> rates) {
     _sharedPrefs.setString(latestExchangeRatesKey, jsonEncode(rates));
   }
 
+  // user preference: default currency
+  String get userPrefDefaultCurrency =>
+      _sharedPrefs.getString(userPrefDefaultCurrencyKey) ?? "usd";
+
+  set userPrefDefaultCurrency(String symbol) =>
+      _sharedPrefs.setString(userPrefDefaultCurrencyKey, symbol);
+
+
+  // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
   static const hasSeenPushNotificationPermissionRationaleKey =
       "hasSeenPushNotificationPermissionRationale";
   static const groupSubscriptionsKey = "groupNotificationSettings";
   static const latestExchangeRatesKey = "latestExchangeRates";
+  static const userPrefDefaultCurrencyKey = "defaultCurrency";
 }

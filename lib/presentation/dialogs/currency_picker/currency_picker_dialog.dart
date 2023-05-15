@@ -12,7 +12,7 @@ class CurrencyPickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: BaseBlocWidget(
-        create: (context) => CurrencyPickerCubit()..loadCurrencies(),
+        create: (context) => CurrencyPickerCubit(),
         child: BaseBlocBuilder<CurrencyPickerCubit>(builder: (cubit, state) {
           if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
