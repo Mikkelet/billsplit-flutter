@@ -1,9 +1,11 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
@@ -70,6 +72,29 @@ class ProfilePage extends StatelessWidget {
                         children: const [
                           Text("Friends"),
                           Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // default currency
+                    ClickableListItem(
+                      onClick: () async {
+                        final response = await showDialog(
+                            context: context,
+                            builder: (context) => const CurrencyPickerDialog());
+                        if (response is Currency) {
+                          cubit.updateCurrency(response);
+                        }
+                      },
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            cubit.defaultCurrency.toUpperCase(),
+                          ),
+                          const Icon(Icons.edit)
                         ],
                       ),
                     ),

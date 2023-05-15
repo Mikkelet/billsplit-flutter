@@ -129,9 +129,17 @@ class AddExpensePage extends StatelessWidget {
                               },
                               enabled: cubit.groupExpense.id.isEmpty,
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                cubit.groupExpense.currencyState.symbol
-                                    .toUpperCase(),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    cubit.groupExpense.currencyState.symbol
+                                        .toUpperCase(),
+                                  ),
+                                  if (cubit.groupExpense.id.isEmpty)
+                                    const Icon(Icons.edit)
+                                ],
                               ),
                             ),
                             const SizedBox(height: 8),

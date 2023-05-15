@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_groups_usecase.dart';
@@ -10,6 +11,7 @@ class GroupsBloc extends BaseCubit {
   final _getGroupsUseCase = GetGroupsUseCase();
   final _getFriendsUseCase = GetFriendsUseCase();
   final _observeGroupsUseCase = ObserveGroupsUseCase();
+  final _convertCurrencyUseCase = ConvertCurrencyUseCase();
 
   GroupsBloc() : super();
 
@@ -35,5 +37,10 @@ class GroupsBloc extends BaseCubit {
     } catch (e) {
       showError(e);
     }
+  }
+
+  num convertToDefault(num debt) {
+    final userPref = sharedPrefs.userPrefDefaultCurrency;
+    return _convertCurrencyUseCase.launch(debt, "usd", userPref);
   }
 }

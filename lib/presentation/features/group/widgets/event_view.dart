@@ -41,7 +41,8 @@ class EventView extends StatelessWidget {
         );
       }
       if (event is Payment) {
-        final text = "${(event as Payment).createdBy.nameState} paid \$${(event as Payment).amount.fmt2dec()} to ${(event as Payment).paidTo.nameState}";
+        final text =
+            "${(event as Payment).createdBy.nameState} paid ${(event as Payment).currency.symbol.toUpperCase()} ${(event as Payment).amount.fmt2dec()} to ${(event as Payment).paidTo.nameState}";
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),

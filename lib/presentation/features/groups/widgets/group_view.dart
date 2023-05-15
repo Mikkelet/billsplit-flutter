@@ -35,19 +35,11 @@ class GroupView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Text(group.nameState,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                      Flexible(flex: 1, child: _debtView(context, yourDebts))
-                    ],
-                  ),
+                  Text(group.nameState,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis),
+                  _debtView(context, yourDebts),
                   const SizedBox(height: 8),
                   ProfilePictureStack(
                     people: group.people,
@@ -64,23 +56,38 @@ class GroupView extends StatelessWidget {
   }
 
   Widget _debtView(BuildContext context, num debt) {
-    if (debt > 0) {
-      return Text("\$${debt.fmt2dec()}",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
+    final cubit = context.read<GroupsBloc>();
+    final convertDebt = cubit.convertToDefault(debt);
+    final String currency =
+        cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
+    return Row(
+      children: [
+        const SizedBox(width: 64),
+        const Expanded(child: SizedBox()),
+        Text(
+          currency,
           style:
-              Theme.of(context).textTheme.bodyLarge?.apply(color: Colors.red));
-    }
-    if (debt < 0) {
-      return Text("\$${debt.abs().fmt2dec()}",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.apply(color: Colors.green));
-    }
-    return const SizedBox();
+              TextStyle(fontSize: 10, color: Theme.of(context).disabledColor),
+        ),
+        const SizedBox(width: 4),
+        if (debt > 0)
+          Text(convertDebt.fmt2dec(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.apply(color: Colors.red)),
+        if (debt < 0)
+          Text(convertDebt.abs().fmt2dec(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.apply(color: Colors.green))
+      ],
+    );
   }
 
   void _onClick(BuildContext context) {

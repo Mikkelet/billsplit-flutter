@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/use_cases/sign_out_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/update_profile_picture_usecase.dart';
@@ -52,4 +53,11 @@ class ProfileCubit extends BaseCubit {
       _updateDisplayNameState(UpdateTextFieldState.display);
     });
   }
+
+  void updateCurrency(Currency currency) {
+    sharedPrefs.userPrefDefaultCurrency = currency.symbol;
+    emit(Main());
+  }
+
+  String get defaultCurrency => sharedPrefs.userPrefDefaultCurrency;
 }

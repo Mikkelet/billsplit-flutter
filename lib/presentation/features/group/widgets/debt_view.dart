@@ -15,18 +15,22 @@ class DebtView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final groupCubit = context.read<GroupBloc>();
+
     String text = "";
     Color color = Colors.black;
+    final String userCurrency = groupCubit.sharedPrefs.userPrefDefaultCurrency;
+    final convertDebt = groupCubit.convertToDefaultCurrency(debt.second);
     final isDebt = debt.second > 0;
+
     if (isDebt) {
-      text = "You owe \$${debt.second.fmt2dec()} to ${debt.first.nameState}";
+      text = "You owe $userCurrency ${convertDebt.fmt2dec()} to ${debt.first.nameState}";
       color = Colors.redAccent;
     } else if (debt.second < 0) {
       text =
-          "${debt.first.nameState} owes you \$${debt.second.abs().fmt2dec()}";
+          "${debt.first.nameState} owes you $userCurrency ${convertDebt.abs().fmt2dec()}";
       color = Colors.green;
     }
-    final groupCubit = context.read<GroupBloc>();
     return RoundedListItem(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

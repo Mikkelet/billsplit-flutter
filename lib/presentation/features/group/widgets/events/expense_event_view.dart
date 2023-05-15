@@ -57,10 +57,22 @@ class ExpenseEventView extends StatelessWidget {
                       .bodyLarge!
                       .copyWith(fontStyle: fontStyle)),
               const SizedBox(height: 8),
-              Text(
-                "\$${groupExpense.total.fmt2dec()}",
-                style: Theme.of(context).textTheme.titleLarge,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    groupExpense.currencyState.symbol.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 15, color: Theme.of(context).disabledColor),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    groupExpense.total.fmt2dec(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  )
+                ],
               ),
+              const SizedBox(height: 8),
               Text(
                 "paid by ${groupExpense.payerState.nameState}",
                 style: Theme.of(context).textTheme.bodySmall,

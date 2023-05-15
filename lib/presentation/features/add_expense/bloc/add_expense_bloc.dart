@@ -14,7 +14,18 @@ class AddExpenseBloc extends BaseCubit {
   late final _addExpenseUseCase = AddEventUseCase();
   final _deleteExpenseUseCase = DeleteExpenseUseCase();
 
-  AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main());
+  AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main()) {
+    if (groupExpense.id.isEmpty) {
+      final groupDefCurrencyRate =
+          sharedPrefs.latestExchangeRates[group.defaultCurrencyState];
+      if (groupDefCurrencyRate == null) {
+        groupExpense.currencyState = Currency.USD();
+      } else {
+        groupExpense.currencyState = Currency(
+            symbol: group.defaultCurrencyState, rate: groupDefCurrencyRate);
+      }
+    }
+  }
 
   void onExpensesUpdated() {
     emit(Main());

@@ -84,7 +84,7 @@ class GroupExpense extends Event {
             sharedExpenses: [SharedExpense.newInstance(group.people)],
             syncState: SyncState.synced,
             payer: user,
-            currency: Currency(symbol: "usd", rate: 1),
+            currency: Currency(symbol: group.defaultCurrencyState, rate: 1),
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
   @override

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
@@ -8,6 +9,7 @@ import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_person_to_group_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_debts_usecase.dart';
@@ -29,6 +31,7 @@ class GroupBloc extends BaseCubit {
   final _addPersonToGroupUseCase = AddPersonToGroupUseCase();
   final _addGroupUseCase = AddGroupUseCase();
   final _addExpenseUseCase = AddEventUseCase();
+  final _convertCurrencyUseCase = ConvertCurrencyUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
@@ -119,5 +122,15 @@ class GroupBloc extends BaseCubit {
 
   void retryAddExpense(GroupExpense expense) {
     _addExpenseUseCase.launch(group.id, expense);
+  }
+
+  num convertToDefaultCurrency(num amount) {
+    final userPrefCurrency = sharedPrefs.userPrefDefaultCurrency;
+    return _convertCurrencyUseCase.launch(amount, "usd", userPrefCurrency);
+  }
+
+  void updateCurrency(Currency currency) {
+    group.defaultCurrencyState = currency.symbol;
+    emit(Main());
   }
 }

@@ -5,6 +5,7 @@ class ConvertCurrencyUseCase {
   final _prefs = getIt<SharedPrefs>();
 
   num launch(num amount, String currencySymbol, String convertToCurrency) {
+    if(amount == 0) return 0;
     final response = _prefs.latestExchangeRates;
     final rateForCurrentCurrency = response[currencySymbol.toUpperCase()]!;
     final rateForNewCurrency = response[convertToCurrency.toUpperCase()]!;

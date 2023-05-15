@@ -7,6 +7,7 @@ import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_pick
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/notifications_settings/notifications_settings_view.dart';
+import 'package:billsplit_flutter/presentation/features/group/widgets/default_currency/default_group_currency_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/leave_group_button.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,8 @@ class GroupSettings extends StatelessWidget {
                     );
                   },
                   child: const Text("Add to group")),
+            const SizedBox(height: 16),
+            DefaultGroupCurrencyView(group: cubit.group),
             const SizedBox(height: 16),
             ClickableListItem(
               onClick: () {
