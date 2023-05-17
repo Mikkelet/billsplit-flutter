@@ -49,7 +49,7 @@ class ExpenseCurrency extends StatelessWidget {
             Text(
               cubit.groupExpense.currencyState.symbol.toUpperCase(),
             ),
-            if (cubit.groupExpense.id.isEmpty) const Icon(Icons.edit)
+            const Icon(Icons.edit)
           ],
         ),
       ),

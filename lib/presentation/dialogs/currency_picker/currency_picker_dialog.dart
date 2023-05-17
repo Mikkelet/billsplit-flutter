@@ -41,6 +41,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
             return const Center(child: CircularProgressIndicator());
           }
           return SingleChildScrollView(
+            primary: false,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -61,18 +62,30 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                   if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
                     const Text("Recent currencies"),
                   if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
-                    ...cubit.recentCurrencies
-                        .map((currency) => _currencyButton(cubit, currency)),
+                    ...cubit.recentCurrencies.map((currency) =>
+                        _currencyButton(Key(currency.symbol), cubit, currency)),
                   if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
                     const Text("All currencies"),
-                  ...cubit.currencies
-                      .where((element) => filter.isNotEmpty
-                          ? element.symbol.toLowerCase().startsWith(filter)
-                          : true)
-                      .map((currency) {
-                    return _currencyButton(cubit, currency);
-                  })
-                ].toList(),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                      itemCount: cubit.currencies
+                          .where((element) => filter.isNotEmpty
+                              ? element.symbol.toLowerCase().startsWith(filter)
+                              : true)
+                          .length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final items = cubit.currencies
+                            .where((element) => filter.isNotEmpty
+                                ? element.symbol
+                                    .toLowerCase()
+                                    .startsWith(filter)
+                                : true)
+                            .toList();
+                        final item = items[index];
+                        return _currencyButton(Key(item.symbol), cubit, item);
+                      })
+                ],
               ),
             ),
           );
@@ -81,7 +94,8 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
     );
   }
 
-  Widget _currencyButton(CurrencyPickerCubit cubit, Currency currency) {
+  Widget _currencyButton(
+      Key key, CurrencyPickerCubit cubit, Currency currency) {
     return TextButton(
       onPressed: () {
         cubit.onCurrencyPressed(currency);
@@ -95,6 +109,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
             currency.symbol.toUpperCase(),
           ),
           Text(
+            key: key,
             "~${cubit.getRateForCurrency(currency).fmt2dec()} ${cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase()}",
             style: TextStyle(color: Theme.of(context).disabledColor),
           )
