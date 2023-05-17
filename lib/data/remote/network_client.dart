@@ -12,14 +12,14 @@ import 'package:http/retry.dart';
 
 class NetworkClient {
   static bool allowNetworkLogging = false;
-  static bool debug = true;
+  static bool debug = false;
   static String debugBaseUrl = Platform.isAndroid
-      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v2/"
-      : "http://localhost:5000/billsplittapp/us-central1/v2/";
-  static String devUrl = "http://192.168.8.227:5000/billsplittapp/us-central1/v2/";
+      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v3/"
+      : "http://localhost:5000/billsplittapp/us-central1/v3/";
+  static String devUrl = "http://192.168.8.227:5000/billsplittapp/us-central1/v3/";
   static String releaseBaseUrl =
-      "https://us-central1-billsplittapp.cloudfunctions.net/v2/";
-  static String baseUrl = debug ? debugBaseUrl : releaseBaseUrl;
+      "https://us-central1-billsplittapp.cloudfunctions.net/v3/";
+  static String baseUrl = debug ? devUrl : releaseBaseUrl;
 
   final _client = RetryClient(http.Client());
   final _authProvider = getIt<AuthProvider>();
@@ -61,7 +61,7 @@ class NetworkClient {
         ? await _authProvider.getToken(true)
         : await _authProvider.getToken(false);
     final headers = {
-      HttpHeaders.authorizationHeader: token,
+      HttpHeaders.authorizationHeader: "$token",
       HttpHeaders.contentTypeHeader: "application/json"
     };
 
@@ -91,7 +91,7 @@ class NetworkClient {
         ? await _authProvider.getToken(true)
         : await _authProvider.getToken(false);
     final headers = {
-      HttpHeaders.authorizationHeader: token,
+      HttpHeaders.authorizationHeader: "$token",
       HttpHeaders.contentTypeHeader: "application/json"
     };
     final response =
