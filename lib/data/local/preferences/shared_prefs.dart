@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:billsplit_flutter/data/local/preferences/models/group_notification_setting.dart';
+import 'package:billsplit_flutter/data/local/preferences/models/recent_currency.dart';
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
@@ -58,6 +60,25 @@ class SharedPrefs {
   set userPrefDefaultCurrency(String symbol) =>
       _sharedPrefs.setString(userPrefDefaultCurrencyKey, symbol);
 
+  // recently picked currencies
+  Iterable<Currency> get recentCurrencies {
+    final lsJson = _sharedPrefs.getStringList(recentCurrenciesKey) ?? [];
+    if (lsJson.isEmpty) return [];
+    final recentSorted = lsJson
+        .map((e) => RecentCurrency.fromJson(jsonDecode(e)))
+        .toList()
+      ..sort();
+    return recentSorted.map((e) => Currency(symbol: e.symbol, rate: 0));
+  }
+
+  addRecentCurrency(Currency currency) {
+    final lsJson = _sharedPrefs.getStringList(recentCurrenciesKey) ?? [];
+    final currencyWithTimestamp =
+        RecentCurrency(currency.symbol, DateTime.now().millisecondsSinceEpoch);
+    final encoded = jsonEncode(currencyWithTimestamp);
+    lsJson.add(encoded);
+    _sharedPrefs.setStringList(recentCurrenciesKey, lsJson);
+  }
 
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
@@ -65,6 +86,7 @@ class SharedPrefs {
   static const hasSeenPushNotificationPermissionRationaleKey =
       "hasSeenPushNotificationPermissionRationale";
   static const groupSubscriptionsKey = "groupNotificationSettings";
+  static const recentCurrenciesKey = "recentCurrencies";
   static const latestExchangeRatesKey = "latestExchangeRates";
   static const userPrefDefaultCurrencyKey = "defaultCurrency";
 }

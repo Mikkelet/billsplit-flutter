@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
@@ -30,6 +31,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: null,
         actions: const [CloseButton()],
       ),
       body: BaseBlocWidget(
@@ -56,36 +58,47 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                     maxLines: 1,
                   )),
                   const SizedBox(height: 32),
+                  if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
+                    const Text("Recent currencies"),
+                  if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
+                    ...cubit.recentCurrencies
+                        .map((currency) => _currencyButton(cubit, currency)),
+                  if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
+                    const Text("All currencies"),
                   ...cubit.currencies
                       .where((element) => filter.isNotEmpty
                           ? element.symbol.toLowerCase().startsWith(filter)
                           : true)
                       .map((currency) {
-                    return TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(currency);
-                      },
-                      style: const ButtonStyle(alignment: Alignment.centerLeft),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            currency.symbol.toUpperCase(),
-                          ),
-                          Text(
-                            "~${cubit.getRateForCurrency(currency).fmt2dec()} ${cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase()}",
-                            style: TextStyle(
-                                color: Theme.of(context).disabledColor),
-                          )
-                        ],
-                      ),
-                    );
+                    return _currencyButton(cubit, currency);
                   })
                 ].toList(),
               ),
             ),
           );
         }),
+      ),
+    );
+  }
+
+  Widget _currencyButton(CurrencyPickerCubit cubit, Currency currency) {
+    return TextButton(
+      onPressed: () {
+        cubit.onCurrencyPressed(currency);
+        Navigator.of(context).pop(currency);
+      },
+      style: const ButtonStyle(alignment: Alignment.centerLeft),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            currency.symbol.toUpperCase(),
+          ),
+          Text(
+            "~${cubit.getRateForCurrency(currency).fmt2dec()} ${cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase()}",
+            style: TextStyle(color: Theme.of(context).disabledColor),
+          )
+        ],
       ),
     );
   }

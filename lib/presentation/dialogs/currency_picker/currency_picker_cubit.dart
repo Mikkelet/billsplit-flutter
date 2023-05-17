@@ -14,4 +14,16 @@ class CurrencyPickerCubit extends BaseCubit {
     return _convertCurrencyUseCase.launch(
         1, currency.symbol, sharedPrefs.userPrefDefaultCurrency);
   }
+
+  Iterable<Currency> get recentCurrencies {
+    final removeDuplicates =
+        sharedPrefs.recentCurrencies.map((e) => e.symbol).toSet();
+    final toCurrencies =
+        removeDuplicates.map((e) => Currency(symbol: e, rate: 0));
+    return toCurrencies.take(5);
+  }
+
+  void onCurrencyPressed(Currency currency) {
+    sharedPrefs.addRecentCurrency(currency);
+  }
 }
