@@ -66,18 +66,15 @@ class SharedPrefs {
     if (lsJson.isEmpty) return [];
     final recentSorted = lsJson
         .map((e) => RecentCurrency.fromJson(jsonDecode(e)))
-        .toList()
-      ..sort();
+        .toList();
     return recentSorted.map((e) => Currency(symbol: e.symbol, rate: 0));
   }
 
-  addRecentCurrency(Currency currency) {
-    final lsJson = _sharedPrefs.getStringList(recentCurrenciesKey) ?? [];
-    final currencyWithTimestamp =
-        RecentCurrency(currency.symbol, DateTime.now().millisecondsSinceEpoch);
-    final encoded = jsonEncode(currencyWithTimestamp);
-    lsJson.add(encoded);
-    _sharedPrefs.setStringList(recentCurrenciesKey, lsJson);
+  set recentCurrencies(Iterable<Currency> currencies) {
+    final currencyWithTimestamp = currencies.map((currency) =>
+        RecentCurrency(currency.symbol, DateTime.now().millisecondsSinceEpoch));
+    final encoded = currencyWithTimestamp.map((e) => jsonEncode(e.toJson()));
+    _sharedPrefs.setStringList(recentCurrenciesKey, encoded.toList());
   }
 
   // Keys

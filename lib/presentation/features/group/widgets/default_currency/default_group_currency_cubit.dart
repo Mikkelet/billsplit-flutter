@@ -15,8 +15,8 @@ class DefaultGroupCurrencyCubit extends BaseCubit {
     showLoading();
     _addGroupUseCase.launch(group).then((value) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 }

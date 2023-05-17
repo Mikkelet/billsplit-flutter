@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_person_to_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_debts_usecase.dart';
@@ -32,6 +33,7 @@ class GroupBloc extends BaseCubit {
   final _addGroupUseCase = AddGroupUseCase();
   final _addExpenseUseCase = AddEventUseCase();
   final _convertCurrencyUseCase = ConvertCurrencyUseCase();
+  final _getExchangeRatesUseCase = GetExchangeRatesUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
@@ -51,14 +53,13 @@ class GroupBloc extends BaseCubit {
       _observeDebtsUseCase.observe(group.id);
 
   void loadGroup() async {
+    _getExchangeRatesUseCase.launch();
     emit(SyncingGroup(navIndex));
     _getGroupUseCase
         .launch(group.id)
         .then((value) => emit(GroupLoaded(navIndex)))
-        .catchError((err, ss) {
-      print(ss);
-
-      showError(err);
+        .catchError((err, st) {
+      showError(err, st);
     });
   }
 
@@ -82,8 +83,8 @@ class GroupBloc extends BaseCubit {
     showLoading();
     _leaveGroupUseCase.launch(group.id).then((value) {
       emit(GroupLeft());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 
@@ -91,8 +92,8 @@ class GroupBloc extends BaseCubit {
     emit(AddingPersonToGroup());
     _addPersonToGroupUseCase.launch(group, person).then((value) {
       emit(Main());
-    }).catchError((onError) {
-      showError(onError);
+    }).catchError((onError, st) {
+      showError(onError, st);
     });
   }
 

@@ -24,8 +24,8 @@ class FriendPickerCubit extends BaseCubit {
     showLoading();
     _getFriendsUseCase.launch().then((value) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 }

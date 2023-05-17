@@ -9,8 +9,8 @@ class SignUpCubit extends BaseCubit {
     showLoading();
     _signUpUseCase.launch(email, password).then((data) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
       emit(Main());
     });
   }

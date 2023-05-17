@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -23,7 +24,7 @@ class AuthProvider {
 
   Future<String> getToken(bool refresh) async {
     final user = _firebaseAuth.currentUser;
-    if (user == null) return "";
+    if (user == null) throw UiException(404, "User not logged in");
     return await user.getIdToken(refresh);
   }
 

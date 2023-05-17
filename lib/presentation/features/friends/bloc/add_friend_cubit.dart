@@ -11,8 +11,8 @@ class AddFriendCubit extends BaseCubit {
     emit(Loading());
     _addFriendUserIdUseCase.launch(userId).then((value) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 
@@ -20,8 +20,8 @@ class AddFriendCubit extends BaseCubit {
     emit(Loading());
     _addFriendEmailUseCase.launch(email).then((value) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 }

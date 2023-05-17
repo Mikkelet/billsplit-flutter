@@ -23,8 +23,8 @@ class AddServiceBloc extends BaseCubit {
     emit(Loading());
     addServiceUseCase.launch(group.id, service).then((value) {
       emit(ServiceAdded());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 
@@ -37,8 +37,8 @@ class AddServiceBloc extends BaseCubit {
     showLoading();
     deleteServiceUseCase.launch(group.id, service).then((value) {
       emit(ServiceDeleted());
-    }).catchError((error) {
-      showError(error);
+    }).catchError((error, st) {
+      showError(error, st);
     });
   }
 }

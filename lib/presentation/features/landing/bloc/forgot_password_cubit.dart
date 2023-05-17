@@ -9,8 +9,8 @@ class ForgotPasswordCubit extends BaseCubit {
     showLoading();
     _forgotPasswordUseCase.launch(email).then((value) {
       emit(ResetPasswordSent());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 }

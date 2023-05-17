@@ -10,13 +10,12 @@ class CurrencyConverter {
       return amount;
     }
     final latestRates = _sharedPrefs.latestExchangeRates;
-    final rateForCurrentCurrency = latestRates[currencySymbol.toUpperCase()]!;
-    final rateForNewCurrency = latestRates[convertToCurrency.toUpperCase()]!;
+    final oldCurrencyRate = latestRates[currencySymbol.toUpperCase()]!;
+    final newCurrencyRate = latestRates[convertToCurrency.toUpperCase()]!;
     // convert amount to USD
-    final amountUSD = amount / rateForCurrentCurrency;
-
+    final amountUSD = amount / oldCurrencyRate;
     // multiply amount by new conversion rate
-    return amountUSD * rateForNewCurrency;
+    return amountUSD * newCurrencyRate;
   }
 
   num convertToUSD(num expense, String fromCurrency) {

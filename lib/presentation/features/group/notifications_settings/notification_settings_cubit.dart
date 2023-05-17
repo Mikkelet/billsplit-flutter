@@ -24,8 +24,8 @@ class NotificationSettingsCubit extends BaseCubit {
     showLoading();
     _toggleSubscriptionUseCase.launch(_group.id, _topic, subscribe).then((_) {
       initialise();
-    }).catchError((error) {
-      showError(error);
+    }).catchError((error, st) {
+      showError(error, st);
     });
   }
 }

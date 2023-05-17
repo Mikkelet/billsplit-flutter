@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 
 class DebtCubit extends BaseCubit {
   final Group group;
@@ -21,16 +22,27 @@ class DebtCubit extends BaseCubit {
   DebtCubit(this.group, this.debt);
 
   void updateCurrency(String newCurrency) {
-    amount = _convertCurrencyUseCase.launch(amount, currency, newCurrency);
+    final newMaxAmount =
+        _convertCurrencyUseCase.launch(maxAmount, currency, newCurrency);
+    if (newMaxAmount < amount || amount.fmt2dec() == maxAmount.fmt2dec()) {
+      amount = newMaxAmount;
+    }
     currency = newCurrency;
+    print("update, amount=$amount, currency=$currency");
     emit(CurrencyChanged());
   }
 
+  update(){
+    emit(Main());
+  }
+
   payDebt() {
-    final num? rate = sharedPrefs.latestExchangeRates[currency];
+    final num? rate = sharedPrefs.latestExchangeRates[currency.toUpperCase()];
     if (rate == null) {
-      showError(UiException(3000,
-          "$currency is not a valid currency! Please contact the developer"));
+      showError(
+          UiException(3000,
+              "$currency is not a valid currency! Please contact the developer"),
+          null);
       return;
     }
     final payment = Payment(
@@ -39,13 +51,13 @@ class DebtCubit extends BaseCubit {
       createdBy: user,
       timestamp: DateTime.now().millisecondsSinceEpoch,
       paidTo: debt.first,
-      amount: debt.second,
+      amount: amount,
     );
     emit(Loading());
     _addEventUseCase.launch(group.id, payment).then((_) {
       emit(DebtPayed());
-    }).catchError((error) {
-      showError(error);
+    }).catchError((error, st) {
+      showError(error, st);
     });
   }
 
@@ -55,6 +67,7 @@ class DebtCubit extends BaseCubit {
   }
 
   void updateAmount(num value) {
+    print("\t updateValue=$value");
     amount = value;
   }
 }

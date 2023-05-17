@@ -38,12 +38,12 @@ class _NotificationsRationaleState extends State<NotificationsRationale> {
                     "To keep up with the latest expenses, we would need your permission to send you notifications!"),
                 const SizedBox(height: 32),
                 if (permissionDecided == AuthorizationStatus.authorized)
-                  const Text("Accepted!",
-                      style: TextStyle(color: Colors.green)),
-                if (permissionDecided == AuthorizationStatus.denied)
+                  const Text("Accepted!", style: TextStyle(color: Colors.green))
+                else
                   const Text("Denied", style: TextStyle(color: Colors.red)),
-                if (permissionDecided != null) const SizedBox(height: 32),
-                if (permissionDecided == AuthorizationStatus.denied)
+                if (permissionDecided != AuthorizationStatus.authorized)
+                  const SizedBox(height: 32),
+                if (permissionDecided != AuthorizationStatus.authorized)
                   SimpleButton(onClick: () async {
                     prefs.hasSeenPushNotificationPermissionRationale = true;
                     final permission =

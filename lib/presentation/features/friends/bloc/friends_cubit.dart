@@ -13,14 +13,14 @@ class FriendsCubit extends BaseCubit {
   void getFriends() {
     _getFriendsUseCase
         .launch()
-        .onError((error, stackTrace) => showError(error));
+        .onError((error, stackTrace) => showError(error, stackTrace));
   }
 
   Future refreshFriends() async {
     try {
       await _getFriendsUseCase.launch();
-    } catch (e) {
-      showError(e);
+    } catch (e, st) {
+      showError(e, st);
     }
   }
 }

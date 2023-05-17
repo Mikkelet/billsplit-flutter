@@ -35,7 +35,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
         actions: const [CloseButton()],
       ),
       body: BaseBlocWidget(
-        create: (context) => CurrencyPickerCubit(),
+        create: (context) => CurrencyPickerCubit()..loadCurrencies(),
         child: BaseBlocBuilder<CurrencyPickerCubit>(builder: (cubit, state) {
           if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
@@ -48,15 +48,16 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                 children: [
                   const SizedBox(height: 32),
                   RoundedListItem(
-                      child: TextField(
-                    onChanged: _onChange,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "USD, EUR",
-                        counterText: ""),
-                    maxLength: 10,
-                    maxLines: 1,
-                  )),
+                    child: TextField(
+                      onChanged: _onChange,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "USD, EUR",
+                          counterText: ""),
+                      maxLength: 10,
+                      maxLines: 1,
+                    ),
+                  ),
                   const SizedBox(height: 32),
                   if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
                     const Text("Recent currencies"),
@@ -67,23 +68,22 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                     const Text("All currencies"),
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
-                      itemCount: cubit.currencies
+                    itemCount: cubit.currencies
+                        .where((element) => filter.isNotEmpty
+                            ? element.symbol.toLowerCase().startsWith(filter)
+                            : true)
+                        .length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final items = cubit.currencies
                           .where((element) => filter.isNotEmpty
                               ? element.symbol.toLowerCase().startsWith(filter)
                               : true)
-                          .length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final items = cubit.currencies
-                            .where((element) => filter.isNotEmpty
-                                ? element.symbol
-                                    .toLowerCase()
-                                    .startsWith(filter)
-                                : true)
-                            .toList();
-                        final item = items[index];
-                        return _currencyButton(Key(item.symbol), cubit, item);
-                      })
+                          .toList();
+                      final item = items[index];
+                      return _currencyButton(Key(item.symbol), cubit, item);
+                    },
+                  )
                 ],
               ),
             ),

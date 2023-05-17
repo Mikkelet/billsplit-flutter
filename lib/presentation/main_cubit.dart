@@ -65,16 +65,16 @@ class MainCubit extends BaseCubit {
           emit(GroupOpenedFromNotification(group));
         }
       }
-    }, onError: (error) {
-      showError(error);
+    }, onError: (error, st) {
+      showError(error, st);
     });
   }
 
   void _initialiseAuth() {
     _initializeAuthUseCase.initialize().then((value) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 

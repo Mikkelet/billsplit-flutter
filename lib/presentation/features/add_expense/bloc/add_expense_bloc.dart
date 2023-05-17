@@ -57,8 +57,8 @@ class AddExpenseBloc extends BaseCubit {
     showLoading();
     _deleteExpenseUseCase.launch(group.id, groupExpense).then((_) {
       emit(ExpenseDeleted());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 

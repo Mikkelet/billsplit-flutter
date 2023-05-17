@@ -1,16 +1,18 @@
 import 'package:billsplit_flutter/data/currency_converter.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
 class DebtCalculator {
-  final currencyConverter = CurrencyConverter();
+  final currencyConverter = getIt<CurrencyConverter>();
   final Iterable<Person> people;
   final Iterable<GroupExpense> expenses;
   final Iterable<Payment> payments;
@@ -48,7 +50,9 @@ class DebtCalculator {
         final debtsByIndebted = payedForIndividualExpenses
             .where((element) => element.person.uid == indebted.uid);
         // accumulate all their debts
-        final totalDebt = debtsByIndebted.map((e) => e.expense).sum;
+        final totalDebt = debtsByIndebted
+            .map((e) => currencyConverter.convertToUSD(e.expense, e.currency))
+            .sum;
         return Pair(indebted, totalDebt);
       });
       return Pair(person, accExpensesByIe);
@@ -103,7 +107,7 @@ class DebtCalculator {
   Iterable<Pair<Person, num>> calculateDebtsAfterPayments(Person person) {
     // get debts owed by person
     final effectiveDebt = calculateEffectiveDebt(person);
-    // for each debts, calculate the payment to negate potential debt
+    // for each debts, calculate the payments to negate potential debt
     return effectiveDebt.map((debt) {
       final debtee = debt.first;
       final debtAmount = debt.second;
@@ -218,7 +222,9 @@ extension PaymentExt on Payment {
       timestamp: timestamp,
       description: "",
       payer: createdBy,
-      sharedExpenses: [],
+      sharedExpenses: [
+        SharedExpense(expense: amount, participants: [paidTo], description: "")
+      ],
       syncState: SyncState.synced,
       currency: currency);
 }

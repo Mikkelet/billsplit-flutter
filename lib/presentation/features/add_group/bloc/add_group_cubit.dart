@@ -41,8 +41,8 @@ class AddGroupCubit extends BaseCubit {
     emit(LoadingFriends());
     _getFriendsUseCase.launch().then((value) {
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 
@@ -51,8 +51,8 @@ class AddGroupCubit extends BaseCubit {
     emit(Loading());
     _addGroupUseCase.launch(group).then((value) {
       emit(GroupAdded(value));
-    }).catchError((error) {
-      showError(error);
+    }).catchError((error, st) {
+      showError(error, st);
     });
   }
 }

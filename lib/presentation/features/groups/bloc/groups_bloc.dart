@@ -26,16 +26,16 @@ class GroupsBloc extends BaseCubit {
     Future.value([_getFriendsUseCase.launch(), _getGroupsUseCase.launch()])
         .then((value) {
       emit(Main());
-    }).catchError((error) {
-      showError(error);
+    }).catchError((error, st) {
+      showError(error, st);
     });
   }
 
   Future refreshGroups() async {
     try {
       await _getGroupsUseCase.launch();
-    } catch (e) {
-      showError(e);
+    } catch (e, st) {
+      showError(e, st);
     }
   }
 

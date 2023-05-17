@@ -83,7 +83,7 @@ class PaymentDTO extends EventDTO {
       {required String id,
       required PersonDTO createdBy,
       required num timestamp,
-        String type = "payment",
+      String type = "payment",
       required this.currency,
       required this.paidTo,
       required this.amount})

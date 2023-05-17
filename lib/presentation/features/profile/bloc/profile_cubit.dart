@@ -15,8 +15,8 @@ class ProfileCubit extends BaseCubit {
   UpdateTextFieldState updateDisplayNameState = UpdateTextFieldState.display;
 
   void signOut() {
-    _signOutUseCase.launch().then((value) {}).catchError((error) {
-      showError(error);
+    _signOutUseCase.launch().then((value) {}).catchError((error, st) {
+      showError(error, st);
     });
   }
 
@@ -25,8 +25,8 @@ class ProfileCubit extends BaseCubit {
     _updateProfilePictureUseCase.launch(Uri(path: path)).then((value) {
       user.pfpUrlState = value;
       emit(Main());
-    }).catchError((err) {
-      showError(err);
+    }).catchError((err, st) {
+      showError(err, st);
     });
   }
 
@@ -48,8 +48,8 @@ class ProfileCubit extends BaseCubit {
     _updateDisplayNameUseCase.launch(newName).then((value) {
       user.nameState = newName;
       _updateDisplayNameState(UpdateTextFieldState.display);
-    }).catchError((error) {
-      showError(error);
+    }).catchError((error, st) {
+      showError(error, st);
       _updateDisplayNameState(UpdateTextFieldState.display);
     });
   }

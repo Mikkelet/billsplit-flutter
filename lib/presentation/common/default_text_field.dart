@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseTextField extends StatelessWidget {
+class ExpenseTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final void Function(num) onChange;
   final bool canBeZero;
@@ -9,7 +9,7 @@ class ExpenseTextField extends StatelessWidget {
   final num? maxValue;
   final String prefix;
 
-  ExpenseTextField({
+  const ExpenseTextField({
     Key? key,
     required this.textEditingController,
     required this.onChange,
@@ -17,36 +17,47 @@ class ExpenseTextField extends StatelessWidget {
     this.autoFocus = false,
     this.maxValue,
     this.prefix = "",
-  }) : super(key: key) {
-    textEditingController.addListener(() {
-      onChange(parseInput);
-      _onChange();
-    });
+  }) : super(key: key);
+
+  @override
+  State<ExpenseTextField> createState() => _ExpenseTextFieldState();
+
+  static const maxInput = 9999999.99; // max 7 chars + 2 decimals
+}
+
+class _ExpenseTextFieldState extends State<ExpenseTextField> {
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      autofocus: autoFocus,
+      autofocus: widget.autoFocus,
       maxLength: 7,
       textAlign: TextAlign.end,
       maxLines: 1,
-      controller: textEditingController,
+      controller: widget.textEditingController,
       style: Theme.of(context).textTheme.bodyLarge,
+      onChanged: (value) {
+        _onChange();
+        widget.onChange(parseInput);
+        setState(() {});
+      },
       decoration: InputDecoration(
         isDense: true,
         hintText: "0",
         border: InputBorder.none,
         errorText: _errorText(),
         prefixStyle: const TextStyle(fontSize: 10),
-        prefixText: prefix.toUpperCase(),
+        prefixText: widget.prefix.toUpperCase(),
         counterText: "",
         prefixIconConstraints: const BoxConstraints(),
-        suffix: maxValue != null
+        suffix: widget.maxValue != null
             ? TextButton(
                 onPressed: isInputMaxValue() ? null : () => onMaxPressed(),
-                child: const Text("max"),
-              )
+                child: const Text("max"))
             : null,
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -58,16 +69,16 @@ class ExpenseTextField extends StatelessWidget {
   }
 
   void onMaxPressed() {
-    text = maxValue!.fmtTextField();
-    textEditingController.selection =
-        TextSelection.collapsed(offset: textEditingController.text.length);
+    text = widget.maxValue!.fmtTextField();
+    widget.textEditingController.selection =
+        TextSelection.collapsed(offset: text.length);
   }
 
   String? _errorText() {
     if (text.isEmpty) return "Enter a number";
     try {
       final number = num.parse(text);
-      if (!canBeZero && number == 0) return "Expense is 0";
+      if (!widget.canBeZero && number == 0) return "Expense is 0";
       if (number < 0) return "Input < 0";
       return null;
     } catch (e) {
@@ -81,8 +92,8 @@ class ExpenseTextField extends StatelessWidget {
       final input = num.parse(text);
       if (input < 0) {
         inputAsNumber = 0;
-      } else if (input > maxInput) {
-        inputAsNumber = maxInput;
+      } else if (input > ExpenseTextField.maxInput) {
+        inputAsNumber = ExpenseTextField.maxInput;
       } else {
         inputAsNumber = input;
       }
@@ -94,38 +105,38 @@ class ExpenseTextField extends StatelessWidget {
   }
 
   bool isInputMaxValue() {
-    if (maxValue == null) return true;
-    return parseInput.fmt2dec() == maxValue!.fmt2dec();
+    if (widget.maxValue == null) return true;
+    return parseInput.fmt2dec() == widget.maxValue!.fmt2dec();
   }
 
   bool isInputOverMaxValue() {
-    if (maxValue == null) return true;
-    return parseInput > maxValue! &&
-        (parseInput.fmt2dec() != maxValue!.fmt2dec() ||
-            text.length > maxValue!.fmt2dec().length);
+    if (widget.maxValue == null) return true;
+    return parseInput > widget.maxValue! &&
+        (parseInput.fmt2dec() != widget.maxValue!.fmt2dec() ||
+            text.length > widget.maxValue!.fmt2dec().length);
   }
 
   void _onChange() {
     if (text == "0") {
       text = "";
-      textEditingController.selection =
+      widget.textEditingController.selection =
           TextSelection.collapsed(offset: text.length);
     }
     if (isInputOverMaxValue()) {
-      text = maxValue!.fmtTextField();
-      textEditingController.selection =
+      text = widget.maxValue!.fmtTextField();
+      widget.textEditingController.selection =
           TextSelection.collapsed(offset: text.length);
     }
     if (text.contains(",")) {
       text = text.replaceAll(",", ".");
-      textEditingController.selection =
+      widget.textEditingController.selection =
           TextSelection.collapsed(offset: text.length);
     }
   }
 
-  String get text => textEditingController.text;
+  String get text => widget.textEditingController.text;
 
-  set text(String text) => textEditingController.text = text;
-
-  static const maxInput = 9999999.99; // max 7 chars + 2 decimals
+  set text(String text) {
+    widget.textEditingController.text = text;
+  }
 }

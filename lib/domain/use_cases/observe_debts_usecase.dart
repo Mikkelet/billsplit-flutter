@@ -13,11 +13,11 @@ class ObserveDebtsUseCase {
   final _observeEventsUseCase = ObserveEventsUseCase();
 
   Stream<Iterable<Pair<Person, num>>> observe(String groupId) {
-    return _observeEventsUseCase.observe(groupId).asyncMap((event) async {
+    return _observeEventsUseCase.observe(groupId).asyncMap((events) async {
       final response = await _database.groupsDAO.getGroup(groupId);
       final group = response.toGroup();
       final calculator = DebtCalculator.fromCombined(
-          {...group.people, ...group.pastMembers}, event);
+          {...group.people, ...group.pastMembers}, events);
       final user = _authProvider.user!;
       final debts = calculator.calculateEffectiveDebt(user);
       return debts.where((element) => element.second != 0);

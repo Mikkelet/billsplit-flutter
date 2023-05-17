@@ -19,7 +19,7 @@ abstract class BaseCubit extends Cubit<UiState> {
     emit(Loading());
   }
 
-  void showError(dynamic err) {
+  void showError(dynamic err, StackTrace? stackTrace) {
     if (err is Error) {
       emit(Failure(UiException(-1, err.toString())));
     } else if (err is UiException) {
@@ -37,6 +37,7 @@ abstract class BaseCubit extends Cubit<UiState> {
       print("qqq err: ${err.runtimeType.toString()}");
       emit(Failure(UiException(-1, "${err.runtimeType}: $err")));
     }
+    print(stackTrace.toString());
   }
 
   Person get user => authProvider.user!;

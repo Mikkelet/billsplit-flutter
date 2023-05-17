@@ -28,14 +28,6 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
   late final TextEditingController controller = TextEditingController(text: widget.debt.second.fmtTextField());
 
   @override
-  void initState() {
-    controller.addListener(() {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<DebtCubit>(
       listener: (context, cubit, state) {
@@ -43,6 +35,7 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
           Navigator.of(context).pop();
         } else if (state is CurrencyChanged) {
           controller.text = cubit.amount.fmtTextField();
+          print("\tStateChange, amount=${controller.text}");
         }
       },
       create: (context) => DebtCubit(widget.group, widget.debt),
@@ -102,5 +95,11 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
