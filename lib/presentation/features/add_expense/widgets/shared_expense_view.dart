@@ -42,7 +42,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             Expanded(
               flex: 5,
               child: ExpenseTextField(
-                currency: cubit.groupExpense.currencyState.symbol,
+                prefix: cubit.groupExpense.currencyState.symbol,
                 onChange: (value) {
                   widget.sharedExpense.expenseState = value;
                   cubit.onExpensesUpdated();

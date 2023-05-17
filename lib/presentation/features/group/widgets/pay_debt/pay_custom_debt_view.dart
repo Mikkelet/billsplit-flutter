@@ -1,15 +1,17 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
+import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/features/group/bloc/debt_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../domain/models/group.dart';
+import '../../../../../domain/models/group.dart';
 
 class PayCustomDebtView extends StatefulWidget {
   final Group group;
@@ -23,9 +25,7 @@ class PayCustomDebtView extends StatefulWidget {
 }
 
 class _PayCustomDebtViewState extends State<PayCustomDebtView> {
-  late final TextEditingController controller =
-      TextEditingController(text: widget.debt.second.fmtTextField());
-  late num amount = widget.debt.second;
+  late final TextEditingController controller = TextEditingController(text: widget.debt.second.fmtTextField());
 
   @override
   void initState() {
@@ -39,11 +39,13 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
   Widget build(BuildContext context) {
     return BaseBlocWidget<DebtCubit>(
       listener: (context, cubit, state) {
-        if (state is DebtAdded) {
+        if (state is DebtPayed) {
           Navigator.of(context).pop();
+        } else if (state is CurrencyChanged) {
+          controller.text = cubit.amount.fmtTextField();
         }
       },
-      create: (context) => DebtCubit(),
+      create: (context) => DebtCubit(widget.group, widget.debt),
       child: BaseBlocBuilder<DebtCubit>(builder: (cubit, state) {
         return SingleChildScrollView(
           child: Padding(
@@ -53,16 +55,29 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 32),
-                SizedBox(
-                  width: 200,
-                  child: ExpenseTextField(
-                    maxValue: widget.debt.second,
-                    autoFocus: true,
-                    textEditingController: controller,
-                    onChange: (value) {
-                      amount = value;
-                    },
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: () async {
+                          final response = await Navigator.of(context)
+                              .push(CurrencyPickerDialog.route);
+                          if (response is Currency) {
+                            cubit.updateCurrency(response.symbol);
+                          }
+                        },
+                        child: Text(cubit.currency.toUpperCase())),
+                    SizedBox(
+                      width: 200,
+                      child: ExpenseTextField(
+                        maxValue: cubit.maxAmount,
+                        textEditingController: controller,
+                        onChange: (value) {
+                          cubit.updateAmount(value);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -71,11 +86,10 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
                     if (state is Loading) const CircularProgressIndicator(),
                     if (state is Main)
                       IconButton(
-                        onPressed: amount == 0
+                        onPressed: cubit.amount == 0
                             ? null
                             : () {
-                                cubit.payDebt(widget.group,
-                                    Pair(widget.debt.first, amount));
+                                cubit.payDebt();
                               },
                         icon: const Icon(Icons.check),
                       ),

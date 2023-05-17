@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/features/group/widgets/pay_custom_debt_view.dart';
+import 'package:billsplit_flutter/presentation/features/group/widgets/pay_debt/pay_custom_debt_view.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -19,16 +19,16 @@ class DebtView extends StatelessWidget {
 
     String text = "";
     Color color = Colors.black;
-    final String userCurrency = groupCubit.sharedPrefs.userPrefDefaultCurrency;
+    final String defaultCurrency = groupCubit.group.defaultCurrencyState.toUpperCase();
     final convertDebt = groupCubit.convertToDefaultCurrency(debt.second);
     final isDebt = debt.second > 0;
 
     if (isDebt) {
-      text = "You owe $userCurrency ${convertDebt.fmt2dec()} to ${debt.first.nameState}";
+      text = "You owe $defaultCurrency ${convertDebt.fmt2dec()} to ${debt.first.nameState}";
       color = Colors.redAccent;
     } else if (debt.second < 0) {
       text =
-          "${debt.first.nameState} owes you $userCurrency ${convertDebt.abs().fmt2dec()}";
+          "${debt.first.nameState} owes you $defaultCurrency ${convertDebt.abs().fmt2dec()}";
       color = Colors.green;
     }
     return RoundedListItem(
@@ -44,7 +44,7 @@ class DebtView extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (context) => PayCustomDebtView(
-                    debt: debt,
+                    debt: Pair(debt.first, groupCubit.convertToDefaultCurrency(debt.second)),
                     group: groupCubit.group,
                   ),
                 );

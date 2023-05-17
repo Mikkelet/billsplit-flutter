@@ -52,9 +52,8 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                     onChanged: _onChange,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: "USD",
+                        hintText: "USD, EUR",
                         counterText: ""),
-                    autofocus: true,
                     maxLength: 10,
                     maxLines: 1,
                   )),

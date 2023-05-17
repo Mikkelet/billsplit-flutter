@@ -125,9 +125,8 @@ class GroupBloc extends BaseCubit {
   }
 
   num convertToDefaultCurrency(num amount) {
-    final userPrefCurrency = sharedPrefs.userPrefDefaultCurrency;
     // debt is always calculated in USD
-    return _convertCurrencyUseCase.launch(amount, "usd", userPrefCurrency);
+    return _convertCurrencyUseCase.launch(amount, "usd", group.defaultCurrencyState);
   }
 
   void updateCurrency(Currency currency) {
