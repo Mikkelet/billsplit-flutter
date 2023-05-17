@@ -16,9 +16,6 @@ class CurrencyConverter {
     final amountUSD = amount / rateForCurrentCurrency;
 
     // multiply amount by new conversion rate
-
-    print(
-        "qqq converting ${currencySymbol.toUpperCase()} $amount to ${convertToCurrency.toUpperCase()} ${amountUSD*rateForNewCurrency}");
     return amountUSD * rateForNewCurrency;
   }
 

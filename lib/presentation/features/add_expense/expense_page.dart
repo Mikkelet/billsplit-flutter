@@ -1,11 +1,8 @@
-import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
-import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
@@ -23,6 +20,8 @@ import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'widgets/expense_currency.dart';
 
 class AddExpensePage extends StatelessWidget {
   final GroupExpense groupExpense;
@@ -117,28 +116,7 @@ class AddExpensePage extends StatelessWidget {
                             const SizedBox(height: 8),
 
                             // Currency
-                            ClickableListItem(
-                              onClick: () async {
-                                final response = await Navigator.of(context).push(CurrencyPickerDialog.route);
-                                if (response is Currency) {
-                                  cubit.updateCurrency(response);
-                                }
-                              },
-                              enabled: cubit.groupExpense.id.isEmpty,
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    cubit.groupExpense.currencyState.symbol
-                                        .toUpperCase(),
-                                  ),
-                                  if (cubit.groupExpense.id.isEmpty)
-                                    const Icon(Icons.edit)
-                                ],
-                              ),
-                            ),
+                            const ExpenseCurrency(),
                             const SizedBox(height: 8),
 
                             // Shared Expenses

@@ -57,6 +57,7 @@ class GroupExpense extends Event {
   bool get isChanged {
     return _payer.uid != payerState.uid ||
         _description != descriptionState ||
+        _currency != currencyState ||
         !sharedExpensesState.equals(_sharedExpenses.toList()) ||
         sharedExpensesState.any((element) => element.isChanged);
   }
@@ -65,6 +66,7 @@ class GroupExpense extends Event {
     descriptionState = _description;
     payerState = _payer;
     sharedExpensesState = _sharedExpenses.toList();
+    currencyState = _currency;
   }
 
   GroupExpense.dummy(num seed)
