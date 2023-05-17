@@ -80,9 +80,7 @@ class ProfilePage extends StatelessWidget {
                     // default currency
                     ClickableListItem(
                       onClick: () async {
-                        final response = await showDialog(
-                            context: context,
-                            builder: (context) => const CurrencyPickerDialog());
+                        final response = await Navigator.of(context).push(CurrencyPickerDialog.route);
                         if (response is Currency) {
                           cubit.updateCurrency(response);
                         }

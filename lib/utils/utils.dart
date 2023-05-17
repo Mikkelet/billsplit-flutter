@@ -1,11 +1,17 @@
 import 'package:intl/intl.dart';
 
 var formatter2dec = NumberFormat('#,###.##');
+var formatter4dec = NumberFormat('#,###.####');
 var formatter0dec = NumberFormat('#,###');
 
 extension NumExt on num {
   String fmt2dec() {
-    return remainder(1) != 0 ? formatter2dec.format(this) : formatter0dec.format(this);
+    if (this == 0) return "0";
+    if (this < 0.01) return formatter4dec.format(this);
+    if (this < 1) return formatter2dec.format(this);
+    return remainder(1) != 0
+        ? formatter2dec.format(this)
+        : formatter0dec.format(this);
   }
 
   String fmtTextField() => fmt2dec().replaceAll(",", "");
