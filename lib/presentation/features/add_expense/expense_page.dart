@@ -16,6 +16,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/closable_tips_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/submit_expense_button.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -70,15 +71,7 @@ class AddExpensePage extends StatelessWidget {
                     icon: const Icon(Icons.delete),
                     color: Theme.of(context).colorScheme.error,
                   ),
-                  IconButton(
-                    onPressed:
-                        cubit.groupExpense.isChanged && groupExpense.total > 0
-                            ? () {
-                                cubit.addExpense();
-                              }
-                            : null,
-                    icon: const Icon(Icons.check),
-                  )
+                  const SubmitExpenseButton()
                 ],
               ),
               body: WillPopScope(

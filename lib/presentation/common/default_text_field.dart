@@ -28,6 +28,11 @@ class ExpenseTextField extends StatefulWidget {
 class _ExpenseTextFieldState extends State<ExpenseTextField> {
   @override
   void initState() {
+    widget.textEditingController.addListener(() {
+      widget.onChange(parseInput);
+      _onChange();
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -40,11 +45,6 @@ class _ExpenseTextFieldState extends State<ExpenseTextField> {
       maxLines: 1,
       controller: widget.textEditingController,
       style: Theme.of(context).textTheme.bodyLarge,
-      onChanged: (value) {
-        _onChange();
-        widget.onChange(parseInput);
-        setState(() {});
-      },
       decoration: InputDecoration(
         isDense: true,
         hintText: "0",
