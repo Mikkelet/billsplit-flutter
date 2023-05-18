@@ -7,15 +7,16 @@ part of 'service_dto.dart';
 // **************************************************************************
 
 ServiceDTO _$ServiceDTOFromJson(Map<String, dynamic> json) => ServiceDTO(
-      json['id'] as String,
-      json['name'] as String,
-      json['imageUrl'] as String,
-      json['monthlyExpense'] as num,
-      PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
-      (json['participants'] as List<dynamic>)
+      id: json['id'] as String,
+      name: json['name'] as String,
+      imageUrl: json['imageUrl'] as String,
+      monthlyExpense: json['monthlyExpense'] as num,
+      createdBy: PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
+      participants: (json['participants'] as List<dynamic>)
           .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      PersonDTO.fromJson(json['payer'] as Map<String, dynamic>),
+      payer: PersonDTO.fromJson(json['payer'] as Map<String, dynamic>),
+      currency: json['currency'] as String,
     );
 
 Map<String, dynamic> _$ServiceDTOToJson(ServiceDTO instance) =>
@@ -26,5 +27,6 @@ Map<String, dynamic> _$ServiceDTOToJson(ServiceDTO instance) =>
       'monthlyExpense': instance.monthlyExpense,
       'payer': instance.payer.toJson(),
       'createdBy': instance.createdBy.toJson(),
+      'currency': instance.currency,
       'participants': instance.participants.map((e) => e.toJson()).toList(),
     };

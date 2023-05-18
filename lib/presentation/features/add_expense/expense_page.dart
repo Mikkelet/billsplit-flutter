@@ -219,19 +219,24 @@ class AddExpensePage extends StatelessWidget {
                             const SizedBox(height: 8),
                             RoundedListItem(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text("Total"),
-                                  Expanded(
-                                    child: Text(
-                                      "\$${groupExpense.total.fmt2dec()}",
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.end,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        groupExpense.total.fmt2dec(),
+                                        textAlign: TextAlign.end,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        cubit.groupExpense.currencyState.symbol,
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10),
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),

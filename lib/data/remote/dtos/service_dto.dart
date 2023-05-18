@@ -12,9 +12,18 @@ class ServiceDTO {
   final num monthlyExpense;
   final PersonDTO payer;
   final PersonDTO createdBy;
+  final String currency;
   final List<PersonDTO> participants;
 
-  ServiceDTO(this.id, this.name, this.imageUrl, this.monthlyExpense, this.createdBy, this.participants, this.payer);
+  ServiceDTO(
+      {required this.id,
+      required this.name,
+      required this.imageUrl,
+      required this.monthlyExpense,
+      required this.createdBy,
+      required this.participants,
+      required this.payer,
+      required this.currency});
 
   factory ServiceDTO.fromJson(Json json) => _$ServiceDTOFromJson(json);
 

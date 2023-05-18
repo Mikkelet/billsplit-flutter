@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/friend.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
@@ -12,6 +13,7 @@ class LoadingFriends extends Main {}
 
 class AddGroupCubit extends BaseCubit {
   String groupName = "";
+  String currency = Currency.USD().symbol;
   late final List<Person> _people = [user];
   final _observeFriendsUseCase = ObserveFriendsUseCase();
   final _getFriendsUseCase = GetFriendsUseCase();
@@ -47,12 +49,17 @@ class AddGroupCubit extends BaseCubit {
   }
 
   void addGroup() {
-    final group = Group.newGroup(user, groupName, people);
-    emit(Loading());
+    final group = Group.newGroup(user, groupName, people, currency);
+    showLoading();
     _addGroupUseCase.launch(group).then((value) {
       emit(GroupAdded(value));
     }).catchError((error, st) {
       showError(error, st);
     });
+  }
+
+  void updateCurrency(Currency currency) {
+    this.currency = currency.symbol;
+    emit(Main());
   }
 }

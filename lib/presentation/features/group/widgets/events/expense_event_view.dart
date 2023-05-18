@@ -61,16 +61,16 @@ class ExpenseEventView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
+                    groupExpense.total.fmt2dec(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
                     groupExpense.currencyState.symbol.toUpperCase(),
                     style: TextStyle(
                         fontSize: 15, color: Theme.of(context).disabledColor),
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    groupExpense.total.fmt2dec(),
-                    style: Theme.of(context).textTheme.titleLarge,
-                  )
-                ],
+                                  ],
               ),
               const SizedBox(height: 8),
               Text(

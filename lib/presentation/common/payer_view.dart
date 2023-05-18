@@ -29,10 +29,13 @@ class PayerView extends StatelessWidget {
             icon: ProfilePictureView(person: person, size: size),
           ),
           if (isPayer)
-            Icon(
-              color: Colors.greenAccent,
-              Icons.attach_money_rounded,
-              size: size * 0.8,
+            CircleAvatar(
+              backgroundColor: Colors.black54,
+              child: Icon(
+                color: Colors.greenAccent,
+                Icons.credit_score_rounded,
+                size: size * 0.5,
+              ),
             )
         ],
       ),

@@ -1,7 +1,9 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/widgets/service_participant_view.dart';
@@ -163,27 +165,47 @@ class _AddServicePageState extends State<AddServicePage> {
                           ),
                           const SizedBox(height: 8),
                           RoundedListItem(
-                            child: ExpenseTextField(
-                                textEditingController: _expenseTextController,
-                                canBeZero: !showCannotBe0ZeroError,
-                                onChange: (value) {
-                                  service.monthlyExpenseState = value;
-                                  cubit.onServiceUpdated();
-                                }),
+                            child: Row(
+                              children: [
+                                TextButton(
+                                    onPressed: () async {
+                                      final response = await Navigator.of(context)
+                                          .push(CurrencyPickerDialog.route);
+                                      if (response is Currency) {
+                                        cubit.updateCurrency(response.symbol);
+                                      }
+                                    },
+                                    child: Text(cubit.service.currencyState
+                                        .toUpperCase())),
+                                Expanded(
+                                  child: ExpenseTextField(
+                                      textEditingController:
+                                          _expenseTextController,
+                                      canBeZero: !showCannotBe0ZeroError,
+                                      onChange: (value) {
+                                        service.monthlyExpenseState = value;
+                                        cubit.onServiceUpdated();
+                                      }),
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
                           RoundedListItem(
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                  "Participants will pay \$${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                                  "Participants will pay ${cubit.service.currencyState.toUpperCase()} ${_getMonthlyServicePerPerson().fmt2dec()} every month"),
                             ),
                           ),
                           const SizedBox(height: 8),
                           Builder(builder: (context) {
-                            final nextMonth = DateTime.now().month; // index starts at 1
-                            final monthString = monthNames[nextMonth]; // index starts at 0, so we get the next month by just getting the index
-                            return Text("Next expense will be submittted on 1st of $monthString");
+                            final nextMonth =
+                                DateTime.now().month; // index starts at 1
+                            final monthString = monthNames[
+                                nextMonth]; // index starts at 0, so we get the next month by just getting the index
+                            return Text(
+                                "Next expense will be submitted on 1st of $monthString");
                           }),
                           const SizedBox(height: 8),
                           RoundedListItem(

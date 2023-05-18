@@ -41,4 +41,9 @@ class AddServiceBloc extends BaseCubit {
       showError(error, st);
     });
   }
+
+  void updateCurrency(String symbol) {
+    service.currencyState = symbol;
+    onServiceUpdated();
+  }
 }

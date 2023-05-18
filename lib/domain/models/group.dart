@@ -36,7 +36,7 @@ class Group {
 
   Iterable<Person> get allPeople => [...people, ...pastMembers];
 
-  Group.newGroup(Person createdBy, String name, List<Person> people)
+  Group.newGroup(Person createdBy, String name, List<Person> people, String currency)
       : this(
           id: "",
           createdBy: createdBy,
@@ -45,7 +45,7 @@ class Group {
           pastMembers: [],
           timestamp: DateTime.now().millisecondsSinceEpoch,
           latestEvent: null,
-          defaultCurrency: "usd",
+          defaultCurrency: currency,
           debts: [],
         );
 

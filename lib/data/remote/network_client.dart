@@ -12,14 +12,20 @@ import 'package:http/retry.dart';
 
 class NetworkClient {
   static bool allowNetworkLogging = false;
-  static bool debug = false;
+  static bool debug = true;
+  static bool emulator = true;
   static String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/v3/"
       : "http://localhost:5000/billsplittapp/us-central1/v3/";
-  static String devUrl = "http://192.168.8.227:5000/billsplittapp/us-central1/v3/";
+  static String devUrl =
+      "http://192.168.8.227:5000/billsplittapp/us-central1/v3/";
   static String releaseBaseUrl =
       "https://us-central1-billsplittapp.cloudfunctions.net/v3/";
-  static String baseUrl = debug ? devUrl : releaseBaseUrl;
+  static String baseUrl = debug
+      ? emulator
+          ? debugBaseUrl
+          : devUrl
+      : releaseBaseUrl;
 
   final _client = RetryClient(http.Client());
   final _authProvider = getIt<AuthProvider>();
@@ -29,7 +35,7 @@ class NetworkClient {
   }
 
   Future<Json> get(String path, {bool refreshToken = false}) async {
-    if(allowNetworkLogging) {
+    if (allowNetworkLogging) {
       print("qqq baseUrl=$baseUrl$path");
     }
     final url = Uri.parse("$baseUrl$path");
@@ -40,7 +46,7 @@ class NetworkClient {
       HttpHeaders.authorizationHeader: token,
     };
     final response = await _client.get(url, headers: headers);
-    if(allowNetworkLogging) {
+    if (allowNetworkLogging) {
       print("Request: ${response.request}");
       print("Request: ${response.request?.headers}");
       print('Response status: ${response.statusCode}');
@@ -67,7 +73,7 @@ class NetworkClient {
 
     final response =
         await _client.post(url, body: json.encode(body), headers: headers);
-    if(allowNetworkLogging) {
+    if (allowNetworkLogging) {
       print('Request body:$body');
       print("Request headers: $headers");
       print("Request: ${response.request}");
@@ -96,7 +102,7 @@ class NetworkClient {
     };
     final response =
         await _client.put(url, body: json.encode(body), headers: headers);
-    if(allowNetworkLogging) {
+    if (allowNetworkLogging) {
       print('Request body:$body');
       print("Request headers: $headers");
 
@@ -136,7 +142,7 @@ class NetworkClient {
       response =
           await _client.delete(url, body: json.encode(body), headers: headers);
     }
-    if(allowNetworkLogging) {
+    if (allowNetworkLogging) {
       print('Request body:$body');
       print("Request headers: $headers");
       print("Request body: ${response.body}");

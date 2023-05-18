@@ -14,90 +14,80 @@ class IndividualExpenseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    final nameShort = person.nameState;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        PayerView(
-          person: person,
-          isPayer: _isPayer(person, cubit),
-          size: 50,
-          onClick: () {
-            cubit.onPayerSelected(person);
-          },
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Flexible(
+          flex: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Builder(
-                        builder: (context) {
-                          String buttonText = nameShort;
-                          if (cubit.groupExpense.payerState.uid ==
-                              person.uid) {
-                            buttonText = "$nameShort is paying";
-                          }
-                          return MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            onPressed: () {
-                              cubit.onPayerSelected(person);
-                            },
-                            onLongPress: () {
-                              HapticFeedback.heavyImpact();
-
-                              cubit.addExpenseForUser(person);
-                            },
-                            visualDensity: VisualDensity.compact,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                buttonText,
-                                maxLines: 2,
-                              ),
-                            ),
-                          );
-                        },
+              PayerView(
+                person: person,
+                isPayer: _isPayer(person, cubit),
+                size: 50,
+                onClick: () {
+                  cubit.onPayerSelected(person);
+                },
+              ),
+              Builder(
+                builder: (context) {
+                  return Expanded(
+                    child: MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      onPressed: () {
+                        cubit.onPayerSelected(person);
+                      },
+                      onLongPress: () {
+                        HapticFeedback.heavyImpact();
+                        cubit.addExpenseForUser(person);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          person.nameState,
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Builder(builder: (context) {
-                        final totalForUser = getTotalForUser(cubit).fmt2dec();
-                        if (totalForUser.length > 13) {
-                          return Text(
-                            "\$${totalForUser.substring(0, totalForUser.length - 1)}...",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          );
-                        } else {
-                          if (getTotalForUser(cubit) > 0) {
-                            return Text(
-                              "\$${getTotalForUser(cubit).fmt2dec()}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            );
-                          }
-                          return const SizedBox();
-                        }
-                      }),
-                    ),
-                  )
-                ],
-              ),
+                  );
+                },
+              )
             ],
           ),
         ),
+        Flexible(
+          flex: 1,
+          child: Builder(
+            builder: (context) {
+              if (getTotalForUser(cubit) > 0) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Expanded(child: SizedBox()),
+                    Text(
+                      getTotalForUser(cubit).fmt2dec(),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.end,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      cubit.groupExpense.currencyState.symbol,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(fontSize: 10),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
+          ),
+        )
       ],
     );
   }

@@ -23,7 +23,7 @@ class GroupView extends StatelessWidget {
         0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: Center(
         child: ClickableListItem(
           onClick: () {
@@ -73,7 +73,15 @@ class GroupView extends StatelessWidget {
               TextStyle(fontSize: 10, color: Theme.of(context).disabledColor),
         ),
         const SizedBox(width: 4),
-        if (debt > 0)
+        if (debt > 9999999.99)
+          Text("9,999,999.99",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.apply(color: Colors.red))
+        else if (debt > 0)
           Text(convertDebt.fmt2dec(),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
