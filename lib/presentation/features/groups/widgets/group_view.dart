@@ -65,14 +65,7 @@ class GroupView extends StatelessWidget {
     }
     return Row(
       children: [
-        const SizedBox(width: 64),
         const Expanded(child: SizedBox()),
-        Text(
-          currency,
-          style:
-              TextStyle(fontSize: 10, color: Theme.of(context).disabledColor),
-        ),
-        const SizedBox(width: 4),
         if (debt > 9999999.99)
           Text("9,999,999.99",
               overflow: TextOverflow.ellipsis,
@@ -96,7 +89,13 @@ class GroupView extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
-                  ?.apply(color: Colors.green))
+                  ?.apply(color: Colors.green)),
+        const SizedBox(width: 4),
+        Text(
+          currency,
+          style:
+              TextStyle(fontSize: 10, color: Theme.of(context).disabledColor),
+        )
       ],
     );
   }

@@ -75,7 +75,7 @@ class IndividualExpenseView extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      cubit.groupExpense.currencyState.symbol,
+                      cubit.groupExpense.currencyState.symbol.toUpperCase(),
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall
