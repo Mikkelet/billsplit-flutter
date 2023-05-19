@@ -39,8 +39,7 @@ class GroupsBloc extends BaseCubit {
     }
   }
 
-  num convertToDefault(num debt) {
-    final userPref = sharedPrefs.userPrefDefaultCurrency;
-    return _convertCurrencyUseCase.launch(debt, "usd", userPref);
+  num convertToDefault(Group group, num debt) {
+    return _convertCurrencyUseCase.launch(debt, "usd", group.defaultCurrencyState);
   }
 }

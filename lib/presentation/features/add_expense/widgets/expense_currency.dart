@@ -6,13 +6,17 @@ import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseCurrency extends StatelessWidget {
-  const ExpenseCurrency({Key? key}) : super(key: key);
+class ExpenseCurrencyButton extends StatelessWidget {
+  const ExpenseCurrencyButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BaseBlocBuilder<AddExpenseBloc>(
       builder: (cubit, state) => ClickableListItem(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(10),
+          bottom: Radius.circular(10),
+        ),
         onClick: () async {
           if (cubit.groupExpense.id.isNotEmpty) {
             final warningResponse = await showDialog(
@@ -35,22 +39,17 @@ class ExpenseCurrency extends StatelessWidget {
           }
 
           if (context.mounted) {
-            final response =
-                await Navigator.of(context).push(CurrencyPickerDialog.route);
+            final response = await Navigator.of(context).push(
+                CurrencyPickerDialog.getRoute(
+                    convertToCurrency: cubit.group.defaultCurrencyState));
             if (response is Currency) {
               cubit.updateCurrency(response);
             }
           }
         },
-        alignment: Alignment.centerLeft,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              cubit.groupExpense.currencyState.symbol.toUpperCase(),
-            ),
-            const Icon(Icons.edit)
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Text(cubit.groupExpense.currencyState.symbol.toUpperCase()),
         ),
       ),
     );

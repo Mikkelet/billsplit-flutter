@@ -169,8 +169,11 @@ class _AddServicePageState extends State<AddServicePage> {
                               children: [
                                 TextButton(
                                     onPressed: () async {
-                                      final response = await Navigator.of(context)
-                                          .push(CurrencyPickerDialog.route);
+                                      final response =
+                                          await Navigator.of(context).push(
+                                              CurrencyPickerDialog.getRoute(
+                                                  convertToCurrency: cubit.group
+                                                      .defaultCurrencyState));
                                       if (response is Currency) {
                                         cubit.updateCurrency(response.symbol);
                                       }

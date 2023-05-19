@@ -18,7 +18,7 @@ class _SelectCurrencyButtonState extends State<SelectCurrencyButton> {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        final response = await Navigator.of(context).push(CurrencyPickerDialog.route);
+        final response = await Navigator.of(context).push(CurrencyPickerDialog.getRoute());
         if (response is Currency) {
           setState(() {
             currencyState = response.symbol;

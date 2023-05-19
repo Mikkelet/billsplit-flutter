@@ -33,8 +33,10 @@ class DefaultGroupCurrencyView extends StatelessWidget {
                   IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () async {
-                        final response = await Navigator.of(context)
-                            .push(CurrencyPickerDialog.route);
+                        final response = await Navigator.of(context).push(
+                            CurrencyPickerDialog.getRoute(
+                                convertToCurrency:
+                                    cubit.group.defaultCurrencyState));
                         if (response is Currency) {
                           cubit.updateCurrency(response);
                         }

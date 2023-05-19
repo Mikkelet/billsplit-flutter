@@ -6,6 +6,8 @@ class ClickableListItem extends StatelessWidget {
   final Color? color;
   final EdgeInsets? padding;
   final Alignment? alignment;
+  final BorderRadius? borderRadius;
+
   final bool enabled;
 
   const ClickableListItem(
@@ -15,14 +17,16 @@ class ClickableListItem extends StatelessWidget {
       this.enabled = true,
       this.color,
       this.padding,
-      this.alignment});
+      this.alignment,
+      this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: enabled ? onClick : null,
       minWidth: double.infinity,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      shape: RoundedRectangleBorder(
+          borderRadius: borderRadius ?? BorderRadius.circular(30)),
       color: color ?? Theme.of(context).colorScheme.primaryContainer,
       elevation: 0,
       highlightElevation: 0,

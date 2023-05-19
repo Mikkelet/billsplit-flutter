@@ -25,7 +25,8 @@ class PayCustomDebtView extends StatefulWidget {
 }
 
 class _PayCustomDebtViewState extends State<PayCustomDebtView> {
-  late final TextEditingController controller = TextEditingController(text: widget.debt.second.fmtTextField());
+  late final TextEditingController controller =
+      TextEditingController(text: widget.debt.second.fmtTextField());
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +54,9 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
                   children: [
                     TextButton(
                         onPressed: () async {
-                          final response = await Navigator.of(context)
-                              .push(CurrencyPickerDialog.route);
+                          final response = await Navigator.of(context).push(
+                              CurrencyPickerDialog.getRoute(
+                                  convertToCurrency: cubit.currency));
                           if (response is Currency) {
                             cubit.updateCurrency(response.symbol);
                           }

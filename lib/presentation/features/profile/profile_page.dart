@@ -67,9 +67,9 @@ class ProfilePage extends StatelessWidget {
                       onClick: () {
                         Navigator.of(context).push(FriendsPage.getRoute());
                       },
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text("Friends"),
                           Icon(Icons.arrow_forward_ios)
                         ],
@@ -80,7 +80,7 @@ class ProfilePage extends StatelessWidget {
                     // default currency
                     ClickableListItem(
                       onClick: () async {
-                        final response = await Navigator.of(context).push(CurrencyPickerDialog.route);
+                        final response = await Navigator.of(context).push(CurrencyPickerDialog.getRoute());
                         if (response is Currency) {
                           cubit.updateCurrency(response);
                         }

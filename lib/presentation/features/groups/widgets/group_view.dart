@@ -39,7 +39,7 @@ class GroupView extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                       softWrap: false,
                       overflow: TextOverflow.ellipsis),
-                  _debtView(context, yourDebts),
+                  _debtView(context, group, yourDebts),
                   const SizedBox(height: 8),
                   ProfilePictureStack(
                     people: group.people,
@@ -55,11 +55,10 @@ class GroupView extends StatelessWidget {
     );
   }
 
-  Widget _debtView(BuildContext context, num debt) {
+  Widget _debtView(BuildContext context, Group group, num debt) {
     final cubit = context.read<GroupsBloc>();
-    final convertDebt = cubit.convertToDefault(debt);
-    final String currency =
-        cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
+    final convertDebt = cubit.convertToDefault(group, debt);
+    final String currency = group.defaultCurrencyState.toUpperCase();
     if (convertDebt == 0) {
       return const SizedBox();
     }

@@ -66,7 +66,7 @@ class AddGroupPage extends StatelessWidget {
                       ClickableListItem(
                         onClick: () async {
                           final response = await Navigator.of(context)
-                              .push(CurrencyPickerDialog.route);
+                              .push(CurrencyPickerDialog.getRoute());
                           if (response is Currency) {
                             cubit.updateCurrency(response);
                           }

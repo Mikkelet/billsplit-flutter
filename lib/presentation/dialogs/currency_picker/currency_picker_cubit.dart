@@ -8,9 +8,10 @@ import 'package:collection/collection.dart';
 class CurrencyPickerCubit extends BaseCubit {
   final _getCurrenciesUseCase = GetCurrenciesUseCase();
   final _convertCurrencyUseCase = ConvertCurrencyUseCase();
+  final String? convertToCurrency;
   late List<Currency> currencies;
 
-  CurrencyPickerCubit() : super.withState(Loading());
+  CurrencyPickerCubit(this.convertToCurrency) : super.withState(Loading());
 
   loadCurrencies() {
     showLoading();
@@ -22,9 +23,9 @@ class CurrencyPickerCubit extends BaseCubit {
     });
   }
 
-  num getRateForCurrency(Currency currency) {
-    return _convertCurrencyUseCase.launch(
-        1, currency.symbol, sharedPrefs.userPrefDefaultCurrency);
+  num getRateForCurrency(String currency) {
+    final convertTo = convertToCurrency ?? sharedPrefs.userPrefDefaultCurrency;
+    return _convertCurrencyUseCase.launch(1, currency, convertTo);
   }
 
   Iterable<Currency> get recentCurrencies {

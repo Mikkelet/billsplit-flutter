@@ -100,18 +100,6 @@ class AddExpensePage extends StatelessWidget {
                       child: Center(
                         child: Column(
                           children: [
-                            // Description
-                            RoundedListItem(
-                              child: DescriptionTextField(
-                                initialText: groupExpense.descriptionState,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-
-                            // Currency
-                            const ExpenseCurrency(),
-                            const SizedBox(height: 8),
-
                             // Shared Expenses
                             RoundedListItem(
                               borderRadius: const BorderRadius.vertical(
@@ -177,7 +165,23 @@ class AddExpensePage extends StatelessWidget {
                                 ],
                               ),
                             ),
-
+                            const SizedBox(height: 8),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  flex: 3,
+                                  child: DescriptionTextField(
+                                      initialText:
+                                          groupExpense.descriptionState),
+                                ),
+                                const SizedBox(width: 8),
+                                const Flexible(
+                                  flex: 1,
+                                  child: ExpenseCurrencyButton(),
+                                )
+                              ],
+                            ),
                             // Tips and tricks
                             ClosableTipView(
                               padding: const EdgeInsets.only(
@@ -192,9 +196,9 @@ class AddExpensePage extends StatelessWidget {
                                     true;
                               },
                             ),
-                            const SizedBox(height: 8),
 
                             // Individual expenses
+                            const SizedBox(height: 8),
                             RoundedListItem(
                               borderRadius: const BorderRadius.vertical(
                                   bottom: Radius.circular(30),
@@ -219,7 +223,8 @@ class AddExpensePage extends StatelessWidget {
                             const SizedBox(height: 8),
                             RoundedListItem(
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text("Total"),
                                   Row(
@@ -233,8 +238,12 @@ class AddExpensePage extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
-                                        cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10),
+                                        cubit.groupExpense.currencyState.symbol
+                                            .toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(fontSize: 10),
                                       )
                                     ],
                                   ),

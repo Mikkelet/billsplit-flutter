@@ -9,13 +9,19 @@ import 'package:flutter/material.dart';
 import 'currency_picker_cubit.dart';
 
 class CurrencyPickerDialog extends StatefulWidget {
-  const CurrencyPickerDialog({Key? key}) : super(key: key);
+  final String? convertToCurrency;
+
+  const CurrencyPickerDialog({this.convertToCurrency, Key? key})
+      : super(key: key);
 
   @override
   State<CurrencyPickerDialog> createState() => _CurrencyPickerDialogState();
 
-  static get route =>
-      MaterialPageRoute(builder: (context) => const CurrencyPickerDialog());
+  static getRoute({String? convertToCurrency}) => MaterialPageRoute(
+        builder: (context) => CurrencyPickerDialog(
+          convertToCurrency: convertToCurrency,
+        ),
+      );
 }
 
 class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
@@ -35,7 +41,8 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
         actions: const [CloseButton()],
       ),
       body: BaseBlocWidget(
-        create: (context) => CurrencyPickerCubit()..loadCurrencies(),
+        create: (context) =>
+            CurrencyPickerCubit(widget.convertToCurrency)..loadCurrencies(),
         child: BaseBlocBuilder<CurrencyPickerCubit>(builder: (cubit, state) {
           if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
@@ -95,6 +102,9 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
 
   Widget _currencyButton(
       Key key, CurrencyPickerCubit cubit, Currency currency) {
+    final symbol = widget.convertToCurrency ??
+        cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
+    final rate = cubit.getRateForCurrency(currency.symbol);
     return TextButton(
       onPressed: () {
         cubit.onCurrencyPressed(currency);
@@ -109,7 +119,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
           ),
           Text(
             key: key,
-            "~${cubit.getRateForCurrency(currency).fmt2dec()} ${cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase()}",
+            "${symbol == currency.symbol ? "" : "~"}${rate.fmt2dec()} ${symbol.toUpperCase()}",
             style: TextStyle(color: Theme.of(context).disabledColor),
           )
         ],
