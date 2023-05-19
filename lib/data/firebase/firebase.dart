@@ -5,7 +5,9 @@ class FirebaseProvider {
   late final FirebaseApp firebaseApp;
 
   Future init() async {
-    firebaseApp = await Firebase.initializeApp(
+    if(Firebase.apps.isEmpty) {
+      firebaseApp = await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
+    }
   }
 }

@@ -11,7 +11,9 @@ const notificationChannelDesc = "This channel is used for general notifications.
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if(Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  }
   await setupFlutterNotifications();
   //showFlutterNotification(message);
 }
