@@ -110,7 +110,7 @@ class _ExpenseTextFieldState extends State<ExpenseTextField> {
   }
 
   bool isInputOverMaxValue() {
-    if (widget.maxValue == null) return true;
+    if (widget.maxValue == null) return false;
     return parseInput > widget.maxValue! &&
         (parseInput.fmt2dec() != widget.maxValue!.fmt2dec() ||
             text.length > widget.maxValue!.fmt2dec().length);

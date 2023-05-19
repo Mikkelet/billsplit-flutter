@@ -12,8 +12,8 @@ import 'package:http/retry.dart';
 
 class NetworkClient {
   static bool allowNetworkLogging = false;
-  static bool debug = true;
-  static bool emulator = true;
+  static bool debug = false;
+  static bool emulator = false;
   static String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/v3/"
       : "http://localhost:5000/billsplittapp/us-central1/v3/";
