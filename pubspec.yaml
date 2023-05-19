@@ -32,6 +32,7 @@ dependencies:
   flutter_local_notifications: ^14.0.0+1
   shared_preferences: ^2.1.0
   eraser: ^2.0.1
+  firebase_crashlytics: ^3.3.1
 
 dev_dependencies:
   json_serializable: ^6.6.1

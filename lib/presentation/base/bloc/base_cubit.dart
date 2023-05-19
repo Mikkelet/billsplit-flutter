@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
@@ -19,7 +20,14 @@ abstract class BaseCubit extends Cubit<UiState> {
     emit(Loading());
   }
 
+  @override
+  void emit(UiState state) {
+    if(isClosed) return;
+    super.emit(state);
+  }
+
   void showError(dynamic err, StackTrace? stackTrace) {
+    FirebaseCrashlytics.instance.log("error=$err, stackTrace=$stackTrace");
     if (err is Error) {
       emit(Failure(UiException(-1, err.toString())));
     } else if (err is UiException) {
