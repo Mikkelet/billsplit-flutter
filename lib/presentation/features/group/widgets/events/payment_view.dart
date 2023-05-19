@@ -1,16 +1,27 @@
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class PaymentView extends StatelessWidget {
   final Payment payment;
+
   const PaymentView({Key? key, required this.payment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-          "Payment by ${payment.createdBy.nameState}: \$${payment.amount}"),
+    final text = "${payment.createdBy.nameState} paid ${payment.currency.symbol.toUpperCase()} ${payment.amount.fmt2dec()} to ${payment.paidTo.nameState}";
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onBackground
+                  .withAlpha(125)),
+        ),
+      ),
     );
   }
 }
