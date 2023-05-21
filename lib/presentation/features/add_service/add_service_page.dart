@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_bloc.dart';
@@ -167,8 +168,8 @@ class _AddServicePageState extends State<AddServicePage> {
                           RoundedListItem(
                             child: Row(
                               children: [
-                                FilledButton(
-                                    onPressed: () async {
+                                SimpleButton(
+                                    onClick: () async {
                                       final response =
                                           await Navigator.of(context).push(
                                               CurrencyPickerDialog.getRoute(
