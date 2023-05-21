@@ -60,10 +60,10 @@ class GroupsPage extends StatelessWidget {
                     return ListView.builder(
                       controller: scrollingController,
                       itemCount: groups.length,
-                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: GroupView(group: groups[index]),
                         );
                       },

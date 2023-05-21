@@ -22,39 +22,36 @@ class GroupView extends StatelessWidget {
             ?.owes ??
         0;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      child: Center(
-        child: ClickableListItem(
-          elevation: 4,
-          onClick: () {
-            _onClick(context);
-          },
-          cornerRadius: 10,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(group.nameState,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20),
-                      softWrap: false,
-                      overflow: TextOverflow.ellipsis),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      ProfilePictureStack(
-                        people: group.people,
-                        size: 30,
-                        limit: 3,
-                      ),
-                      Expanded(child: _debtView(context, group, yourDebts)),
-                    ],
-                  ),
-                ],
-              ),
+    return Center(
+      child: ClickableListItem(
+        elevation: 4,
+        onClick: () {
+          _onClick(context);
+        },
+        cornerRadius: 10,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(group.nameState,
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        fontSize: 20),
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    ProfilePictureStack(
+                      people: group.people,
+                      size: 30,
+                      limit: 3,
+                    ),
+                    Expanded(child: _debtView(context, group, yourDebts)),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

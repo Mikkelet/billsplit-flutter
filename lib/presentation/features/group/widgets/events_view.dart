@@ -42,7 +42,7 @@ class EventsView extends StatelessWidget {
                           event is! Payment;
 
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
                     child: Builder(builder: (context) {
                       if (event is GroupExpense) {
                         return Row(
