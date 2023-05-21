@@ -43,3 +43,15 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat-Regular.ttf
+          style: normal
+        - asset: fonts/Montserrat-Light.ttf
+          weight: 200
+        - asset: fonts/Montserrat-Bold.ttf
+          weight: 700
+        - asset: fonts/Montserrat-Italic.ttf
+          style: italic
+

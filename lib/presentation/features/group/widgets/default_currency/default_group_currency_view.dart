@@ -30,17 +30,20 @@ class DefaultGroupCurrencyView extends StatelessWidget {
                 if (state is Loading)
                   const CircularProgressIndicator()
                 else
-                  IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () async {
-                        final response = await Navigator.of(context).push(
-                            CurrencyPickerDialog.getRoute(
-                                convertToCurrency:
-                                    cubit.group.defaultCurrencyState));
-                        if (response is Currency) {
-                          cubit.updateCurrency(response);
-                        }
-                      })
+                  CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    child: IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () async {
+                          final response = await Navigator.of(context).push(
+                              CurrencyPickerDialog.getRoute(
+                                  convertToCurrency:
+                                      cubit.group.defaultCurrencyState));
+                          if (response is Currency) {
+                            cubit.updateCurrency(response);
+                          }
+                        }),
+                  )
               ],
             ),
           );

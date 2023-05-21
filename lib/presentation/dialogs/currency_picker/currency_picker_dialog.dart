@@ -116,6 +116,10 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
         children: [
           Text(
             currency.symbol.toUpperCase(),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontWeight: FontWeight.w700
+            ),
           ),
           Text(
             key: key,

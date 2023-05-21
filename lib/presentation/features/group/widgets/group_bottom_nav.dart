@@ -23,9 +23,9 @@ class _GroupBottomNavState extends State<GroupBottomNav> {
         }
       }
       const destinations = [
-        NavigationDestination(icon: Icon(Icons.add), label: "Events"),
-        NavigationDestination(icon: Icon(Icons.ac_unit), label: "Services"),
-        NavigationDestination(icon: Icon(Icons.ad_units), label: "Debt")
+        NavigationDestination(icon: Icon(Icons.receipt_outlined), label: "Expenses"),
+        NavigationDestination(icon: Icon(Icons.update_outlined), label: "Services"),
+        NavigationDestination(icon: Icon(Icons.monetization_on_outlined), label: "Debts")
       ];
       return NavigationBar(
         selectedIndex: navIndex > destinations.length - 1 ? 0 : navIndex,

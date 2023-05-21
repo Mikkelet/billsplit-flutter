@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/add_service_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -40,15 +41,14 @@ class GroupPage extends StatelessWidget {
                   String text = state.nav == GroupPageNav.events
                       ? "Add expense"
                       : "Add service";
-                  return FloatingActionButton.extended(
-                    isExtended: true,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.tertiaryContainer,
+                  return ExtendedFloatingActionButton(
+                    scrollController: ScrollController(),
                     onPressed: () {
                       _onFabClicked(context);
                     },
-                    label: Text(text),
-                    icon: const Icon(Icons.add),
+
+                    label: text,
+                    icon: Icons.add,
                   );
                 }
                 return const SizedBox();
@@ -56,6 +56,7 @@ class GroupPage extends StatelessWidget {
             ),
             appBar: AppBar(
                 elevation: 0,
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 title: Text(group.nameState),
                 actions: [
                   IconButton(

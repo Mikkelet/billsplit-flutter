@@ -48,8 +48,8 @@ class _ExtendedFloatingActionButtonState
     return FloatingActionButton.extended(
       isExtended: isExtended,
       key: UniqueKey(),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       onPressed: widget.onPressed,
-      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
       icon: Icon(widget.icon),
       label: Text(widget.label),
     );

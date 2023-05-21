@@ -29,6 +29,7 @@ class GroupView extends StatelessWidget {
           onClick: () {
             _onClick(context);
           },
+          cornerRadius: 10,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
             child: Center(
@@ -36,15 +37,20 @@ class GroupView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(group.nameState,
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: 20),
                       softWrap: false,
                       overflow: TextOverflow.ellipsis),
-                  _debtView(context, group, yourDebts),
-                  const SizedBox(height: 8),
-                  ProfilePictureStack(
-                    people: group.people,
-                    size: 30,
-                    limit: 6,
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      ProfilePictureStack(
+                        people: group.people,
+                        size: 30,
+                        limit: 3,
+                      ),
+                      Expanded(child: _debtView(context, group, yourDebts)),
+                    ],
                   ),
                 ],
               ),
@@ -92,8 +98,8 @@ class GroupView extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           currency,
-          style:
-              TextStyle(fontSize: 10, color: Theme.of(context).disabledColor),
+          style: TextStyle(
+              fontSize: 10, color: Theme.of(context).colorScheme.onPrimaryContainer),
         )
       ],
     );

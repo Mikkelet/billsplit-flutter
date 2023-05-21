@@ -56,12 +56,12 @@ class ProfilePictureStack extends StatelessWidget {
                 alignment: Alignment.center,
                 width: size,
                 height: size,
-                color: Theme.of(context).colorScheme.tertiaryContainer,
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 child: Text(
                   "+$remaining",
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontSize: (size / 2.5),
-                      color: Theme.of(context).colorScheme.onTertiaryContainer),
+                      color: Theme.of(context).colorScheme.onSecondaryContainer),
                 ),
               ),
             ),

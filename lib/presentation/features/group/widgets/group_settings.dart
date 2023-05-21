@@ -53,7 +53,7 @@ class GroupSettings extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
             if (cubit.state is AddingPersonToGroup)
               const Center(child: CircularProgressIndicator())
             else
@@ -70,7 +70,13 @@ class GroupSettings extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text("Add to group")),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Add to group"),
+                      Icon(Icons.add)
+                    ],
+                  )),
             const SizedBox(height: 16),
             DefaultGroupCurrencyView(group: cubit.group),
             const SizedBox(height: 16),
@@ -79,9 +85,9 @@ class GroupSettings extends StatelessWidget {
                 Navigator.of(context)
                     .push(NotificationsSettingsView.getRoute(cubit.group));
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text("Group notifications"),
                   Icon(Icons.arrow_right)
                 ],

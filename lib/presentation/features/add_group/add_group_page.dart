@@ -50,19 +50,39 @@ class AddGroupPage extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Container(height: 40),
+                      const SizedBox(height: 40),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          cubit.groupName.isEmpty
+                              ? "New group"
+                              : cubit.groupName,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall
+                              ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       RoundedListItem(
                           child: TextField(
-                        autofocus: true,
+                        autofocus: cubit.groupName.isEmpty,
+                        maxLines: 1,
+                        maxLength: 20,
                         controller: nameTextController,
                         onChanged: (value) {
-                          cubit.groupName = value;
+                          cubit.onUpdateGroupName(value);
                         },
                         textInputAction: TextInputAction.done,
                         decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: "New group"),
+                            counterText: "",
+                            border: InputBorder.none,
+                            hintText: "New group"),
                       )),
-                      Container(height: 16),
+                      const SizedBox(height: 16),
                       ClickableListItem(
                         onClick: () async {
                           final response = await Navigator.of(context)
@@ -71,18 +91,17 @@ class AddGroupPage extends StatelessWidget {
                             cubit.updateCurrency(response);
                           }
                         },
-                        alignment: Alignment.centerLeft,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               cubit.currency.toUpperCase(),
                             ),
-                            const Icon(Icons.edit)
+                            const Icon(Icons.arrow_drop_down)
                           ],
                         ),
                       ),
-                      Container(height: 16),
+                      const SizedBox(height: 16),
                       RoundedListItem(
                         child: Column(
                           children: [
@@ -92,7 +111,7 @@ class AddGroupPage extends StatelessWidget {
                             ...cubit.people
                                 .map((e) => AddedPersonView(person: e))
                                 .toList(),
-                            Container(height: 12),
+                            const SizedBox(height: 12),
                             const Align(
                               alignment: Alignment.centerRight,
                               child: AddPeopleToGroupView(),

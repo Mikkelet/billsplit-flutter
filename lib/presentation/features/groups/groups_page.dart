@@ -1,7 +1,5 @@
-
 import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
@@ -21,36 +19,24 @@ class GroupsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocWidget(
       create: (context) => GroupsBloc()..loadProfile(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Splitsby"),
-          actions: [
-            Builder(builder: (context) {
-              final cubit = context.read<GroupsBloc>();
-              return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(ProfilePage.getRoute());
-                  },
-                  child: ProfilePictureView(person: cubit.user));
-            }),
-            const SizedBox(width: 16)
-          ],
-        ),
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-          child: ExtendedFloatingActionButton(
-            scrollController: scrollingController,
-            label: "Add group",
-            icon: Icons.group_add_rounded,
-            onPressed: () {
-              Navigator.of(context).push(AddGroupPage.getRoute());
-            },
-          ),
-        ),
-        body: BaseBlocBuilder<GroupsBloc>(
-          builder: (cubit, state) {
-            return Center(
+      child: BlocBuilder<GroupsBloc, UiState>(
+        builder: (context, state) {
+          final cubit = context.read<GroupsBloc>();
+          return Scaffold(
+            appBar: _appBar(context),
+            floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+              child: ExtendedFloatingActionButton(
+                scrollController: scrollingController,
+                label: "Add group",
+                icon: Icons.group_add_rounded,
+                onPressed: () {
+                  Navigator.of(context).push(AddGroupPage.getRoute());
+                },
+              ),
+            ),
+            body: Center(
               child: RefreshIndicator(
                 onRefresh: () async {
                   await cubit.refreshGroups();
@@ -59,8 +45,7 @@ class GroupsPage extends StatelessWidget {
                   stream: cubit.getGroupStream(),
                   body: (groups) {
                     if (state is Loading && groups.isEmpty) {
-                      return const Center(
-                          child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     if (groups.isEmpty) {
                       return const Center(
@@ -73,18 +58,53 @@ class GroupsPage extends StatelessWidget {
                       );
                     }
                     return ListView.builder(
-                        controller: scrollingController,
-                        itemCount: groups.length,
-                        padding: const EdgeInsets.symmetric(vertical: 40),
-                        itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: GroupView(group: groups[index]),
-                            ));
+                      controller: scrollingController,
+                      itemCount: groups.length,
+                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
+                          child: GroupView(group: groups[index]),
+                        );
+                      },
+                    );
                   },
                 ),
               ),
-            );
-          },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  AppBar _appBar(BuildContext context) {
+    final cubit = context.read<GroupsBloc>();
+    return AppBar(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      bottom: PreferredSize(
+        preferredSize: const Size(double.infinity, 32),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "Splitsby",
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 30,
+                    color: Theme.of(context).colorScheme.onBackground),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(ProfilePage.getRoute());
+                },
+                child: ProfilePictureView(person: cubit.user, size: 50),
+              )
+            ],
+          ),
         ),
       ),
     );

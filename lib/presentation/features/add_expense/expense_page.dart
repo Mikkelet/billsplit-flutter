@@ -48,29 +48,37 @@ class AddExpensePage extends StatelessWidget {
           builder: (cubit, state) {
             return Scaffold(
               appBar: AppBar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                title: Builder(builder: (context) {
+                  if (cubit.groupExpense.id.isEmpty) {
+                    return const Text("New Expense");
+                  }
+                  return const Text("Edit expense");
+                }),
                 actions: [
-                  IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return CustomDialog(
-                              title: "Are you sure you want to delete",
-                              primaryText: "Delete",
-                              secondaryText: "Cancel",
-                              onPrimaryClick: () {
-                                Navigator.of(context).pop();
-                                cubit.deleteExpense();
-                              },
-                              onSecondaryClick: () {
-                                Navigator.of(context).pop();
-                              },
-                            );
-                          });
-                    },
-                    icon: const Icon(Icons.delete),
-                    color: Theme.of(context).colorScheme.error,
-                  ),
+                  if (cubit.groupExpense.id.isNotEmpty)
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomDialog(
+                                title: "Are you sure you want to delete",
+                                primaryText: "Delete",
+                                secondaryText: "Cancel",
+                                onPrimaryClick: () {
+                                  Navigator.of(context).pop();
+                                  cubit.deleteExpense();
+                                },
+                                onSecondaryClick: () {
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            });
+                      },
+                      icon: const Icon(Icons.delete),
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   const SubmitExpenseButton()
                 ],
               ),

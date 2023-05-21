@@ -80,7 +80,8 @@ class ProfilePage extends StatelessWidget {
                     // default currency
                     ClickableListItem(
                       onClick: () async {
-                        final response = await Navigator.of(context).push(CurrencyPickerDialog.getRoute());
+                        final response = await Navigator.of(context)
+                            .push(CurrencyPickerDialog.getRoute());
                         if (response is Currency) {
                           cubit.updateCurrency(response);
                         }
@@ -92,7 +93,10 @@ class ProfilePage extends StatelessWidget {
                           Text(
                             cubit.defaultCurrency.toUpperCase(),
                           ),
-                          const Icon(Icons.edit)
+                          CircleAvatar(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              child: const Icon(Icons.edit))
                         ],
                       ),
                     ),

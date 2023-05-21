@@ -82,11 +82,12 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                   child: Row(
                     children: [
                       ProfilePictureView(person: person),
-                      const SizedBox(width: 16),
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(person.nameState)),
-                      const Expanded(child: SizedBox()),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(person.nameState,maxLines: 1,overflow: TextOverflow.ellipsis,)),
+                      ),
                     ],
                   ),
                 ),
@@ -131,7 +132,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                   Navigator.of(context).pop(widget.participants);
                 },
                 disabledColor: Theme.of(context).disabledColor,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.onBackground,
                 icon: const Icon(Icons.check),
               )
           ],

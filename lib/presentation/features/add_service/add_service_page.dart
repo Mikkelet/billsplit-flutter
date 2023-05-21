@@ -167,7 +167,7 @@ class _AddServicePageState extends State<AddServicePage> {
                           RoundedListItem(
                             child: Row(
                               children: [
-                                TextButton(
+                                FilledButton(
                                     onPressed: () async {
                                       final response =
                                           await Navigator.of(context).push(
@@ -178,8 +178,13 @@ class _AddServicePageState extends State<AddServicePage> {
                                         cubit.updateCurrency(response.symbol);
                                       }
                                     },
-                                    child: Text(cubit.service.currencyState
-                                        .toUpperCase())),
+                                    child: Row(
+                                      children: [
+                                        Text(cubit.service.currencyState
+                                            .toUpperCase()),
+                                        const Icon(Icons.arrow_drop_down)
+                                      ],
+                                    )),
                                 Expanded(
                                   child: ExpenseTextField(
                                       textEditingController:
@@ -207,10 +212,14 @@ class _AddServicePageState extends State<AddServicePage> {
                                 DateTime.now().month; // index starts at 1
                             final monthString = monthNames[
                                 nextMonth]; // index starts at 0, so we get the next month by just getting the index
-                            return Text(
-                                "Next expense will be submitted on 1st of $monthString");
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 32.0),
+                              child: Text(
+                                  "Next expense will be submitted on 1st of $monthString"),
+                            );
                           }),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 16),
                           RoundedListItem(
                             child: Column(
                               children: [

@@ -18,10 +18,9 @@ class _AddPeopleToGroupViewState extends State<AddPeopleToGroupView> {
   Widget build(BuildContext context) {
     final cubit = context.read<AddGroupCubit>();
     return CircleAvatar(
-      backgroundColor: Colors.purple,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       child: IconButton(
           icon: const Icon(Icons.add),
-          color: Colors.white,
           onPressed: () {
             showDialog(
                 context: context,

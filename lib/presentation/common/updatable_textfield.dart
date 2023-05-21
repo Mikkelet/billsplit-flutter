@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 enum UpdateTextFieldState { isUpdating, isEditing, display }
 
@@ -52,12 +53,16 @@ class _UpdatableTextField extends State<UpdatableTextField> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  widget.onEditPressed();
-                },
-                icon: const Icon(Icons.edit),
-                color: Theme.of(context).colorScheme.secondary,
+              CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: IconButton(
+                  onPressed: () {
+                    HapticFeedback.heavyImpact();
+                    widget.onEditPressed();
+                  },
+                  icon: const Icon(Icons.edit),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               )
             ],
           );

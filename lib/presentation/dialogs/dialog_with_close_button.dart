@@ -20,7 +20,7 @@ class DialogWithCloseButton extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.onBackground,
                 icon: const Icon(Icons.close),
               ),
             ),

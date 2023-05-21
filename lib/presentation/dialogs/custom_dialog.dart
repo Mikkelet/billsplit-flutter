@@ -28,11 +28,12 @@ class CustomDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title ?? "", style: Theme.of(context).textTheme.titleLarge),
+              Text(title ?? "", style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onBackground
+              )),
               Text(text ?? "", style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: 16),
               SimpleButton(
-                  color: Theme.of(context).colorScheme.primary,
                   onClick: onPrimaryClick ??
                       () {
                         Navigator.of(context).pop();

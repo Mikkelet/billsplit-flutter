@@ -62,4 +62,9 @@ class AddGroupCubit extends BaseCubit {
     this.currency = currency.symbol;
     emit(Main());
   }
+
+  void onUpdateGroupName(String name) {
+    groupName = name;
+    emit(Main());
+  }
 }

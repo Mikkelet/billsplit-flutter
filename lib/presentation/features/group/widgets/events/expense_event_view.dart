@@ -28,16 +28,19 @@ class ExpenseEventView extends StatelessWidget {
           const Text(
             "Error occurred. Press to resubmit",
             style: TextStyle(color: Colors.redAccent),
-          ),
+          )
+        else if (groupExpense.syncState == SyncState.pending)
+          const SizedBox(
+              height: 20, width: 20, child: CircularProgressIndicator()),
         ClickableListItem(
           color: builder(() {
             if (groupExpense.syncState == SyncState.pending) {
               return Theme.of(context).highlightColor;
             }
             if (groupExpense.syncState == SyncState.failed) {
-              return Colors.redAccent;
+              return Theme.of(context).colorScheme.errorContainer;
             }
-            return Theme.of(context).colorScheme.primaryContainer;
+            return Theme.of(context).colorScheme.surface;
           }),
           onClick: () {
             final cubit = context.read<GroupBloc>();
@@ -70,7 +73,7 @@ class ExpenseEventView extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 15, color: Theme.of(context).disabledColor),
                   ),
-                                  ],
+                ],
               ),
               const SizedBox(height: 8),
               Text(
