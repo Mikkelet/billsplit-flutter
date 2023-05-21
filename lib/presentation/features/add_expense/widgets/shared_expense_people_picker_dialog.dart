@@ -67,7 +67,7 @@ class _SharedExpensePeoplePickerDialogState
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                     icon: const Icon(Icons.check))
               ],
             )

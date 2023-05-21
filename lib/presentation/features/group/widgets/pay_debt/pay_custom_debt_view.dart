@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
+import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_state.dart';
@@ -51,8 +52,8 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FilledButton(
-                        onPressed: () async {
+                    SimpleButton(
+                        onClick: () async {
                           final response = await Navigator.of(context).push(
                               CurrencyPickerDialog.getRoute(
                                   convertToCurrency: cubit.currency));

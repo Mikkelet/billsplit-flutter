@@ -8,6 +8,7 @@ class ClickableListItem extends StatelessWidget {
   final Alignment? alignment;
   final BorderRadius? borderRadius;
   final double cornerRadius;
+  final double elevation;
 
   final bool enabled;
 
@@ -20,15 +21,17 @@ class ClickableListItem extends StatelessWidget {
       this.padding,
       this.alignment,
       this.borderRadius,
-      this.cornerRadius = 30});
+      this.cornerRadius = 30,
+      this.elevation = 0});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
-        elevation: 0,
-        color: color,
+      shape: RoundedRectangleBorder(
+          borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
+      elevation: elevation,
+      surfaceTintColor: color ?? Theme.of(context).colorScheme.primaryContainer,
+      color: color ?? Theme.of(context).colorScheme.primaryContainer,
       child: InkWell(
         onTap: enabled ? onClick : null,
         child: Padding(

@@ -15,7 +15,7 @@ class SimpleButton extends StatelessWidget {
     return MaterialButton(
       onPressed: onClick,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      color: color ?? Theme.of(context).colorScheme.primary,
+      color: color ?? Theme.of(context).colorScheme.secondaryContainer,
       textColor: textColor ?? Theme.of(context).colorScheme.onPrimary,
       elevation: 0,
       highlightElevation: 0,

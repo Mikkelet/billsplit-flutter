@@ -81,7 +81,7 @@ class GroupsPage extends StatelessWidget {
   AppBar _appBar(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
     return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       bottom: PreferredSize(
         preferredSize: const Size(double.infinity, 32),
         child: Padding(

@@ -26,6 +26,7 @@ class GroupView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: Center(
         child: ClickableListItem(
+          elevation: 4,
           onClick: () {
             _onClick(context);
           },

@@ -48,7 +48,6 @@ class AddExpensePage extends StatelessWidget {
           builder: (cubit, state) {
             return Scaffold(
               appBar: AppBar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
                 title: Builder(builder: (context) {
                   if (cubit.groupExpense.id.isEmpty) {
                     return const Text("New Expense");

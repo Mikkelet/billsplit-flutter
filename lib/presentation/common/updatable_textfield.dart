@@ -54,7 +54,7 @@ class _UpdatableTextField extends State<UpdatableTextField> {
                 ),
               ),
               CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
                 child: IconButton(
                   onPressed: () {
                     HapticFeedback.heavyImpact();

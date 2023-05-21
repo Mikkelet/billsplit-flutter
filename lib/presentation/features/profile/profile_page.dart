@@ -22,7 +22,9 @@ class ProfilePage extends StatelessWidget {
       create: (context) => ProfileCubit(),
       child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
         return Scaffold(
-          appBar: AppBar(leading: const BackButton()),
+          appBar: AppBar(
+            leading: const BackButton(),
+          ),
           body: Builder(builder: (context) {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
@@ -95,7 +97,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           CircleAvatar(
                               backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context).colorScheme.secondaryContainer,
                               child: const Icon(Icons.edit))
                         ],
                       ),

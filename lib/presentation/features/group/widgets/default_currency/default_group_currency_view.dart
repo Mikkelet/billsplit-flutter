@@ -31,7 +31,7 @@ class DefaultGroupCurrencyView extends StatelessWidget {
                   const CircularProgressIndicator()
                 else
                   CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
                     child: IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: () async {

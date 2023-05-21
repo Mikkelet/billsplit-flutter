@@ -56,7 +56,6 @@ class GroupPage extends StatelessWidget {
             ),
             appBar: AppBar(
                 elevation: 0,
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 title: Text(group.nameState),
                 actions: [
                   IconButton(
