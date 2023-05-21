@@ -71,7 +71,7 @@ class ExpenseEventView extends StatelessWidget {
                   Text(
                     groupExpense.currencyState.symbol.toUpperCase(),
                     style: TextStyle(
-                        fontSize: 15, color: Theme.of(context).disabledColor),
+                        fontSize: 15, color: Theme.of(context).colorScheme.inversePrimary),
                   ),
                 ],
               ),
