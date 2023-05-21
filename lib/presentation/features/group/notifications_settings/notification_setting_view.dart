@@ -27,6 +27,12 @@ class NotificationSettingView extends StatelessWidget {
             Text(topic.getTopicName()),
             if (state is Main)
               Checkbox(
+                  fillColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Theme.of(context).colorScheme.inversePrimary;
+                    }
+                    return Theme.of(context).colorScheme.secondaryContainer;
+                  }),
                   value: cubit.isSubscribed,
                   onChanged: (value) {
                     if (value == null) return;

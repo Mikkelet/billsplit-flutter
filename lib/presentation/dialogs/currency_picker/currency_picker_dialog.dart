@@ -37,6 +37,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Theme.of(context).colorScheme.surface,
         leading: null,
         actions: const [CloseButton()],
       ),

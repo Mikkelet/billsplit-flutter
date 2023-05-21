@@ -79,45 +79,48 @@ class _AddServicePageState extends State<AddServicePage> {
         builder: (cubit, state) {
           return Scaffold(
             appBar: builder(() {
-              return AppBar(leading: const BackButton(), actions: [
-                if (service.id.isNotEmpty)
-                  IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => CustomDialog(
-                          text:
-                              "Are you sure you want to delete this subscription service?",
-                          primaryText: "No, keep it",
-                          onPrimaryClick: () {
-                            Navigator.of(context).pop();
-                          },
-                          secondaryText: "Yes, delete it",
-                          onSecondaryClick: () {
-                            Navigator.of(context).pop();
-                            cubit.deleteService(service);
-                          },
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.delete),
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                IconButton(
-                  onPressed:
-                      service.isChanged && service.monthlyExpenseState > 0
-                          ? () {
-                              if (isValid()) {
-                                cubit.submitService();
-                              } else {
-                                showCannotBe0ZeroError = true;
-                                setState(() {});
-                              }
-                            }
-                          : null,
-                  icon: const Icon(Icons.check),
-                )
-              ]);
+              return AppBar(
+                  leading: const BackButton(),
+                  surfaceTintColor: Theme.of(context).colorScheme.surface,
+                  actions: [
+                    if (service.id.isNotEmpty)
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => CustomDialog(
+                              text:
+                                  "Are you sure you want to delete this subscription service?",
+                              primaryText: "No, keep it",
+                              onPrimaryClick: () {
+                                Navigator.of(context).pop();
+                              },
+                              secondaryText: "Yes, delete it",
+                              onSecondaryClick: () {
+                                Navigator.of(context).pop();
+                                cubit.deleteService(service);
+                              },
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.delete),
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    IconButton(
+                      onPressed:
+                          service.isChanged && service.monthlyExpenseState > 0
+                              ? () {
+                                  if (isValid()) {
+                                    cubit.submitService();
+                                  } else {
+                                    showCannotBe0ZeroError = true;
+                                    setState(() {});
+                                  }
+                                }
+                              : null,
+                      icon: const Icon(Icons.check),
+                    )
+                  ]);
             }),
             body: WillPopScope(
               onWillPop: () async {
@@ -158,6 +161,7 @@ class _AddServicePageState extends State<AddServicePage> {
                                 FocusManager.instance.primaryFocus?.unfocus();
                               },
                               decoration: InputDecoration(
+                                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
                                   errorText: nameErrorText,
                                   counterText: "",
                                   border: InputBorder.none,

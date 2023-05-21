@@ -16,8 +16,9 @@ class FriendsPage extends StatelessWidget {
       create: (context) => FriendsCubit()..getFriends(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          surfaceTintColor: Theme.of(context).colorScheme.surface,
           title: const Text("Friends"),
+
           leading: const BackButton(),
         ),
         body: Builder(
