@@ -24,8 +24,8 @@ class SplitsbyTheme3 extends ColorScheme {
           tertiaryContainer: const Color(0xFF967aa1),
           onTertiaryContainer: Colors.black,
           onInverseSurface: Colors.greenAccent,
-          surfaceTint: Colors.greenAccent,
-          surfaceVariant: Colors.greenAccent,
-          inversePrimary: Colors.greenAccent,
+          surfaceTint: Colors.white,
+          surfaceVariant: Colors.white,
+          inversePrimary: Colors.grey,
         );
 }

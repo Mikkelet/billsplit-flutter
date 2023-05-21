@@ -54,6 +54,12 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                 ),
               ),
               Checkbox(
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  if(states.contains(MaterialState.disabled)) {
+                    return Theme.of(context).colorScheme.inversePrimary;
+                  }
+                  return Theme.of(context).colorScheme.secondaryContainer;
+                }),
                 tristate: true,
                 value: (_isEveryoneSelected()) ? true : null,
                 onChanged: _isEveryoneSelected()
@@ -94,6 +100,9 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
               ),
               const SizedBox(width: 32),
               Checkbox(
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  return Theme.of(context).colorScheme.secondaryContainer;
+                }),
                   value: widget.participants.contains(person),
                   onChanged: (isParticipant) {
                     if (isParticipant == false &&

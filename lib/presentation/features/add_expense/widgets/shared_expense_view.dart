@@ -99,7 +99,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             ),
           ),
         ),
-        const Divider()
+        Divider(color: Theme.of(context).colorScheme.inversePrimary)
       ],
     );
   }

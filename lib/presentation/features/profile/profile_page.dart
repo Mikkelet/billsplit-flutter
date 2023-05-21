@@ -103,7 +103,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    const Divider(endIndent: 16, indent: 16),
+                    Divider(endIndent: 16, indent: 16, color: Theme.of(context).colorScheme.inversePrimary),
                     const SizedBox(height: 32),
                     ClickableListItem(
                       onClick: () {
