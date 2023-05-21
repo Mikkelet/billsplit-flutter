@@ -32,6 +32,7 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
                     controller: textFieldController,
                     decoration: InputDecoration(
                         errorText: errorText,
+                        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
                         border: InputBorder.none,
                         hintText: "Enter an email"),
                     onChanged: (_) {

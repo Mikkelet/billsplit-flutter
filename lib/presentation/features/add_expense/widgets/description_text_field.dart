@@ -39,8 +39,9 @@ class _DescriptionTextFieldState extends State<DescriptionTextField> {
           cubit.groupExpense.descriptionState = value;
           cubit.onExpensesUpdated();
         },
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
             counterText: "",
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
             border: InputBorder.none,
             hintText:
                 "Eg. restaurant, groceries"),

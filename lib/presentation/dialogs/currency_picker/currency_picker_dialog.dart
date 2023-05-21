@@ -57,9 +57,10 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                   RoundedListItem(
                     child: TextField(
                       onChanged: _onChange,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "USD, EUR",
+                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
                           counterText: ""),
                       maxLength: 10,
                       maxLines: 1,
@@ -124,7 +125,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
           Text(
             key: key,
             "${symbol == currency.symbol ? "" : "~"}${rate.fmt2dec()} ${symbol.toUpperCase()}",
-            style: TextStyle(color: Theme.of(context).disabledColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
           )
         ],
       ),

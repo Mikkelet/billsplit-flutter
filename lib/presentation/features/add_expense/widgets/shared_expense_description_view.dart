@@ -58,6 +58,7 @@ class _SharedExpenseDescriptionViewState
       maxLines: 1,
       maxLength: 20,
       decoration: InputDecoration(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         counterText: "",
         prefixIcon: widget.showIcon
             ? const Padding(

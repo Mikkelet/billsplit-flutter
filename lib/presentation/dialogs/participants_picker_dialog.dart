@@ -50,7 +50,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                   "tip: tap a friend's name to select only them!",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
-                      color: Theme.of(context).disabledColor),
+                      color: Theme.of(context).colorScheme.inversePrimary),
                 ),
               ),
               Checkbox(

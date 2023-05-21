@@ -69,11 +69,11 @@ class ProfilePage extends StatelessWidget {
                       onClick: () {
                         Navigator.of(context).push(FriendsPage.getRoute());
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Friends"),
-                          Icon(Icons.arrow_forward_ios)
+                          const Text("Friends"),
+                          Icon(Icons.arrow_right, color: Theme.of(context).colorScheme.onPrimaryContainer,)
                         ],
                       ),
                     ),

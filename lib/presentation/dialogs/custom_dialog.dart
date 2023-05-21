@@ -41,7 +41,7 @@ class CustomDialog extends StatelessWidget {
                   child: Text(
                     primaryText ?? "OK",
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                        color: Theme.of(context).colorScheme.onSecondary),
                   )),
               if (secondaryText != null) const SizedBox(height: 8),
               if (secondaryText != null)

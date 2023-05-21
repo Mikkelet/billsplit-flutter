@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/main_cubit.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_theme3_dark.dart';
 import 'package:eraser/eraser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,11 @@ class _BillSplitAppState extends State<BillSplitApp>
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Splitsby',
-      darkTheme: ThemeData.dark(useMaterial3: true),
+      darkTheme: ThemeData(
+        fontFamily: "Montserrat",
+        colorScheme: const SplitsbyTheme3Dark(),
+        useMaterial3: true,
+      ),
       theme: ThemeData(
         splashFactory: InkSplash.splashFactory,
         fontFamily: "Montserrat",

@@ -71,13 +71,14 @@ class AddGroupPage extends StatelessWidget {
                           child: TextField(
                         autofocus: cubit.groupName.isEmpty,
                         maxLines: 1,
-                        maxLength: 20,
+                        maxLength: 40,
                         controller: nameTextController,
                         onChanged: (value) {
                           cubit.onUpdateGroupName(value);
                         },
                         textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
                             counterText: "",
                             border: InputBorder.none,
                             hintText: "New group"),

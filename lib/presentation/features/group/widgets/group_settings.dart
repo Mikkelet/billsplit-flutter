@@ -53,7 +53,7 @@ class GroupSettings extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 1),
             if (cubit.state is AddingPersonToGroup)
               const Center(child: CircularProgressIndicator())
             else
@@ -70,11 +70,11 @@ class GroupSettings extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Add to group"),
-                      Icon(Icons.add)
+                      const Text("Add to group"),
+                      Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimaryContainer,)
                     ],
                   )),
             const SizedBox(height: 16),
@@ -85,11 +85,11 @@ class GroupSettings extends StatelessWidget {
                 Navigator.of(context)
                     .push(NotificationsSettingsView.getRoute(cubit.group));
               },
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Group notifications"),
-                  Icon(Icons.arrow_right)
+                  const Text("Group notifications"),
+                  Icon(Icons.arrow_right, color: Theme.of(context).colorScheme.onPrimaryContainer)
                 ],
               ),
             ),

@@ -169,23 +169,18 @@ class _AddServicePageState extends State<AddServicePage> {
                             child: Row(
                               children: [
                                 SimpleButton(
-                                    onClick: () async {
-                                      final response =
-                                          await Navigator.of(context).push(
-                                              CurrencyPickerDialog.getRoute(
-                                                  convertToCurrency: cubit.group
-                                                      .defaultCurrencyState));
-                                      if (response is Currency) {
-                                        cubit.updateCurrency(response.symbol);
-                                      }
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(cubit.service.currencyState
-                                            .toUpperCase()),
-                                        const Icon(Icons.arrow_drop_down)
-                                      ],
-                                    )),
+                                  onClick: () async {
+                                    final response = await Navigator.of(context)
+                                        .push(CurrencyPickerDialog.getRoute(
+                                            convertToCurrency: cubit
+                                                .group.defaultCurrencyState));
+                                    if (response is Currency) {
+                                      cubit.updateCurrency(response.symbol);
+                                    }
+                                  },
+                                  child: Text(cubit.service.currencyState
+                                      .toUpperCase()),
+                                ),
                                 Expanded(
                                   child: ExpenseTextField(
                                       textEditingController:

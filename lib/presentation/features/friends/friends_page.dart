@@ -16,6 +16,7 @@ class FriendsPage extends StatelessWidget {
       create: (context) => FriendsCubit()..getFriends(),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.background,
           title: const Text("Friends"),
           leading: const BackButton(),
         ),
@@ -43,7 +44,7 @@ class FriendsPage extends StatelessWidget {
                                 child: CircularProgressIndicator());
                           }
                           if (friends.isEmpty) {
-                            return const Text("No friends");
+                            return const Text("Type an email above to add a friend!");
                           }
                           return Column(
                             mainAxisSize: MainAxisSize.min,

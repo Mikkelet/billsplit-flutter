@@ -53,6 +53,7 @@ class _ExpenseTextFieldState extends State<ExpenseTextField> {
         prefixStyle: const TextStyle(fontSize: 10),
         prefixText: widget.prefix.toUpperCase(),
         counterText: "",
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         prefixIconConstraints: const BoxConstraints(),
         suffix: widget.maxValue != null
             ? TextButton(
