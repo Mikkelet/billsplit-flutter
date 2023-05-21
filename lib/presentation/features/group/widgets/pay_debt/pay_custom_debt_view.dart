@@ -36,7 +36,6 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
           Navigator.of(context).pop();
         } else if (state is CurrencyChanged) {
           controller.text = cubit.amount.fmtTextField();
-          print("\tStateChange, amount=${controller.text}");
         }
       },
       create: (context) => DebtCubit(widget.group, widget.debt),
@@ -52,7 +51,7 @@ class _PayCustomDebtViewState extends State<PayCustomDebtView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
+                    FilledButton(
                         onPressed: () async {
                           final response = await Navigator.of(context).push(
                               CurrencyPickerDialog.getRoute(

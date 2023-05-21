@@ -13,7 +13,7 @@ class SplitsbyTheme3 extends ColorScheme {
             onPrimary: Colors.black,
             primary: const Color(0xFFD5C6E0),
             secondary: const Color(0xFFA8F1F7),
-            onSecondary: const Color(0xFFDDDAE9),
+            onSecondary: Colors.black,
             secondaryContainer: const Color(0xFFDFD7E2),
             onSecondaryContainer: Colors.black,
             brightness: Brightness.light,

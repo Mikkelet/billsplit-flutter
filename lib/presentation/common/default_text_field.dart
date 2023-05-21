@@ -56,8 +56,14 @@ class _ExpenseTextFieldState extends State<ExpenseTextField> {
         prefixIconConstraints: const BoxConstraints(),
         suffix: widget.maxValue != null
             ? TextButton(
-                onPressed: isInputMaxValue() ? null : () => onMaxPressed(),
-                child: const Text("max"))
+                onPressed: onMaxPressed,
+                child: Builder(builder: (context) {
+                  Color textColor = Colors.grey;
+                  if (!isInputMaxValue()) {
+                    textColor = Theme.of(context).colorScheme.onSurface;
+                  }
+                  return Text("max", style: TextStyle(color: textColor));
+                }))
             : null,
       ),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
