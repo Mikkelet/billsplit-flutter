@@ -25,9 +25,9 @@ class ExpenseEventView extends StatelessWidget {
     return Column(
       children: [
         if (groupExpense.syncState == SyncState.failed)
-          const Text(
+          Text(
             "Error occurred. Press to resubmit",
-            style: TextStyle(color: Colors.redAccent),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           )
         else if (groupExpense.syncState == SyncState.pending)
           const SizedBox(
