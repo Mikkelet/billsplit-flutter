@@ -3,8 +3,10 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/sign_up_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_welcome.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,6 +70,11 @@ class _SignUpViewState extends State<SignUpView> {
   Widget build(BuildContext context) {
     final landingCubit = context.read<LandingBloc>();
     return BaseBlocWidget(
+      listener: (context, cubit, state) {
+        if (state is SignUpSuccessful) {
+          Navigator.of(context).push(OnboardingStepWelcomeView.getRoute());
+        }
+      },
       create: (context) => SignUpCubit(),
       child: BaseBlocBuilder<SignUpCubit>(builder: (signUpCubit, state) {
         return SingleChildScrollView(

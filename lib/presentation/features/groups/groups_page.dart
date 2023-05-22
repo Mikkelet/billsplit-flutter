@@ -22,6 +22,7 @@ class GroupsPage extends StatelessWidget {
       child: BlocBuilder<GroupsBloc, UiState>(
         builder: (context, state) {
           final cubit = context.read<GroupsBloc>();
+
           return Scaffold(
             appBar: _appBar(context),
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,

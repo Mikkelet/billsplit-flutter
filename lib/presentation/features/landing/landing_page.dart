@@ -25,7 +25,7 @@ class LandingPage extends StatelessWidget {
             if (state is ShowSignUp) {
               return const SignUpView();
             }
-            return SignInView();
+            return const SignInView();
           },
         ),
       ),

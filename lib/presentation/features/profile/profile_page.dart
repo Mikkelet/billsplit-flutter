@@ -3,15 +3,13 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/display_name_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -34,23 +32,7 @@ class ProfilePage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        _updateProfilePicture(cubit);
-                      },
-                      child: Builder(
-                        builder: (context) {
-                          if (state is ProfilePictureUploading) {
-                            return const SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: CircularProgressIndicator());
-                          }
-                          return ProfilePictureView(
-                              person: cubit.user, size: 120);
-                        },
-                      ),
-                    ),
+                    const UploadProfilePictureView(),
                     const SizedBox(height: 16),
                     RoundedListItem(
                       child: Column(
@@ -127,14 +109,6 @@ class ProfilePage extends StatelessWidget {
         );
       }),
     );
-  }
-
-  Future _updateProfilePicture(ProfileCubit cubit) async {
-    final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      cubit.updateProfilePicture(file.path);
-    }
   }
 
   static Route<ProfilePage> getRoute() =>
