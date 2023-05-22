@@ -3,8 +3,8 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/update_currency/update_currency_view.dart';
-import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield2.dart';
+import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
+import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
@@ -37,7 +37,7 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          UpdatableTextField2(
+                          UpdatableTextField(
                               initState: cubit.user.nameState,
                               updateFuture: cubit.updateDisplayName),
                           const SizedBox(height: 16),
@@ -68,7 +68,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 16),
 
                     // default currency
-                    const UpdateCurrencyView(),
+                    const UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 32),
                     Divider(
                         endIndent: 16,

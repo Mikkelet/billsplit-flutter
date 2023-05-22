@@ -45,9 +45,8 @@ class CustomDialog extends StatelessWidget {
                   )),
               if (secondaryText != null) const SizedBox(height: 8),
               if (secondaryText != null)
-                SimpleButton(
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
-                  onClick: () {
+                TextButton(
+                  onPressed: () {
                     onSecondaryClick?.call();
                   },
                   child: Text(

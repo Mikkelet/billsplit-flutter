@@ -1,8 +1,8 @@
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
-import 'package:billsplit_flutter/presentation/common/update_currency/update_currency_view.dart';
-import 'package:billsplit_flutter/presentation/common/update_currency/update_currency_cubit.dart';
+import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
+import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_cubit.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -12,8 +12,8 @@ class OnboardingStepDefaultCurrency extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => UpdateCurrencyCubit(),
-      child: BaseBlocBuilder<UpdateCurrencyCubit>(builder: (cubit, state) {
+      create: (context) => UpdateUserDefaultCurrencyCubit(),
+      child: BaseBlocBuilder<UpdateUserDefaultCurrencyCubit>(builder: (cubit, state) {
         return Scaffold(
           appBar: AppBar(
             leading: const BackButton(),
@@ -37,7 +37,7 @@ class OnboardingStepDefaultCurrency extends StatelessWidget {
                       style: TextStyle(fontSize: 25),
                     ),
                     const SizedBox(height: 64),
-                    const UpdateCurrencyView(),
+                    const UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 64),
                     SimpleButton(
                       onClick: () {

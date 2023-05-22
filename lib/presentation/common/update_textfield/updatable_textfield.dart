@@ -8,12 +8,12 @@ import 'package:flutter/services.dart';
 
 enum UpdateTextFieldState { isUpdating, isEditing, display }
 
-class UpdatableTextField2 extends StatefulWidget {
+class UpdatableTextField extends StatefulWidget {
   final String initState;
   final int charLimit;
   final Future Function(String) updateFuture;
 
-  const UpdatableTextField2(
+  const UpdatableTextField(
       {Key? key,
       required this.initState,
       required this.updateFuture,
@@ -21,10 +21,10 @@ class UpdatableTextField2 extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<UpdatableTextField2> createState() => _UpdatableTextField();
+  State<UpdatableTextField> createState() => _UpdatableTextField();
 }
 
-class _UpdatableTextField extends State<UpdatableTextField2> {
+class _UpdatableTextField extends State<UpdatableTextField> {
   late String currentState = widget.initState;
   late final controller = TextEditingController(text: currentState);
 

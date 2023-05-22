@@ -18,7 +18,6 @@ import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
@@ -37,7 +36,6 @@ class GroupBloc extends BaseCubit {
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
-  UpdateTextFieldState editGroupNameState = UpdateTextFieldState.display;
 
   GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
 
@@ -97,28 +95,9 @@ class GroupBloc extends BaseCubit {
     });
   }
 
-  editGroupName(bool isEditing) {
-    if (isEditing) {
-      _updateEditGroupNameState(UpdateTextFieldState.isEditing);
-    } else {
-      _updateEditGroupNameState(UpdateTextFieldState.display);
-    }
-  }
-
-  _updateEditGroupNameState(UpdateTextFieldState state) {
-    editGroupNameState = state;
-    emit(Main());
-  }
-
-  updateGroupName(String newName) {
+  Future updateGroupName(String newName) async {
+    await _addGroupUseCase.launch(group);
     group.nameState = newName;
-    _updateEditGroupNameState(UpdateTextFieldState.isUpdating);
-    _addGroupUseCase.launch(group).then((value) {
-      _updateEditGroupNameState(UpdateTextFieldState.display);
-    }).catchError((error) {
-      group.reset();
-      _updateEditGroupNameState(UpdateTextFieldState.display);
-    });
   }
 
   void retryAddExpense(GroupExpense expense) {
@@ -127,7 +106,8 @@ class GroupBloc extends BaseCubit {
 
   num convertToDefaultCurrency(num amount) {
     // debt is always calculated in USD
-    return _convertCurrencyUseCase.launch(amount, "usd", group.defaultCurrencyState);
+    return _convertCurrencyUseCase.launch(
+        amount, "usd", group.defaultCurrencyState);
   }
 
   void updateCurrency(Currency currency) {

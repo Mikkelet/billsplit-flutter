@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
-import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield2.dart';
+import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/update_name_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_upload_pfp_screen.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
@@ -39,7 +39,7 @@ class OnboardingStepChangeDisplayName extends StatelessWidget {
                   ),
                   const SizedBox(height: 64),
                   RoundedListItem(
-                    child: UpdatableTextField2(
+                    child: UpdatableTextField(
                         initState: cubit.user.nameState,
                         updateFuture: cubit.updateName),
                   ),

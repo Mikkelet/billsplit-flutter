@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/domain/use_cases/update_display_name_usecase.d
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
-class UpdateCurrencyCubit extends BaseCubit {
+class UpdateUserDefaultCurrencyCubit extends BaseCubit {
   final _updateNameUseCase = UpdateDisplayNameUseCase();
 
   Future updateName(String name) async {

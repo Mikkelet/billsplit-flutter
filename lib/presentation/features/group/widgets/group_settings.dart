@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/updatable_textfield.dart';
+import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
@@ -24,17 +24,9 @@ class GroupSettings extends StatelessWidget {
             const SizedBox(height: 32),
             RoundedListItem(
               child: UpdatableTextField(
-                  initState: cubit.group.nameState,
-                  state: cubit.editGroupNameState,
-                  onEditPressed: () {
-                    cubit.editGroupName(true);
-                  },
-                  onCancelPressed: () {
-                    cubit.editGroupName(false);
-                  },
-                  onUpdateClicked: (value) {
-                    cubit.updateGroupName(value);
-                  }),
+                initState: cubit.group.nameState,
+                updateFuture: cubit.updateGroupName,
+              ),
             ),
             const SizedBox(height: 16),
             RoundedListItem(
