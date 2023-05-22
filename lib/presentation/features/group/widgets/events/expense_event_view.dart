@@ -19,7 +19,7 @@ class ExpenseEventView extends StatelessWidget {
   Widget build(BuildContext context) {
     final description = groupExpense.descriptionState.isNotEmpty
         ? "\"${groupExpense.descriptionState}\""
-        : "${groupExpense.createdBy.nameState} added a new expense";
+        : "${groupExpense.createdBy.displayName} added a new expense";
     final fontStyle =
         groupExpense.descriptionState.isNotEmpty ? FontStyle.italic : null;
     return Column(
@@ -77,7 +77,7 @@ class ExpenseEventView extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "paid by ${groupExpense.payerState.nameState}",
+                "paid by ${groupExpense.payerState.displayName}",
                 style: Theme.of(context).textTheme.bodySmall,
               )
             ],

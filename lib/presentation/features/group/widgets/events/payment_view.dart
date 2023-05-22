@@ -10,7 +10,7 @@ class PaymentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text =
-        "${payment.createdBy.nameState} paid ${payment.currency.symbol.toUpperCase()} ${payment.amount.fmt2dec()} to ${payment.paidTo.nameState}";
+        "${payment.createdBy.displayName} paid ${payment.currency.symbol.toUpperCase()} ${payment.amount.fmt2dec()} to ${payment.paidTo.displayName}";
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16),

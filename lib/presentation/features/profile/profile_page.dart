@@ -66,9 +66,9 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
 
                     // default currency
+                    const SizedBox(height: 16),
                     const UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 32),
                     Divider(

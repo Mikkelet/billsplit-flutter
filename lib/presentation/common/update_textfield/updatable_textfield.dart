@@ -11,12 +11,14 @@ enum UpdateTextFieldState { isUpdating, isEditing, display }
 class UpdatableTextField extends StatefulWidget {
   final String initState;
   final int charLimit;
+  final String hintText;
   final Future Function(String) updateFuture;
 
   const UpdatableTextField(
       {Key? key,
       required this.initState,
       required this.updateFuture,
+      this.hintText = "",
       this.charLimit = 40})
       : super(key: key);
 
@@ -73,8 +75,9 @@ class _UpdatableTextField extends State<UpdatableTextField> {
               Flexible(
                 child: TextField(
                   autofocus: true,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: InputBorder.none,
+                    hintText: widget.hintText,
                     counterText: "",
                   ),
                   maxLines: 1,

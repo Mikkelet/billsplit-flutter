@@ -18,7 +18,7 @@ class SignOutUseCase {
     await _database.paymentsDAO.clearTable();
     await _database.servicesDao.clearTable();
     await _authProvider.signOut();
-    unsubscribeFromGroups();
+    //unsubscribeFromGroups();
   }
 
   Future unsubscribeFromGroups() async {

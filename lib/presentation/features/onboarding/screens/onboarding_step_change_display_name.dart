@@ -41,6 +41,7 @@ class OnboardingStepChangeDisplayName extends StatelessWidget {
                   RoundedListItem(
                     child: UpdatableTextField(
                         initState: cubit.user.nameState,
+                        hintText: "Your name",
                         updateFuture: cubit.updateName),
                   ),
                   const SizedBox(height: 64),

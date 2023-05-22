@@ -96,8 +96,8 @@ class GroupBloc extends BaseCubit {
   }
 
   Future updateGroupName(String newName) async {
-    await _addGroupUseCase.launch(group);
     group.nameState = newName;
+    await _addGroupUseCase.launch(group);
   }
 
   void retryAddExpense(GroupExpense expense) {

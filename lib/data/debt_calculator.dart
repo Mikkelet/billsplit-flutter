@@ -147,22 +147,22 @@ class DebtCalculator {
     calculateDebts().forEach((pair) {
       final payer = pair.first;
       final debts = pair.second;
-      print("${payer.nameState} is owed:");
+      print("${payer.displayName} is owed:");
       for (var element in debts) {
         final indExpense = element.first;
         final debt = element.second;
-        print("\t\$$debt by ${indExpense.nameState}");
+        print("\t\$$debt by ${indExpense.displayName}");
       }
     });
     print("\n=== IND DEBT ===");
     calculateDebtTo().forEach((pair) {
       final payee = pair.first;
       final payeeDebts = pair.second;
-      print("${payee.nameState} owes");
+      print("${payee.displayName} owes");
       for (var it in payeeDebts) {
         final ie = it.first;
         final debt = it.second;
-        print("\t\$$debt to ${ie.nameState}");
+        print("\t\$$debt to ${ie.displayName}");
       }
     });
     print("\n=== Effect Debt ===");
@@ -173,30 +173,30 @@ class DebtCalculator {
         .flatMap()
         .toSet()
         .forEach((person) {
-      print("${person.nameState} owes:");
+      print("${person.displayName} owes:");
       final debt = calculateEffectiveDebt(person);
       for (var it in debt) {
-        print("\tto ${it.first.nameState}: \$${it.second}");
+        print("\tto ${it.first.displayName}: \$${it.second}");
       }
     });
     print("\n=== After Payments ===");
     print("");
     for (var it in payments) {
       print(
-          "${it.createdBy.nameState} paid \$${it.amount} to ${it.paidTo.nameState}");
+          "${it.createdBy.displayName} paid \$${it.amount} to ${it.paidTo.displayName}");
     }
     print("");
     for (var person in people) {
-      print("Debts for ${person.nameState}");
+      print("Debts for ${person.displayName}");
       calculateDebtsAfterPayments(person).forEach((element) {
         final otherPerson = element.first;
         final debt = element.second;
         if (debt > 0) {
           print(
-              "\t${otherPerson.nameState} owes \$$debt to ${person.nameState}");
+              "\t${otherPerson.displayName} owes \$$debt to ${person.displayName}");
         } else if (debt < 0) {
           print(
-              "\t${person.nameState} owes \$$debt to ${otherPerson.nameState}");
+              "\t${person.displayName} owes \$$debt to ${otherPerson.displayName}");
         }
       });
     }

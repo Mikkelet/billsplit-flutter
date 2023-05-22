@@ -47,7 +47,7 @@ class IndividualExpenseView extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          person.nameState,
+                          person.displayName,
                           style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
                           maxLines: 2,
                           textAlign: TextAlign.start,

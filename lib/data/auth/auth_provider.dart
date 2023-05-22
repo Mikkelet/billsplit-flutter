@@ -49,6 +49,7 @@ class AuthProvider {
   }
 
   Future updateUserName(String name) async {
+    print("update name=$name");
     await _firebaseAuth.currentUser!.updateDisplayName(name);
   }
 

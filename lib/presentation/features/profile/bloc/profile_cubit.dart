@@ -10,7 +10,10 @@ class ProfileCubit extends BaseCubit {
 
 
   void signOut() {
-    _signOutUseCase.launch().then((value) {}).catchError((error, st) {
+    showLoading();
+    _signOutUseCase.launch().then((value) {
+
+    }).catchError((error, st) {
       showError(error, st);
     });
   }
