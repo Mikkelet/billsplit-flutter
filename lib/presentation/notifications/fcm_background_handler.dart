@@ -7,12 +7,14 @@ import '../../firebase_options.dart';
 
 const notificationChannelId = "splitsby_notifications";
 const notificationChannelTitle = "Splitsby Notifications";
-const notificationChannelDesc = "This channel is used for general notifications.";
+const notificationChannelDesc =
+    "This channel is used for general notifications.";
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if(Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
   }
   await setupFlutterNotifications();
   //showFlutterNotification(message);
@@ -29,10 +31,9 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
   channel = const AndroidNotificationChannel(
-     notificationChannelId, // id
+    notificationChannelId, // id
     notificationChannelTitle, // title
-    description:
-        notificationChannelDesc, // description
+    description: notificationChannelDesc, // description
     importance: Importance.defaultImportance,
   );
 
@@ -51,7 +52,6 @@ Future<void> setupFlutterNotifications() async {
 }
 
 void showFlutterNotification(RemoteMessage message) {
-  print("qqq data=${message.data}, from=${message.from}, android=${message.notification?.android != null}");
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null && !kIsWeb) {
@@ -70,5 +70,6 @@ void showFlutterNotification(RemoteMessage message) {
         ),
       ),
     );
-  }else print("qqq cannot send notication");
+  } else
+    print("qqq cannot send notication");
 }
