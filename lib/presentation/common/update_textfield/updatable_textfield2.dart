@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/update_textfield_cubit.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/update_textfield_state.dart';
 import 'package:flutter/material.dart';
@@ -37,84 +36,82 @@ class _UpdatableTextField extends State<UpdatableTextField2> {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedListItem(
-      child: BaseBlocWidget<UpdateTextFieldCubit>(
-        create: (context) => UpdateTextFieldCubit(widget.updateFuture),
-        child: BaseBlocBuilder<UpdateTextFieldCubit>(
-          builder: (cubit, state) {
-            if (state is DisplayText) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      currentState,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.secondaryContainer,
-                    child: IconButton(
-                      onPressed: () {
-                        HapticFeedback.heavyImpact();
-                        cubit.onEditPressed();
-                      },
-                      icon: const Icon(Icons.edit),
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  )
-                ],
-              );
-            }
+    return BaseBlocWidget<UpdateTextFieldCubit>(
+      create: (context) => UpdateTextFieldCubit(widget.updateFuture),
+      child: BaseBlocBuilder<UpdateTextFieldCubit>(
+        builder: (cubit, state) {
+          if (state is DisplayText) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
-                  child: TextField(
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      counterText: "",
-                    ),
+                  child: Text(
+                    currentState,
+                    overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    maxLength: widget.charLimit,
-                    controller: controller,
-                    onChanged: (val) {
-                      currentState = val;
-                    },
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
-                if (state is Loading)
-                  const CircularProgressIndicator()
-                else ...[
-                  IconButton(
+                CircleAvatar(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.secondaryContainer,
+                  child: IconButton(
                     onPressed: () {
-                      if (currentState != widget.initState) {
-                        cubit.onUpdatePressed(currentState);
-                      } else {
-                        cubit.onCancelPressed();
-                      }
+                      HapticFeedback.heavyImpact();
+                      cubit.onEditPressed();
                     },
-                    icon: const Icon(Icons.check),
-                    color: Colors.green,
+                    icon: const Icon(Icons.edit),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      currentState = widget.initState;
-                      controller.text = widget.initState;
-                      cubit.onCancelPressed();
-                    },
-                    icon: const Icon(Icons.close),
-                    color: Colors.red,
-                  ),
-                ]
+                )
               ],
             );
-          },
-        ),
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: TextField(
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    counterText: "",
+                  ),
+                  maxLines: 1,
+                  maxLength: widget.charLimit,
+                  controller: controller,
+                  onChanged: (val) {
+                    currentState = val;
+                  },
+                ),
+              ),
+              if (state is Loading)
+                const CircularProgressIndicator()
+              else ...[
+                IconButton(
+                  onPressed: () {
+                    if (currentState != widget.initState) {
+                      cubit.onUpdatePressed(currentState);
+                    } else {
+                      cubit.onCancelPressed();
+                    }
+                  },
+                  icon: const Icon(Icons.check),
+                  color: Colors.green,
+                ),
+                IconButton(
+                  onPressed: () {
+                    currentState = widget.initState;
+                    controller.text = widget.initState;
+                    cubit.onCancelPressed();
+                  },
+                  icon: const Icon(Icons.close),
+                  color: Colors.red,
+                ),
+              ]
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_default_currency.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -30,12 +31,13 @@ class OnboardingStepUploadProfilePicture extends StatelessWidget {
               ),
               const SizedBox(height: 64),
               const UploadProfilePictureView(),
-              const SizedBox(height: 16),
+              const SizedBox(height: 64),
               SimpleButton(
                 onClick: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.of(context)
+                      .push(OnboardingStepDefaultCurrency.getRoute());
                 },
-                child: const Text("I'm ready!"),
+                child: const Text("Next"),
               )
             ],
           ),

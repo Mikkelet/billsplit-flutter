@@ -30,15 +30,9 @@ class ProfileCubit extends BaseCubit {
     emit(Main());
   }
 
-  updateDisplayName(String newName) {
-    _updateDisplayNameState(UpdateTextFieldState.isUpdating);
-    _updateDisplayNameUseCase.launch(newName).then((value) {
-      user.nameState = newName;
-      _updateDisplayNameState(UpdateTextFieldState.display);
-    }).catchError((error, st) {
-      showError(error, st);
-      _updateDisplayNameState(UpdateTextFieldState.display);
-    });
+  Future updateDisplayName(String newName) async {
+    await _updateDisplayNameUseCase.launch(newName);
+    user.nameState = newName;
   }
 
   void updateCurrency(Currency currency) {
@@ -46,5 +40,4 @@ class ProfileCubit extends BaseCubit {
     emit(Main());
   }
 
-  String get defaultCurrency => sharedPrefs.userPrefDefaultCurrency;
 }

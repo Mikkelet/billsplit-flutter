@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -17,11 +18,10 @@ class CurrencyPickerDialog extends StatefulWidget {
   @override
   State<CurrencyPickerDialog> createState() => _CurrencyPickerDialogState();
 
-  static getRoute({String? convertToCurrency}) => MaterialPageRoute(
-        builder: (context) => CurrencyPickerDialog(
-          convertToCurrency: convertToCurrency,
-        ),
-      );
+  static getRoute({String? convertToCurrency}) =>
+      slideUpRoute(CurrencyPickerDialog(
+        convertToCurrency: convertToCurrency,
+      ));
 }
 
 class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
@@ -61,7 +61,9 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "USD, EUR",
-                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                          hintStyle: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
                           counterText: ""),
                       maxLength: 10,
                       maxLines: 1,
@@ -119,14 +121,14 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
           Text(
             currency.symbol.toUpperCase(),
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
-              fontWeight: FontWeight.w700
-            ),
+                color: Theme.of(context).colorScheme.onBackground,
+                fontWeight: FontWeight.w700),
           ),
           Text(
             key: key,
             "${symbol == currency.symbol ? "" : "~"}${rate.fmt2dec()} ${symbol.toUpperCase()}",
-            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+            style:
+                TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
           )
         ],
       ),
