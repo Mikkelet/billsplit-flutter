@@ -36,7 +36,7 @@ class CustomDialog extends StatelessWidget {
               SimpleButton(
                   onClick: onPrimaryClick ??
                       () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       },
                   child: Text(
                     primaryText ?? "OK",
@@ -47,7 +47,7 @@ class CustomDialog extends StatelessWidget {
               if (secondaryText != null)
                 TextButton(
                   onPressed: () {
-                    onSecondaryClick?.call();
+                    onSecondaryClick?.call() ?? Navigator.of(context).pop(false);
                   },
                   child: Text(
                     "$secondaryText",

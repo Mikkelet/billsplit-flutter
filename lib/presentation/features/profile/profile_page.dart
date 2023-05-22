@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/common/update_textfield/updatable
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -75,20 +76,7 @@ class ProfilePage extends StatelessWidget {
                         indent: 16,
                         color: Theme.of(context).colorScheme.inversePrimary),
                     const SizedBox(height: 32),
-                    ClickableListItem(
-                      onClick: () {
-                        cubit.signOut();
-                      },
-                      color: Theme.of(context).colorScheme.error,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Sign out",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onError),
-                        ),
-                      ),
-                    ),
+                    const SignOutButton(),
                   ],
                 ),
               ),
