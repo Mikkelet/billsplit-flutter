@@ -26,7 +26,7 @@ class OnboardingStepUploadProfilePicture extends StatelessWidget {
             children: [
               const SizedBox(height: 64),
               const Text(
-                "What's do you look like?",
+                "What do you look like?",
                 style: TextStyle(fontSize: 25),
               ),
               const SizedBox(height: 64),

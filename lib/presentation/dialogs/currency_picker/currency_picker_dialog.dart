@@ -112,7 +112,7 @@ class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
     return TextButton(
       onPressed: () {
         cubit.onCurrencyPressed(currency);
-        Navigator.of(context).pop(currency);
+        Navigator.of(context).maybePop(currency);
       },
       style: const ButtonStyle(alignment: Alignment.centerLeft),
       child: Row(
