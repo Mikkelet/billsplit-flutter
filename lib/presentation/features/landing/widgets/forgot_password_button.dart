@@ -36,7 +36,9 @@ class ForgotPasswordButton extends StatelessWidget {
           onPressed: () {
             cubit.forgotPassword(emailController.text);
           },
-          child: const Text("I forgot my password"),
+          child: Text("I forgot my password",
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onBackground)),
         );
       }),
     );

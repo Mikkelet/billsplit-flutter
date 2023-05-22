@@ -68,21 +68,20 @@ class _SignInViewState extends State<SignInView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Sign in",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .displayMedium),
+                      style: Theme.of(context).textTheme.displayMedium),
                 ),
                 Container(height: 32),
                 RoundedListItem(
                     child: TextField(
-                      controller: emailFieldController,
-                      decoration: InputDecoration(
-                        errorText: emailError,
-                        hintText: "Email",
-                        border: InputBorder.none,
-                      ),
-                    )),
+                  controller: emailFieldController,
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary),
+                    errorText: emailError,
+                    hintText: "Email",
+                    border: InputBorder.none,
+                  ),
+                )),
                 const SizedBox(height: 16),
                 RoundedListItem(
                   child: PasswordTextField(
@@ -95,26 +94,35 @@ class _SignInViewState extends State<SignInView> {
                 if (signInState is Loading)
                   const CircularProgressIndicator()
                 else
-                  SimpleButton(
-                    onClick: () {
-                      if (validateFields()) {
-                        final String email = emailFieldController.value.text;
-                        final String password =
-                            passwordFieldController.value.text;
-                        signInCubit.signIn(email, password);
-                      }
-                      setState(() {});
-                    },
-                    child: const Text("Sign in"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ForgotPasswordButton(
+                          emailController: emailFieldController),
+                      SimpleButton(
+                        onClick: () {
+                          if (validateFields()) {
+                            final String email =
+                                emailFieldController.value.text;
+                            final String password =
+                                passwordFieldController.value.text;
+                            signInCubit.signIn(email, password);
+                          }
+                          setState(() {});
+                        },
+                        child: const Text("Sign in"),
+                      ),
+                    ],
                   ),
-                const SizedBox(height: 16),
-                ForgotPasswordButton(emailController: emailFieldController),
+                const SizedBox(height: 8),
                 const SizedBox(height: 32),
                 MaterialButton(
                   onPressed: () {
                     landingCubit.showSignUp();
                   },
-                  child: const Text("Create an account ▶"),
+                  child: Text("Create an account ▶",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground)),
                 ),
                 const SizedBox(height: 32),
               ],

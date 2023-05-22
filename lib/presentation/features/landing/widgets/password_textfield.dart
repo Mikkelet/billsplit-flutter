@@ -25,6 +25,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return TextField(
       controller: widget.controller,
       decoration: InputDecoration(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         errorText: widget.error,
         suffixIcon: IconButton(
           icon: Icon(builder(() {

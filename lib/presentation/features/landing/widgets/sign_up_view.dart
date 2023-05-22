@@ -86,6 +86,8 @@ class _SignUpViewState extends State<SignUpView> {
                     child: TextField(
                   controller: emailFieldController,
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary),
                     errorText: emailError,
                     hintText: "Email",
                     border: InputBorder.none,
@@ -130,7 +132,11 @@ class _SignUpViewState extends State<SignUpView> {
                   onPressed: () {
                     landingCubit.showSignIn();
                   },
-                  child: const Text("Sign in"),
+                  child: Text(
+                    "Sign in",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground),
+                  ),
                 ),
                 const SizedBox(height: 32)
               ],
