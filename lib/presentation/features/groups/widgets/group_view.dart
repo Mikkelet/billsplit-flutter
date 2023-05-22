@@ -59,6 +59,24 @@ class GroupView extends StatelessWidget {
     );
   }
 
+  // TODO Consider
+  Widget groupPicture() {
+    return Container(
+      height: 100,
+      width: 100,
+      decoration: const BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+          )
+      ),
+      child: ClipRRect(borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(10),
+      bottomLeft: Radius.circular(10),
+    ),child: Image.network("https://i.imgur.com/iIbMzPG.jpeg", fit: BoxFit.cover,)));
+  }
+
   Widget _debtView(BuildContext context, Group group, num debt) {
     final cubit = context.read<GroupsBloc>();
     final convertDebt = cubit.convertToDefault(group, debt);
@@ -73,23 +91,27 @@ class GroupView extends StatelessWidget {
           Text("9,999,999.99",
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .bodyLarge
                   ?.apply(color: Colors.red))
-        else if (debt > 0)
-          Text(convertDebt.fmt2dec(),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.apply(color: Colors.red)),
+        else
+          if (debt > 0)
+            Text(convertDebt.fmt2dec(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.apply(color: Colors.red)),
         if (debt < 0)
           Text(convertDebt.abs().fmt2dec(),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .bodyLarge
                   ?.apply(color: Colors.green)),
@@ -97,7 +119,11 @@ class GroupView extends StatelessWidget {
         Text(
           currency,
           style: TextStyle(
-              fontSize: 10, color: Theme.of(context).colorScheme.onPrimaryContainer),
+              fontSize: 10,
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .onPrimaryContainer),
         )
       ],
     );
