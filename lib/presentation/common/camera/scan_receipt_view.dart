@@ -28,7 +28,6 @@ class SplitsbyCamera extends StatefulWidget {
 
 class _SplitsbyCameraState extends State<SplitsbyCamera> {
   bool snappingPicture = false;
-  XFile? _xFile;
   Offset? focusCircleOffset;
   BarrierDrag barrierDrag = BarrierDrag.none;
   double upperBarrier = 100;
@@ -54,11 +53,12 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }
+            final xFile = cubit.xFile;
             final cameraController = cubit.cameraController;
             return Center(
               child: Stack(
                 children: [
-                  if (_xFile == null)
+                  if (xFile == null)
                     GestureDetector(
                       child: cameraController.buildPreview(),
                       onTapDown: (details) async {
@@ -70,10 +70,10 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                     )
                   else
                     GestureDetector(
-                      child: ViewPictureScreen(_xFile!),
+                      child: ViewPictureScreen(xFile),
                       onVerticalDragUpdate: (details) {
                         final posY = details.globalPosition.dy;
-                        const limit = 10;
+                        const limit = 40;
                         final isDraggingUpper = posY < upperBarrier + limit &&
                             posY > upperBarrier - limit;
                         final isDraggingLower = posY > lowerBarrier - limit &&
@@ -118,9 +118,9 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          if (_xFile == null) _snapPicture(cubit),
-                          if (_xFile != null) _confirmPicture(cubit),
-                          if (_xFile != null) _cancelPicture(cubit)
+                          if (xFile == null) _snapPicture(cubit),
+                          if (xFile != null) _confirmPicture(cubit),
+                          if (xFile != null) _cancelPicture(cubit)
                         ],
                       ),
                     ),
@@ -150,7 +150,6 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
             final response = await cubit.cameraController.takePicture();
             if (response is XFile && context.mounted) {
               setState(() {
-                _xFile = response;
                 snappingPicture = false;
               });
               cubit.uploadReceipt(response);
