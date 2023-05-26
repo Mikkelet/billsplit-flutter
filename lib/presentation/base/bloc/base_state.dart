@@ -11,3 +11,9 @@ class Failure extends UiState {
 
   Failure(this.error);
 }
+
+class ShowToast extends UiState {
+  final String message;
+
+  ShowToast(this.message);
+}

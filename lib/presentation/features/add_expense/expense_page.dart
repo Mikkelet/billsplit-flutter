@@ -173,12 +173,17 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
     return <Person>{...pastMembers, ...group.people};
   }
 
+  static const String routeName = "add_expense";
+
   static Route getRoute(Person user, Group group, GroupExpense? expense) {
     if (expense == null) {
-      return slideUpRoute(AddExpensePage(
-          group: group, groupExpense: GroupExpense.newExpense(user, group)));
+      return slideUpRoute(
+          AddExpensePage(
+              group: group, groupExpense: GroupExpense.newExpense(user, group)),
+          routeName: routeName);
     } else {
-      return slideUpRoute(AddExpensePage(group: group, groupExpense: expense));
+      return slideUpRoute(AddExpensePage(group: group, groupExpense: expense),
+          routeName: routeName);
     }
   }
 }

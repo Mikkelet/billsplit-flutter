@@ -72,6 +72,10 @@ class AddExpenseBloc extends BaseCubit {
 
   uploadReceipt(String uri) {
     _scanReceiptUseCase.launch(uri).then((prices) {
+      if(prices.isEmpty) {
+        showToast("No items found");
+        return;
+      }
       final expenses = prices.map((e) => SharedExpense(
           expense: e, participants: group.people, description: ""));
       groupExpense.sharedExpensesState.clear();

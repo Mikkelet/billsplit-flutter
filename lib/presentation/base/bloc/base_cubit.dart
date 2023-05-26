@@ -49,4 +49,8 @@ abstract class BaseCubit extends Cubit<UiState> {
   }
 
   Person get user => authProvider.user ?? Person("", "User Logged out");
+
+  void showToast(String message){
+    emit(ShowToast(message));
+  }
 }

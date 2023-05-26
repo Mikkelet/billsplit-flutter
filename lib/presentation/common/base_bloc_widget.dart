@@ -25,8 +25,24 @@ class BaseBlocWidget<T extends BaseCubit> extends BlocProvider<T> {
             } else {
               listener?.call(context, context.read<T>(), state);
             }
+            if (state is ShowToast) {
+              _showToast(context, state.message);
+            }
           },
           child: child),
     );
+  }
+
+  void _showToast(BuildContext context, String message) {
+    try {
+      final scaffold = ScaffoldMessenger.of(context);
+      scaffold.showSnackBar(SnackBar(
+        content: Text(message,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+      ));
+    } catch (e) {
+      // ignore
+    }
   }
 }
