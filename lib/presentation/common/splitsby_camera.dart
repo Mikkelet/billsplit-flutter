@@ -2,6 +2,8 @@ import 'package:billsplit_flutter/main.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/routing_utils.dart';
+
 class SplitsbyCamera extends StatefulWidget {
   const SplitsbyCamera({Key? key}) : super(key: key);
 
@@ -9,7 +11,7 @@ class SplitsbyCamera extends StatefulWidget {
   State<SplitsbyCamera> createState() => _SplitsbyCameraState();
 
   static Route getRoute() {
-    return MaterialPageRoute(builder: (context) => const SplitsbyCamera());
+    return slideUpRoute( const SplitsbyCamera());
   }
 }
 

@@ -1,30 +1,28 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
-import 'package:billsplit_flutter/presentation/common/splitsby_camera.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/delete_button.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_description_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/individual_expense_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/long_press_tip_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/quick_add_shared_expense_button.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/scan_receipt_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/closable_tips_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/submit_expense_button.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
-import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'widgets/expense_currency.dart';
 
 class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
@@ -58,11 +56,6 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                   return const Text("Edit expense");
                 }),
                 actions: [
-                  IconButton(
-                      onPressed: () async {
-                        Navigator.of(context).push(SplitsbyCamera.getRoute());
-                      },
-                      icon: const Icon(Icons.document_scanner_outlined)),
                   if (cubit.groupExpense.id.isNotEmpty)
                     const DeleteExpenseButton(),
                   const SubmitExpenseButton()
@@ -113,46 +106,15 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                                           return false;
                                         })),
                                   ),
-                                  Align(
+                                  const Align(
                                     alignment: Alignment.centerRight,
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        // Quick add expense
-                                        IconButton(
-                                          onPressed: () {
-                                            cubit.onQuickAddSharedExpense();
-                                          },
-                                          icon: const Icon(Icons.bolt),
-                                        ),
-
-                                        // Add expense
-                                        IconButton(
-                                          onPressed: () async {
-                                            final sharedExpense =
-                                                SharedExpense.newInstance(
-                                                    [...cubit.group.people]);
-                                            showModalBottomSheet(
-                                              enableDrag: true,
-                                              isScrollControlled: true,
-                                              useSafeArea: true,
-                                              context: context,
-                                              builder: (context) =>
-                                                  AddSharedExpenseView(
-                                                onSubmit: () {
-                                                  cubit.groupExpense
-                                                      .sharedExpensesState
-                                                      .add(sharedExpense);
-                                                  Navigator.of(context).pop();
-                                                  cubit.onExpensesUpdated();
-                                                },
-                                                group: cubit.group,
-                                                sharedExpense: sharedExpense,
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(Icons.add),
-                                        ),
+                                        ScanReceiptButton(),
+                                        SizedBox(width: 16),
+                                        QuickAddSharedExpenseButton(),
+                                        AddSharedExpenseButton(),
                                       ],
                                     ),
                                   ),
@@ -160,39 +122,10 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                  flex: 3,
-                                  child: DescriptionTextField(
-                                      initialText:
-                                          groupExpense.descriptionState),
-                                ),
-                                const SizedBox(width: 8),
-                                const Flexible(
-                                  flex: 1,
-                                  child: ExpenseCurrencyButton(),
-                                )
-                              ],
-                            ),
-                            // Tips and tricks
-                            ClosableTipView(
-                              padding: const EdgeInsets.only(
-                                  left: 16, right: 16, top: 8),
-                              tip:
-                                  "Tip: long press a user to quick-add an expense for them",
-                              hasSeen: cubit.sharedPrefs
-                                  .hasSeenHoldToAddIndividualExpenseTip,
-                              onClose: () {
-                                cubit.sharedPrefs
-                                        .hasSeenHoldToAddIndividualExpenseTip =
-                                    true;
-                              },
-                            ),
-
-                            // Individual expenses
+                            const ExpenseDescriptionAndCurrencyView(),
+                            const LongPressTipView(),
                             const SizedBox(height: 8),
+                            // Individual expenses
                             RoundedListItem(
                               borderRadius: const BorderRadius.vertical(
                                   bottom: Radius.circular(30),
@@ -215,35 +148,7 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            RoundedListItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Total"),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        groupExpense.total.fmt2dec(),
-                                        textAlign: TextAlign.end,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        cubit.groupExpense.currencyState.symbol
-                                            .toUpperCase(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(fontSize: 10),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                            const ExpenseTotalView(),
                             const SizedBox(height: 120),
                           ],
                         ),
