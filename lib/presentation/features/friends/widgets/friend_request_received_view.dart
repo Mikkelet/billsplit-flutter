@@ -15,7 +15,7 @@ class FriendRequestReceivedView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(person.nameState),
+        Text(person.displayName),
         BlocBuilder<AddFriendCubit, UiState>(builder: (context, state) {
           if (state is Loading) {
             return const CircularProgressIndicator(color: Colors.white,);

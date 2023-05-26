@@ -86,7 +86,7 @@ class _BillSplitAppState extends State<BillSplitApp>
                 builder: (context, snapshot) {
                   final uid = snapshot.data;
                   if (uid == null) {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    _onUserLoggedOut(uid, context);
                     return const LandingPage();
                   }
                   return GroupsPage();
@@ -98,6 +98,15 @@ class _BillSplitAppState extends State<BillSplitApp>
         ),
       ),
     );
+  }
+
+  // delay popUntil to reduce false nulls
+  _onUserLoggedOut(String? uid, BuildContext context) {
+    Future.delayed(const Duration(seconds: 1)).then((value) {
+      if (uid == null) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
+    });
   }
 
   @override

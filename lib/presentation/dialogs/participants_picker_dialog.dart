@@ -55,7 +55,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
               ),
               Checkbox(
                 fillColor: MaterialStateProperty.resolveWith((states) {
-                  if(states.contains(MaterialState.disabled)) {
+                  if (states.contains(MaterialState.disabled)) {
                     return Theme.of(context).colorScheme.inversePrimary;
                   }
                   return Theme.of(context).colorScheme.secondaryContainer;
@@ -92,7 +92,11 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                       Expanded(
                         child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(person.nameState,maxLines: 1,overflow: TextOverflow.ellipsis,)),
+                            child: Text(
+                              person.displayName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )),
                       ),
                     ],
                   ),
@@ -100,9 +104,9 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
               ),
               const SizedBox(width: 32),
               Checkbox(
-                fillColor: MaterialStateProperty.resolveWith((states) {
-                  return Theme.of(context).colorScheme.secondaryContainer;
-                }),
+                  fillColor: MaterialStateProperty.resolveWith((states) {
+                    return Theme.of(context).colorScheme.secondaryContainer;
+                  }),
                   value: widget.participants.contains(person),
                   onChanged: (isParticipant) {
                     if (isParticipant == false &&

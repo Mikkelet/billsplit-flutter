@@ -9,8 +9,10 @@ class Person {
   late String pfpUrlState = _pfpUrl;
 
   Person(this.uid, String name, {String pfpUrl = "", this.email = ""})
-      : _name = name.isEmpty ? "Splitsby user" : name,
+      : _name = name,
         _pfpUrl = pfpUrl;
+
+  String get displayName => nameState.isEmpty ? "Splitsby user" : nameState;
 
   Person.dummy(num seed)
       : uid = "P$seed",
@@ -32,7 +34,7 @@ class Person {
     return "Person(id=$uid, name=$_name)";
   }
 
-  void resetChanges(){
+  void resetChanges() {
     pfpUrlState = _pfpUrl;
     nameState = _name;
   }

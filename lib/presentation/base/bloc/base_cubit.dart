@@ -48,5 +48,5 @@ abstract class BaseCubit extends Cubit<UiState> {
     print(stackTrace.toString());
   }
 
-  Person get user => authProvider.user!;
+  Person get user => authProvider.user ?? Person("", "User Logged out");
 }

@@ -27,9 +27,9 @@ class ServiceParticipantView extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         if (isPayer)
-          Text("${person.nameState} is paying")
+          Text("${person.displayName} is paying")
         else
-          Text(person.nameState),
+          Text(person.displayName),
       ],
     );
   }

@@ -35,7 +35,7 @@ class _SharedExpensePeoplePickerDialogState
                 children: [
                   ProfilePictureView(person: person),
                   const SizedBox(width: 16),
-                  Text(person.nameState),
+                  Text(person.displayName),
                   const Expanded(child: SizedBox()),
                   Checkbox(
                       value: widget.sharedExpense.participantsState

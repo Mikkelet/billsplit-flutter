@@ -8,6 +8,6 @@ class FriendAcceptedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(width: double.infinity, child: Text(person.nameState));
+    return SizedBox(width: double.infinity, child: Text(person.displayName));
   }
 }
