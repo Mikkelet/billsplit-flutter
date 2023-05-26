@@ -3,10 +3,11 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
-import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
+import 'package:billsplit_flutter/presentation/common/splitsby_camera.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/delete_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_view.dart';
@@ -24,7 +25,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/expense_currency.dart';
 
-class AddExpensePage extends StatelessWidget {
+class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
   final Group group;
 
@@ -56,29 +57,13 @@ class AddExpensePage extends StatelessWidget {
                   return const Text("Edit expense");
                 }),
                 actions: [
-                  if (cubit.groupExpense.id.isNotEmpty)
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return CustomDialog(
-                                title: "Are you sure you want to delete",
-                                primaryText: "Delete",
-                                secondaryText: "Cancel",
-                                onPrimaryClick: () {
-                                  Navigator.of(context).pop();
-                                  cubit.deleteExpense();
-                                },
-                                onSecondaryClick: () {
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            });
+                  IconButton(
+                      onPressed: () async {
+                        Navigator.of(context).push(SplitsbyCamera.getRoute());
                       },
-                      icon: const Icon(Icons.delete),
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                      icon: const Icon(Icons.document_scanner_outlined)),
+                  if (cubit.groupExpense.id.isNotEmpty)
+                    const DeleteExpenseButton(),
                   const SubmitExpenseButton()
                 ],
               ),

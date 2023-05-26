@@ -33,6 +33,8 @@ dependencies:
   shared_preferences: ^2.1.0
   eraser: ^2.0.1
   firebase_crashlytics: ^3.3.1
+  google_ml_kit: ^0.14.0
+  camera: ^0.10.5+2
 
 dev_dependencies:
   json_serializable: ^6.6.1

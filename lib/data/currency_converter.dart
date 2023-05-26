@@ -9,6 +9,8 @@ class CurrencyConverter {
     if (currencySymbol.toLowerCase() == convertToCurrency.toLowerCase()) {
       return amount;
     }
+    print(_sharedPrefs.latestExchangeRates);
+    if(_sharedPrefs.latestExchangeRates.isEmpty) return -1;
     final latestRates = _sharedPrefs.latestExchangeRates;
     final oldCurrencyRate = latestRates[currencySymbol.toUpperCase()]!;
     final newCurrencyRate = latestRates[convertToCurrency.toUpperCase()]!;

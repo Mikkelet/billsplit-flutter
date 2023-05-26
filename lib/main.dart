@@ -10,15 +10,19 @@ import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3_dark.dart';
+import 'package:camera/camera.dart';
 import 'package:eraser/eraser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/common/base_bloc_widget.dart';
 
-void main() async {
+late List<CameraDescription> cameras;
+
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupGetIt();
+  cameras = await availableCameras();
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   runApp(const BillSplitApp());

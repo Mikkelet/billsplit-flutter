@@ -2,8 +2,10 @@ import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/delete_expense_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -13,6 +15,7 @@ class AddExpenseBloc extends BaseCubit {
   final GroupExpense groupExpense;
   late final _addExpenseUseCase = AddEventUseCase();
   final _deleteExpenseUseCase = DeleteExpenseUseCase();
+  final _scanReceiptUseCase = ScanReceiptUseCase();
 
   AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main()) {
     if (groupExpense.id.isEmpty) {
@@ -65,5 +68,17 @@ class AddExpenseBloc extends BaseCubit {
   void updateCurrency(Currency currency) {
     groupExpense.currencyState = currency;
     onExpensesUpdated();
+  }
+
+  uploadReceipt(String uri) {
+    _scanReceiptUseCase.launch(uri).then((prices) {
+      final expenses = prices.map((e) => SharedExpense(
+          expense: e, participants: group.people, description: ""));
+      groupExpense.sharedExpensesState.clear();
+      groupExpense.sharedExpensesState.addAll(expenses);
+      onExpensesUpdated();
+    }).catchError((onError, st) {
+      showError(onError, st);
+    });
   }
 }
