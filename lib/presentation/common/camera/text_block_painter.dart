@@ -13,22 +13,25 @@ class TextBlockPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final scale = scaleFactor;
-
     final itemsWithinBoundaries = receiptItems.where((element) =>
         element.boundaryBox.top * scaleFactor > upperBarrier &&
         element.boundaryBox.bottom * scaleFactor < lowerBarrier);
     bool even = itemsWithinBoundaries.length % 2 == 0;
+
     for (var text in itemsWithinBoundaries) {
       final textBlock = text.boundaryBox;
+      final rectScaled = Rect.fromLTWH(
+          textBlock.left * scale,
+          textBlock.top * scale,
+          textBlock.width * scale,
+          textBlock.height * scale);
+
       final paint = Paint();
       paint.style = PaintingStyle.stroke;
       paint.color = even ? Colors.green : Colors.blue;
       even = !even;
       paint.strokeWidth = 2;
-      canvas.drawRect(
-          Rect.fromLTWH(textBlock.left * scale, (textBlock.top * scale),
-              textBlock.width * scale, textBlock.height * scale),
-          paint);
+      canvas.drawRect(rectScaled, paint);
     }
 
     final barrierPaint = Paint()..color = Colors.black.withAlpha(200);

@@ -14,8 +14,6 @@ class ScanReceiptUseCase2 {
     final inputImage = InputImage.fromFilePath(file.path);
     File image = File(file.path); // Or any other way to get a File instance.
     var decodedImage = await decodeImageFromList(image.readAsBytesSync());
-    print(decodedImage.width);
-    print(decodedImage.height);
     final RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
     final texts = recognizedText.blocks
