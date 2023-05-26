@@ -24,11 +24,11 @@ class DebtView extends StatelessWidget {
     final isDebt = debt.second > 0;
 
     if (isDebt) {
-      text = "You owe $defaultCurrency ${convertDebt.fmt2dec()} to ${debt.first.nameState}";
+      text = "You owe $defaultCurrency ${convertDebt.fmt2dec()} to ${debt.first.displayName}";
       color = Colors.redAccent;
     } else if (debt.second < 0) {
       text =
-          "${debt.first.nameState} owes you $defaultCurrency ${convertDebt.abs().fmt2dec()}";
+          "${debt.first.displayName} owes you $defaultCurrency ${convertDebt.abs().fmt2dec()}";
       color = Colors.green;
     }
     return RoundedListItem(

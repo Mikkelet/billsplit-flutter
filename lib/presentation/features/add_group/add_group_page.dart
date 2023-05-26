@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'bloc/add_group_cubit.dart';
@@ -131,6 +132,5 @@ class AddGroupPage extends StatelessWidget {
     );
   }
 
-  static Route<AddGroupPage> getRoute() =>
-      MaterialPageRoute(builder: (context) => AddGroupPage());
+  static Route getRoute() => slideUpRoute(AddGroupPage());
 }

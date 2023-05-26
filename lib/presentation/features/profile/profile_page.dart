@@ -1,17 +1,15 @@
-import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
+import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
+import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
+import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
-import 'package:billsplit_flutter/presentation/features/profile/widgets/display_name_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -34,29 +32,15 @@ class ProfilePage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        _updateProfilePicture(cubit);
-                      },
-                      child: Builder(
-                        builder: (context) {
-                          if (state is ProfilePictureUploading) {
-                            return const SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: CircularProgressIndicator());
-                          }
-                          return ProfilePictureView(
-                              person: cubit.user, size: 120);
-                        },
-                      ),
-                    ),
+                    const UploadProfilePictureView(),
                     const SizedBox(height: 16),
                     RoundedListItem(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const DisplayNameTextField(),
+                          UpdatableTextField(
+                              initState: cubit.user.nameState,
+                              updateFuture: cubit.updateDisplayName),
                           const SizedBox(height: 16),
                           Text(cubit.user.email,
                               style: const TextStyle(fontSize: 16)),
@@ -73,52 +57,26 @@ class ProfilePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("Friends"),
-                          Icon(Icons.arrow_right, color: Theme.of(context).colorScheme.onPrimaryContainer,)
+                          Icon(
+                            Icons.arrow_right,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          )
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
 
                     // default currency
-                    ClickableListItem(
-                      onClick: () async {
-                        final response = await Navigator.of(context)
-                            .push(CurrencyPickerDialog.getRoute());
-                        if (response is Currency) {
-                          cubit.updateCurrency(response);
-                        }
-                      },
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            cubit.defaultCurrency.toUpperCase(),
-                          ),
-                          CircleAvatar(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.secondaryContainer,
-                              child: const Icon(Icons.edit))
-                        ],
-                      ),
-                    ),
+                    const SizedBox(height: 16),
+                    const UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 32),
-                    Divider(endIndent: 16, indent: 16, color: Theme.of(context).colorScheme.inversePrimary),
+                    Divider(
+                        endIndent: 16,
+                        indent: 16,
+                        color: Theme.of(context).colorScheme.inversePrimary),
                     const SizedBox(height: 32),
-                    ClickableListItem(
-                      onClick: () {
-                        cubit.signOut();
-                      },
-                      color: Theme.of(context).colorScheme.error,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Sign out",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onError),
-                        ),
-                      ),
-                    ),
+                    const SignOutButton(),
                   ],
                 ),
               ),
@@ -127,14 +85,6 @@ class ProfilePage extends StatelessWidget {
         );
       }),
     );
-  }
-
-  Future _updateProfilePicture(ProfileCubit cubit) async {
-    final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      cubit.updateProfilePicture(file.path);
-    }
   }
 
   static Route<ProfilePage> getRoute() =>

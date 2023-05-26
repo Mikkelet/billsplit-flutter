@@ -36,12 +36,12 @@ class GroupView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(group.nameState,
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 16),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ProfilePictureStack(
                       people: group.people,
@@ -59,6 +59,28 @@ class GroupView extends StatelessWidget {
     );
   }
 
+  // TODO Consider
+  Widget groupPicture() {
+    return Container(
+        height: 100,
+        width: 100,
+        decoration: const BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+            )),
+        child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+            ),
+            child: Image.network(
+              "https://i.imgur.com/iIbMzPG.jpeg",
+              fit: BoxFit.cover,
+            )));
+  }
+
   Widget _debtView(BuildContext context, Group group, num debt) {
     final cubit = context.read<GroupsBloc>();
     final convertDebt = cubit.convertToDefault(group, debt);
@@ -69,35 +91,28 @@ class GroupView extends StatelessWidget {
     return Row(
       children: [
         const Expanded(child: SizedBox()),
-        if (debt > 9999999.99)
-          Text("9,999,999.99",
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.apply(color: Colors.red))
-        else if (debt > 0)
-          Text(convertDebt.fmt2dec(),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.apply(color: Colors.red)),
+        if (debt > 0)
+          Expanded(
+            child: Text(convertDebt.fmt2dec(),
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: const TextStyle(color: Colors.red, fontSize: 15)),
+          ),
         if (debt < 0)
-          Text(convertDebt.abs().fmt2dec(),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.apply(color: Colors.green)),
+          Expanded(
+            child: Text(convertDebt.abs().fmt2dec(),
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: const TextStyle(color: Colors.green, fontSize: 15)),
+          ),
         const SizedBox(width: 4),
         Text(
           currency,
           style: TextStyle(
-              fontSize: 10, color: Theme.of(context).colorScheme.onPrimaryContainer),
+              fontSize: 10,
+              color: Theme.of(context).colorScheme.onPrimaryContainer),
         )
       ],
     );

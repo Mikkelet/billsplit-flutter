@@ -44,11 +44,12 @@ class AuthProvider {
     await _firebaseAuth.signOut();
   }
 
-  Future updateProfilePicture(String downloadUrl) async {
+  Future updateProfilePicture(String? downloadUrl) async {
     await _firebaseAuth.currentUser!.updatePhotoURL(downloadUrl);
   }
 
   Future updateUserName(String name) async {
+    print("update name=$name");
     await _firebaseAuth.currentUser!.updateDisplayName(name);
   }
 
