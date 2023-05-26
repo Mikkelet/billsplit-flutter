@@ -28,7 +28,6 @@ class DebtCubit extends BaseCubit {
       amount = newMaxAmount;
     }
     currency = newCurrency;
-    print("update, amount=$amount, currency=$currency");
     emit(CurrencyChanged());
   }
 
@@ -67,7 +66,6 @@ class DebtCubit extends BaseCubit {
   }
 
   void updateAmount(num value) {
-    print("\t updateValue=$value");
     amount = value;
   }
 }

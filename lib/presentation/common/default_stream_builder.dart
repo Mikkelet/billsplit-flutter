@@ -19,7 +19,6 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
           if (snapshot.hasError) {
             print("snapshot error=${snapshot.error}");
           }
-          print("snapshot data=${snapshot.data}");
           if (!snapshot.hasData) {
             return const Center(child: Text("No data"));
           }

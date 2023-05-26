@@ -2,17 +2,23 @@ import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
 import 'package:flutter/material.dart';
 
 class TextBlockPainter extends CustomPainter {
-  final Iterable<ScannedReceiptItem> textBlocks;
+  final Iterable<ScannedReceiptItem> receiptItems;
+  final double scaleFactor;
   final double upperBarrier;
   final double lowerBarrier;
-  final scale = 0.19;
 
-  TextBlockPainter(this.textBlocks, this.upperBarrier, this.lowerBarrier);
+  TextBlockPainter(this.receiptItems, this.upperBarrier, this.lowerBarrier,
+      this.scaleFactor);
 
   @override
   void paint(Canvas canvas, Size size) {
-    bool even = false;
-    for (var text in textBlocks) {
+    final scale = scaleFactor;
+
+    final itemsWithinBoundaries = receiptItems.where((element) =>
+        element.boundaryBox.top * scaleFactor > upperBarrier &&
+        element.boundaryBox.bottom * scaleFactor < lowerBarrier);
+    bool even = itemsWithinBoundaries.length % 2 == 0;
+    for (var text in itemsWithinBoundaries) {
       final textBlock = text.boundaryBox;
       final paint = Paint();
       paint.style = PaintingStyle.stroke;

@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:camera/camera.dart';
@@ -10,8 +10,12 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 class ScanReceiptUseCase2 {
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
-  Future<Iterable<ScannedReceiptItem>> launch(XFile file) async {
+  Future<ScannedReceipt> launch(XFile file) async {
     final inputImage = InputImage.fromFilePath(file.path);
+    File image = File(file.path); // Or any other way to get a File instance.
+    var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+    print(decodedImage.width);
+    print(decodedImage.height);
     final RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
     final texts = recognizedText.blocks
@@ -20,7 +24,10 @@ class ScanReceiptUseCase2 {
         .map((e) => e.elements)
         .flatMap();
 
-    return _deriveExpenses(inputImage, texts);
+    return ScannedReceipt(
+        Size(decodedImage.width.toDouble(), decodedImage.height.toDouble()),
+        _deriveExpenses(inputImage, texts),
+        file);
   }
 
   Iterable<ScannedReceiptItem> _deriveExpenses(
@@ -120,6 +127,19 @@ class ScanReceiptUseCase2 {
   }
 }
 
+class ScannedReceipt {
+  final XFile xFile;
+  final Size imageSize;
+  final Iterable<ScannedReceiptItem> items;
+
+  ScannedReceipt(this.imageSize, this.items, this.xFile);
+
+  double getScaleFactor(BuildContext context){
+    final windowSize = MediaQuery.of(context).size;
+    return  windowSize.width / imageSize.width;
+  }
+}
+
 class ScannedReceiptItem {
   final num expense;
   final String description;
@@ -129,4 +149,5 @@ class ScannedReceiptItem {
       {required this.expense,
       required this.description,
       required this.boundaryBox});
+
 }

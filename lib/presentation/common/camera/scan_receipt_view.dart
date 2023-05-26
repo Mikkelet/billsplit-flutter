@@ -53,12 +53,12 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }
-            final xFile = cubit.xFile;
+            final receipt = cubit.receipt;
             final cameraController = cubit.cameraController;
             return Center(
               child: Stack(
                 children: [
-                  if (xFile == null)
+                  if (receipt == null)
                     GestureDetector(
                       child: cameraController.buildPreview(),
                       onTapDown: (details) async {
@@ -69,10 +69,27 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       },
                     )
                   else
+                    ViewPictureScreen(receipt.xFile),
+                  if (focusCircleOffset != null)
+                    Positioned(
+                      top: focusCircleOffset!.dy - 32,
+                      left: focusCircleOffset!.dx - 32,
+                      width: 64,
+                      height: 64,
+                      child: const Icon(Icons.circle_outlined),
+                    ),
+                  if (cubit.receipt != null)
                     GestureDetector(
-                      child: ViewPictureScreen(xFile),
+                      child: CustomPaint(
+                        painter: TextBlockPainter(
+                            cubit.receipt!.items,
+                            upperBarrier,
+                            lowerBarrier,
+                            cubit.receipt!.getScaleFactor(context)),
+                        child: Container(),
+                      ),
                       onVerticalDragUpdate: (details) {
-                        final posY = details.globalPosition.dy;
+                        final posY = details.localPosition.dy;
                         const limit = 40;
                         final isDraggingUpper = posY < upperBarrier + limit &&
                             posY > upperBarrier - limit;
@@ -96,21 +113,6 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                         }
                       },
                     ),
-                  if (focusCircleOffset != null)
-                    Positioned(
-                      top: focusCircleOffset!.dy - 32,
-                      left: focusCircleOffset!.dx - 32,
-                      width: 64,
-                      height: 64,
-                      child: const Icon(Icons.circle_outlined),
-                    ),
-                  if (cubit.xFile != null)
-                    CustomPaint(
-                      painter: TextBlockPainter(
-                          cubit.getReceiptItems(upperBarrier, lowerBarrier),
-                          upperBarrier,
-                          lowerBarrier),
-                    ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -118,9 +120,9 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          if (xFile == null) _snapPicture(cubit),
-                          if (xFile != null) _confirmPicture(cubit),
-                          if (xFile != null) _cancelPicture(cubit)
+                          if (receipt == null) _snapPicture(cubit),
+                          if (receipt != null) _cancelPicture(cubit),
+                          if (receipt != null) _confirmPicture(cubit),
                         ],
                       ),
                     ),
@@ -171,10 +173,12 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
       maxRadius: 32,
       child: IconButton(
           onPressed: () {
-            Navigator.of(context).pop(
-                cubit.getReceiptItems(upperBarrier, lowerBarrier).toList());
+            Navigator.of(context).pop(cubit
+                .getReceiptItems(upperBarrier, lowerBarrier,
+                    cubit.receipt!.getScaleFactor(context))
+                .toList());
           },
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onSurface,
           icon: const Icon(Icons.check)),
     );
   }
@@ -186,7 +190,7 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
           onPressed: () {
             cubit.cancelPicture();
           },
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onSurface,
           icon: const Icon(Icons.rotate_right)),
     );
   }

@@ -43,8 +43,6 @@ class GetGroupsUseCase {
     Future.forEach(subFutures, (element) {}).whenComplete(() {
       final newGroupSettings = missingSubscriptions
           .map((groupId) => GroupNotificationSetting.fromNewGroup(groupId));
-      print("qqq newGroups=${newGroupSettings.length}");
-      print("qqq totalGroup=${[..._prefs.groupNotificationSettings, ...newGroupSettings]}");
       _prefs.groupNotificationSettings = [
         ..._prefs.groupNotificationSettings,
         ...newGroupSettings

@@ -1,4 +1,3 @@
-
 import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
 import 'package:billsplit_flutter/main.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
@@ -6,10 +5,9 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:camera/camera.dart';
 
 class ScanReceiptCubit extends BaseCubit {
-  late CameraController cameraController;
   final _scanReceiptUseCase = ScanReceiptUseCase2();
-  XFile? xFile;
-  Iterable<ScannedReceiptItem> scannedReceiptItems = [];
+  late CameraController cameraController;
+  ScannedReceipt? receipt;
 
   void initialize() async {
     showLoading();
@@ -19,14 +17,13 @@ class ScanReceiptCubit extends BaseCubit {
   }
 
   void uploadReceipt(XFile xFile) {
-    this.xFile = xFile;
     showLoading();
-    _scanReceiptUseCase.launch(xFile).then((scannedItems) {
-      if (scannedItems.isEmpty) {
+    _scanReceiptUseCase.launch(xFile).then((scannedReceipt) {
+      if (scannedReceipt.items.isEmpty) {
         showToast("No items found");
         return;
       }
-      scannedReceiptItems = scannedItems;
+      receipt = scannedReceipt;
       emit(Main());
     }).catchError((onError, st) {
       showError(onError, st);
@@ -34,16 +31,16 @@ class ScanReceiptCubit extends BaseCubit {
   }
 
   void cancelPicture() {
-    xFile = null;
-    scannedReceiptItems = [];
+    receipt = null;
     emit(Main());
   }
 
   Iterable<ScannedReceiptItem> getReceiptItems(
-      double upperBarrier, double lowerBarrier) {
-    return scannedReceiptItems.where((element) =>
-        element.boundaryBox.top * 0.19 > upperBarrier &&
-        element.boundaryBox.bottom * 0.19 < lowerBarrier);
+      double upperBarrier, double lowerBarrier, double scaleFactor) {
+    if(receipt == null) return [];
+    return receipt!.items.where((element) =>
+        element.boundaryBox.top * scaleFactor > upperBarrier &&
+        element.boundaryBox.bottom * scaleFactor < lowerBarrier);
   }
 
   @override
