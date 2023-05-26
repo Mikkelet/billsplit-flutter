@@ -114,6 +114,18 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       },
                     ),
                   Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 48.0, horizontal: 32),
+                      child: CircleAvatar(
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        child: CloseButton(
+                            color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                    ),
+                  ),
+                  Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.all(32.0),
