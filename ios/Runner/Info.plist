@@ -30,6 +30,10 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app may access your camera to scan receipts</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app may access your microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app may access your photo gallery when you want to change your profile picture</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

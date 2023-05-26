@@ -10,6 +10,6 @@ class ViewPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Image.file(File(xFile.path)));
+    return Image.file(File(xFile.path));
   }
 }

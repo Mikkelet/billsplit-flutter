@@ -1,6 +1,6 @@
-import 'package:billsplit_flutter/presentation/common/camera/splitsby_camera.dart';
+import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
+import 'package:billsplit_flutter/presentation/common/camera/scan_receipt_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,8 +14,8 @@ class ScanReceiptButton extends StatelessWidget {
         onPressed: () async {
           final response =
               await Navigator.of(context).push(SplitsbyCamera.getRoute());
-          if (response is XFile) {
-            cubit.uploadReceipt(response.path);
+          if (response is List<ScannedReceiptItem>) {
+            cubit.uploadReceipt(response);
           }
         },
         icon: const Icon(Icons.document_scanner_outlined));

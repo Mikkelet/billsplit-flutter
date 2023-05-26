@@ -112,7 +112,7 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         ScanReceiptButton(),
-                                        SizedBox(width: 16),
+                                        Expanded(child: SizedBox()),
                                         QuickAddSharedExpenseButton(),
                                         AddSharedExpenseButton(),
                                       ],

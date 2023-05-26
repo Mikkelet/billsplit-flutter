@@ -43,7 +43,6 @@ class SharedPrefs {
   // exchange rates
   Map<String, num> get latestExchangeRates {
     final json = _sharedPrefs.getString(latestExchangeRatesKey) ?? "";
-    print("qqq json=$json");
     if(json.isEmpty) return <String, num>{};
     final decode = jsonDecode(json);
     final cast = (decode as Map).map(
