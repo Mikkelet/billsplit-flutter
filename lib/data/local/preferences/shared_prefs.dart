@@ -43,7 +43,7 @@ class SharedPrefs {
   // exchange rates
   Map<String, num> get latestExchangeRates {
     final json = _sharedPrefs.getString(latestExchangeRatesKey) ?? "";
-    if(json.isEmpty) return <String, num>{};
+    if (json.isEmpty) return <String, num>{};
     final decode = jsonDecode(json);
     final cast = (decode as Map).map(
         (key, value) => MapEntry<String, num>(key as String, value as num));
@@ -65,9 +65,8 @@ class SharedPrefs {
   Iterable<Currency> get recentCurrencies {
     final lsJson = _sharedPrefs.getStringList(recentCurrenciesKey) ?? [];
     if (lsJson.isEmpty) return [];
-    final recentSorted = lsJson
-        .map((e) => RecentCurrency.fromJson(jsonDecode(e)))
-        .toList();
+    final recentSorted =
+        lsJson.map((e) => RecentCurrency.fromJson(jsonDecode(e))).toList();
     return recentSorted.map((e) => Currency(symbol: e.symbol, rate: 0));
   }
 
@@ -78,6 +77,13 @@ class SharedPrefs {
     _sharedPrefs.setStringList(recentCurrenciesKey, encoded.toList());
   }
 
+  // hasDeletedSharedExpenseKey
+  bool get hasDeletedSharedExpense =>
+      _sharedPrefs.getBool(hasDeletedSharedExpenseKey) ?? false;
+
+  set hasDeletedSharedExpense(bool value) =>
+      _sharedPrefs.setBool(hasDeletedSharedExpenseKey, value);
+
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
@@ -87,4 +93,5 @@ class SharedPrefs {
   static const recentCurrenciesKey = "recentCurrencies";
   static const latestExchangeRatesKey = "latestExchangeRates";
   static const userPrefDefaultCurrencyKey = "defaultCurrency";
+  static const hasDeletedSharedExpenseKey = "hasDeletedSharedExpense";
 }

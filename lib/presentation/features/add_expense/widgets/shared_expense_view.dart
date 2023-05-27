@@ -7,6 +7,7 @@ import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SharedExpenseView extends StatefulWidget {
@@ -28,14 +29,16 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
+    final canSwipe = cubit.groupExpense.sharedExpensesState.length > 1;
+    final showAnimation = canSwipe && !cubit.sharedPrefs.hasDeletedSharedExpense;
+
     return Column(
       children: [
         Dismissible(
-          key: Key(widget.sharedExpense.keyId),
+          key: Key(widget.sharedExpense.hashCode.toString()),
           behavior: HitTestBehavior.deferToChild,
-          direction: cubit.groupExpense.sharedExpensesState.length == 1
-              ? DismissDirection.none
-              : DismissDirection.endToStart,
+          direction:
+              canSwipe ? DismissDirection.endToStart : DismissDirection.none,
           onDismissed: (direction) {
             cubit.removeSharedExpense(widget.sharedExpense);
           },
@@ -44,8 +47,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             child: Row(
               children: [
                 const Expanded(child: SizedBox()),
-                Icon(Icons.delete,
-                    color: Theme.of(context).colorScheme.error),
+                Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
               ],
             ),
           ),
@@ -125,7 +127,18 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                 const SizedBox(height: 8),
               ],
             ),
-          ),
+          ).animate(autoPlay: showAnimation, delay: 1000.ms, effects: [
+            SlideEffect(
+                begin: Offset.zero,
+                end: const Offset(-0.1, 0),
+                duration: 100.ms,
+                curve: Curves.fastLinearToSlowEaseIn),
+            SlideEffect(
+                delay: 1000.ms,
+                end: const Offset(0.1, 0),
+                duration: 100.ms,
+                curve: Curves.fastLinearToSlowEaseIn)
+          ]),
         ),
         const SizedBox(height: 8),
       ],

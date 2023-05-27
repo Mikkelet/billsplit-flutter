@@ -35,6 +35,7 @@ dependencies:
   firebase_crashlytics: ^3.3.1
   google_ml_kit: ^0.14.0
   camera: ^0.10.5+2
+  flutter_animate: ^4.1.1+1
 
 dev_dependencies:
   json_serializable: ^6.6.1
