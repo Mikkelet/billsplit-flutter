@@ -1,10 +1,12 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 
 class SharedExpense {
   final num _expense;
   final Iterable<Person> _participants;
   final String _description;
+  final String keyId = UniqueKey().toString();
 
   late num expenseState = _expense;
   late List<Person> participantsState = _participants.toList();

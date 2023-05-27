@@ -92,7 +92,6 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                               children: [
                                 ...groupExpense.sharedExpensesState.map(
                                   (e) => SharedExpenseView(
-                                    key: UniqueKey(),
                                     sharedExpense: e,
                                     autoFocus: builder(
                                       () {

@@ -31,15 +31,13 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
     return Column(
       children: [
         Dismissible(
-          key: UniqueKey(),
+          key: Key(widget.sharedExpense.keyId),
           behavior: HitTestBehavior.deferToChild,
           direction: cubit.groupExpense.sharedExpensesState.length == 1
               ? DismissDirection.none
               : DismissDirection.endToStart,
           onDismissed: (direction) {
-            if (direction == DismissDirection.endToStart) {
-              cubit.removeSharedExpense(widget.sharedExpense);
-            }
+            cubit.removeSharedExpense(widget.sharedExpense);
           },
           background: RoundedListItem(
             color: Theme.of(context).colorScheme.error,
@@ -106,6 +104,12 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                     },
                     child: Row(
                       children: [
+                        Icon(
+                          Icons.edit_outlined,
+                          size: participantsIconSize / 1.2,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                        const SizedBox(width: 4),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: ProfilePictureStack(
@@ -114,11 +118,6 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                             limit: 4,
                           ),
                         ),
-                        Icon(
-                          Icons.edit_outlined,
-                          size: participantsIconSize / 1.2,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        )
                       ],
                     ),
                   ),
