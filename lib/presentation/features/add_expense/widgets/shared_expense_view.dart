@@ -40,12 +40,12 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             cubit.removeSharedExpense(widget.sharedExpense);
           },
           background: RoundedListItem(
-            color: Theme.of(context).colorScheme.error,
+            color: Theme.of(context).colorScheme.background,
             child: Row(
               children: [
                 const Expanded(child: SizedBox()),
                 Icon(Icons.delete,
-                    color: Theme.of(context).colorScheme.onError),
+                    color: Theme.of(context).colorScheme.error),
               ],
             ),
           ),
