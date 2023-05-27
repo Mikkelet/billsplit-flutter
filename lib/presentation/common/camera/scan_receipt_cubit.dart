@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
 import 'package:billsplit_flutter/main.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ScanReceiptCubit extends BaseCubit {
   final _scanReceiptUseCase = ScanReceiptUseCase2();
@@ -16,9 +19,9 @@ class ScanReceiptCubit extends BaseCubit {
     emit(Main());
   }
 
-  void uploadReceipt(XFile xFile) {
+  void uploadReceipt(Size windowSize, XFile xFile) {
     showLoading();
-    _scanReceiptUseCase.launch(xFile).then((scannedReceipt) {
+    _scanReceiptUseCase.launch(windowSize, xFile).then((scannedReceipt) {
       if (scannedReceipt.items.isEmpty) {
         showToast("No items found");
         return;
@@ -30,17 +33,27 @@ class ScanReceiptCubit extends BaseCubit {
     });
   }
 
+  Future updateProfilePicture() async {
+    final picker = ImagePicker();
+    final file = await picker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      uploadReceipt(Size.zero, XFile(file.path));
+    }
+  }
+
   void cancelPicture() {
     receipt = null;
     emit(Main());
   }
 
   Iterable<ScannedReceiptItem> getReceiptItems(
-      double upperBarrier, double lowerBarrier, double scaleFactor) {
-    if(receipt == null) return [];
+      double upperBarrier, double lowerBarrier) {
+    if (receipt == null) return [];
+
+    // check if *inside* barriers
     return receipt!.items.where((element) =>
-        element.boundaryBox.top * scaleFactor > upperBarrier &&
-        element.boundaryBox.bottom * scaleFactor < lowerBarrier);
+        element.boundaryBox.top > upperBarrier &&
+        element.boundaryBox.bottom < lowerBarrier);
   }
 
   @override

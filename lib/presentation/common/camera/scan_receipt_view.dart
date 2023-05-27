@@ -82,10 +82,7 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                     GestureDetector(
                       child: CustomPaint(
                         painter: TextBlockPainter(
-                            cubit.receipt!.items,
-                            upperBarrier,
-                            lowerBarrier,
-                            cubit.receipt!.getScaleFactor(context)),
+                            cubit.receipt!, upperBarrier, lowerBarrier),
                         child: Container(),
                       ),
                       onVerticalDragUpdate: (details) {
@@ -132,7 +129,7 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          if (receipt == null) _snapPicture(cubit),
+                          if (receipt == null) _snapPicture(context, cubit),
                           if (receipt != null) _cancelPicture(cubit),
                           if (receipt != null) _confirmPicture(cubit),
                         ],
@@ -148,7 +145,7 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
     );
   }
 
-  Widget _snapPicture(ScanReceiptCubit cubit) {
+  Widget _snapPicture(BuildContext context, ScanReceiptCubit cubit) {
     if (snappingPicture == true) {
       return const CircularProgressIndicator();
     }
@@ -166,7 +163,8 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
               setState(() {
                 snappingPicture = false;
               });
-              cubit.uploadReceipt(response);
+              final windowSize = MediaQuery.of(context).size;
+              cubit.uploadReceipt(windowSize, response);
             }
           } catch (e, st) {
             print(e);
@@ -185,10 +183,8 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
       maxRadius: 32,
       child: IconButton(
           onPressed: () {
-            Navigator.of(context).pop(cubit
-                .getReceiptItems(upperBarrier, lowerBarrier,
-                    cubit.receipt!.getScaleFactor(context))
-                .toList());
+            Navigator.of(context).pop(
+                cubit.getReceiptItems(upperBarrier, lowerBarrier).toList());
           },
           color: Theme.of(context).colorScheme.onSurface,
           icon: const Icon(Icons.check)),
