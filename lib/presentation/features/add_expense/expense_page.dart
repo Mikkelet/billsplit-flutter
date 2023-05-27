@@ -88,38 +88,35 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                         child: Column(
                           children: [
                             // Shared Expenses
-                            RoundedListItem(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(30),
-                                bottom: Radius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  ...groupExpense.sharedExpensesState.map(
-                                    (e) => SharedExpenseView(
-                                        key: Key("${e.hashCode}"),
-                                        sharedExpense: e,
-                                        autoFocus: builder(() {
-                                          if (state is QuickAddSharedExpense) {
-                                            return state.sharedExpense == e;
-                                          }
-                                          return false;
-                                        })),
-                                  ),
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ScanReceiptButton(),
-                                        Expanded(child: SizedBox()),
-                                        QuickAddSharedExpenseButton(),
-                                        AddSharedExpenseButton(),
-                                      ],
+                            Column(
+                              children: [
+                                ...groupExpense.sharedExpensesState.map(
+                                  (e) => SharedExpenseView(
+                                    key: UniqueKey(),
+                                    sharedExpense: e,
+                                    autoFocus: builder(
+                                      () {
+                                        if (state is QuickAddSharedExpense) {
+                                          return state.sharedExpense == e;
+                                        }
+                                        return false;
+                                      },
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ScanReceiptButton(),
+                                      Expanded(child: SizedBox()),
+                                      QuickAddSharedExpenseButton(),
+                                      AddSharedExpenseButton(),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 8),
                             const ExpenseDescriptionAndCurrencyView(),

@@ -46,12 +46,20 @@ class IndividualExpenseView extends StatelessWidget {
                       },
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          person.displayName,
-                          style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                        ),
+                        child: Builder(builder: (context) {
+                          final displayName = _isPayer(person, cubit)
+                              ? "${person.displayName} is paying"
+                              : person.displayName;
+                          return Text(
+                            displayName,
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer),
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                          );
+                        }),
                       ),
                     ),
                   );
@@ -77,10 +85,7 @@ class IndividualExpenseView extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(fontSize: 10),
+                      style: const TextStyle(fontSize: 10),
                     ),
                   ],
                 );

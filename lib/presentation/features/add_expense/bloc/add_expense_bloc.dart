@@ -82,4 +82,9 @@ class AddExpenseBloc extends BaseCubit {
     groupExpense.sharedExpensesState.addAll(sharedExpenses);
     emit(Main());
   }
+
+  void removeSharedExpense(SharedExpense sharedExpense) {
+    groupExpense.removeSharedExpense(sharedExpense);
+    onExpensesUpdated();
+  }
 }
