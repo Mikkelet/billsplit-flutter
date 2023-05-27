@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/common/camera/text_block_painter.
 import 'package:billsplit_flutter/presentation/common/camera/view_picture_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/routing_utils.dart';
 
@@ -116,12 +117,19 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 48.0, horizontal: 32),
                       child: CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
                         child: CloseButton(
                             color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ),
                   ),
+                  if (receipt == null)
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: _pickFromGallery(context),
+                        )),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -129,9 +137,9 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          if (receipt == null) _snapPicture(context, cubit),
-                          if (receipt != null) _cancelPicture(cubit),
-                          if (receipt != null) _confirmPicture(cubit),
+                          if (receipt == null) _snapPicture(context),
+                          if (receipt != null) _cancelPicture(context),
+                          if (receipt != null) _confirmPicture(context),
                         ],
                       ),
                     ),
@@ -145,12 +153,13 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
     );
   }
 
-  Widget _snapPicture(BuildContext context, ScanReceiptCubit cubit) {
+  Widget _snapPicture(BuildContext context) {
+    final cubit = context.read<ScanReceiptCubit>();
     if (snappingPicture == true) {
       return const CircularProgressIndicator();
     }
     return CircleAvatar(
-      backgroundColor: Colors.black.withAlpha(100),
+      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
       maxRadius: 32,
       child: IconButton(
         onPressed: () async {
@@ -173,13 +182,30 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
         },
         iconSize: 32,
         icon: const Icon(Icons.camera),
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
 
-  Widget _confirmPicture(ScanReceiptCubit cubit) {
+  Widget _pickFromGallery(BuildContext context) {
+    final windowSize = MediaQuery.of(context).size;
+    final cubit = context.read<ScanReceiptCubit>();
     return CircleAvatar(
+      maxRadius: 32,
+      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
+      child: IconButton(
+          onPressed: () {
+            cubit.pickFromGallery(windowSize);
+          },
+          color: Theme.of(context).colorScheme.onSurface,
+          icon: const Icon(Icons.photo_library_outlined)),
+    );
+  }
+
+  Widget _confirmPicture(BuildContext context) {
+    final cubit = context.read<ScanReceiptCubit>();
+    return CircleAvatar(
+      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
       maxRadius: 32,
       child: IconButton(
           onPressed: () {
@@ -191,8 +217,10 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
     );
   }
 
-  Widget _cancelPicture(ScanReceiptCubit cubit) {
+  Widget _cancelPicture(BuildContext context) {
+    final cubit = context.read<ScanReceiptCubit>();
     return CircleAvatar(
+      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
       maxRadius: 32,
       child: IconButton(
           onPressed: () {

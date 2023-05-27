@@ -33,11 +33,11 @@ class ScanReceiptCubit extends BaseCubit {
     });
   }
 
-  Future updateProfilePicture() async {
+  Future pickFromGallery(Size windowSize) async {
     final picker = ImagePicker();
     final file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
-      uploadReceipt(Size.zero, XFile(file.path));
+      uploadReceipt(windowSize, XFile(file.path));
     }
   }
 
