@@ -91,6 +91,13 @@ class SharedPrefs {
   set hasSeenScannerDisclaimer(bool value) =>
       _sharedPrefs.setBool(hasSeenScannerDisclaimerKey, value);
 
+  // hasSeenChoosePayerGuide
+  bool get hasSeenChoosePayerGuide =>
+      _sharedPrefs.getBool(hasSeenScannerDisclaimerKey) ?? false;
+
+  set hasSeenChoosePayerGuide(bool value) =>
+      _sharedPrefs.setBool(hasSeenChoosePayerGuideKey, value);
+
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
@@ -102,4 +109,5 @@ class SharedPrefs {
   static const userPrefDefaultCurrencyKey = "defaultCurrency";
   static const hasDeletedSharedExpenseKey = "hasDeletedSharedExpense";
   static const hasSeenScannerDisclaimerKey = "hasSeenScannerDisclaimer";
+  static const hasSeenChoosePayerGuideKey = "hasSeenChoosePayerGuide";
 }

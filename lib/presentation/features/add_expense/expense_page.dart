@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/delete_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_description_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/guide_choose_payer.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/long_press_tip_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/quick_add_shared_expense_button.dart';
@@ -90,31 +91,42 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                         child: Column(
                           children: [
                             // Shared Expenses
-                            Column(
+                            Stack(
                               children: [
-                                ...groupExpense.sharedExpensesState
-                                    .mapIndexed((i, e) {
-                                  final listPos =
-                                      ListPosition.calculatePosition(
-                                          i, groupExpense.sharedExpensesState);
-                                  return SharedExpenseView(
-                                    sharedExpense: e,
-                                    listPosition: listPos,
-                                    autoFocus: listPos == ListPosition.last,
-                                  );
-                                }),
-                                const Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ScanReceiptButton(),
-                                      Expanded(child: SizedBox()),
-                                      QuickAddSharedExpenseButton(),
-                                      AddSharedExpenseButton(),
-                                    ],
-                                  ),
+                                Column(
+                                  children: [
+                                    ...groupExpense.sharedExpensesState
+                                        .mapIndexed((i, e) {
+                                      final listPos =
+                                          ListPosition.calculatePosition(i,
+                                              groupExpense.sharedExpensesState);
+                                      return SharedExpenseView(
+                                        sharedExpense: e,
+                                        listPosition: listPos,
+                                        autoFocus: listPos == ListPosition.last,
+                                      );
+                                    }),
+                                    const Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ScanReceiptButton(),
+                                          Expanded(child: SizedBox()),
+                                          QuickAddSharedExpenseButton(),
+                                          AddSharedExpenseButton(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                                Positioned.fill(
+                                  child: GuideView(
+                                      text:
+                                          "Here you can see sub-expenses. You can either scan a receipt or add them manually!",
+                                      onClick: () {},
+                                      show: true),
+                                )
                               ],
                             ),
                             const SizedBox(height: 8),
@@ -122,26 +134,48 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                             const LongPressTipView(),
                             const SizedBox(height: 4),
                             // Individual expenses
-                            RoundedListItem(
-                              borderRadius: const BorderRadius.vertical(
-                                  bottom: Radius.circular(30),
-                                  top: Radius.circular(10)),
-                              child: Column(
-                                children: [
-                                  ...getParticipatingPeople().mapIndexed(
-                                    (i, e) {
-                                      final isMiddleElement = i > 0;
-                                      if (isMiddleElement) {
-                                        return Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 16),
-                                            child: IndividualExpenseView(e));
-                                      }
-                                      return IndividualExpenseView(e);
+                            Stack(
+                              children: [
+                                RoundedListItem(
+                                  borderRadius: const BorderRadius.vertical(
+                                    bottom: Radius.circular(30),
+                                    top: Radius.circular(10),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      ...getParticipatingPeople().mapIndexed(
+                                        (i, e) {
+                                          final isMiddleElement = i > 0;
+                                          if (isMiddleElement) {
+                                            return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 16),
+                                                child:
+                                                    IndividualExpenseView(e));
+                                          }
+                                          return IndividualExpenseView(e);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned.fill(
+                                  child: GuideView(
+                                    show: cubit
+                                        .sharedPrefs.hasSeenChoosePayerGuide,
+                                    text:
+                                        "Here you choose who pays and see their individual expenses!",
+                                    borderRadius: const BorderRadius.vertical(
+                                      bottom: Radius.circular(30),
+                                      top: Radius.circular(10),
+                                    ),
+                                    onClick: () {
+                                      cubit.sharedPrefs
+                                          .hasSeenChoosePayerGuide = true;
                                     },
                                   ),
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                             const SizedBox(height: 8),
                             const ExpenseTotalView(),
