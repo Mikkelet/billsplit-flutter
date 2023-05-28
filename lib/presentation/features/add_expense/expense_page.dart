@@ -124,8 +124,12 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                                   child: GuideView(
                                       text:
                                           "Here you can see sub-expenses. You can either scan a receipt or add them manually!",
-                                      onClick: () {},
-                                      show: true),
+                                      onClick: () {
+                                        cubit.sharedPrefs
+                                            .hasSeenSharedExpenseGuide = true;
+                                      },
+                                      show: !cubit.sharedPrefs
+                                          .hasSeenSharedExpenseGuide),
                                 )
                               ],
                             ),
@@ -161,7 +165,7 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                                 ),
                                 Positioned.fill(
                                   child: GuideView(
-                                    show: cubit
+                                    show: !cubit
                                         .sharedPrefs.hasSeenChoosePayerGuide,
                                     text:
                                         "Here you choose who pays and see their individual expenses!",

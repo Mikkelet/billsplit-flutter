@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
+import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
@@ -70,6 +71,24 @@ class ProfilePage extends StatelessWidget {
                     // default currency
                     const SizedBox(height: 16),
                     const UpdateUserDefaultCurrencyView(),
+                    const SizedBox(height: 32),
+                    ClickableListItem(
+                      onClick: () {
+                        Navigator.of(context).push(DeveloperSettingsPage.getRoute());
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Developer settings"),
+                          Icon(
+                            Icons.code,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          )
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 32),
                     Divider(
                         endIndent: 16,

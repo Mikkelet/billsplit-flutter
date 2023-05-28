@@ -98,6 +98,14 @@ class SharedPrefs {
   set hasSeenChoosePayerGuide(bool value) =>
       _sharedPrefs.setBool(hasSeenChoosePayerGuideKey, value);
 
+  // hasSeenChoosePayerGuide
+  bool get hasSeenSharedExpenseGuide =>
+      _sharedPrefs.getBool(hasSeenSharedExpenseGuideKey) ?? false;
+
+  set hasSeenSharedExpenseGuide(bool value) =>
+      _sharedPrefs.setBool(hasSeenSharedExpenseGuideKey, value);
+
+
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
@@ -110,4 +118,5 @@ class SharedPrefs {
   static const hasDeletedSharedExpenseKey = "hasDeletedSharedExpense";
   static const hasSeenScannerDisclaimerKey = "hasSeenScannerDisclaimer";
   static const hasSeenChoosePayerGuideKey = "hasSeenChoosePayerGuide";
+  static const hasSeenSharedExpenseGuideKey = "hasSeenSharedExpenseGuide";
 }
