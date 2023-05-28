@@ -31,7 +31,8 @@ class CustomDialog extends StatelessWidget {
               Text(title ?? "", style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground
               )),
-              Text(text ?? "", style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 16),
+              Text(text ?? "", textAlign: TextAlign.center,),
               const SizedBox(height: 16),
               SimpleButton(
                   onClick: onPrimaryClick ??
