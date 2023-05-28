@@ -12,7 +12,7 @@ class ExpenseViewPagerTitle extends StatefulWidget {
 }
 
 class _ExpenseViewPagerTitleState extends State<ExpenseViewPagerTitle> {
-  double page = 0.0;
+  late double page = widget.pageController.initialPage.toDouble();
 
   @override
   void initState() {

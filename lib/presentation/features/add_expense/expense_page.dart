@@ -17,12 +17,25 @@ import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+enum Page {
+  simple(0),
+  advanced(1);
+
+  final int pageIndex;
+
+  const Page(this.pageIndex);
+}
+
 class AddExpensePage extends StatefulWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
   final Group group;
+  final Page openOnPage;
 
   const AddExpensePage(
-      {required this.groupExpense, required this.group, super.key});
+      {required this.groupExpense,
+      required this.group,
+      this.openOnPage = Page.simple,
+      super.key});
 
   @override
   State<AddExpensePage> createState() => _AddExpensePageState();
@@ -36,14 +49,25 @@ class AddExpensePage extends StatefulWidget with WidgetsBindingObserver {
               group: group, groupExpense: GroupExpense.newExpense(user, group)),
           routeName: routeName);
     } else {
-      return slideUpRoute(AddExpensePage(group: group, groupExpense: expense),
+      final numOfSharedExpenses = expense.sharedExpensesState.length;
+      final openOnPage = numOfSharedExpenses > 1 ? Page.advanced : Page.simple;
+      return slideUpRoute(
+          AddExpensePage(
+              group: group, openOnPage: openOnPage, groupExpense: expense),
           routeName: routeName);
     }
   }
 }
 
 class _AddExpensePageState extends State<AddExpensePage> {
-  final PageController pageController = PageController();
+  late final PageController pageController =
+      PageController(initialPage: widget.openOnPage.pageIndex);
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
