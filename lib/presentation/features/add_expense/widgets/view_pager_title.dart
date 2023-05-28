@@ -45,7 +45,7 @@ class _ExpenseViewPagerTitleState extends State<ExpenseViewPagerTitle> {
                   widget.pageController.animateToPage(1,
                       duration: 200.ms, curve: Curves.bounceIn);
                 },
-                child: Text("Advanced",
+                child: Text("Extended",
                     style: TextStyle(fontSize: 12 * (page + 1)))),
           ]),
     );
