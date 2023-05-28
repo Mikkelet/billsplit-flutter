@@ -32,8 +32,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
         child: Center(
           child: Column(
             children: [
@@ -42,11 +41,9 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                 children: [
                   Column(
                     children: [
-                      ...groupExpense.sharedExpensesState
-                          .mapIndexed((i, e) {
-                        final listPos =
-                        ListPosition.calculatePosition(i,
-                            groupExpense.sharedExpensesState);
+                      ...groupExpense.sharedExpensesState.mapIndexed((i, e) {
+                        final listPos = ListPosition.calculatePosition(
+                            i, groupExpense.sharedExpensesState);
                         return SharedExpenseView(
                           sharedExpense: e,
                           listPosition: listPos,
@@ -69,14 +66,13 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                   ),
                   Positioned.fill(
                     child: GuideView(
-                        text:
-                        "Here you can see sub-expenses.\n Add as many as you need!",
-                        onClick: () {
-                          cubit.sharedPrefs
-                              .hasSeenSharedExpenseGuide = true;
-                        },
-                        show: !cubit.sharedPrefs
-                            .hasSeenSharedExpenseGuide),
+                      text:
+                          "Here you can see sub-expenses.\n Add as many as you need!",
+                      show: !cubit.sharedPrefs.hasSeenSharedExpenseGuide,
+                      onClick: () {
+                        cubit.sharedPrefs.hasSeenSharedExpenseGuide = true;
+                      },
+                    ),
                   )
                 ],
               ),
@@ -95,14 +91,12 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                     child: Column(
                       children: [
                         ...getParticipatingPeople().mapIndexed(
-                              (i, e) {
+                          (i, e) {
                             final isMiddleElement = i > 0;
                             if (isMiddleElement) {
                               return Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 16),
-                                  child:
-                                  IndividualExpenseView(e));
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: IndividualExpenseView(e));
                             }
                             return IndividualExpenseView(e);
                           },
@@ -112,17 +106,15 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                   ),
                   Positioned.fill(
                     child: GuideView(
-                      show: !cubit
-                          .sharedPrefs.hasSeenChoosePayerGuide,
+                      show: !cubit.sharedPrefs.hasSeenChoosePayerGuide,
                       text:
-                      "Here you choose who pays and see their individual expenses!",
+                          "Here you choose who pays and see their individual expenses!",
                       borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(30),
                         top: Radius.circular(10),
                       ),
                       onClick: () {
-                        cubit.sharedPrefs
-                            .hasSeenChoosePayerGuide = true;
+                        cubit.sharedPrefs.hasSeenChoosePayerGuide = true;
                       },
                     ),
                   )
@@ -156,7 +148,8 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
               group: group, groupExpense: GroupExpense.newExpense(user, group)),
           routeName: routeName);
     } else {
-      return slideUpRoute(AdvancedExpensePage(group: group, groupExpense: expense),
+      return slideUpRoute(
+          AdvancedExpensePage(group: group, groupExpense: expense),
           routeName: routeName);
     }
   }
