@@ -88,4 +88,9 @@ class AddExpenseBloc extends BaseCubit {
     sharedPrefs.hasDeletedSharedExpense = true;
     onExpensesUpdated();
   }
+
+  void updateParticipantsForExpense(SharedExpense sharedExpense, List<Person> participants) {
+    sharedExpense.participantsState = participants;
+    onExpensesUpdated();
+  }
 }

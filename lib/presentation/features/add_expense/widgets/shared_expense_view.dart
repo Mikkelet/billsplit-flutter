@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
@@ -106,26 +107,23 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                           );
                         },
                       );
-                      if (response != null) {
-                        widget.sharedExpense.participantsState = response;
+                      if (response is List<Person>) {
+                        cubit.updateParticipantsForExpense(
+                            widget.sharedExpense, response);
                       }
-                      cubit.onExpensesUpdated();
                     },
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        ProfilePictureStack(
+                          people: widget.sharedExpense.participantsState,
+                          size: participantsIconSize,
+                          limit: 4,
+                        ),
                         Icon(
-                          Icons.edit_outlined,
+                          Icons.group,
                           size: participantsIconSize / 1.2,
                           color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                        const SizedBox(width: 4),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ProfilePictureStack(
-                            people: widget.sharedExpense.participantsState,
-                            size: participantsIconSize,
-                            limit: 4,
-                          ),
                         ),
                       ],
                     ),
