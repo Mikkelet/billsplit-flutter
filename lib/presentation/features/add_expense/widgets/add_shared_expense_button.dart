@@ -27,6 +27,7 @@ class AddSharedExpenseButton extends StatelessWidget {
               cubit.onExpensesUpdated();
             },
             group: cubit.group,
+            groupExpense: cubit.groupExpense,
             sharedExpense: sharedExpense,
           ),
         );

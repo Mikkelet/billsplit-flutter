@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
+import 'package:billsplit_flutter/utils/list_position.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +14,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
   final bool autoFocus;
+  final ListPosition listPosition;
 
   const SharedExpenseView(
-      {super.key, required this.sharedExpense, this.autoFocus = false});
+      {super.key,
+      required this.sharedExpense,
+      this.autoFocus = false,
+      required this.listPosition});
 
   @override
   State<SharedExpenseView> createState() => _SharedExpenseViewState();
@@ -30,7 +35,8 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     final canSwipe = cubit.groupExpense.sharedExpensesState.length > 1;
-    final showAnimation = canSwipe && !cubit.sharedPrefs.hasDeletedSharedExpense;
+    final showAnimation =
+        canSwipe && !cubit.sharedPrefs.hasDeletedSharedExpense;
 
     return Column(
       children: [
@@ -52,6 +58,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
             ),
           ),
           child: RoundedListItem(
+            borderRadius: widget.listPosition.getBorderRadius(hardCorner: 10),
             child: Column(
               children: [
                 Row(
@@ -140,7 +147,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                 curve: Curves.fastLinearToSlowEaseIn)
           ]),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
       ],
     );
   }

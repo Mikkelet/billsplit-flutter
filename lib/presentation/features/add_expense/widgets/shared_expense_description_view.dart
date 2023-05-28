@@ -14,7 +14,7 @@ class SharedExpenseDescriptionView extends StatefulWidget {
       required this.sharedExpense,
       this.showIcon = false,
       this.alignRight = false,
-      required this.autoFocus})
+      this.autoFocus = false})
       : super(key: key);
 
   @override

@@ -24,6 +24,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../utils/list_position.dart';
+
 class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
   final Group group;
@@ -76,84 +78,80 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                   }
                   return true;
                 },
-                child: Builder(
-                  builder: (context) {
-                    if (state is Loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 24),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              // Shared Expenses
-                              Column(
-                                children: [
-                                  ...groupExpense.sharedExpensesState.map(
-                                    (e) => SharedExpenseView(
-                                      sharedExpense: e,
-                                      autoFocus: builder(
-                                        () {
-                                          if (state is QuickAddSharedExpense) {
-                                            return state.sharedExpense == e;
-                                          }
-                                          return false;
-                                        },
-                                      ),
-                                    ),
+                child: Builder(builder: (context) {
+                  if (state is Loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 24),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            // Shared Expenses
+                            Column(
+                              children: [
+                                ...groupExpense.sharedExpensesState
+                                    .mapIndexed((i, e) {
+                                  final listPos =
+                                      ListPosition.calculatePosition(
+                                          i, groupExpense.sharedExpensesState);
+                                  return SharedExpenseView(
+                                    sharedExpense: e,
+                                    listPosition: listPos,
+                                    autoFocus: listPos == ListPosition.last,
+                                  );
+                                }),
+                                const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ScanReceiptButton(),
+                                      Expanded(child: SizedBox()),
+                                      QuickAddSharedExpenseButton(),
+                                      AddSharedExpenseButton(),
+                                    ],
                                   ),
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ScanReceiptButton(),
-                                        Expanded(child: SizedBox()),
-                                        QuickAddSharedExpenseButton(),
-                                        AddSharedExpenseButton(),
-                                      ],
-                                    ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            const ExpenseDescriptionAndCurrencyView(),
+                            const LongPressTipView(),
+                            const SizedBox(height: 4),
+                            // Individual expenses
+                            RoundedListItem(
+                              borderRadius: const BorderRadius.vertical(
+                                  bottom: Radius.circular(30),
+                                  top: Radius.circular(10)),
+                              child: Column(
+                                children: [
+                                  ...getParticipatingPeople().mapIndexed(
+                                    (i, e) {
+                                      final isMiddleElement = i > 0;
+                                      if (isMiddleElement) {
+                                        return Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 16),
+                                            child: IndividualExpenseView(e));
+                                      }
+                                      return IndividualExpenseView(e);
+                                    },
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              const ExpenseDescriptionAndCurrencyView(),
-                              const LongPressTipView(),
-                              const SizedBox(height: 8),
-                              // Individual expenses
-                              RoundedListItem(
-                                borderRadius: const BorderRadius.vertical(
-                                    bottom: Radius.circular(30),
-                                    top: Radius.circular(10)),
-                                child: Column(
-                                  children: [
-                                    ...getParticipatingPeople().mapIndexed(
-                                      (i, e) {
-                                        final isMiddleElement = i > 0;
-                                        if (isMiddleElement) {
-                                          return Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 16),
-                                              child: IndividualExpenseView(e));
-                                        }
-                                        return IndividualExpenseView(e);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              const ExpenseTotalView(),
-                              const SizedBox(height: 120),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 8),
+                            const ExpenseTotalView(),
+                            const SizedBox(height: 120),
+                          ],
                         ),
                       ),
-                    );
-                  }
-                ),
+                    ),
+                  );
+                }),
               ),
             );
           },

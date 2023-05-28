@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class AddSharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
+  final GroupExpense groupExpense;
   final Group group;
   final Function() onSubmit;
 
@@ -14,7 +16,8 @@ class AddSharedExpenseView extends StatefulWidget {
       {Key? key,
       required this.sharedExpense,
       required this.group,
-      required this.onSubmit})
+      required this.onSubmit,
+      required this.groupExpense})
       : super(key: key);
 
   @override
@@ -57,17 +60,18 @@ class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
                 )
               ],
             ),
-            SharedExpenseDescriptionView(
-                autoFocus: true,
-                sharedExpense: widget.sharedExpense,
-                showIcon: true,
-                alignRight: true),
             ExpenseTextField(
               textEditingController: textController,
+              autoFocus: true,
+              prefix: widget.groupExpense.currencyState.symbol,
               onChange: (value) {
                 widget.sharedExpense.expenseState = value;
               },
             ),
+            SharedExpenseDescriptionView(
+                sharedExpense: widget.sharedExpense,
+                showIcon: true,
+                alignRight: true),
             const SizedBox(height: 16),
             ParticipantsPickerDialog(
               participants: widget.sharedExpense.participantsState,
