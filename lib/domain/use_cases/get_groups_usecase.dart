@@ -16,12 +16,12 @@ class GetGroupsUseCase {
     final response = await _apiService.getGroups();
     await _database.groupsDAO.clearTable();
     await _database.groupsDAO.insertGroups(response.groups.toDb());
-    subscribeToGroupTopics(response.groups.map((e) => e.id).toSet());
   }
 
   // Store new groups in group notification settings with default value as true
   // we find the difference in ids between remote and local
   // then find the difference between missing ids and unsubs
+   // deprecated("Moving towards user-topics only. Kept for reference")
   void subscribeToGroupTopics(Set<String> remoteGroupIds) {
     final localGroupIdSubs =
         _prefs.groupNotificationSettings.map((e) => e.groupId);
