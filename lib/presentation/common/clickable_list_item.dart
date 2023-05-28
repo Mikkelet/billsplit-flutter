@@ -33,6 +33,8 @@ class ClickableListItem extends StatelessWidget {
       surfaceTintColor: color ?? Theme.of(context).colorScheme.primaryContainer,
       color: color ?? Theme.of(context).colorScheme.primaryContainer,
       child: InkWell(
+
+      borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
         onTap: enabled ? onClick : null,
         child: Padding(
           padding: padding ??
