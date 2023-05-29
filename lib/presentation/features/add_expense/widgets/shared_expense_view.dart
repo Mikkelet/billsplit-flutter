@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/utils/list_position.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +44,12 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
       children: [
         Dismissible(
           key: Key(widget.sharedExpense.hashCode.toString()),
-          behavior: HitTestBehavior.deferToChild,
+          behavior: HitTestBehavior.opaque,
+          onUpdate: (details) {
+            if (details.direction == DismissDirection.endToStart) {
+              cubit.sharedPrefs.hasDeletedSharedExpense = true;
+            }
+          },
           direction:
               canSwipe ? DismissDirection.endToStart : DismissDirection.none,
           onDismissed: (direction) {
@@ -89,44 +95,31 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
                 const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: () async {
-                      final response = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return DialogWithCloseButton(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: ParticipantsPickerDialog(
-                                participants: [
-                                  ...widget.sharedExpense.participantsState
-                                ],
-                                people: cubit.group.people,
-                              ),
-                            ),
-                          );
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ProfilePictureStack(
+                        people: widget.sharedExpense.participantsState,
+                        size: participantsIconSize,
+                        limit: 4,
+                      ),
+                      IconButton(
+                        iconSize: participantsIconSize * 0.8,
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () {
+                          _editParticipants(context);
                         },
-                      );
-                      if (response is List<Person>) {
-                        cubit.updateParticipantsForExpense(
-                            widget.sharedExpense, response);
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ProfilePictureStack(
-                          people: widget.sharedExpense.participantsState,
-                          size: participantsIconSize,
-                          limit: 4,
-                        ),
-                        Icon(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer)),
+                        icon: Icon(
                           Icons.group,
-                          size: participantsIconSize / 1.2,
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -148,6 +141,27 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
         const SizedBox(height: 4),
       ],
     );
+  }
+
+  void _editParticipants(BuildContext context) async {
+    final cubit = context.read<AddExpenseBloc>();
+    final response = await showDialog(
+      context: context,
+      builder: (context) {
+        return DialogWithCloseButton(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: ParticipantsPickerDialog(
+              participants: [...widget.sharedExpense.participantsState],
+              people: cubit.group.people,
+            ),
+          ),
+        );
+      },
+    );
+    if (response is List<Person>) {
+      cubit.updateParticipantsForExpense(widget.sharedExpense, response);
+    }
   }
 
   @override

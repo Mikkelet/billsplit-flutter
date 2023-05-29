@@ -1,7 +1,9 @@
+
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
+import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_description_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
@@ -17,7 +19,6 @@ import '../../common/default_text_field.dart';
 class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
   final Group group;
-
 
   const SimpleExpensePage(
       {required this.groupExpense, required this.group, super.key});
@@ -44,8 +45,7 @@ class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
 class _SimpleExpensePageState extends State<SimpleExpensePage> {
   late final expense = widget.groupExpense.sharedExpensesState.first;
   late final textController =
-  TextEditingController(
-      text: "${expense.expenseState}");
+      TextEditingController(text: "${expense.expenseState}");
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +57,20 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
           child: Column(
             children: [
               // Shared Expenses
-              RoundedListItem(child: ExpenseTextField(
-                prefix: cubit.groupExpense.currencyState.symbol,
-                onChange: (value) {
-                  expense.expenseState = value;
-                  cubit.onExpensesUpdated();
-                },
-                textEditingController: textController,
-              )),
+              RoundedListItem(
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(10),
+                    top: Radius.circular(30),
+                  ),
+                  child: ExpenseTextField(
+                    prefix: cubit.groupExpense.currencyState.symbol,
+                    onChange: (value) {
+                      expense.expenseState = value;
+                      cubit.onExpensesUpdated();
+                    },
+                    autoFocus: textController.text.isEmpty,
+                    textEditingController: textController,
+                  )),
               const SizedBox(height: 4),
               const ExpenseDescriptionAndCurrencyView(),
               //const LongPressTipView(),
@@ -77,10 +83,9 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
                 ),
                 child: Column(
                   children: [
-                    ...getParticipatingPeople().mapIndexed(
-                          (i, e) {
-                        final isMiddleElement = i > 0;
-                        if (isMiddleElement) {
+                    ...expense.participantsState.mapIndexed(
+                      (i, e) {
+                        if (i > 0) {
                           return Padding(
                               padding: const EdgeInsets.only(top: 16),
                               child: IndividualExpenseView(e));
@@ -88,9 +93,44 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
                         return IndividualExpenseView(e);
                       },
                     ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer)),
+                        onPressed: () async {
+                          final response = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DialogWithCloseButton(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: ParticipantsPickerDialog(
+                                    participants: [...getParticipatingPeople()],
+                                    people: cubit.group.people,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                          if (response is List<Person>) {
+                            cubit.updateParticipantsForExpense(
+                                expense, response);
+                          }
+                        },
+                        icon: const Icon(Icons.group),
+                      ),
+                    )
                   ],
                 ),
               ),
+              const SizedBox(height: 8),
               const SizedBox(height: 8),
               const ExpenseTotalView(),
               const SizedBox(height: 120),
@@ -101,12 +141,8 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
     );
   }
 
-  Iterable<Person> getParticipatingPeople() {
-    final Iterable<Person> pastMembers = [
-      ...widget.groupExpense.sharedExpensesState
-          .map((e) => e.participantsState)
-          .toList()
-    ].flatMap().toSet();
+  Set<Person> getParticipatingPeople() {
+    final Iterable<Person> pastMembers = expense.participantsState;
     return <Person>{...pastMembers, ...widget.group.people};
   }
 }
