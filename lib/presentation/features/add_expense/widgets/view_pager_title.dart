@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -11,15 +12,15 @@ class ExpenseViewPagerTitle extends StatefulWidget {
   State<ExpenseViewPagerTitle> createState() => _ExpenseViewPagerTitleState();
 }
 
-class _ExpenseViewPagerTitleState extends State<ExpenseViewPagerTitle> {
+class _ExpenseViewPagerTitleState extends SafeState<ExpenseViewPagerTitle> {
   late double page = widget.pageController.initialPage.toDouble();
 
   @override
   void initState() {
     widget.pageController.addListener(() {
-      setState(() {
-        page = widget.pageController.page ?? 0.0;
-      });
+        setState(() {
+          page = widget.pageController.page ?? 0.0;
+        });
     });
     super.initState();
   }
@@ -28,7 +29,7 @@ class _ExpenseViewPagerTitleState extends State<ExpenseViewPagerTitle> {
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(
-          minHeight: 48, minWidth: double.infinity, maxHeight: 100),
+          minHeight: 64, minWidth: double.infinity, maxHeight: 100),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.max,
@@ -36,14 +37,14 @@ class _ExpenseViewPagerTitleState extends State<ExpenseViewPagerTitle> {
             TextButton(
                 onPressed: () {
                   widget.pageController.animateToPage(0,
-                      duration: 100.ms, curve: Curves.bounceIn);
+                      duration: 200.ms, curve: Curves.fastEaseInToSlowEaseOut);
                 },
                 child: Text("Simple",
                     style: TextStyle(fontSize: 12 * ((page - 1).abs() + 1)))),
             TextButton(
                 onPressed: () {
                   widget.pageController.animateToPage(1,
-                      duration: 200.ms, curve: Curves.bounceIn);
+                      duration: 200.ms, curve: Curves.fastEaseInToSlowEaseOut);
                 },
                 child: Text("Extended",
                     style: TextStyle(fontSize: 12 * (page + 1)))),

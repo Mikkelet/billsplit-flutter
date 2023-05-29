@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class PayCustomDebtView extends StatefulWidget {
   State<PayCustomDebtView> createState() => _PayCustomDebtViewState();
 }
 
-class _PayCustomDebtViewState extends State<PayCustomDebtView> {
+class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
   late final TextEditingController controller =
       TextEditingController(text: widget.debt.second.fmtTextField());
 

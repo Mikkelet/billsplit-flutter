@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
 class SharedExpenseDescriptionView extends StatefulWidget {
@@ -23,7 +24,7 @@ class SharedExpenseDescriptionView extends StatefulWidget {
 }
 
 class _SharedExpenseDescriptionViewState
-    extends State<SharedExpenseDescriptionView> {
+    extends SafeState<SharedExpenseDescriptionView> {
   late final textController =
       TextEditingController(text: widget.sharedExpense.descriptionState);
 

@@ -1,5 +1,5 @@
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class ExtendedFloatingActionButton extends StatefulWidget {
   final ScrollController scrollController;
@@ -21,7 +21,7 @@ class ExtendedFloatingActionButton extends StatefulWidget {
 }
 
 class _ExtendedFloatingActionButtonState
-    extends State<ExtendedFloatingActionButton> {
+    extends SafeState<ExtendedFloatingActionButton> {
   bool isExtended = true;
 
   @override

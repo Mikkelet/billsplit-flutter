@@ -7,6 +7,7 @@ import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_sta
 import 'package:billsplit_flutter/presentation/features/landing/bloc/sign_up_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_welcome.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class SignUpView extends StatefulWidget {
   State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignUpViewState extends State<SignUpView> {
+class _SignUpViewState extends SafeState<SignUpView> {
   final emailFieldController = TextEditingController();
   final passwordFieldController = TextEditingController();
   final repeatPasswordFieldController = TextEditingController();
@@ -128,7 +129,7 @@ class _SignUpViewState extends State<SignUpView> {
                             passwordFieldController.value.text;
                         signUpCubit.signUp(email, password);
                       }
-                      setState(() {});
+                      updateState();
                     },
                     child: const Text("Sign up"),
                   ),

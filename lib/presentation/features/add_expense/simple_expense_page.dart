@@ -1,4 +1,3 @@
-
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
@@ -9,7 +8,7 @@ import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expe
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/individual_expense_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,24 +24,9 @@ class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
 
   @override
   State<SimpleExpensePage> createState() => _SimpleExpensePageState();
-
-  static const String routeName = "add_expense";
-
-  static Route getRoute(Person user, Group group, GroupExpense? expense) {
-    if (expense == null) {
-      return slideUpRoute(
-          SimpleExpensePage(
-              group: group, groupExpense: GroupExpense.newExpense(user, group)),
-          routeName: routeName);
-    } else {
-      return slideUpRoute(
-          SimpleExpensePage(group: group, groupExpense: expense),
-          routeName: routeName);
-    }
-  }
 }
 
-class _SimpleExpensePageState extends State<SimpleExpensePage> {
+class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
   late final expense = widget.groupExpense.sharedExpensesState.first;
   late final textController =
       TextEditingController(text: "${expense.expenseState}");
@@ -52,7 +36,7 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
     final cubit = context.read<AddExpenseBloc>();
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Center(
           child: Column(
             children: [
@@ -62,14 +46,21 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
                     bottom: Radius.circular(10),
                     top: Radius.circular(30),
                   ),
-                  child: ExpenseTextField(
-                    prefix: cubit.groupExpense.currencyState.symbol,
-                    onChange: (value) {
-                      expense.expenseState = value;
-                      cubit.onExpensesUpdated();
-                    },
-                    autoFocus: textController.text.isEmpty,
-                    textEditingController: textController,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ExpenseTextField(
+                          onChange: (value) {
+                            expense.expenseState = value;
+                            cubit.onExpensesUpdated();
+                          },
+                          textAlign: TextAlign.center,
+                          autoFocus: textController.text.isEmpty,
+                          textEditingController: textController,
+                        ),
+                      ),
+                    ],
                   )),
               const SizedBox(height: 4),
               const ExpenseDescriptionAndCurrencyView(),
@@ -93,12 +84,12 @@ class _SimpleExpensePageState extends State<SimpleExpensePage> {
                         return IndividualExpenseView(e);
                       },
                     ),
+                    const SizedBox(height: 16),
                     Align(
                       alignment: Alignment.centerRight,
                       child: IconButton(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.resolveWith(
                                 (states) => Theme.of(context)

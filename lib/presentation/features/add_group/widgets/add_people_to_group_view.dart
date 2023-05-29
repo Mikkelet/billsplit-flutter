@@ -4,15 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/add_group_cubit.dart';
 
-class AddPeopleToGroupView extends StatefulWidget {
-  const AddPeopleToGroupView({Key? key}) : super(key: key);
-
-  @override
-  State<AddPeopleToGroupView> createState() => _AddPeopleToGroupViewState();
-}
-
-class _AddPeopleToGroupViewState extends State<AddPeopleToGroupView> {
-  bool hasFriends = false;
+class AddPeopleToGroupView extends StatelessWidget {
+  const AddPeopleToGroupView({super.key});
 
   @override
   Widget build(BuildContext context) {

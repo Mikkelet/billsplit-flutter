@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/camera/scan_receipt_cubit.dart';
 import 'package:billsplit_flutter/presentation/common/camera/text_block_painter.dart';
 import 'package:billsplit_flutter/presentation/common/camera/view_picture_screen.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,22 +28,12 @@ class SplitsbyCamera extends StatefulWidget {
   }
 }
 
-class _SplitsbyCameraState extends State<SplitsbyCamera> {
+class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
   bool snappingPicture = false;
   Offset? focusCircleOffset;
   BarrierDrag barrierDrag = BarrierDrag.none;
   double upperBarrier = 100;
   double lowerBarrier = 500;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,10 +162,11 @@ class _SplitsbyCameraState extends State<SplitsbyCamera> {
           });
           try {
             final response = await cubit.cameraController.takePicture();
-            if (response is XFile && context.mounted) {
+            if (response is XFile) {
               setState(() {
                 snappingPicture = false;
               });
+              if(!mounted) return;
               final windowSize = MediaQuery.of(context).size;
               cubit.uploadReceipt(windowSize, response);
             }

@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class CurrencyPickerDialog extends StatefulWidget {
       ));
 }
 
-class _CurrencyPickerDialogState extends State<CurrencyPickerDialog> {
+class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
   String filter = "";
 
   _onChange(String? value) {

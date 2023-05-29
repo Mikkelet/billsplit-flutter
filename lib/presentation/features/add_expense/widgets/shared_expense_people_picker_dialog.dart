@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
 class SharedExpensePeoplePickerDialog extends StatefulWidget {
@@ -21,7 +22,7 @@ class SharedExpensePeoplePickerDialog extends StatefulWidget {
 }
 
 class _SharedExpensePeoplePickerDialogState
-    extends State<SharedExpensePeoplePickerDialog> {
+    extends SafeState<SharedExpensePeoplePickerDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -43,7 +44,7 @@ class _SharedExpensePeoplePickerDialogState
                       onChanged: (newValue) {
                         widget.sharedExpense
                             .changeParticipantState(person, newValue ?? false);
-                        setState(() {});
+                        updateState();
                       })
                 ],
               ),

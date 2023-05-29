@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/friends/bloc/add_friend_cubit.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class AddFriendTextField extends StatefulWidget {
   State<AddFriendTextField> createState() => _AddFriendTextFieldState();
 }
 
-class _AddFriendTextFieldState extends State<AddFriendTextField> {
+class _AddFriendTextFieldState extends SafeState<AddFriendTextField> {
   final textFieldController = TextEditingController();
   String? errorText;
 
@@ -32,14 +33,15 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
                     controller: textFieldController,
                     decoration: InputDecoration(
                         errorText: errorText,
-                        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                        hintStyle: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.inversePrimary),
                         border: InputBorder.none,
                         hintText: "Enter an email"),
                     onChanged: (_) {
-                      if (errorText != null) {
+                      setState(() {
                         errorText = null;
-                        setState(() {});
-                      }
+                      });
                     },
                   ),
                 ),
@@ -50,8 +52,8 @@ class _AddFriendTextFieldState extends State<AddFriendTextField> {
                   return IconButton(
                       onPressed: () {
                         if (!_isEmailValid()) {
-                          setState(() {});
-                        }else {
+                          updateState();
+                        } else {
                           cubit.addFriendEmail(textFieldController.text);
                         }
                       },

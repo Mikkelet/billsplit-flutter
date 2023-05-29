@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantsPickerDialog extends StatefulWidget {
@@ -21,7 +22,7 @@ class ParticipantsPickerDialog extends StatefulWidget {
       _ParticipantsPickerDialogState();
 }
 
-class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
+class _ParticipantsPickerDialogState extends SafeState<ParticipantsPickerDialog> {
   void changeParticipantStatus(Person person, bool isParticipant) {
     if (isParticipant) {
       widget.participants.add(person);
@@ -68,7 +69,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                         if (value == false) {
                           widget.participants.clear();
                           widget.participants.addAll(widget.people);
-                          setState(() {});
+                          updateState();
                         }
                       },
               )
@@ -83,7 +84,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                   onTap: () {
                     widget.participants.clear();
                     widget.participants.add(person);
-                    setState(() {});
+                    updateState();
                   },
                   child: Row(
                     children: [
@@ -117,7 +118,7 @@ class _ParticipantsPickerDialogState extends State<ParticipantsPickerDialog> {
                       showMin1PersonError = false;
                       changeParticipantStatus(person, isParticipant ?? false);
                     }
-                    setState(() {});
+                    updateState();
                   })
             ],
           ),

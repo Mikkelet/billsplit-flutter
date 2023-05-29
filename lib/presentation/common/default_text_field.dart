@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -8,13 +9,15 @@ class ExpenseTextField extends StatefulWidget {
   final bool autoFocus;
   final num? maxValue;
   final String prefix;
+  final TextAlign textAlign;
 
-  const ExpenseTextField({
+  const   ExpenseTextField({
     Key? key,
     required this.textEditingController,
     required this.onChange,
     this.canBeZero = true,
     this.autoFocus = false,
+    this.textAlign = TextAlign.right,
     this.maxValue,
     this.prefix = "",
   }) : super(key: key);
@@ -25,15 +28,13 @@ class ExpenseTextField extends StatefulWidget {
   static const maxInput = 9999999.99; // max 7 chars + 2 decimals
 }
 
-class _ExpenseTextFieldState extends State<ExpenseTextField> {
+class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   @override
   void initState() {
     widget.textEditingController.addListener(() {
       widget.onChange(parseInput);
       _onChange();
-      if(mounted) {
-        setState(() {});
-      }
+      updateState();
     });
     super.initState();
   }
@@ -43,7 +44,7 @@ class _ExpenseTextFieldState extends State<ExpenseTextField> {
     return TextField(
       autofocus: widget.autoFocus,
       maxLength: 7,
-      textAlign: TextAlign.end,
+      textAlign: widget.textAlign,
       maxLines: 1,
       controller: widget.textEditingController,
       style: Theme.of(context).textTheme.bodyLarge,

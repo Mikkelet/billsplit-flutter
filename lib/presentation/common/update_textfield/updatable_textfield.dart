@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/update_textfield_cubit.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/update_textfield_state.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +27,7 @@ class UpdatableTextField extends StatefulWidget {
   State<UpdatableTextField> createState() => _UpdatableTextField();
 }
 
-class _UpdatableTextField extends State<UpdatableTextField> {
+class _UpdatableTextField extends SafeState<UpdatableTextField> {
   late String currentState = widget.initState;
   late final controller = TextEditingController(text: currentState);
 

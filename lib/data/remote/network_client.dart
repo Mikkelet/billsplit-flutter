@@ -11,7 +11,7 @@ import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 class NetworkClient {
-  static bool allowNetworkLogging = true;
+  static bool allowNetworkLogging = false;
   static bool debug = false;
   static bool emulator = false;
   static String debugBaseUrl = Platform.isAndroid

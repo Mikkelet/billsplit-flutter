@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,7 @@ class DescriptionTextField extends StatefulWidget {
   State<DescriptionTextField> createState() => _DescriptionTextFieldState();
 }
 
-class _DescriptionTextFieldState extends State<DescriptionTextField> {
+class _DescriptionTextFieldState extends SafeState<DescriptionTextField> {
   late final textController = TextEditingController(text: widget.initialText);
 
   @override

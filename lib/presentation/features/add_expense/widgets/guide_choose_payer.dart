@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -19,7 +20,7 @@ class GuideView extends StatefulWidget {
   State<GuideView> createState() => _GuideViewState();
 }
 
-class _GuideViewState extends State<GuideView> {
+class _GuideViewState extends SafeState<GuideView> {
   late bool show = widget.show;
 
   @override

@@ -8,7 +8,7 @@ import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/utils/list_position.dart';
-import 'package:flutter/gestures.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,17 +18,18 @@ class SharedExpenseView extends StatefulWidget {
   final bool autoFocus;
   final ListPosition listPosition;
 
-  const SharedExpenseView(
-      {super.key,
-      required this.sharedExpense,
-      this.autoFocus = false,
-      required this.listPosition});
+  const SharedExpenseView({
+    super.key,
+    required this.sharedExpense,
+    this.autoFocus = false,
+    required this.listPosition,
+  });
 
   @override
   State<SharedExpenseView> createState() => _SharedExpenseViewState();
 }
 
-class _SharedExpenseViewState extends State<SharedExpenseView> {
+class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
   late final textController =
       TextEditingController(text: "${widget.sharedExpense.expenseState}");
   final double participantsIconSize = 25;
@@ -44,7 +45,7 @@ class _SharedExpenseViewState extends State<SharedExpenseView> {
       children: [
         Dismissible(
           key: Key(widget.sharedExpense.hashCode.toString()),
-          behavior: HitTestBehavior.opaque,
+          behavior: HitTestBehavior.translucent,
           onUpdate: (details) {
             if (details.direction == DismissDirection.endToStart) {
               cubit.sharedPrefs.hasDeletedSharedExpense = true;

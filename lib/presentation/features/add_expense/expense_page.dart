@@ -14,6 +14,7 @@ import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/view_pager_title.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/submit_expense_button.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,7 +60,7 @@ class AddExpensePage extends StatefulWidget with WidgetsBindingObserver {
   }
 }
 
-class _AddExpensePageState extends State<AddExpensePage> {
+class _AddExpensePageState extends SafeState<AddExpensePage> {
   late final PageController pageController =
       PageController(initialPage: widget.openOnPage.pageIndex);
 
@@ -120,9 +121,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   }
                   return Column(
                     children: [
-                      const SizedBox(height: 16),
                       ExpenseViewPagerTitle(pageController: pageController),
                       Expanded(
+                        flex: 1,
                         child: PageView(
                           controller: pageController,
                           children: [
@@ -130,6 +131,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                 groupExpense: widget.groupExpense,
                                 group: widget.group),
                             AdvancedExpensePage(
+                                pageController: pageController,
                                 groupExpense: widget.groupExpense,
                                 group: widget.group),
                           ],

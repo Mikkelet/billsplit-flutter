@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
 class PasswordTextField extends StatefulWidget {
@@ -17,7 +18,7 @@ class PasswordTextField extends StatefulWidget {
   State<PasswordTextField> createState() => _PasswordTextFieldState();
 }
 
-class _PasswordTextFieldState extends State<PasswordTextField> {
+class _PasswordTextFieldState extends SafeState<PasswordTextField> {
   bool showPassword = false;
 
   @override
@@ -25,7 +26,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return TextField(
       controller: widget.controller,
       decoration: InputDecoration(
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        hintStyle:
+            TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         errorText: widget.error,
         suffixIcon: IconButton(
           icon: Icon(builder(() {
@@ -36,9 +38,9 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             }
           })),
           onPressed: () {
-            setState(() {
-              showPassword = !showPassword;
-            });
+              setState(() {
+                showPassword = !showPassword;
+              });
           },
         ),
         border: InputBorder.none,

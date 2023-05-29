@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/signin_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/forgot_password_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,7 @@ class SignInView extends StatefulWidget {
   State<SignInView> createState() => _SignInViewState();
 }
 
-class _SignInViewState extends State<SignInView> {
+class _SignInViewState extends SafeState<SignInView> {
   final emailFieldController = TextEditingController();
   final passwordFieldController = TextEditingController();
   bool showPassword = false;
@@ -39,9 +40,9 @@ class _SignInViewState extends State<SignInView> {
 
   _resetEmailError() {
     if (emailError != null) {
-      setState(() {
-        emailError = null;
-      });
+        setState(() {
+          emailError = null;
+        });
     }
   }
 
@@ -108,7 +109,7 @@ class _SignInViewState extends State<SignInView> {
                                 passwordFieldController.value.text;
                             signInCubit.signIn(email, password);
                           }
-                          setState(() {});
+                          updateState();
                         },
                         child: const Text("Sign in"),
                       ),

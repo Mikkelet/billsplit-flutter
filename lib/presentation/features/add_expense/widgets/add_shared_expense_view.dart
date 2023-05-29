@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
 class AddSharedExpenseView extends StatefulWidget {
@@ -24,14 +25,14 @@ class AddSharedExpenseView extends StatefulWidget {
   State<AddSharedExpenseView> createState() => _AddSharedExpenseViewState();
 }
 
-class _AddSharedExpenseViewState extends State<AddSharedExpenseView> {
+class _AddSharedExpenseViewState extends SafeState<AddSharedExpenseView> {
   late final textController =
       TextEditingController(text: "${widget.sharedExpense.expenseState}");
 
   @override
   void initState() {
     textController.addListener(() {
-      setState(() {});
+      updateState();
     });
     super.initState();
   }

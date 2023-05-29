@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class NotificationsRationale extends StatefulWidget {
       MaterialPageRoute(builder: (context) => const NotificationsRationale());
 }
 
-class _NotificationsRationaleState extends State<NotificationsRationale> {
+class _NotificationsRationaleState extends SafeState<NotificationsRationale> {
   AuthorizationStatus? permissionDecided;
 
   void setPermissionDecided(AuthorizationStatus status) {

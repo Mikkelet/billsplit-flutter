@@ -18,6 +18,7 @@ import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class AddServicePage extends StatefulWidget {
   }
 }
 
-class _AddServicePageState extends State<AddServicePage> {
+class _AddServicePageState extends SafeState<AddServicePage> {
   late final _nameTextController =
       TextEditingController(text: widget.service.nameState);
 
@@ -114,7 +115,7 @@ class _AddServicePageState extends State<AddServicePage> {
                                     cubit.submitService();
                                   } else {
                                     showCannotBe0ZeroError = true;
-                                    setState(() {});
+                                    updateState();
                                   }
                                 }
                               : null,
@@ -136,152 +137,149 @@ class _AddServicePageState extends State<AddServicePage> {
                 }
                 return true;
               },
-              child: Builder(
-                builder: (context) {
-                  if (state is Loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 40),
-                      child: Column(
-                        children: [
-                          RoundedListItem(
-                            child: TextField(
-                              controller: _nameTextController,
-                              onChanged: (value) {
-                                service.nameState = value;
-                                cubit.onServiceUpdated();
-                              },
-                              textInputAction: TextInputAction.next,
-                              maxLines: 1,
-                              maxLength: 30,
-                              onTapOutside: (event) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              decoration: InputDecoration(
-                                  hintStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .inversePrimary),
-                                  errorText: nameErrorText,
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  hintText: "Netflix, rent, etc"),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          RoundedListItem(
-                            child: Row(
-                              children: [
-                                SimpleButton(
-                                  onClick: () async {
-                                    final response = await Navigator.of(context)
-                                        .push(CurrencyPickerDialog.getRoute(
-                                        convertToCurrency: cubit
-                                            .group.defaultCurrencyState));
-                                    if (response is Currency) {
-                                      cubit.updateCurrency(response.symbol);
-                                    }
-                                  },
-                                  child: Text(cubit.service.currencyState
-                                      .toUpperCase()),
-                                ),
-                                Expanded(
-                                  child: ExpenseTextField(
-                                      textEditingController:
-                                      _expenseTextController,
-                                      canBeZero: !showCannotBe0ZeroError,
-                                      onChange: (value) {
-                                        service.monthlyExpenseState = value;
-                                        cubit.onServiceUpdated();
-                                      }),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          RoundedListItem(
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  "Participants will pay ${cubit.service.currencyState.toUpperCase()} ${_getMonthlyServicePerPerson().fmt2dec()} every month"),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Builder(builder: (context) {
-                            final nextMonth =
-                                DateTime.now().month; // index starts at 1
-                            final monthString = monthNames[
-                            nextMonth]; // index starts at 0, so we get the next month by just getting the index
-                            return Padding(
-                              padding:
-                              const EdgeInsets.symmetric(horizontal: 32.0),
-                              child: Text(
-                                  "Next expense will be submitted on 1st of $monthString"),
-                            );
-                          }),
-                          const SizedBox(height: 16),
-                          RoundedListItem(
-                            child: Column(
-                              children: [
-                                ...service.participantsState.mapIndexed(
-                                      (i, e) {
-                                    if (i > 0) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child:
-                                        ServiceParticipantView(person: e),
-                                      );
-                                    }
-                                    return ServiceParticipantView(person: e);
-                                  },
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: IconButton(
-                                    onPressed: () async {
-                                      service.participantsState =
-                                      await showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            DialogWithCloseButton(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(16),
-                                                child: ParticipantsPickerDialog(
-                                                  participants: [
-                                                    ...service.participantsState
-                                                  ],
-                                                  people: cubit.group.people,
-                                                ),
-                                              ),
-                                            ),
-                                      );
-                                      if (!service.participantsState
-                                          .contains(service.payerState)) {
-                                        service.payerState =
-                                            service.participantsState.first;
-                                      }
-                                      if (service.participantsState.isEmpty) {
-                                        service.participantsState
-                                            .add(service.payerState);
-                                      }
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(Icons.group),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ),
-                  );
+              child: Builder(builder: (context) {
+                if (state is Loading) {
+                  return const Center(child: CircularProgressIndicator());
                 }
-              ),
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 40),
+                    child: Column(
+                      children: [
+                        RoundedListItem(
+                          child: TextField(
+                            controller: _nameTextController,
+                            onChanged: (value) {
+                              service.nameState = value;
+                              cubit.onServiceUpdated();
+                            },
+                            textInputAction: TextInputAction.next,
+                            maxLines: 1,
+                            maxLength: 30,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            decoration: InputDecoration(
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary),
+                                errorText: nameErrorText,
+                                counterText: "",
+                                border: InputBorder.none,
+                                hintText: "Netflix, rent, etc"),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Row(
+                            children: [
+                              SimpleButton(
+                                onClick: () async {
+                                  final response = await Navigator.of(context)
+                                      .push(CurrencyPickerDialog.getRoute(
+                                          convertToCurrency: cubit
+                                              .group.defaultCurrencyState));
+                                  if (response is Currency) {
+                                    cubit.updateCurrency(response.symbol);
+                                  }
+                                },
+                                child: Text(
+                                    cubit.service.currencyState.toUpperCase()),
+                              ),
+                              Expanded(
+                                child: ExpenseTextField(
+                                    textEditingController:
+                                        _expenseTextController,
+                                    canBeZero: !showCannotBe0ZeroError,
+                                    onChange: (value) {
+                                      service.monthlyExpenseState = value;
+                                      cubit.onServiceUpdated();
+                                    }),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RoundedListItem(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                "Participants will pay ${cubit.service.currencyState.toUpperCase()} ${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Builder(builder: (context) {
+                          final nextMonth =
+                              DateTime.now().month; // index starts at 1
+                          final monthString = monthNames[
+                              nextMonth]; // index starts at 0, so we get the next month by just getting the index
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 32.0),
+                            child: Text(
+                                "Next expense will be submitted on 1st of $monthString"),
+                          );
+                        }),
+                        const SizedBox(height: 16),
+                        RoundedListItem(
+                          child: Column(
+                            children: [
+                              ...service.participantsState.mapIndexed(
+                                (i, e) {
+                                  if (i > 0) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: ServiceParticipantView(person: e),
+                                    );
+                                  }
+                                  return ServiceParticipantView(person: e);
+                                },
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    service.participantsState =
+                                        await showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          DialogWithCloseButton(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: ParticipantsPickerDialog(
+                                            participants: [
+                                              ...service.participantsState
+                                            ],
+                                            people: cubit.group.people,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                    if (!service.participantsState
+                                        .contains(service.payerState)) {
+                                      service.payerState =
+                                          service.participantsState.first;
+                                    }
+                                    if (service.participantsState.isEmpty) {
+                                      service.participantsState
+                                          .add(service.payerState);
+                                    }
+                                    updateState();
+                                  },
+                                  icon: const Icon(Icons.group),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           );
         },
