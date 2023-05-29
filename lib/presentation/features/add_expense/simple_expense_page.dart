@@ -63,7 +63,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                     ],
                   )),
               const SizedBox(height: 4),
-              const ExpenseDescriptionAndCurrencyView(),
+              ExpenseDescriptionAndCurrencyView(),
               //const LongPressTipView(),
               const SizedBox(height: 4),
               // Individual expenses
@@ -121,8 +121,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               const ExpenseTotalView(),
               const SizedBox(height: 120),
             ],

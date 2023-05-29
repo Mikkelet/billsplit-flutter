@@ -27,19 +27,22 @@ class ClickableListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
           borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
       elevation: elevation,
       surfaceTintColor: color ?? Theme.of(context).colorScheme.primaryContainer,
       color: color ?? Theme.of(context).colorScheme.primaryContainer,
       child: InkWell(
-
-      borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
+        borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
         onTap: enabled ? onClick : null,
         child: Padding(
           padding: padding ??
-              const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          child: Align(alignment: alignment ?? Alignment.center, child: child),
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: Align(
+            alignment: alignment ?? Alignment.center,
+            child: child,
+          ),
         ),
       ),
     );

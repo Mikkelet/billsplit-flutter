@@ -47,9 +47,12 @@ class ExpenseCurrencyButton extends StatelessWidget {
             }
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Text(cubit.groupExpense.currencyState.symbol.toUpperCase()),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(cubit.groupExpense.currencyState.symbol.toUpperCase()),
+          ],
         ),
       ),
     );

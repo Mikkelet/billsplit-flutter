@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -59,6 +60,7 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
                   RoundedListItem(
                     child: TextField(
                       onChanged: _onChange,
+                      style: SplitsbyTextTheme.textFieldStyle(context),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "USD, EUR",
@@ -121,16 +123,12 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
         children: [
           Text(
             currency.symbol.toUpperCase(),
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
-                fontWeight: FontWeight.w700),
+            style: SplitsbyTextTheme.currencyTitle(context),
           ),
           Text(
-            key: key,
-            "${symbol == currency.symbol ? "" : "~"}${rate.fmt2dec()} ${symbol.toUpperCase()}",
-            style:
-                TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
-          )
+              key: key,
+              "${symbol == currency.symbol ? "" : "~"}${rate.fmt2dec()} ${symbol.toUpperCase()}",
+              style: SplitsbyTextTheme.exchangeRateLabel(context)),
         ],
       ),
     );

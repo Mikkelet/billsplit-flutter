@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +68,7 @@ class AddGroupPage extends StatelessWidget {
                                       .onBackground),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
                       RoundedListItem(
                           child: TextField(
                         autofocus: cubit.groupName.isEmpty,
@@ -78,13 +79,17 @@ class AddGroupPage extends StatelessWidget {
                           cubit.onUpdateGroupName(value);
                         },
                         textInputAction: TextInputAction.done,
+                        style: SplitsbyTextTheme.textFieldStyle(context),
                         decoration: InputDecoration(
-                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                            hintStyle: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary),
                             counterText: "",
                             border: InputBorder.none,
                             hintText: "New group"),
                       )),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       ClickableListItem(
                         onClick: () async {
                           final response = await Navigator.of(context)
@@ -103,7 +108,7 @@ class AddGroupPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       RoundedListItem(
                         child: Column(
                           children: [

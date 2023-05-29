@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class GroupView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(group.nameState,
-                    style: const TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.labelMedium,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 16),
@@ -97,7 +98,8 @@ class GroupView extends StatelessWidget {
                 textAlign: TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: const TextStyle(color: Colors.red, fontSize: 15)),
+                style: SplitsbyTextTheme.groupViewNegativeDebt(context)
+            ),
           ),
         if (debt < 0)
           Expanded(
@@ -105,14 +107,12 @@ class GroupView extends StatelessWidget {
                 textAlign: TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: const TextStyle(color: Colors.green, fontSize: 15)),
+                style: SplitsbyTextTheme.groupViewPositiveDebt(context)),
           ),
         const SizedBox(width: 4),
         Text(
           currency,
-          style: TextStyle(
-              fontSize: 10,
-              color: Theme.of(context).colorScheme.onPrimaryContainer),
+          style: SplitsbyTextTheme.groupViewDebtCurrency(context),
         )
       ],
     );

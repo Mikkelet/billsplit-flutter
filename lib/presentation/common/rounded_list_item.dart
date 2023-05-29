@@ -4,9 +4,10 @@ class RoundedListItem extends StatelessWidget {
   final Widget child;
   final Color? color;
   final BorderRadius? borderRadius;
+  final double padding;
 
   const RoundedListItem(
-      {Key? key, required this.child, this.color, this.borderRadius})
+      {Key? key, required this.child, this.color, this.borderRadius, this.padding = 8})
       : super(key: key);
 
   @override
@@ -17,7 +18,7 @@ class RoundedListItem extends StatelessWidget {
           color: color ?? Theme.of(context).colorScheme.primaryContainer,
           borderRadius: borderRadius ?? BorderRadius.circular(30)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(padding),
         child: child,
       ),
     );

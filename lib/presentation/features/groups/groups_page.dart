@@ -61,7 +61,8 @@ class GroupsPage extends StatelessWidget {
                     return ListView.builder(
                       controller: scrollingController,
                       itemCount: groups.length,
-                      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 32, horizontal: 16),
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -91,13 +92,11 @@ class GroupsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                "Splitsby",
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 30,
-                    color: Theme.of(context).colorScheme.onBackground),
-              ),
+              Text("Splitsby",
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayLarge
+                      ?.copyWith(fontWeight: FontWeight.w700)),
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(ProfilePage.getRoute());

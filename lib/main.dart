@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/features/permissions/notification
 import 'package:billsplit_flutter/presentation/main_cubit.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3_dark.dart';
 import 'package:camera/camera.dart';
@@ -56,6 +57,7 @@ class _BillSplitAppState extends State<BillSplitApp>
       darkTheme: ThemeData(
         fontFamily: "Montserrat",
         colorScheme: const SplitsbyTheme3Dark(),
+        textTheme: const SplitsbyTextTheme(),
         useMaterial3: true,
       ),
       theme: ThemeData(
