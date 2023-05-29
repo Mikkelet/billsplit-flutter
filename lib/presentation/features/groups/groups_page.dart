@@ -95,7 +95,7 @@ class GroupsPage extends StatelessWidget {
               Text("Splitsby",
                   style: Theme.of(context)
                       .textTheme
-                      .displayLarge
+                      .displaySmall
                       ?.copyWith(fontWeight: FontWeight.w700)),
               InkWell(
                 onTap: () {

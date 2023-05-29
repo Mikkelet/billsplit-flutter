@@ -13,12 +13,12 @@ class ExpenseDescriptionAndCurrencyView extends StatelessWidget {
     final cubit = context.read<AddExpenseBloc>();
     final groupExpense = cubit.groupExpense;
     return SizedBox(
-      height: 48,
+      height: 64,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(
-            flex: 3,
+            flex: 5,
             child:
                 DescriptionTextField(initialText: groupExpense.descriptionState),
           ),

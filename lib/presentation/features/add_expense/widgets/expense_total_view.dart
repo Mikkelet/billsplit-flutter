@@ -14,7 +14,6 @@ class ExpenseTotalView extends StatelessWidget {
     return SizedBox(
       height: 48,
       child: RoundedListItem(
-
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

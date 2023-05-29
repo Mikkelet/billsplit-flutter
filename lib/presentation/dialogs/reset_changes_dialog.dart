@@ -14,7 +14,7 @@ class ResetChangesDialog extends Dialog {
       onPrimaryClick: () {
         Navigator.of(context).pop(false);
       },
-      secondaryText: "Cancel changes",
+      secondaryText: "Discard  changes",
       onSecondaryClick: () {
         resetChanges();
         Navigator.of(context).pop(true);

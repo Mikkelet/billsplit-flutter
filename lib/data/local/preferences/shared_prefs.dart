@@ -47,6 +47,7 @@ class SharedPrefs {
     final decode = jsonDecode(json);
     final cast = (decode as Map).map(
         (key, value) => MapEntry<String, num>(key as String, value as num));
+
     return cast;
   }
 

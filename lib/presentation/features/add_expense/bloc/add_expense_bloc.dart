@@ -18,13 +18,18 @@ class AddExpenseBloc extends BaseCubit {
 
   AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main()) {
     if (groupExpense.id.isEmpty) {
+      print(group.defaultCurrencyState);
+      sharedPrefs.latestExchangeRates.forEach((key, value) {
+        print("$key: $value");
+      });
       final groupDefCurrencyRate =
-          sharedPrefs.latestExchangeRates[group.defaultCurrencyState];
+      sharedPrefs.latestExchangeRates[group.defaultCurrencyState.toUpperCase()];
+      print(groupDefCurrencyRate);
       if (groupDefCurrencyRate == null) {
-        groupExpense.currencyState = Currency.USD();
+        updateCurrency(Currency.USD());
       } else {
-        groupExpense.currencyState = Currency(
-            symbol: group.defaultCurrencyState, rate: groupDefCurrencyRate);
+        updateCurrency(Currency(
+            symbol: group.defaultCurrencyState, rate: groupDefCurrencyRate));
       }
     }
   }
@@ -45,13 +50,13 @@ class AddExpenseBloc extends BaseCubit {
 
   void onQuickAddSharedExpense() {
     final sharedExpense =
-        groupExpense.addNewSharedExpense(withParticipants: group.people);
+    groupExpense.addNewSharedExpense(withParticipants: group.people);
     emit(QuickAddSharedExpense(sharedExpense));
   }
 
   void addExpenseForUser(Person person) {
     final sharedExpense =
-        groupExpense.addNewSharedExpense(withParticipants: [person]);
+    groupExpense.addNewSharedExpense(withParticipants: [person]);
     emit(QuickAddSharedExpense(sharedExpense));
   }
 
@@ -65,6 +70,7 @@ class AddExpenseBloc extends BaseCubit {
   }
 
   void updateCurrency(Currency currency) {
+    print("Updating current = ${currency.symbol}");
     groupExpense.currencyState = currency;
     onExpensesUpdated();
   }
@@ -74,10 +80,11 @@ class AddExpenseBloc extends BaseCubit {
       showToast("No items found");
       return;
     }
-    final sharedExpenses = receiptItems.map((e) => SharedExpense(
-        expense: e.expense,
-        participants: group.people,
-        description: e.description));
+    final sharedExpenses = receiptItems.map((e) =>
+        SharedExpense(
+            expense: e.expense,
+            participants: group.people,
+            description: e.description));
     groupExpense.sharedExpensesState.clear();
     groupExpense.sharedExpensesState.addAll(sharedExpenses);
     emit(Main());
@@ -88,7 +95,8 @@ class AddExpenseBloc extends BaseCubit {
     onExpensesUpdated();
   }
 
-  void updateParticipantsForExpense(SharedExpense sharedExpense, List<Person> participants) {
+  void updateParticipantsForExpense(SharedExpense sharedExpense,
+      List<Person> participants) {
     sharedExpense.participantsState = participants;
     onExpensesUpdated();
   }

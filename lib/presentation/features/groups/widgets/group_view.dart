@@ -37,7 +37,7 @@ class GroupView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(group.nameState,
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(context).textTheme.titleLarge,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 16),
@@ -98,8 +98,7 @@ class GroupView extends StatelessWidget {
                 textAlign: TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: SplitsbyTextTheme.groupViewNegativeDebt(context)
-            ),
+                style: SplitsbyTextTheme.groupViewNegativeDebt(context)),
           ),
         if (debt < 0)
           Expanded(

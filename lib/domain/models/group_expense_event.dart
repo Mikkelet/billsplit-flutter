@@ -57,7 +57,7 @@ class GroupExpense extends Event {
   bool get isChanged {
     return _payer.uid != payerState.uid ||
         _description != descriptionState ||
-        _currency.symbol != currencyState.symbol ||
+        _currency != currencyState ||
         !sharedExpensesState.equals(_sharedExpenses.toList()) ||
         sharedExpensesState.any((element) => element.isChanged);
   }
@@ -68,17 +68,6 @@ class GroupExpense extends Event {
     sharedExpensesState = _sharedExpenses.toList();
     currencyState = _currency;
   }
-
-  GroupExpense.dummy(num seed)
-      : this(
-            id: "GE$seed",
-            createdBy: Person.dummy(seed),
-            description: "",
-            sharedExpenses: [],
-            syncState: SyncState.synced,
-            payer: Person.dummy(seed),
-            currency: Currency(symbol: "usd", rate: 1),
-            timestamp: 0);
 
   GroupExpense.newExpense(Person user, Group group)
       : this(

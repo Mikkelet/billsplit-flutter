@@ -37,7 +37,7 @@ class ServiceView extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
-                  "${service.currencyState.toUpperCase()} ${service.monthlyExpenseState} is paid by by ${service.payerState.displayName}",
+                  "${service.currencyState.toUpperCase()} ${service.monthlyExpenseState} is paid by ${service.payerState.displayName}",
                   softWrap: false,
                   style: Theme.of(context).textTheme.bodyMedium,
                   overflow: TextOverflow.ellipsis,
