@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,7 @@ class _ExtendedFloatingActionButtonState
     return FloatingActionButton.extended(
       isExtended: isExtended,
       key: UniqueKey(),
+      extendedTextStyle: SplitsbyTextTheme.fabText(context),
       backgroundColor: Theme.of(context).colorScheme.secondary,
       onPressed: widget.onPressed,
       icon: Icon(widget.icon),

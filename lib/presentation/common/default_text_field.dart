@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class ExpenseTextField extends StatefulWidget {
   final String prefix;
   final TextAlign textAlign;
 
-  const   ExpenseTextField({
+  const ExpenseTextField({
     Key? key,
     required this.textEditingController,
     required this.onChange,
@@ -29,6 +30,8 @@ class ExpenseTextField extends StatefulWidget {
 }
 
 class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
+  final focusNode = FocusNode();
+
   @override
   void initState() {
     widget.textEditingController.addListener(() {
@@ -46,8 +49,9 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
       maxLength: 7,
       textAlign: widget.textAlign,
       maxLines: 1,
+      focusNode: focusNode,
       controller: widget.textEditingController,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: SplitsbyTextTheme.textFieldStyle(context),
       decoration: InputDecoration(
         isDense: true,
         hintText: "0",
@@ -56,7 +60,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
         prefixStyle: const TextStyle(fontSize: 10),
         prefixText: widget.prefix.toUpperCase(),
         counterText: "",
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
         prefixIconConstraints: const BoxConstraints(),
         suffix: widget.maxValue != null
             ? TextButton(
@@ -85,7 +89,14 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   }
 
   String? _errorText() {
-    if (text.isEmpty) return "Enter a number";
+    final bool hasFocus = focusNode.hasFocus;
+    if (text.isEmpty) {
+      if (hasFocus) {
+        return null;
+      } else {
+        return "Enter a number";
+      }
+    }
     try {
       final number = num.parse(text);
       if (!widget.canBeZero && number == 0) return "Expense is 0";

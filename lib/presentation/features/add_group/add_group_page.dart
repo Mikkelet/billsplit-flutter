@@ -70,6 +70,7 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       RoundedListItem(
+                        padding: 16,
                           child: TextField(
                         autofocus: cubit.groupName.isEmpty,
                         maxLines: 1,
@@ -91,6 +92,7 @@ class AddGroupPage extends StatelessWidget {
                       )),
                       const SizedBox(height: 8),
                       ClickableListItem(
+                        padding: const EdgeInsets.all(16),
                         onClick: () async {
                           final response = await Navigator.of(context)
                               .push(CurrencyPickerDialog.getRoute());
@@ -103,6 +105,7 @@ class AddGroupPage extends StatelessWidget {
                           children: [
                             Text(
                               cubit.currency.toUpperCase(),
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                             const Icon(Icons.arrow_drop_down)
                           ],
@@ -110,6 +113,7 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       RoundedListItem(
+                        padding: 16,
                         child: Column(
                           children: [
                             cubit.people.isEmpty

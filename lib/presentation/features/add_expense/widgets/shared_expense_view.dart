@@ -32,7 +32,7 @@ class SharedExpenseView extends StatefulWidget {
 class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
   late final textController =
       TextEditingController(text: "${widget.sharedExpense.expenseState}");
-  final double participantsIconSize = 25;
+  final double participantsIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
             ),
           ),
           child: RoundedListItem(
-            borderRadius: widget.listPosition.getBorderRadius(hardCorner: 10),
+            borderRadius: widget.listPosition.getBorderRadius(hardCorner: 10,softCorner: 10),
             child: Column(
               children: [
                 Row(
@@ -93,7 +93,6 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Row(
@@ -105,16 +104,10 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                         limit: 4,
                       ),
                       IconButton(
-                        iconSize: participantsIconSize * 0.8,
-                        visualDensity: VisualDensity.compact,
+                        iconSize: participantsIconSize * 1.2,
                         onPressed: () {
                           _editParticipants(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer)),
                         icon: Icon(
                           Icons.group,
                           color: Theme.of(context).colorScheme.primary,
@@ -123,7 +116,6 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
               ],
             ),
           ).animate(autoPlay: showAnimation, delay: 1000.ms, effects: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SplitsbyTextTheme extends TextTheme {
-  static const double baseFontSize = 18;
+  static const double baseFontSize = 12;
 
   const SplitsbyTextTheme()
       : super(
@@ -22,14 +22,27 @@ class SplitsbyTextTheme extends TextTheme {
           displayLarge: const TextStyle(fontSize: baseFontSize * 2.2),
         );
 
-
   // generic
   static TextStyle textFieldStyle(BuildContext context) =>
       TextStyle(fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize);
 
-  static TextStyle textFieldHintStyle(BuildContext context) =>
-      TextStyle(fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
+  static TextStyle textFieldHintStyle(BuildContext context) => TextStyle(
+      fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
       color: Theme.of(context).colorScheme.inversePrimary);
+
+  static TextStyle signOutButtonText(BuildContext context) => TextStyle(
+      fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+      color: Theme.of(context).colorScheme.onError);
+
+
+  static TextStyle fabText(BuildContext context) => TextStyle(
+      fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
+      fontFamily: "Montserrat");
+
+  // Home page
+  static TextStyle splitsbyTitle(BuildContext context) => TextStyle(
+      fontSize: Theme.of(context).textTheme.displaySmall?.fontSize,
+      fontWeight: FontWeight.w700);
 
   // group view
   static TextStyle _groupViewDebt(BuildContext context) =>
@@ -41,8 +54,7 @@ class SplitsbyTextTheme extends TextTheme {
       );
 
   static TextStyle groupViewNegativeDebt(BuildContext context) =>
-      _groupViewDebt(context).copyWith(
-        color: Colors.red);
+      _groupViewDebt(context).copyWith(color: Colors.red);
 
   static TextStyle groupViewDebtCurrency(BuildContext context) => TextStyle(
       fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,

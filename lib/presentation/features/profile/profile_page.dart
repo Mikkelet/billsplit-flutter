@@ -36,6 +36,7 @@ class ProfilePage extends StatelessWidget {
                     const UploadProfilePictureView(),
                     const SizedBox(height: 16),
                     RoundedListItem(
+                      padding: 16,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -44,20 +45,24 @@ class ProfilePage extends StatelessWidget {
                               updateFuture: cubit.updateDisplayName),
                           const SizedBox(height: 16),
                           Text(cubit.user.email,
-                              style: const TextStyle(fontSize: 16)),
+                              style: Theme.of(context).textTheme.labelLarge),
                           const SizedBox(height: 16),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 4),
                     ClickableListItem(
+                      padding: const EdgeInsets.all(16),
                       onClick: () {
                         Navigator.of(context).push(FriendsPage.getRoute());
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Friends"),
+                          Text(
+                            "Friends",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
                           Icon(
                             Icons.arrow_right,
                             color: Theme.of(context)
@@ -69,17 +74,23 @@ class ProfilePage extends StatelessWidget {
                     ),
 
                     // default currency
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 4),
                     const UpdateUserDefaultCurrencyView(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 4),
                     ClickableListItem(
+                      padding: const EdgeInsets.all(16),
                       onClick: () {
-                        Navigator.of(context).push(DeveloperSettingsPage.getRoute());
+                        Navigator.of(context)
+                            .push(DeveloperSettingsPage.getRoute());
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text("Developer settings"),
+                          Text(
+                            "Developer settings",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
                           Icon(
                             Icons.code,
                             color: Theme.of(context)

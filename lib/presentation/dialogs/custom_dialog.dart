@@ -28,11 +28,15 @@ class CustomDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title ?? "", style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onBackground
-              )),
+              Text(title ?? "",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: 16),
-              Text(text ?? "", textAlign: TextAlign.center,),
+              Text(
+                text ?? "",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               const SizedBox(height: 16),
               SimpleButton(
                   onClick: onPrimaryClick ??
@@ -48,7 +52,8 @@ class CustomDialog extends StatelessWidget {
               if (secondaryText != null)
                 TextButton(
                   onPressed: () {
-                    onSecondaryClick?.call() ?? Navigator.of(context).pop(false);
+                    onSecondaryClick?.call() ??
+                        Navigator.of(context).pop(false);
                   },
                   child: Text(
                     "$secondaryText",

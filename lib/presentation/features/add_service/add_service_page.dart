@@ -17,6 +17,7 @@ import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -157,21 +158,20 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                             textInputAction: TextInputAction.next,
                             maxLines: 1,
                             maxLength: 30,
+                            style: SplitsbyTextTheme.textFieldStyle(context),
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                             decoration: InputDecoration(
-                                hintStyle: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .inversePrimary),
+                                hintStyle: SplitsbyTextTheme.textFieldHintStyle(
+                                    context),
                                 errorText: nameErrorText,
                                 counterText: "",
                                 border: InputBorder.none,
                                 hintText: "Netflix, rent, etc"),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         RoundedListItem(
                           child: Row(
                             children: [
@@ -201,15 +201,17 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         RoundedListItem(
+                          padding: 16,
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                                "Participants will pay ${cubit.service.currencyState.toUpperCase()} ${_getMonthlyServicePerPerson().fmt2dec()} every month"),
+                                "Participants will pay ${cubit.service.currencyState.toUpperCase()} ${_getMonthlyServicePerPerson().fmt2dec()} every month",
+                                style: Theme.of(context).textTheme.labelSmall),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         Builder(builder: (context) {
                           final nextMonth =
                               DateTime.now().month; // index starts at 1
@@ -241,8 +243,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                 alignment: Alignment.centerRight,
                                 child: IconButton(
                                   onPressed: () async {
-                                    service.participantsState =
-                                        await showDialog(
+                                    final response = await showDialog(
                                       context: context,
                                       builder: (context) =>
                                           DialogWithCloseButton(
@@ -257,16 +258,9 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                         ),
                                       ),
                                     );
-                                    if (!service.participantsState
-                                        .contains(service.payerState)) {
-                                      service.payerState =
-                                          service.participantsState.first;
+                                    if (response is List<Person>) {
+                                      cubit.updateParticipants(response);
                                     }
-                                    if (service.participantsState.isEmpty) {
-                                      service.participantsState
-                                          .add(service.payerState);
-                                    }
-                                    updateState();
                                   },
                                   icon: const Icon(Icons.group),
                                 ),

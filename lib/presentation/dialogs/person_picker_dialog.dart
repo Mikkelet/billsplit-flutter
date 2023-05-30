@@ -24,7 +24,7 @@ class PersonPickerDialog extends StatelessWidget {
                       children: [
                         ProfilePictureView(person: person),
                         const SizedBox(width: 8),
-                        Text(person.displayName),
+                        Text(person.displayName, style: Theme.of(context).textTheme.labelSmall,),
                       ],
                     ),
                     IconButton(

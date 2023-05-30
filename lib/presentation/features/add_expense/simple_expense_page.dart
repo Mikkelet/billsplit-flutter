@@ -1,15 +1,14 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_description_textfield.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_currency.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -43,17 +42,19 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
           child: Column(
             children: [
               // Shared Expenses
-              RoundedListItem(
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(10),
-                    top: Radius.circular(30),
-                  ),
-                  child: SizedBox(
-                    height: 64,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
+              SizedBox(
+                height: 64,
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 5,
+                      child: RoundedListItem(
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                            topRight: Radius.circular(10)),
+                        child: Expanded(
                           child: ExpenseTextField(
                             onChange: (value) {
                               expense.expenseState = value;
@@ -64,11 +65,27 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                             textEditingController: textController,
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  )),
+                    const SizedBox(width: 4),
+                    const Flexible(
+                        flex: 1,
+                        child: ExpenseCurrencyButton(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                              topRight: Radius.circular(30)),
+                        ))
+                  ],
+                ),
+              ),
               const SizedBox(height: 4),
-              const ExpenseDescriptionAndCurrencyView(),
+              SizedBox(
+                height: 64,
+                child: DescriptionTextField(
+                    initialText: cubit.groupExpense.descriptionState),
+              ),
               //const LongPressTipView(),
               const SizedBox(height: 4),
               Row(
@@ -84,22 +101,23 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ProfilePictureStack(
+                            size: 32,
                             people: expense.participantsState,
-                            limit: 5,
+                            limit: 4,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 getExpensePerParticipant().fmt2dec(),
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                style: Theme.of(context).textTheme.labelLarge,
                                 textAlign: TextAlign.end,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 cubit.groupExpense.currencyState.symbol
                                     .toUpperCase(),
-                                style: const TextStyle(fontSize: 10),
+                                style: Theme.of(context).textTheme.labelSmall,
                               ),
                               const SizedBox(width: 8)
                             ],
@@ -111,11 +129,6 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                   const SizedBox(width: 8),
                   IconButton(
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer)),
                     onPressed: () async {
                       final response = await showDialog(
                         context: context,
@@ -124,7 +137,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                             child: Padding(
                               padding: const EdgeInsets.all(16),
                               child: ParticipantsPickerDialog(
-                                participants: [...getParticipatingPeople()],
+                                participants: expense.participantsState,
                                 people: cubit.group.people,
                               ),
                             ),
@@ -141,29 +154,9 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                 ],
               ),
               const SizedBox(height: 4),
-              ClickableListItem(
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(30),
-                  top: Radius.circular(10),
-                ),
-                onClick: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text("Paid by"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ProfilePictureView(
-                          person: cubit.groupExpense.payerState),
-                    )
-                  ],
-                ),
-              ),
+              PaidByDropDownView(participants: getParticipatingPeople(), showExpenses: false),
               const SizedBox(height: 4),
-              const ExpenseTotalView(),
+              //const ExpenseTotalView(),
               const SizedBox(height: 120),
             ],
           ),

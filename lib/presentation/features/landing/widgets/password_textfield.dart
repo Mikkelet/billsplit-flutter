@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -24,10 +25,11 @@ class _PasswordTextFieldState extends SafeState<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      
       controller: widget.controller,
+      style: SplitsbyTextTheme.textFieldStyle(context),
       decoration: InputDecoration(
-        hintStyle:
-            TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
         errorText: widget.error,
         suffixIcon: IconButton(
           icon: Icon(builder(() {

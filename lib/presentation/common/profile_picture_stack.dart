@@ -17,18 +17,21 @@ class ProfilePictureStack extends StatelessWidget {
   Widget build(BuildContext context) {
     final paddingSize = size / 1.5;
     if (people.length <= limit) {
-      return Row(
-        children: [
-          ...people.map(
-            (e) => Padding(
-              padding: const EdgeInsets.only(right: 2.0),
-              child: ProfilePictureView(
-                person: e,
-                size: size,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0), // to offset missing padding from stack's border
+        child: Row(
+          children: [
+            ...people.map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(right: 2.0),
+                child: ProfilePictureView(
+                  person: e,
+                  size: size,
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
     }
     final remaining = people.length - limit;

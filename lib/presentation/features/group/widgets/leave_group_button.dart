@@ -11,27 +11,30 @@ class LeaveGroupButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
 
-    return ClickableListItem(
-      color: Theme.of(context).colorScheme.error,
-      onClick: () async {
-        await showDialog(
-          context: context,
-          builder: (context) => CustomDialog(
-            text: "Are you sure you want to leave ${cubit.group.nameState}?",
-            onPrimaryClick: () {
-              Navigator.of(context).pop();
-            },
-            primaryText: "No",
-            secondaryText: "Yes, I want to leave",
-            onSecondaryClick: () {
-              cubit.leaveGroup();
-            },
-          ),
-        );
-      },
-      child: Text(
-        "Leave group",
-        style: TextStyle(color: Theme.of(context).colorScheme.onError),
+    return SizedBox(
+      height: 48,
+      child: ClickableListItem(
+        color: Theme.of(context).colorScheme.error,
+        onClick: () async {
+          await showDialog(
+            context: context,
+            builder: (context) => CustomDialog(
+              text: "Are you sure you want to leave ${cubit.group.nameState}?",
+              onPrimaryClick: () {
+                Navigator.of(context).pop();
+              },
+              primaryText: "No",
+              secondaryText: "Yes, I want to leave",
+              onSecondaryClick: () {
+                cubit.leaveGroup();
+              },
+            ),
+          );
+        },
+        child: Text(
+          "Leave group",
+          style: Theme.of(context).textTheme.labelSmall,
+        ),
       ),
     );
   }

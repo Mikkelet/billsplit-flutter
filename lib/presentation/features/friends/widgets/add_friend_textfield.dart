@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/friends/bloc/add_friend_cubit.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +27,17 @@ class _AddFriendTextFieldState extends SafeState<AddFriendTextField> {
       child: BaseBlocBuilder<AddFriendCubit>(
         builder: (cubit, state) {
           return RoundedListItem(
+            padding: 16,
             child: Row(
               children: [
                 Flexible(
                   child: TextField(
+                    style: SplitsbyTextTheme.textFieldStyle(context),
                     controller: textFieldController,
                     decoration: InputDecoration(
                         errorText: errorText,
-                        hintStyle: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
+                        hintStyle:
+                            SplitsbyTextTheme.textFieldHintStyle(context),
                         border: InputBorder.none,
                         hintText: "Enter an email"),
                     onChanged: (_) {

@@ -63,6 +63,7 @@ class _BillSplitAppState extends State<BillSplitApp>
       theme: ThemeData(
         splashFactory: InkSplash.splashFactory,
         fontFamily: "Montserrat",
+        textTheme: const SplitsbyTextTheme(),
         colorScheme: const SplitsbyTheme3(),
         useMaterial3: true,
       ),

@@ -9,7 +9,7 @@ class ResetChangesDialog extends Dialog {
   @override
   Widget build(BuildContext context) {
     return CustomDialog(
-      text: "You have made changes. Do you want keep editing or cancel?",
+      title: "You have made changes. Do you want keep editing or cancel?",
       primaryText: "Keep editing",
       onPrimaryClick: () {
         Navigator.of(context).pop(false);

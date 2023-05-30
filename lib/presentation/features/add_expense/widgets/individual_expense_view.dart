@@ -8,8 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class IndividualExpenseView extends StatelessWidget {
   final Person person;
+  final bool showExpense;
 
-  const IndividualExpenseView(this.person, {super.key});
+  const IndividualExpenseView(this.person,
+      {this.showExpense = true, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +28,18 @@ class IndividualExpenseView extends StatelessWidget {
               PayerView(
                 person: person,
                 isPayer: _isPayer(person, cubit),
-                size: 50,
+                size: 32,
                 onClick: () {
                   cubit.onPayerSelected(person);
                 },
               ),
+              const SizedBox(width: 8),
               Builder(
                 builder: (context) {
                   return Expanded(
                     child: MaterialButton(
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       onPressed: () {
@@ -52,10 +57,7 @@ class IndividualExpenseView extends StatelessWidget {
                               : person.displayName;
                           return Text(
                             displayName,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer),
+                            style: Theme.of(context).textTheme.labelSmall,
                             maxLines: 2,
                             textAlign: TextAlign.start,
                           );
@@ -68,32 +70,33 @@ class IndividualExpenseView extends StatelessWidget {
             ],
           ),
         ),
-        Flexible(
-          flex: 1,
-          child: Builder(
-            builder: (context) {
-              if (getTotalForUser(cubit) > 0) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Expanded(child: SizedBox()),
-                    Text(
-                      getTotalForUser(cubit).fmt2dec(),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.end,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                  ],
-                );
-              }
-              return const SizedBox();
-            },
-          ),
-        )
+        if (showExpense)
+          Flexible(
+            flex: 1,
+            child: Builder(
+              builder: (context) {
+                if (getTotalForUser(cubit) > 0) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Expanded(child: SizedBox()),
+                      Text(
+                        getTotalForUser(cubit).fmt2dec(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.end,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        cubit.groupExpense.currencyState.symbol.toUpperCase(),
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
+          )
       ],
     );
   }

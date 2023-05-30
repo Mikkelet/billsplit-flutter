@@ -12,15 +12,16 @@ class ExpenseTotalView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     return SizedBox(
-      height: 48,
+      height: 64,
       child: RoundedListItem(
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Row(
+            Row(
               children: [
-                SizedBox(width: 8),
-                Text("Total"),
+                const SizedBox(width: 8),
+                Text("Total", style: Theme.of(context).textTheme.labelSmall),
               ],
             ),
             Row(
@@ -28,12 +29,12 @@ class ExpenseTotalView extends StatelessWidget {
                 Text(
                   cubit.groupExpense.total.fmt2dec(),
                   textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                  style: const TextStyle(fontSize: 10),
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
                 const SizedBox(width: 8),
               ],

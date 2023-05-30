@@ -18,7 +18,10 @@ class AddedPersonView extends StatelessWidget {
       children: [
         ProfilePictureView(person: person),
         const SizedBox(width: 8),
-        Text(person.displayName),
+        Text(
+          person.displayName,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const Flexible(
             child: SizedBox(
           width: double.infinity,

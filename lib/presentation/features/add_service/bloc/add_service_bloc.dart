@@ -46,4 +46,15 @@ class AddServiceBloc extends BaseCubit {
     service.currencyState = symbol;
     onServiceUpdated();
   }
+
+  void updateParticipants(List<Person> participants) {
+    service.participantsState = participants;
+    if (!service.participantsState.contains(service.payerState)) {
+      service.payerState = service.participantsState.first;
+    }
+    if (service.participantsState.isEmpty) {
+      service.participantsState.add(service.payerState);
+    }
+    onServiceUpdated();
+  }
 }

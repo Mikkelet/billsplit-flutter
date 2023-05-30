@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/signin_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/forgot_password_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -73,18 +74,20 @@ class _SignInViewState extends SafeState<SignInView> {
                 ),
                 Container(height: 32),
                 RoundedListItem(
+                  padding: 16,
                     child: TextField(
                   controller: emailFieldController,
+                  style: SplitsbyTextTheme.textFieldStyle(context),
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
+                    hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
                     errorText: emailError,
                     hintText: "Email",
                     border: InputBorder.none,
                   ),
                 )),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 RoundedListItem(
+                  padding: 16,
                   child: PasswordTextField(
                     controller: passwordFieldController,
                     error: passwordError,

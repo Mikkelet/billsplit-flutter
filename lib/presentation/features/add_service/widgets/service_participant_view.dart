@@ -20,16 +20,30 @@ class ServiceParticipantView extends StatelessWidget {
         Flexible(
           child: PayerView(
               person: person,
+              size: 40,
               isPayer: isPayer,
               onClick: () {
                 cubit.onPayerClicked(person);
               }),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         if (isPayer)
-          Text("${person.displayName} is paying")
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              "${person.displayName} is paying",
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          )
         else
-          Text(person.displayName),
+          TextButton(
+              onPressed: () {
+                cubit.onPayerClicked(person);
+              },
+              child: Text(
+                person.displayName,
+                style: Theme.of(context).textTheme.labelSmall,
+              )),
       ],
     );
   }

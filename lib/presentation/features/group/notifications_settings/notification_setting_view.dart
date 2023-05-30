@@ -18,30 +18,31 @@ class NotificationSettingView extends StatelessWidget {
     return BaseBlocWidget<NotificationSettingsCubit>(
       create: (context) =>
           NotificationSettingsCubit(topic, group)..initialise(),
-      child:
-          BaseBlocBuilder<NotificationSettingsCubit>(builder: (cubit, state) {
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(topic.getTopicName()),
-            if (state is Main)
-              Checkbox(
-                  fillColor: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Theme.of(context).colorScheme.inversePrimary;
-                    }
-                    return Theme.of(context).colorScheme.secondaryContainer;
-                  }),
-                  value: cubit.isSubscribed,
-                  onChanged: (value) {
-                    if (value == null) return;
-                    cubit.onSubscribeToTopic(value);
-                  }),
-            if (state is Loading) const CircularProgressIndicator(),
-          ],
-        );
-      }),
+      child: BaseBlocBuilder<NotificationSettingsCubit>(
+        builder: (cubit, state) {
+          return Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(topic.getTopicName(), style: Theme.of(context).textTheme.labelSmall,),
+              if (state is Main)
+                Checkbox(
+                    fillColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return Theme.of(context).colorScheme.inversePrimary;
+                      }
+                      return Theme.of(context).colorScheme.secondaryContainer;
+                    }),
+                    value: cubit.isSubscribed,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      cubit.onSubscribeToTopic(value);
+                    }),
+              if (state is Loading) const CircularProgressIndicator(),
+            ],
+          );
+        },
+      ),
     );
   }
 }

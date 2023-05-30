@@ -46,7 +46,6 @@ class GroupPage extends StatelessWidget {
                     onPressed: () {
                       _onFabClicked(context);
                     },
-
                     label: text,
                     icon: Icons.add,
                   );

@@ -34,6 +34,7 @@ class _GroupBottomNavState extends SafeState<GroupBottomNav> {
         onDestinationSelected: (index) {
           _onItemSelected(context, index);
         },
+
       );
     });
   }

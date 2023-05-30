@@ -14,7 +14,7 @@ class SplitsbyTheme3Dark extends ColorScheme {
           onPrimary: Colors.white,
           secondary: const Color(0xFF2D2331),
           onSecondary: Colors.white,
-          secondaryContainer: const Color(0xFF2D2331),
+          secondaryContainer: const Color(0xFF2D5555),
           onSecondaryContainer: Colors.white,
           brightness: Brightness.dark,
           surface: const Color(0xFF080D19),
