@@ -40,7 +40,7 @@ class GroupPage extends StatelessWidget {
                   if (state.nav == GroupPageNav.settings) return const SizedBox();
                   String text = state.nav == GroupPageNav.events
                       ? "Add expense"
-                      : "Add service";
+                      : "Add subscription";
                   return ExtendedFloatingActionButton(
                     scrollController: ScrollController(),
                     onPressed: () {

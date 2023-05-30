@@ -36,7 +36,6 @@ class ProfilePage extends StatelessWidget {
                     const UploadProfilePictureView(),
                     const SizedBox(height: 16),
                     RoundedListItem(
-                      padding: 16,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -28,7 +28,8 @@ class _DescriptionTextFieldState extends SafeState<DescriptionTextField> {
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
     return RoundedListItem(
-      padding: 0,
+      height: 64,
+      padding: EdgeInsets.zero,
       borderRadius: const BorderRadius.vertical(
         top: Radius.circular(10),
         bottom: Radius.circular(10),
@@ -45,12 +46,12 @@ class _DescriptionTextFieldState extends SafeState<DescriptionTextField> {
         },
         decoration: InputDecoration(
             counterText: "",
-            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
             border: InputBorder.none,
             isDense: true,
             hintText:
-                "Eg. restaurant, groceries"),
+                "Enter a description"),
       ),
     );
   }

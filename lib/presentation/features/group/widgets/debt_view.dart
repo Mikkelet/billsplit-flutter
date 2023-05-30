@@ -34,7 +34,6 @@ class DebtView extends StatelessWidget {
     }
     return SizedBox(
       child: RoundedListItem(
-        padding: 16,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

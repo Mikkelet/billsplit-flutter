@@ -21,7 +21,6 @@ class NotificationsSettingsView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
           child: RoundedListItem(
-            padding: 16,
             child: Column(
               children: [
                 ...NotificationTopic.values

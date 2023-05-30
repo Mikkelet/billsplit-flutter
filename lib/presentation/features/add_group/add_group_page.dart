@@ -70,7 +70,6 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       RoundedListItem(
-                        padding: 16,
                           child: TextField(
                         autofocus: cubit.groupName.isEmpty,
                         maxLines: 1,
@@ -113,7 +112,6 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       RoundedListItem(
-                        padding: 16,
                         child: Column(
                           children: [
                             cubit.people.isEmpty

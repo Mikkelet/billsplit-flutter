@@ -30,8 +30,8 @@ class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
 
 class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
   late final expense = widget.groupExpense.sharedExpensesState.first;
-  late final textController =
-      TextEditingController(text: "${expense.expenseState}");
+  late final textController = TextEditingController(
+      text: expense.expenseState.fmt2dec(readOnly: false));
 
   @override
   Widget build(BuildContext context) {
@@ -43,122 +43,117 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
           child: Column(
             children: [
               // Shared Expenses
-              SizedBox(
-                height: 64,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: RoundedListItem(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                            topRight: Radius.circular(10)),
-                        child: ExpenseTextField(
-                          onChange: (value) {
-                            expense.expenseState = value;
-                            cubit.onExpensesUpdated();
-                          },
-                          textAlign: TextAlign.center,
-                          autoFocus: textController.text.isEmpty,
-                          textEditingController: textController,
-                        ),
+              Row(
+                children: [
+                  Expanded(
+                    child: RoundedListItem(
+                      height: 64,
+                      padding: EdgeInsets.zero,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10)),
+                      child: ExpenseTextField(
+                        onChange: (value) {
+                          expense.expenseState = value;
+                          cubit.onExpensesUpdated();
+                        },
+                        fontSize:
+                            Theme.of(context).textTheme.titleLarge?.fontSize,
+                        textAlign: TextAlign.center,
+                        autoFocus: textController.text.isEmpty,
+                        textEditingController: textController,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const SizedBox(
-                      width: 64,
-                      height: 64,
-                      child: ExpenseCurrencyButton(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                            topRight: Radius.circular(30)),
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 4),
+                  const SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: ExpenseCurrencyButton(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  )
+                ],
               ),
               const SizedBox(height: 4),
-              SizedBox(
-                height: 64,
-                child: DescriptionTextField(
-                    initialText: cubit.groupExpense.descriptionState),
-              ),
+              DescriptionTextField(
+                  initialText: cubit.groupExpense.descriptionState),
               //const LongPressTipView(),
               const SizedBox(height: 4),
-              SizedBox(
-                height: 64,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: RoundedListItem(
-                        borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(10),
-                          top: Radius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ProfilePictureStack(
-                              size: 32,
-                              people: expense.participantsState,
-                              limit: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  getExpensePerParticipant().fmt2dec(),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                  textAlign: TextAlign.end,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  cubit.groupExpense.currencyState.symbol
-                                      .toUpperCase(),
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                                const SizedBox(width: 8)
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    SizedBox(
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: RoundedListItem(
                       height: 64,
-                      width: 64,
-                      child: ClickableListItem(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        color: Theme.of(context).colorScheme.secondaryContainer ,
-                        onClick: () async {
-                          final response = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DialogWithCloseButton(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: ParticipantsPickerDialog(
-                                    participants: expense.participantsState,
-                                    people: cubit.group.people,
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                          if (response is List<Person>) {
-                            cubit.updateParticipantsForExpense(expense, response);
-                          }
-                        },
-                        child: const Icon(Icons.group, size: 24,),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(10),
+                        top: Radius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ProfilePictureStack(
+                            size: 32,
+                            people: expense.participantsState,
+                            limit: 4,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                getExpensePerParticipant().fmt2dec(),
+                                style: Theme.of(context).textTheme.labelLarge,
+                                textAlign: TextAlign.end,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                cubit.groupExpense.currencyState.symbol
+                                    .toUpperCase(),
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              const SizedBox(width: 8)
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 4),
+                  SizedBox(
+                    height: 64,
+                    width: 64,
+                    child: ClickableListItem(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10)),
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      onClick: () async {
+                        final response = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return DialogWithCloseButton(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: ParticipantsPickerDialog(
+                                  participants: expense.participantsState,
+                                  people: cubit.group.people,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                        if (response is List<Person>) {
+                          cubit.updateParticipantsForExpense(
+                              expense, response);
+                        }
+                      },
+                      child: const Icon(
+                        Icons.group,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 4),
               PaidByDropDownView(

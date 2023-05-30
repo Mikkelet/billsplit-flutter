@@ -73,7 +73,7 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
                   children: [
                     ...widget.participants.mapIndexed((i, e) => Padding(
                           padding:
-                              EdgeInsets.symmetric(vertical: i > 0 ? 4.0 : 0),
+                              EdgeInsets.only(top: i > 0 ? 8.0 : 0),
                           child: IndividualExpenseView(e, showExpense: widget.showExpenses),
                         ))
                   ],

@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/extensions.dart';
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_bloc.dart';
@@ -50,8 +50,8 @@ class _AddServicePageState extends SafeState<AddServicePage> {
   late final _nameTextController =
       TextEditingController(text: widget.service.nameState);
 
-  late final _expenseTextController =
-      TextEditingController(text: "${widget.service.monthlyExpenseState}");
+  late final _expenseTextController = TextEditingController(
+      text: widget.service.monthlyExpenseState.fmt2dec(readOnly: false));
 
   bool showCannotBe0ZeroError = false;
   String? nameErrorText;
@@ -83,6 +83,12 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                 return null;
               }
               return AppBar(
+                  title: Builder(builder: (context) {
+                    if (service.id.isEmpty) {
+                      return const Text("New Subscription");
+                    }
+                    return const Text("Edit Subscription");
+                  }),
                   leading: const BackButton(),
                   surfaceTintColor: Theme.of(context).colorScheme.surface,
                   actions: [
@@ -149,6 +155,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                     child: Column(
                       children: [
                         RoundedListItem(
+                          borderRadius: BorderRadius.circular(10),
                           child: TextField(
                             controller: _nameTextController,
                             onChanged: (value) {
@@ -168,14 +175,41 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                 errorText: nameErrorText,
                                 counterText: "",
                                 border: InputBorder.none,
-                                hintText: "Netflix, rent, etc"),
+                                hintText: "Enter a name. Netflix, rent, etc"),
                           ),
                         ),
                         const SizedBox(height: 4),
-                        RoundedListItem(
-                          child: Row(
-                            children: [
-                              SimpleButton(
+                        Row(
+                          children: [
+                            Expanded(
+                              child: RoundedListItem(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                height: 64,
+                                borderRadius: BorderRadius.circular(10),
+                                child: ExpenseTextField(
+                                    textEditingController:
+                                        _expenseTextController,
+                                    canBeZero: !showCannotBe0ZeroError,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.fontSize,
+                                    onChange: (value) {
+                                      service.monthlyExpenseState = value;
+                                      cubit.onServiceUpdated();
+                                    }),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            SizedBox(
+                              height: 64,
+                              width: 64,
+                              child: ClickableListItem(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
                                 onClick: () async {
                                   final response = await Navigator.of(context)
                                       .push(CurrencyPickerDialog.getRoute(
@@ -188,22 +222,14 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                 child: Text(
                                     cubit.service.currencyState.toUpperCase()),
                               ),
-                              Expanded(
-                                child: ExpenseTextField(
-                                    textEditingController:
-                                        _expenseTextController,
-                                    canBeZero: !showCannotBe0ZeroError,
-                                    onChange: (value) {
-                                      service.monthlyExpenseState = value;
-                                      cubit.onServiceUpdated();
-                                    }),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 4),
                         RoundedListItem(
-                          padding: 16,
+                          borderRadius: BorderRadius.circular(10),
+                          height: 64,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -217,15 +243,22 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                               DateTime.now().month; // index starts at 1
                           final monthString = monthNames[
                               nextMonth]; // index starts at 0, so we get the next month by just getting the index
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 32.0),
-                            child: Text(
-                                "Next expense will be submitted on 1st of $monthString"),
+                          return Text(
+                            "Next expense will be submitted on 1st of $monthString",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary),
                           );
                         }),
                         const SizedBox(height: 16),
                         RoundedListItem(
+                          borderRadius: const BorderRadius.vertical(
+                              bottom: Radius.circular(30),
+                              top: Radius.circular(10)),
                           child: Column(
                             children: [
                               ...service.participantsState.mapIndexed(

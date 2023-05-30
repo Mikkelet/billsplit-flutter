@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/rounded_list_item.dart';
 import '../bloc/add_expense_bloc.dart';
+import 'expense_currency.dart';
 
 class ExpenseTotalView extends StatelessWidget {
   const ExpenseTotalView({Key? key}) : super(key: key);
@@ -11,37 +12,35 @@ class ExpenseTotalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return SizedBox(
-      height: 64,
-      child: RoundedListItem(
-        borderRadius: const BorderRadius.all(Radius.circular(30)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+    return Row(
+      children: [
+        Expanded(
+          child: RoundedListItem(
+            height: 64,
+            borderRadius: const BorderRadius.horizontal(
+                left: Radius.circular(30), right: Radius.circular(10)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(width: 8),
                 Text("Total", style: Theme.of(context).textTheme.labelSmall),
-              ],
-            ),
-            Row(
-              children: [
                 Text(
                   cubit.groupExpense.total.fmt2dec(),
                   textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-                const SizedBox(width: 8),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(width: 4),
+        const SizedBox(
+            width: 64,
+            height: 64,
+            child: ExpenseCurrencyButton(
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(10), right: Radius.circular(30)),
+            ))
+      ],
     );
   }
 }

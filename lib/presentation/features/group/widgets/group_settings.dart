@@ -20,7 +20,6 @@ class GroupSettings extends StatelessWidget {
           children: [
             const SizedBox(height: 32),
             RoundedListItem(
-              padding: 16,
               child: UpdatableTextField(
                 initState: cubit.group.nameState,
                 updateFuture: cubit.updateGroupName,

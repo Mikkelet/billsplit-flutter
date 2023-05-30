@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -11,6 +12,7 @@ class ExpenseTextField extends StatefulWidget {
   final num? maxValue;
   final String prefix;
   final TextAlign textAlign;
+  final double? fontSize;
 
   const ExpenseTextField({
     Key? key,
@@ -18,6 +20,7 @@ class ExpenseTextField extends StatefulWidget {
     required this.onChange,
     this.canBeZero = true,
     this.autoFocus = false,
+    this.fontSize,
     this.textAlign = TextAlign.right,
     this.maxValue,
     this.prefix = "",
@@ -51,16 +54,28 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
       maxLines: 1,
       focusNode: focusNode,
       controller: widget.textEditingController,
-      style: SplitsbyTextTheme.textFieldStyle(context),
+      style: builder(() {
+        if (widget.fontSize != null) {
+          return SplitsbyTextTheme.textFieldStyle(context)
+              .copyWith(fontSize: widget.fontSize);
+        } else {
+          return SplitsbyTextTheme.textFieldStyle(context);
+        }
+      }),
       decoration: InputDecoration(
         isDense: true,
-        hintText: "0",
+        hintText: "${widget.prefix} 0.00",
         border: InputBorder.none,
         errorText: _errorText(),
-        prefixStyle: const TextStyle(fontSize: 10),
-        prefixText: widget.prefix.toUpperCase(),
         counterText: "",
-        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+        hintStyle: builder(() {
+          if (widget.fontSize != null) {
+            return SplitsbyTextTheme.textFieldHintStyle(context)
+                .copyWith(fontSize: widget.fontSize);
+          } else {
+            return SplitsbyTextTheme.textFieldHintStyle(context);
+          }
+        }),
         prefixIconConstraints: const BoxConstraints(),
         suffix: widget.maxValue != null
             ? TextButton(
@@ -89,9 +104,8 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   }
 
   String? _errorText() {
-    final bool hasFocus = focusNode.hasFocus;
     if (text.isEmpty) {
-      if (hasFocus) {
+      if (focusNode.hasFocus) {
         return null;
       } else {
         return "Enter a number";
@@ -107,10 +121,10 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
     }
   }
 
-  num get parseInput {
-    num inputAsNumber = 0;
+  double get parseInput {
+    double inputAsNumber = 0.00;
     try {
-      final input = num.parse(text);
+      final input = double.parse(text);
       if (input < 0) {
         inputAsNumber = 0;
       } else if (input > ExpenseTextField.maxInput) {
@@ -119,8 +133,8 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
         inputAsNumber = input;
       }
     } catch (e) {
-      print("$e: $inputAsNumber");
-      inputAsNumber = 0;
+      print("${e.runtimeType}: $inputAsNumber");
+      inputAsNumber = 0.00;
     }
     return inputAsNumber;
   }
@@ -138,7 +152,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   }
 
   void _onChange() {
-    if (text == "0") {
+    if (text.isNotEmpty && parseInput == 0) {
       text = "";
       widget.textEditingController.selection =
           TextSelection.collapsed(offset: text.length);

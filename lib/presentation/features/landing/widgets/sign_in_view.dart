@@ -74,7 +74,6 @@ class _SignInViewState extends SafeState<SignInView> {
                 ),
                 Container(height: 32),
                 RoundedListItem(
-                  padding: 16,
                     child: TextField(
                   controller: emailFieldController,
                   style: SplitsbyTextTheme.textFieldStyle(context),
@@ -87,7 +86,6 @@ class _SignInViewState extends SafeState<SignInView> {
                 )),
                 const SizedBox(height: 8),
                 RoundedListItem(
-                  padding: 16,
                   child: PasswordTextField(
                     controller: passwordFieldController,
                     error: passwordError,

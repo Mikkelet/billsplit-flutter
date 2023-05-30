@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/utils/list_position.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,8 +31,8 @@ class SharedExpenseView extends StatefulWidget {
 }
 
 class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
-  late final textController =
-      TextEditingController(text: "${widget.sharedExpense.expenseState}");
+  late final textController = TextEditingController(
+      text: widget.sharedExpense.expenseState.fmt2dec(readOnly: false));
   final double participantsIconSize = 20;
 
   @override
@@ -66,7 +67,8 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
             ),
           ),
           child: RoundedListItem(
-            borderRadius: widget.listPosition.getBorderRadius(hardCorner: 10,softCorner: 10),
+            borderRadius: widget.listPosition
+                .getBorderRadius(hardCorner: 10, softCorner: 10),
             child: Column(
               children: [
                 Row(
@@ -75,7 +77,6 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                     Expanded(
                       flex: 8,
                       child: SharedExpenseDescriptionView(
-                        autoFocus: widget.autoFocus,
                         showIcon: false,
                         sharedExpense: widget.sharedExpense,
                       ),
@@ -83,18 +84,27 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                     Expanded(
                       flex: 5,
                       child: ExpenseTextField(
+                        fontSize:
+                            Theme.of(context).textTheme.labelLarge?.fontSize,
                         prefix: cubit.groupExpense.currencyState.symbol,
                         onChange: (value) {
                           widget.sharedExpense.expenseState = value;
                           cubit.onExpensesUpdated();
                         },
+                        autoFocus: widget.autoFocus,
                         textEditingController: textController,
                       ),
                     ),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
+                TextButton(
+                  onPressed: () {
+                    _editParticipants(context);
+                  },
+                  style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      padding: MaterialStateProperty.resolveWith(
+                          (states) => EdgeInsets.zero)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -103,16 +113,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                         size: participantsIconSize,
                         limit: 4,
                       ),
-                      IconButton(
-                        iconSize: participantsIconSize * 1.2,
-                        onPressed: () {
-                          _editParticipants(context);
-                        },
-                        icon: Icon(
-                          Icons.group,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                      ),
+                      const Expanded(child: SizedBox())
                     ],
                   ),
                 ),

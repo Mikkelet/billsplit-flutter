@@ -27,7 +27,6 @@ class _AddFriendTextFieldState extends SafeState<AddFriendTextField> {
       child: BaseBlocBuilder<AddFriendCubit>(
         builder: (cubit, state) {
           return RoundedListItem(
-            padding: 16,
             child: Row(
               children: [
                 Flexible(

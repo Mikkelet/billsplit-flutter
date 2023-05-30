@@ -5,8 +5,8 @@ var formatter4dec = NumberFormat('#.####');
 var formatter0dec = NumberFormat('#,###');
 
 extension NumExt on num {
-  String fmt2dec() {
-    if (this == 0) return "0";
+  String fmt2dec({bool readOnly = true}) {
+    if (this == 0) return readOnly ? "0.00" : "";
     if (this < 1) return formatter4dec.format(this);
     return remainder(1) != 0
         ? formatter2dec.format(this)

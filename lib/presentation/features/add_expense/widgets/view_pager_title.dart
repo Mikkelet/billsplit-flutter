@@ -39,14 +39,14 @@ class _ExpenseViewPagerTitleState extends SafeState<ExpenseViewPagerTitle> {
                   widget.pageController.animateToPage(0,
                       duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
                 },
-                child: Text("Simple",
+                child: Text("Single",
                     style: TextStyle(fontSize: 12 * ((page - 1).abs() + 1)))),
             TextButton(
                 onPressed: () {
                   widget.pageController.animateToPage(1,
                       duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
                 },
-                child: Text("Extended",
+                child: Text("Multiple",
                     style: TextStyle(fontSize: 12 * (page + 1)))),
           ]),
     );

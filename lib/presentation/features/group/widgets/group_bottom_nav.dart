@@ -25,7 +25,7 @@ class _GroupBottomNavState extends SafeState<GroupBottomNav> {
       }
       const destinations = [
         NavigationDestination(icon: Icon(Icons.receipt_outlined), label: "Expenses"),
-        NavigationDestination(icon: Icon(Icons.update_outlined), label: "Services"),
+        NavigationDestination(icon: Icon(Icons.update_outlined), label: "Subscriptions"),
         NavigationDestination(icon: Icon(Icons.monetization_on_outlined), label: "Debts")
       ];
       return NavigationBar(

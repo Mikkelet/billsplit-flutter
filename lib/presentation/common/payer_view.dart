@@ -24,6 +24,7 @@ class PayerView extends StatelessWidget {
         children: [
           IconButton(
             iconSize: size,
+            visualDensity: VisualDensity.compact,
             onPressed: onClick,
             padding: EdgeInsets.zero,
             icon: ProfilePictureView(person: person, size: size),

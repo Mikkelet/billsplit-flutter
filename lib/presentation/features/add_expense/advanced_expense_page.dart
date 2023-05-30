@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_button.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_description_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/quick_add_shared_expense_button.dart';
@@ -38,10 +38,12 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                 ...groupExpense.sharedExpensesState.mapIndexed((i, e) {
                   final listPos = ListPosition.calculatePosition(
                       i, groupExpense.sharedExpensesState);
+                  final autoFocus = (listPos == ListPosition.last ||
+                      listPos == ListPosition.single) && e.expenseState == 0;
                   return SharedExpenseView(
                     sharedExpense: e,
                     listPosition: listPos,
-                    autoFocus: listPos == ListPosition.last,
+                    autoFocus: autoFocus,
                   );
                 }),
                 Align(
@@ -54,7 +56,8 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                       Expanded(
                         child: Center(
                           child: Text(
-                            "Add as many as you need!",
+                            "Add as many as you need!\nSwipe to delete",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
@@ -70,7 +73,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             const SizedBox(height: 4),
-            const ExpenseDescriptionAndCurrencyView(),
+            DescriptionTextField(initialText: groupExpense.descriptionState),
             //const LongPressTipView(),
             const SizedBox(height: 4),
             PaidByDropDownView(participants: getParticipatingPeople()),

@@ -46,6 +46,7 @@ class _SharedExpenseDescriptionViewState
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.labelLarge;
     return TextField(
       controller: textController,
       onChanged: (value) {
@@ -59,9 +60,11 @@ class _SharedExpenseDescriptionViewState
       autofocus: widget.autoFocus,
       maxLines: 1,
       maxLength: 20,
-      style: SplitsbyTextTheme.textFieldStyle(context),
+      style: style,
       decoration: InputDecoration(
-        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context).copyWith(
+          fontSize: style?.fontSize
+        ),
         counterText: "",
         prefixIcon: widget.showIcon
             ? const Padding(

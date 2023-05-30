@@ -28,7 +28,7 @@ class IndividualExpenseView extends StatelessWidget {
               PayerView(
                 person: person,
                 isPayer: _isPayer(person, cubit),
-                size: 32,
+                size: 40,
                 onClick: () {
                   cubit.onPayerSelected(person);
                 },
@@ -76,21 +76,11 @@ class IndividualExpenseView extends StatelessWidget {
             child: Builder(
               builder: (context) {
                 if (getTotalForUser(cubit) > 0) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Expanded(child: SizedBox()),
-                      Text(
-                        getTotalForUser(cubit).fmt2dec(),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.end,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                    ],
+                  return Text(
+                    "${getTotalForUser(cubit).fmt2dec()} ${cubit.groupExpense.currencyState.symbol.toUpperCase()}",
+                    style: Theme.of(context).textTheme.labelSmall,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   );
                 }
                 return const SizedBox();
