@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +12,13 @@ class AddSharedExpenseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return IconButton(
-      onPressed: () async {
+    return ClickableListItem(
+      padding: EdgeInsets.zero,
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      borderRadius: BorderRadius.circular(10),
+      height: 48,
+      width: 48,
+      onClick: () async {
         final sharedExpense =
             SharedExpense.newInstance([...cubit.group.people]);
         showModalBottomSheet(
@@ -32,7 +38,7 @@ class AddSharedExpenseButton extends StatelessWidget {
           ),
         );
       },
-      icon: const Icon(Icons.add),
+      child: const Icon(Icons.add),
     );
   }
 }

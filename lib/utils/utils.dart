@@ -13,7 +13,7 @@ extension NumExt on num {
         : formatter0dec.format(this);
   }
 
-  String fmtTextField() => fmt2dec().replaceAll(",", "");
+  String fmtTextField() => fmt2dec(readOnly: false).replaceAll(",", "");
 }
 
 const List<String> monthNames = [

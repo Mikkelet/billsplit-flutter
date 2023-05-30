@@ -87,7 +87,7 @@ class AddExpenseBloc extends BaseCubit {
             description: e.description));
     groupExpense.sharedExpensesState.clear();
     groupExpense.sharedExpensesState.addAll(sharedExpenses);
-    emit(Main());
+    onExpensesUpdated();
   }
 
   void removeSharedExpense(SharedExpense sharedExpense) {
@@ -98,6 +98,11 @@ class AddExpenseBloc extends BaseCubit {
   void updateParticipantsForExpense(SharedExpense sharedExpense,
       List<Person> participants) {
     sharedExpense.participantsState = participants;
+    onExpensesUpdated();
+  }
+
+  void updateSharedExpense(SharedExpense sharedExpense, num value) {
+    sharedExpense.expenseState = value;
     onExpensesUpdated();
   }
 }

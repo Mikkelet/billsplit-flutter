@@ -9,6 +9,8 @@ class ClickableListItem extends StatelessWidget {
   final BorderRadius? borderRadius;
   final double cornerRadius;
   final double elevation;
+  final double? height;
+  final double? width;
 
   final bool enabled;
 
@@ -18,6 +20,8 @@ class ClickableListItem extends StatelessWidget {
       required this.child,
       this.enabled = true,
       this.color,
+      this.height,
+      this.width,
       this.padding,
       this.alignment,
       this.borderRadius,
@@ -26,22 +30,26 @@ class ClickableListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-          borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
-      elevation: elevation,
-      surfaceTintColor: color ?? Theme.of(context).colorScheme.primaryContainer,
-      color: color ?? Theme.of(context).colorScheme.primaryContainer,
-      child: InkWell(
-        borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
-        onTap: enabled ? onClick : null,
-        child: Padding(
-          padding: padding ??
-              const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: Align(
-            alignment: alignment ?? Alignment.center,
-            child: child,
+    return SizedBox(
+      height: height,
+      width: width,
+      child: Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+            borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
+        elevation: elevation,
+        surfaceTintColor: color ?? Theme.of(context).colorScheme.primaryContainer,
+        color: color ?? Theme.of(context).colorScheme.primaryContainer,
+        child: InkWell(
+          borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
+          onTap: enabled ? onClick : null,
+          child: Padding(
+            padding:
+                padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            child: Align(
+              alignment: alignment ?? Alignment.center,
+              child: child,
+            ),
           ),
         ),
       ),

@@ -30,8 +30,8 @@ class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
 
 class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
   late final expense = widget.groupExpense.sharedExpensesState.first;
-  late final textController = TextEditingController(
-      text: expense.expenseState.fmt2dec(readOnly: false));
+  late final textController =
+      TextEditingController(text: expense.expenseState.fmtTextField());
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +49,10 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                     child: RoundedListItem(
                       height: 64,
                       padding: EdgeInsets.zero,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       child: ExpenseTextField(
                         onChange: (value) {
-                          expense.expenseState = value;
-                          cubit.onExpensesUpdated();
+                          cubit.updateSharedExpense(expense, value);
                         },
                         fontSize:
                             Theme.of(context).textTheme.titleLarge?.fontSize,
@@ -124,8 +122,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                     height: 64,
                     width: 64,
                     child: ClickableListItem(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       onClick: () async {
                         final response = await showDialog(
@@ -143,8 +140,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                           },
                         );
                         if (response is List<Person>) {
-                          cubit.updateParticipantsForExpense(
-                              expense, response);
+                          cubit.updateParticipantsForExpense(expense, response);
                         }
                       },
                       child: const Icon(
@@ -158,8 +154,6 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
               const SizedBox(height: 4),
               PaidByDropDownView(
                   participants: getParticipatingPeople(), showExpenses: false),
-              const SizedBox(height: 4),
-              //const ExpenseTotalView(),
               const SizedBox(height: 120),
             ],
           ),

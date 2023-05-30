@@ -8,8 +8,12 @@ class SubmitExpenseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocBuilder<AddExpenseBloc>(builder: (cubit, state) {
+      final canSubmit = cubit.groupExpense.isChanged &&
+          cubit.groupExpense.total > 0 &&
+          cubit.groupExpense.sharedExpensesState
+              .every((element) => element.expenseState > 0);
       return IconButton(
-        onPressed: cubit.groupExpense.isChanged && cubit.groupExpense.total > 0
+        onPressed: canSubmit
             ? () {
                 cubit.addExpense();
               }

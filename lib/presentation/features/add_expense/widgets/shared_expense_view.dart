@@ -32,7 +32,7 @@ class SharedExpenseView extends StatefulWidget {
 
 class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
   late final textController = TextEditingController(
-      text: widget.sharedExpense.expenseState.fmt2dec(readOnly: false));
+      text: widget.sharedExpense.expenseState.fmtTextField());
   final double participantsIconSize = 20;
 
   @override
@@ -88,8 +88,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                             Theme.of(context).textTheme.labelLarge?.fontSize,
                         prefix: cubit.groupExpense.currencyState.symbol,
                         onChange: (value) {
-                          widget.sharedExpense.expenseState = value;
-                          cubit.onExpensesUpdated();
+                          cubit.updateSharedExpense(widget.sharedExpense, value);
                         },
                         autoFocus: widget.autoFocus,
                         textEditingController: textController,

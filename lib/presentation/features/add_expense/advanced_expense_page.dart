@@ -66,6 +66,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                         ),
                       ),
                       const QuickAddSharedExpenseButton(),
+                      const SizedBox(width: 4),
                       const AddSharedExpenseButton(),
                     ],
                   ),
@@ -78,7 +79,6 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             const SizedBox(height: 4),
             PaidByDropDownView(participants: getParticipatingPeople()),
             const SizedBox(height: 4),
-            // Individual expenses
             const ExpenseTotalView(),
             const SizedBox(height: 120),
           ],
