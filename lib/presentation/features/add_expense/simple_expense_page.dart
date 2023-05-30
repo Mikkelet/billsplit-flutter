@@ -47,8 +47,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                 height: 64,
                 child: Row(
                   children: [
-                    Flexible(
-                      flex: 5,
+                    Expanded(
                       child: RoundedListItem(
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(30),
@@ -67,15 +66,17 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Flexible(
-                        flex: 1,
-                        child: ExpenseCurrencyButton(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                              topRight: Radius.circular(30)),
-                        ))
+                    const SizedBox(
+                      width: 64,
+                      height: 64,
+                      child: ExpenseCurrencyButton(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                            topRight: Radius.circular(30)),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -153,7 +154,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                             cubit.updateParticipantsForExpense(expense, response);
                           }
                         },
-                        child: const Icon(Icons.group),
+                        child: const Icon(Icons.group, size: 24,),
                       ),
                     ),
                   ],

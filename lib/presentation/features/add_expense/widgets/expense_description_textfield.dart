@@ -17,16 +17,12 @@ class ExpenseDescriptionAndCurrencyView extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flexible(
-            flex: 5,
-            child:
-                DescriptionTextField(initialText: groupExpense.descriptionState),
+          Expanded(
+            child: DescriptionTextField(
+                initialText: groupExpense.descriptionState),
           ),
           const SizedBox(width: 4),
-          const Flexible(
-            flex: 1,
-            child: ExpenseCurrencyButton(),
-          )
+          const SizedBox(width: 64, height: 64, child: ExpenseCurrencyButton())
         ],
       ),
     );

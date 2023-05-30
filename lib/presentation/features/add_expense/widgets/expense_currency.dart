@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class ExpenseCurrencyButton extends StatelessWidget {
   final BorderRadius? borderRadius;
+
   const ExpenseCurrencyButton({Key? key, this.borderRadius}) : super(key: key);
 
   @override
@@ -15,10 +16,11 @@ class ExpenseCurrencyButton extends StatelessWidget {
     return BaseBlocBuilder<AddExpenseBloc>(
       builder: (cubit, state) => ClickableListItem(
         color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: borderRadius ?? const BorderRadius.vertical(
-          top: Radius.circular(10),
-          bottom: Radius.circular(10),
-        ),
+        borderRadius: borderRadius ??
+            const BorderRadius.vertical(
+              top: Radius.circular(10),
+              bottom: Radius.circular(10),
+            ),
         onClick: () async {
           if (cubit.groupExpense.id.isNotEmpty) {
             final warningResponse = await showDialog(
@@ -53,7 +55,10 @@ class ExpenseCurrencyButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(cubit.groupExpense.currencyState.symbol.toUpperCase()),
+            Text(
+              cubit.groupExpense.currencyState.symbol.toUpperCase(),
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
           ],
         ),
       ),
