@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
@@ -31,58 +32,72 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
         ExpansionPanel(
             headerBuilder: (context, isExpanded) {
               return ClickableListItem(
+                padding: EdgeInsets.symmetric(horizontal: isExpanded ? 16 : 8),
+                borderRadius: isExpanded
+                    ? const BorderRadius.vertical(
+                        top: Radius.circular(30),
+                        bottom: Radius.circular(10),
+                      )
+                    : BorderRadius.circular(30),
                 alignment: Alignment.centerLeft,
                 onClick: () {
                   setState(() {
                     this.isExpanded = !this.isExpanded;
                   });
                 },
-                child: Builder(
-                  builder: (context) {
-                    if(!isExpanded){
-                      return ProfilePictureStack(people: cubit.group.people, size: 32,);
-                    }
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            "Group Members",
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                        ),
-                      ],
+                child: Builder(builder: (context) {
+                  if (!isExpanded) {
+                    return ProfilePictureStack(
+                      people: cubit.group.people,
+                      size: 32,
                     );
                   }
-                ),
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Group Members",
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  );
+                }),
               );
             },
             backgroundColor: Colors.transparent,
             isExpanded: isExpanded,
             body: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Column(
-                  children: [
-                    ...cubit.group.people.mapIndexed((i, person) => Padding(
-                          padding: EdgeInsets.only(top: i > 0 ? 4 : 0),
-                          child: Row(
-                            children: [
-                              ProfilePictureView(person: person),
-                              const SizedBox(width: 8),
-                              Text(
-                                person.displayName,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              )
-                            ],
-                          ),
-                        ))
-                  ],
+                RoundedListItem(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Column(
+                    children: [
+                      ...cubit.group.people.mapIndexed((i, person) => Padding(
+                            padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
+                            child: Row(
+                              children: [
+                                ProfilePictureView(person: person),
+                                const SizedBox(width: 8),
+                                Text(
+                                  person.displayName,
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                )
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
                 ),
+                const SizedBox(height: 4),
                 if (cubit.state is AddingPersonToGroup)
                   const Center(child: CircularProgressIndicator())
                 else
                   ClickableListItem(
+                      height: 48,
+                      width: 48,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      borderRadius: BorderRadius.circular(10),
                       onClick: () async {
                         showDialog(
                           context: context,
@@ -95,17 +110,8 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                           ),
                         );
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Expanded(child: SizedBox()),
-                          Icon(
-                            Icons.add,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          )
-                        ],
+                      child: const Icon(
+                        Icons.add,
                       ))
               ],
             ),

@@ -20,31 +20,29 @@ class DefaultGroupCurrencyView extends StatelessWidget {
       create: (context) => DefaultGroupCurrencyCubit(group),
       child: BaseBlocBuilder<DefaultGroupCurrencyCubit>(
         builder: (cubit, state) {
-          return SizedBox(
-            height: 64,
-            child: ClickableListItem(
-              padding: const EdgeInsets.all(16),
-              onClick: () async {
-                final response = await Navigator.of(context).push(
-                    CurrencyPickerDialog.getRoute(
-                        convertToCurrency: cubit.group.defaultCurrencyState));
-                if (response is Currency) {
-                  cubit.updateCurrency(response);
-                }
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    cubit.group.defaultCurrencyState.toUpperCase(),
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                  if (state is Loading)
-                    const CircularProgressIndicator()
-                  else
-                    const Icon(Icons.edit)
-                ],
-              ),
+          return ClickableListItem(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            onClick: () async {
+              final response = await Navigator.of(context).push(
+                  CurrencyPickerDialog.getRoute(
+                      convertToCurrency: cubit.group.defaultCurrencyState));
+              if (response is Currency) {
+                cubit.updateCurrency(response);
+              }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  cubit.group.defaultCurrencyState.toUpperCase(),
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                if (state is Loading)
+                  const CircularProgressIndicator()
+                else
+                  const Icon(Icons.edit)
+              ],
             ),
           );
         },

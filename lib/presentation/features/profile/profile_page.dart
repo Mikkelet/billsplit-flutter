@@ -35,23 +35,26 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     const UploadProfilePictureView(),
                     const SizedBox(height: 16),
+                    UpdatableTextField(
+                        initState: cubit.user.nameState,
+                        updateFuture: cubit.updateDisplayName),
+                    const SizedBox(height: 4),
                     RoundedListItem(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          UpdatableTextField(
-                              initState: cubit.user.nameState,
-                              updateFuture: cubit.updateDisplayName),
-                          const SizedBox(height: 16),
-                          Text(cubit.user.email,
-                              style: Theme.of(context).textTheme.labelLarge),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
+                      align: Alignment.centerLeft,
+                      height: 64,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(30),
+                          bottom: Radius.circular(30)),
+                      child: Text(cubit.user.email,
+                          style: Theme.of(context).textTheme.labelLarge),
                     ),
                     const SizedBox(height: 4),
+                    const UpdateUserDefaultCurrencyView(),
+                    const SizedBox(height: 4),
                     ClickableListItem(
-                      padding: const EdgeInsets.all(16),
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       onClick: () {
                         Navigator.of(context).push(FriendsPage.getRoute());
                       },
@@ -71,13 +74,10 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    // default currency
-                    const SizedBox(height: 4),
-                    const UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 4),
                     ClickableListItem(
-                      padding: const EdgeInsets.all(16),
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       onClick: () {
                         Navigator.of(context)
                             .push(DeveloperSettingsPage.getRoute());

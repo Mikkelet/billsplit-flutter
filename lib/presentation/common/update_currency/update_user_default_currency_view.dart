@@ -16,7 +16,8 @@ class UpdateUserDefaultCurrencyView extends StatelessWidget {
       create: (context) => UpdateUserDefaultCurrencyCubit(),
       child: BaseBlocBuilder<UpdateUserDefaultCurrencyCubit>(builder: (cubit, state) {
         return ClickableListItem(
-          padding: const EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          height: 48,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           onClick: () async {
             final response = await Navigator.of(context)
                 .push(CurrencyPickerDialog.getRoute());
@@ -32,10 +33,7 @@ class UpdateUserDefaultCurrencyView extends StatelessWidget {
                 cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
-              CircleAvatar(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.secondaryContainer,
-                  child: const Icon(Icons.edit))
+              const Icon(Icons.edit)
             ],
           ),
         );

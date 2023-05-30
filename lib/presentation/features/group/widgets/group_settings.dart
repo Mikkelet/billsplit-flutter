@@ -1,6 +1,5 @@
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/notifications_settings/notifications_settings_view.dart';
@@ -19,38 +18,32 @@ class GroupSettings extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 32),
-            RoundedListItem(
-              child: UpdatableTextField(
-                initState: cubit.group.nameState,
-                updateFuture: cubit.updateGroupName,
-              ),
+            UpdatableTextField(
+              initState: cubit.group.nameState,
+              updateFuture: cubit.updateGroupName,
             ),
             const SizedBox(height: 4),
-            const RoundedListItem(
-              child: GroupMembersView(),
-            ),
+            const GroupMembersView(),
             const SizedBox(height: 4),
             DefaultGroupCurrencyView(group: cubit.group),
             const SizedBox(height: 4),
-            SizedBox(
-              height: 64,
-              child: ClickableListItem(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                onClick: () {
-                  Navigator.of(context)
-                      .push(NotificationsSettingsView.getRoute(cubit.group));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Group notifications",
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    Icon(Icons.arrow_right,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer)
-                  ],
-                ),
+            ClickableListItem(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              onClick: () {
+                Navigator.of(context)
+                    .push(NotificationsSettingsView.getRoute(cubit.group));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Group notifications",
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  Icon(Icons.arrow_right,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer)
+                ],
               ),
             ),
             const SizedBox(height: 40),

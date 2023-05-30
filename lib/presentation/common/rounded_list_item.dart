@@ -7,6 +7,7 @@ class RoundedListItem extends StatelessWidget {
   final EdgeInsets? padding;
   final double? width;
   final double? height;
+  final Alignment? align;
 
   const RoundedListItem(
       {Key? key,
@@ -14,6 +15,7 @@ class RoundedListItem extends StatelessWidget {
       this.color,
       this.width,
       this.height,
+      this.align,
       this.borderRadius,
       this.padding})
       : super(key: key);
@@ -23,7 +25,7 @@ class RoundedListItem extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      alignment: Alignment.center,
+      alignment: align ?? Alignment.center,
       decoration: BoxDecoration(
           color: color ?? Theme.of(context).colorScheme.primaryContainer,
           borderRadius: borderRadius ?? BorderRadius.circular(30)),

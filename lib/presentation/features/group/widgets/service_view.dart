@@ -34,8 +34,9 @@ class ServiceView extends StatelessWidget {
               children: [
                 Text(
                   service.nameState,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
+                const SizedBox(height: 4),
                 Text(
                   "${service.currencyState.toUpperCase()} ${service.monthlyExpenseState} is paid by ${service.payerState.displayName}",
                   softWrap: false,

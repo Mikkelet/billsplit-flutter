@@ -14,6 +14,7 @@ class SignOutButton extends StatelessWidget {
     return SizedBox(
       height: 48,
       child: ClickableListItem(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         onClick: () async {
           final response = await showDialog(
               context: context,
