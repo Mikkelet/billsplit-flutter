@@ -14,6 +14,7 @@ class ExpenseCurrencyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocBuilder<AddExpenseBloc>(
       builder: (cubit, state) => ClickableListItem(
+        color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: borderRadius ?? const BorderRadius.vertical(
           top: Radius.circular(10),
           bottom: Radius.circular(10),

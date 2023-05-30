@@ -110,7 +110,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                         },
                         icon: Icon(
                           Icons.group,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
                       ),
                     ],

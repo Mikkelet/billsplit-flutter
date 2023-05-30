@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
@@ -54,16 +55,14 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                             bottomLeft: Radius.circular(10),
                             bottomRight: Radius.circular(10),
                             topRight: Radius.circular(10)),
-                        child: Expanded(
-                          child: ExpenseTextField(
-                            onChange: (value) {
-                              expense.expenseState = value;
-                              cubit.onExpensesUpdated();
-                            },
-                            textAlign: TextAlign.center,
-                            autoFocus: textController.text.isEmpty,
-                            textEditingController: textController,
-                          ),
+                        child: ExpenseTextField(
+                          onChange: (value) {
+                            expense.expenseState = value;
+                            cubit.onExpensesUpdated();
+                          },
+                          textAlign: TextAlign.center,
+                          autoFocus: textController.text.isEmpty,
+                          textEditingController: textController,
                         ),
                       ),
                     ),
@@ -88,73 +87,81 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
               ),
               //const LongPressTipView(),
               const SizedBox(height: 4),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: RoundedListItem(
-                      borderRadius: const BorderRadius.vertical(
-                        bottom: Radius.circular(10),
-                        top: Radius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ProfilePictureStack(
-                            size: 32,
-                            people: expense.participantsState,
-                            limit: 4,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                getExpensePerParticipant().fmt2dec(),
-                                style: Theme.of(context).textTheme.labelLarge,
-                                textAlign: TextAlign.end,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                cubit.groupExpense.currencyState.symbol
-                                    .toUpperCase(),
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                              const SizedBox(width: 8)
-                            ],
-                          ),
-                        ],
+              SizedBox(
+                height: 64,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: RoundedListItem(
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(10),
+                          top: Radius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ProfilePictureStack(
+                              size: 32,
+                              people: expense.participantsState,
+                              limit: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  getExpensePerParticipant().fmt2dec(),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                  textAlign: TextAlign.end,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  cubit.groupExpense.currencyState.symbol
+                                      .toUpperCase(),
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                ),
+                                const SizedBox(width: 8)
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    onPressed: () async {
-                      final response = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return DialogWithCloseButton(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: ParticipantsPickerDialog(
-                                participants: expense.participantsState,
-                                people: cubit.group.people,
-                              ),
-                            ),
+                    const SizedBox(width: 4),
+                    SizedBox(
+                      height: 64,
+                      width: 64,
+                      child: ClickableListItem(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        color: Theme.of(context).colorScheme.secondaryContainer ,
+                        onClick: () async {
+                          final response = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DialogWithCloseButton(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: ParticipantsPickerDialog(
+                                    participants: expense.participantsState,
+                                    people: cubit.group.people,
+                                  ),
+                                ),
+                              );
+                            },
                           );
+                          if (response is List<Person>) {
+                            cubit.updateParticipantsForExpense(expense, response);
+                          }
                         },
-                      );
-                      if (response is List<Person>) {
-                        cubit.updateParticipantsForExpense(expense, response);
-                      }
-                    },
-                    icon: const Icon(Icons.group),
-                  ),
-                  const SizedBox(width: 8)
-                ],
+                        child: const Icon(Icons.group),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 4),
-              PaidByDropDownView(participants: getParticipatingPeople(), showExpenses: false),
+              PaidByDropDownView(
+                  participants: getParticipatingPeople(), showExpenses: false),
               const SizedBox(height: 4),
               //const ExpenseTotalView(),
               const SizedBox(height: 120),
