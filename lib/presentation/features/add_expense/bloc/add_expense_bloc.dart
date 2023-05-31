@@ -5,7 +5,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/delete_expense_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
+import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';

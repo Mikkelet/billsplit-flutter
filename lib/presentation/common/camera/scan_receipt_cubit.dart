@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
+import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase.dart';
 import 'package:billsplit_flutter/main.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -8,7 +8,7 @@ import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ScanReceiptCubit extends BaseCubit {
-  final _scanReceiptUseCase = ScanReceiptUseCase2();
+  final _scanReceiptUseCase = ScanReceiptUseCase();
   late CameraController cameraController;
   ScannedReceipt? receipt;
 

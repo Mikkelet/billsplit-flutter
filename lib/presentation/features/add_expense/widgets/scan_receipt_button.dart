@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase2.dart';
+import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase.dart';
 import 'package:billsplit_flutter/presentation/common/camera/scan_receipt_view.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
