@@ -46,7 +46,7 @@ class SplitsbyTextTheme extends TextTheme {
 
   // group view
   static TextStyle _groupViewDebt(BuildContext context) =>
-      TextStyle(fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize);
+      TextStyle(fontSize: Theme.of(context).textTheme.labelLarge?.fontSize);
 
   static TextStyle groupViewPositiveDebt(BuildContext context) =>
       _groupViewDebt(context).copyWith(
@@ -57,8 +57,8 @@ class SplitsbyTextTheme extends TextTheme {
       _groupViewDebt(context).copyWith(color: Colors.red);
 
   static TextStyle groupViewDebtCurrency(BuildContext context) => TextStyle(
-      fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
-      color: Theme.of(context).colorScheme.onPrimaryContainer);
+      fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
+      color: Theme.of(context).colorScheme.inversePrimary);
 
   // currency picker dialog
   static TextStyle currencyTitle(BuildContext context) => TextStyle(
