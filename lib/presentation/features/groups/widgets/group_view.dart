@@ -37,7 +37,7 @@ class GroupView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(group.nameState,
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 16),
