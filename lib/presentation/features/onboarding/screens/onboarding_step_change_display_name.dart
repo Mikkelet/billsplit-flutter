@@ -1,6 +1,5 @@
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/update_name_cubit.dart';
@@ -38,12 +37,10 @@ class OnboardingStepChangeDisplayName extends StatelessWidget {
                     style: TextStyle(fontSize: 25),
                   ),
                   const SizedBox(height: 64),
-                  RoundedListItem(
-                    child: UpdatableTextField(
-                        initState: cubit.user.nameState,
-                        hintText: "Your name",
-                        updateFuture: cubit.updateName),
-                  ),
+                  UpdatableTextField(
+                      initState: cubit.user.nameState,
+                      hintText: "Your name",
+                      updateFuture: cubit.updateName),
                   const SizedBox(height: 64),
                   SimpleButton(
                     onClick: () {
