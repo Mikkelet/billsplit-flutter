@@ -41,6 +41,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                   final autoFocus = (listPos == ListPosition.last ||
                       listPos == ListPosition.single) && e.expenseState == 0;
                   return SharedExpenseView(
+                    key: Key("${e.hashCode}"),
                     sharedExpense: e,
                     listPosition: listPos,
                     autoFocus: autoFocus,

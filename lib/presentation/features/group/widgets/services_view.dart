@@ -1,6 +1,5 @@
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/service_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,9 +13,6 @@ class ServicesView extends StatelessWidget {
     return DefaultStreamBuilder(
       stream: cubit.getServicesStream(),
       body: (services) {
-        if (cubit.state is SyncingGroup && services.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
         if (services.isEmpty) {
           return Center(
             child: Padding(

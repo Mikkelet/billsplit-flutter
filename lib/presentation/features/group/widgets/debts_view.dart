@@ -1,6 +1,5 @@
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/debt_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,17 +13,14 @@ class DebtsView extends StatelessWidget {
     return DefaultStreamBuilder(
         stream: cubit.getDebtsStream(),
         body: (debts) {
-          if (cubit.state is SyncingGroup && debts.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
           if (debts.isEmpty) {
-            return const Center(
+            return Center(
               child: Padding(
-                padding: EdgeInsets.all(64.0),
+                padding: const EdgeInsets.all(64.0),
                 child: Text(
                   "Your debts are settled!",
                   textAlign: TextAlign.justify,
-                  style: TextStyle(color: Colors.grey),
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
             );
