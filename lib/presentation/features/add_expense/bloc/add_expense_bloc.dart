@@ -22,8 +22,8 @@ class AddExpenseBloc extends BaseCubit {
       sharedPrefs.latestExchangeRates.forEach((key, value) {
         print("$key: $value");
       });
-      final groupDefCurrencyRate =
-      sharedPrefs.latestExchangeRates[group.defaultCurrencyState.toUpperCase()];
+      final groupDefCurrencyRate = sharedPrefs
+          .latestExchangeRates[group.defaultCurrencyState.toUpperCase()];
       print(groupDefCurrencyRate);
       if (groupDefCurrencyRate == null) {
         updateCurrency(Currency.USD());
@@ -50,13 +50,13 @@ class AddExpenseBloc extends BaseCubit {
 
   void onQuickAddSharedExpense() {
     final sharedExpense =
-    groupExpense.addNewSharedExpense(withParticipants: group.people);
+        groupExpense.addNewSharedExpense(withParticipants: group.people);
     emit(QuickAddSharedExpense(sharedExpense));
   }
 
   void addExpenseForUser(Person person) {
     final sharedExpense =
-    groupExpense.addNewSharedExpense(withParticipants: [person]);
+        groupExpense.addNewSharedExpense(withParticipants: [person]);
     emit(QuickAddSharedExpense(sharedExpense));
   }
 
@@ -80,11 +80,10 @@ class AddExpenseBloc extends BaseCubit {
       showToast("No items found");
       return;
     }
-    final sharedExpenses = receiptItems.map((e) =>
-        SharedExpense(
-            expense: e.expense,
-            participants: group.people,
-            description: e.description));
+    final sharedExpenses = receiptItems.map((e) => SharedExpense(
+        expense: e.expense,
+        participants: group.people,
+        description: e.description));
     groupExpense.sharedExpensesState.clear();
     groupExpense.sharedExpensesState.addAll(sharedExpenses);
     onExpensesUpdated();
@@ -95,14 +94,20 @@ class AddExpenseBloc extends BaseCubit {
     onExpensesUpdated();
   }
 
-  void updateParticipantsForExpense(SharedExpense sharedExpense,
-      List<Person> participants) {
+  void updateParticipantsForExpense(
+      SharedExpense sharedExpense, List<Person> participants) {
     sharedExpense.participantsState = participants;
     onExpensesUpdated();
   }
 
   void updateSharedExpense(SharedExpense sharedExpense, num value) {
     sharedExpense.expenseState = value;
+    onExpensesUpdated();
+  }
+
+  void switchToSingle() {
+    groupExpense.sharedExpensesState =
+        groupExpense.sharedExpensesState.sublist(0, 1);
     onExpensesUpdated();
   }
 }

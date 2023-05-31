@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/advanced_expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
@@ -16,6 +17,7 @@ import 'package:billsplit_flutter/presentation/features/profile/widgets/submit_e
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum Page {
@@ -125,6 +127,11 @@ class _AddExpensePageState extends SafeState<AddExpensePage> {
                       Expanded(
                         flex: 1,
                         child: PageView(
+                          onPageChanged: (index) async {
+                            if (index == Page.simple.index) {
+                              onChangeToSimple(context);
+                            }
+                          },
                           controller: pageController,
                           children: [
                             SimpleExpensePage(
@@ -146,6 +153,27 @@ class _AddExpensePageState extends SafeState<AddExpensePage> {
         ),
       ),
     );
+  }
+
+  void onChangeToSimple(BuildContext context) async {
+    final cubit = context.read<AddExpenseBloc>();
+    if (cubit.groupExpense.sharedExpensesState.length > 1) {
+      final response = await showDialog(
+          context: context,
+          builder: (context) => const CustomDialog(
+                title: "You're about to switch to single-mode",
+                text:
+                    "You have added sub-expenses. Switching to single-mode would discard them. Are you sure?",
+                primaryText: "Yes, discard",
+                secondaryText: "No, stay with multiple",
+              ));
+      if (response is bool && response == true) {
+        cubit.switchToSingle();
+      } else {
+        pageController.animateToPage(1,
+            duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
+      }
+    }
   }
 
   Iterable<Person> getParticipatingPeople() {
