@@ -21,6 +21,7 @@ class ScanReceiptUseCase {
         Size(decodedImage.width.toDouble(), decodedImage.height.toDouble());
     final RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
+    textRecognizer.close();
     final texts = recognizedText.blocks
         .map((e) => e.lines)
         .flatMap()
