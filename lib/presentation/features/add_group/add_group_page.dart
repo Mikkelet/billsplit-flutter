@@ -61,11 +61,7 @@ class AddGroupPage extends StatelessWidget {
                               : cubit.groupName,
                           style: Theme.of(context)
                               .textTheme
-                              .displaySmall
-                              ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
+                              .displaySmall,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -81,10 +77,7 @@ class AddGroupPage extends StatelessWidget {
                         textInputAction: TextInputAction.done,
                         style: SplitsbyTextTheme.textFieldStyle(context),
                         decoration: InputDecoration(
-                            hintStyle: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary),
+                            hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
                             counterText: "",
                             border: InputBorder.none,
                             hintText: "New group"),
