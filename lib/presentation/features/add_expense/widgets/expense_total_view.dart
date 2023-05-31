@@ -19,7 +19,7 @@ class ExpenseTotalView extends StatelessWidget {
               child: RoundedListItem(
                 height: 64,
                 borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(30), right: Radius.circular(10)),
+                    left: Radius.circular(10), right: Radius.circular(10)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -39,7 +39,7 @@ class ExpenseTotalView extends StatelessWidget {
                 height: 64,
                 child: ExpenseCurrencyButton(
                   borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10), right: Radius.circular(30)),
+                      left: Radius.circular(10), right: Radius.circular(10)),
                 ))
           ],
         );
