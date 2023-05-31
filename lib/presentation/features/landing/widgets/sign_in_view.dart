@@ -1,8 +1,8 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/signin_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/forgot_password_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
@@ -10,9 +10,7 @@ import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/landing_bloc.dart';
 
 class SignInView extends StatefulWidget {
   const SignInView({Key? key}) : super(key: key);
@@ -41,9 +39,9 @@ class _SignInViewState extends SafeState<SignInView> {
 
   _resetEmailError() {
     if (emailError != null) {
-        setState(() {
-          emailError = null;
-        });
+      setState(() {
+        emailError = null;
+      });
     }
   }
 
@@ -57,76 +55,72 @@ class _SignInViewState extends SafeState<SignInView> {
 
   @override
   Widget build(BuildContext context) {
-    final landingCubit = context.read<LandingBloc>();
     return BaseBlocWidget(
       create: (context) => SignInCubit(),
       child: BaseBlocBuilder<SignInCubit>(builder: (signInCubit, signInState) {
         return SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-                Container(height: 120),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("Sign in",
-                      style: Theme.of(context).textTheme.displayMedium),
-                ),
-                Container(height: 32),
                 RoundedListItem(
-                    child: TextField(
-                  controller: emailFieldController,
-                  style: SplitsbyTextTheme.textFieldStyle(context),
-                  decoration: InputDecoration(
-                    hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
-                    errorText: emailError,
-                    hintText: "Email",
-                    border: InputBorder.none,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(30),
+                    bottom: Radius.circular(10),
                   ),
-                )),
-                const SizedBox(height: 8),
-                RoundedListItem(
-                  child: PasswordTextField(
-                    controller: passwordFieldController,
-                    error: passwordError,
-                    hintText: "Repeat password",
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  height: 64,
+                  child: TextField(
+                    controller: emailFieldController,
+                    style: SplitsbyTextTheme.textFieldStyle(context),
+                    decoration: InputDecoration(
+                      hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+                      errorStyle: SplitsbyTextTheme.textFieldErrorText(context),
+                      errorText: emailError,
+                      hintText: "Email",
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 4),
+                PasswordTextField(
+                  controller: passwordFieldController,
+                  error: passwordError,
+                  hintText: "Repeat password",
+                ),
+                const SizedBox(height: 4),
                 if (signInState is Loading)
                   const CircularProgressIndicator()
                 else
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ForgotPasswordButton(
-                          emailController: emailFieldController),
-                      SimpleButton(
+                      ForgotPasswordButton(emailController: emailFieldController),
+                      ClickableListItem(
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(30)),
+                        height: 48,
+                        width: 128,
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                         onClick: () {
                           if (validateFields()) {
-                            final String email =
-                                emailFieldController.value.text;
+                            final String email = emailFieldController.value.text;
                             final String password =
                                 passwordFieldController.value.text;
                             signInCubit.signIn(email, password);
                           }
                           updateState();
                         },
-                        child: const Text("Sign in"),
+                        child: Text(
+                          "Sign in",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ),
                     ],
                   ),
-                const SizedBox(height: 8),
-                const SizedBox(height: 32),
-                MaterialButton(
-                  onPressed: () {
-                    landingCubit.showSignUp();
-                  },
-                  child: Text("Create an account ▶",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground)),
-                ),
-                const SizedBox(height: 32),
               ],
             ),
           ),

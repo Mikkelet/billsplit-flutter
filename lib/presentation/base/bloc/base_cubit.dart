@@ -22,7 +22,7 @@ abstract class BaseCubit extends Cubit<UiState> {
 
   @override
   void emit(UiState state) {
-    if(isClosed) return;
+    if (isClosed) return;
     super.emit(state);
   }
 
@@ -37,6 +37,8 @@ abstract class BaseCubit extends Cubit<UiState> {
         emit(Failure(UiException(1001, "Enter a valid email")));
       } else if (err.code == "user-not-found") {
         emit(Failure(UiException(1002, "Email not found")));
+      } else {
+        emit(Failure(UiException(1000, "${err.message}")));
       }
     } else if (err is Exception) {
       print("qqq err: ${(err).toString()}");
@@ -50,7 +52,7 @@ abstract class BaseCubit extends Cubit<UiState> {
 
   Person get user => authProvider.user ?? Person("", "User Logged out");
 
-  void showToast(String message){
+  void showToast(String message) {
     emit(ShowToast(message));
   }
 }

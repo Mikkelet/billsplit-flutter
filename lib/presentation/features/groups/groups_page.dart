@@ -49,11 +49,13 @@ class GroupsPage extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (groups.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Padding(
-                          padding: EdgeInsets.all(64.0),
+                          padding: const EdgeInsets.all(64.0),
                           child: Text(
                             "Here you can see your groups! Click below to add one!",
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),
                       );

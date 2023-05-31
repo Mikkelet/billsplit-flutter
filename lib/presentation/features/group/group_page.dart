@@ -90,7 +90,7 @@ class GroupPage extends StatelessWidget {
                       }),
                       if (cubit.state is SyncingGroup)
                         const Align(
-                            alignment: Alignment.topRight,
+                            alignment: Alignment.topCenter,
                             child: Padding(
                               padding: EdgeInsets.all(32.0),
                               child: SizedBox(
