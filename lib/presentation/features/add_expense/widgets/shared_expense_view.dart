@@ -87,7 +87,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                         showErrorText: false,
                         fontSize:
                             Theme.of(context).textTheme.labelLarge?.fontSize,
-                        prefix: cubit.groupExpense.currencyState.symbol,
+                        prefix: cubit.groupExpense.currencyState.symbol.toUpperCase(),
                         onChange: (value) {
                           cubit.updateSharedExpense(widget.sharedExpense, value);
                         },

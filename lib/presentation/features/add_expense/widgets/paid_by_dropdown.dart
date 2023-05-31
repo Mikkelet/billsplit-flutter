@@ -48,7 +48,7 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         "Paid by",
-                        style: Theme.of(context).textTheme.labelSmall,
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
                     Padding(

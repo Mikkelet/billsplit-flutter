@@ -63,7 +63,7 @@ class ProfilePage extends StatelessWidget {
                         children: [
                           Text(
                             "Friends",
-                            style: Theme.of(context).textTheme.labelSmall,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                           Icon(
                             Icons.arrow_right,
@@ -88,7 +88,7 @@ class ProfilePage extends StatelessWidget {
                         children: [
                           Text(
                             "Developer settings",
-                            style: Theme.of(context).textTheme.labelSmall,
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                           Icon(
                             Icons.code,

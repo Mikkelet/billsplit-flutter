@@ -23,7 +23,7 @@ class ExpenseTotalView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Total", style: Theme.of(context).textTheme.labelSmall),
+                    Text("Total", style: Theme.of(context).textTheme.labelLarge),
                     Text(
                       cubit.groupExpense.total.fmt2dec(),
                       textAlign: TextAlign.end,

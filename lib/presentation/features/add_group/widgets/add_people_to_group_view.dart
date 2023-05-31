@@ -20,7 +20,7 @@ class AddPeopleToGroupView extends StatelessWidget {
             bottomLeft: Radius.circular(10),
             bottomRight: Radius.circular(30)),
         color: Theme.of(context).colorScheme.secondaryContainer,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.group_add),
         onClick: () {
           showDialog(
               context: context,

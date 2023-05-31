@@ -64,26 +64,31 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       RoundedListItem(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(30),
+                            bottom: Radius.circular(10),
+                          ),
                           child: TextField(
-                        autofocus: cubit.groupName.isEmpty,
-                        maxLines: 1,
-                        maxLength: 40,
-                        controller: nameTextController,
-                        onChanged: (value) {
-                          cubit.onUpdateGroupName(value);
-                        },
-                        textInputAction: TextInputAction.done,
-                        style: SplitsbyTextTheme.textFieldStyle(context),
-                        decoration: InputDecoration(
-                            hintStyle:
-                                SplitsbyTextTheme.textFieldHintStyle(context),
-                            counterText: "",
-                            border: InputBorder.none,
-                            hintText: "New group"),
-                      )),
+                            autofocus: cubit.groupName.isEmpty,
+                            maxLines: 1,
+                            maxLength: 40,
+                            controller: nameTextController,
+                            onChanged: (value) {
+                              cubit.onUpdateGroupName(value);
+                            },
+                            textInputAction: TextInputAction.done,
+                            style: SplitsbyTextTheme.textFieldStyle(context),
+                            decoration: InputDecoration(
+                                hintStyle: SplitsbyTextTheme.textFieldHintStyle(
+                                    context),
+                                counterText: "",
+                                border: InputBorder.none,
+                                hintText: "Enter group name"),
+                          )),
                       const SizedBox(height: 4),
                       ClickableListItem(
                         padding: const EdgeInsets.all(16),
+                        borderRadius: BorderRadius.circular(10),
                         onClick: () async {
                           final response = await Navigator.of(context)
                               .push(CurrencyPickerDialog.getRoute());
@@ -107,9 +112,9 @@ class AddGroupPage extends StatelessWidget {
                         children: [
                           RoundedListItem(
                             borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30),
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(10)),
                             child: Column(
                               children: [
