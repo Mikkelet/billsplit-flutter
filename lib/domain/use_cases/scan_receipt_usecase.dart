@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:billsplit_flutter/domain/models/scanned_receipt.dart';
+import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
@@ -135,28 +137,4 @@ class ScanReceiptUseCase {
     return Rect.fromLTWH(rect.left * scaleFactor, rect.top * scaleFactor,
         rect.width * scaleFactor, rect.height * scaleFactor);
   }
-}
-
-class ScannedReceipt {
-  final XFile xFile;
-  final Size imageSize;
-  final Iterable<ScannedReceiptItem> items;
-
-  ScannedReceipt(this.imageSize, this.items, this.xFile);
-
-  double getScaleFactor(BuildContext context) {
-    final windowSize = MediaQuery.of(context).size;
-    return windowSize.width / imageSize.width;
-  }
-}
-
-class ScannedReceiptItem {
-  final num expense;
-  final String description;
-  final Rect boundaryBox;
-
-  ScannedReceiptItem(
-      {required this.expense,
-      required this.description,
-      required this.boundaryBox});
 }

@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase.dart';
+import 'package:billsplit_flutter/domain/models/scanned_receipt.dart';
 import 'package:flutter/material.dart';
 
 class TextBlockPainter extends CustomPainter {
