@@ -84,6 +84,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                     Expanded(
                       flex: 5,
                       child: ExpenseTextField(
+                        showErrorText: false,
                         fontSize:
                             Theme.of(context).textTheme.labelLarge?.fontSize,
                         prefix: cubit.groupExpense.currencyState.symbol,

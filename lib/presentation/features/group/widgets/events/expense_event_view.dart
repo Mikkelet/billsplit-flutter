@@ -40,7 +40,7 @@ class ExpenseEventView extends StatelessWidget {
             if (groupExpense.syncState == SyncState.failed) {
               return Theme.of(context).colorScheme.errorContainer;
             }
-            return null;
+            return Theme.of(context).colorScheme.primaryContainer;
           }),
           onClick: () {
             final cubit = context.read<GroupBloc>();

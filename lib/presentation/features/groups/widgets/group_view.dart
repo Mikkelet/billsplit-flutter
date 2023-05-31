@@ -25,6 +25,7 @@ class GroupView extends StatelessWidget {
 
     return Center(
       child: ClickableListItem(
+        color: Theme.of(context).colorScheme.primaryContainer,
         elevation: 4,
         onClick: () {
           _onClick(context);

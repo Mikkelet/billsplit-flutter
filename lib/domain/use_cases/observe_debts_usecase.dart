@@ -20,6 +20,7 @@ class ObserveDebtsUseCase {
           {...group.people, ...group.pastMembers}, events);
       final user = _authProvider.user!;
       final debts = calculator.calculateEffectiveDebt(user);
+      print(debts);
       return debts.where((element) => element.second != 0);
     });
   }

@@ -59,9 +59,7 @@ class AddGroupPage extends StatelessWidget {
                           cubit.groupName.isEmpty
                               ? "New group"
                               : cubit.groupName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -77,12 +75,13 @@ class AddGroupPage extends StatelessWidget {
                         textInputAction: TextInputAction.done,
                         style: SplitsbyTextTheme.textFieldStyle(context),
                         decoration: InputDecoration(
-                            hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+                            hintStyle:
+                                SplitsbyTextTheme.textFieldHintStyle(context),
                             counterText: "",
                             border: InputBorder.none,
                             hintText: "New group"),
                       )),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 4),
                       ClickableListItem(
                         padding: const EdgeInsets.all(16),
                         onClick: () async {
@@ -103,23 +102,32 @@ class AddGroupPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      RoundedListItem(
-                        child: Column(
-                          children: [
-                            cubit.people.isEmpty
-                                ? const Text("Add people to the group")
-                                : const SizedBox(),
-                            ...cubit.people
-                                .map((e) => AddedPersonView(person: e))
-                                .toList(),
-                            const SizedBox(height: 12),
-                            const Align(
-                              alignment: Alignment.centerRight,
-                              child: AddPeopleToGroupView(),
+                      const SizedBox(height: 4),
+                      Column(
+                        children: [
+                          RoundedListItem(
+                            borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(10)),
+                            child: Column(
+                              children: [
+                                if (cubit.people.isEmpty)
+                                  const Text("Add people to the group")
+                                else
+                                  ...cubit.people
+                                      .map((e) => AddedPersonView(person: e))
+                                      .toList(),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Align(
+                            alignment: Alignment.centerRight,
+                            child: AddPeopleToGroupView(),
+                          )
+                        ],
                       ),
                     ],
                   ),

@@ -13,6 +13,10 @@ class ExpenseTextField extends StatefulWidget {
   final String prefix;
   final TextAlign textAlign;
   final double? fontSize;
+  /// Toggle whether any error should be shown as text or, alternatively, as color the hint-text red.
+  final bool showErrorText;
+  /// Toggle to show input validation error. Will override [showErrorText].
+  final bool showError;
 
   const ExpenseTextField({
     Key? key,
@@ -20,6 +24,8 @@ class ExpenseTextField extends StatefulWidget {
     required this.onChange,
     this.canBeZero = true,
     this.autoFocus = false,
+    this.showErrorText = true,
+    this.showError = true,
     this.fontSize,
     this.textAlign = TextAlign.right,
     this.maxValue,
@@ -65,17 +71,14 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
       decoration: InputDecoration(
         isDense: true,
         hintText: "${widget.prefix} 0.00",
+        errorStyle: SplitsbyTextTheme.textFieldErrorText(context),
         border: InputBorder.none,
-        errorText: _errorText(),
-        counterText: "",
-        hintStyle: builder(() {
-          if (widget.fontSize != null) {
-            return SplitsbyTextTheme.textFieldHintStyle(context)
-                .copyWith(fontSize: widget.fontSize);
-          } else {
-            return SplitsbyTextTheme.textFieldHintStyle(context);
-          }
+        errorText: builder(() {
+          if (!widget.showErrorText) return null;
+          return _errorText();
         }),
+        counterText: "",
+        hintStyle: _getHintStyle(context),
         prefixIconConstraints: const BoxConstraints(),
         suffix: widget.maxValue != null
             ? TextButton(
@@ -95,6 +98,21 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
     );
+  }
+
+  TextStyle _getHintStyle(BuildContext context) {
+    final TextStyle baseHintStyle = builder(() {
+      if (!widget.showErrorText && _errorText() != null) {
+        return SplitsbyTextTheme.textFieldErrorText(context);
+      }
+      return SplitsbyTextTheme.textFieldHintStyle(context);
+    });
+
+    if (widget.fontSize != null) {
+      return baseHintStyle.copyWith(fontSize: widget.fontSize);
+    } else {
+      return baseHintStyle;
+    }
   }
 
   void onMaxPressed() {

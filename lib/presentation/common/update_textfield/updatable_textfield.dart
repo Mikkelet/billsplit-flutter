@@ -67,7 +67,7 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                       currentState,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                 ),

@@ -50,7 +50,7 @@ class _ExtendedFloatingActionButtonState
       isExtended: isExtended,
       key: UniqueKey(),
       extendedTextStyle: SplitsbyTextTheme.fabText(context),
-      backgroundColor: Theme.of(context).colorScheme.secondary,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       onPressed: widget.onPressed,
       icon: Icon(widget.icon),
       label: Text(widget.label),

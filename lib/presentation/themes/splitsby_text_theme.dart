@@ -26,14 +26,21 @@ class SplitsbyTextTheme extends TextTheme {
   static TextStyle textFieldStyle(BuildContext context) =>
       TextStyle(fontSize: Theme.of(context).textTheme.labelMedium?.fontSize);
 
+  static TextStyle textFieldErrorText(BuildContext context) => TextStyle(
+      color: Colors.red,
+      fontSize: Theme.of(context).textTheme.labelMedium?.fontSize);
+
   static TextStyle textFieldHintStyle(BuildContext context) => TextStyle(
       fontSize: Theme.of(context).textTheme.labelMedium?.fontSize,
       color: Theme.of(context).colorScheme.inversePrimary);
 
+  static TextStyle textFieldHintError(BuildContext context) => TextStyle(
+      fontSize: Theme.of(context).textTheme.labelMedium?.fontSize,
+      color: Theme.of(context).colorScheme.error);
+
   static TextStyle signOutButtonText(BuildContext context) => TextStyle(
       fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
       color: Theme.of(context).colorScheme.onError);
-
 
   static TextStyle fabText(BuildContext context) => TextStyle(
       fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,

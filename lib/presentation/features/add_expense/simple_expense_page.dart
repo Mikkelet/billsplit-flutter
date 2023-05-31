@@ -54,6 +54,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                         onChange: (value) {
                           cubit.updateSharedExpense(expense, value);
                         },
+                        showErrorText: false,
                         fontSize:
                             Theme.of(context).textTheme.titleLarge?.fontSize,
                         textAlign: TextAlign.center,

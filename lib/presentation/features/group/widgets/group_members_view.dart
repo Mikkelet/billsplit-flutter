@@ -32,7 +32,7 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
         ExpansionPanel(
             headerBuilder: (context, isExpanded) {
               return ClickableListItem(
-                padding: EdgeInsets.symmetric(horizontal: isExpanded ? 16 : 8),
+                padding: EdgeInsets.symmetric(horizontal: isExpanded ? 16 : 8, vertical: 16),
                 borderRadius: isExpanded
                     ? const BorderRadius.vertical(
                         top: Radius.circular(30),
@@ -97,7 +97,12 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       height: 48,
                       width: 48,
                       color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(30)
+                      ),
                       onClick: () async {
                         showDialog(
                           context: context,

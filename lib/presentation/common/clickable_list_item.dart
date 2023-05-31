@@ -38,7 +38,6 @@ class ClickableListItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
         elevation: elevation,
-        surfaceTintColor: color ?? Theme.of(context).colorScheme.primaryContainer,
         color: color ?? Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
           borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
