@@ -12,7 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PaidByDropDownView extends StatefulWidget {
   final Iterable<Person> participants;
   final bool showExpenses;
-  const PaidByDropDownView({Key? key, required this.participants, this.showExpenses = true}) : super(key: key);
+
+  const PaidByDropDownView(
+      {Key? key, required this.participants, this.showExpenses = true})
+      : super(key: key);
 
   @override
   State<PaidByDropDownView> createState() => _PaidByDropDownViewState();
@@ -32,56 +35,81 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
         // https://stackoverflow.com/questions/63437671/flutter-how-to-remove-icon-from-expansion-panel
         ExpansionPanel(
             headerBuilder: (context, isExpanded) {
-              return ClickableListItem(
-                borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(isExpanded ? 10 : 30),
-                    top: const Radius.circular(10)),
-                onClick: () {
-                  setState(() {
-                    this.isExpanded = !this.isExpanded;
-                  });
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        "Paid by",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
+              return Column(
+                children: [
+                  ClickableListItem(
+                    height: 54,
+                    padding: EdgeInsets.zero,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(10),
+                      bottom: Radius.zero,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ProfilePictureView(
-                          size: 40, person: cubit.groupExpense.payerState),
-                    )
-                  ],
-                ),
+                    onClick: () {
+                      setState(() {
+                        this.isExpanded = !this.isExpanded;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            "Paid by",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ProfilePictureView(
+                              size: 40, person: cubit.groupExpense.payerState),
+                        )
+                      ],
+                    ),
+                  ),
+                  RoundedListItem(
+                    height: 10,
+                    color: _getBottomBarColor(isExpanded),
+                    borderRadius: _getBottomBarRadius(isExpanded),
+                    child: const SizedBox(),
+                  )
+                ],
               );
             },
             backgroundColor: Colors.transparent,
             isExpanded: isExpanded,
-            body: Padding(
-              padding: const EdgeInsets.only(right: 32.0),
-              child: RoundedListItem(
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(30),
-                  top: Radius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    ...widget.participants.mapIndexed((i, e) => Padding(
-                          padding:
-                              EdgeInsets.only(top: i > 0 ? 8.0 : 0),
-                          child: IndividualExpenseView(e, showExpense: widget.showExpenses),
-                        ))
-                  ],
-                ),
-              ),
+            body: Column(
+              children: [
+                ...widget.participants.mapIndexed(
+                  (i, e) => Padding(
+                    padding: EdgeInsets.only(top: i > 0 ? 4.0 : 0),
+                    child: IndividualExpenseView(e, showExpense: true),
+                  ),
+                )
+              ],
             ),
             canTapOnHeader: true)
       ],
+    );
+  }
+
+  Color _getBottomBarColor(bool isExpanded) {
+    if (isExpanded) {
+      return Theme.of(context).colorScheme.primaryContainer;
+    }
+    return Theme.of(context).colorScheme.secondaryContainer;
+  }
+
+  BorderRadius _getBottomBarRadius(bool isExpanded) {
+    if (isExpanded) {
+      return const BorderRadius.vertical(
+        top: Radius.zero,
+        bottom: Radius.circular(30),
+      );
+    }
+    return const BorderRadius.vertical(
+      top: Radius.zero,
+      bottom: Radius.circular(10),
     );
   }
 }
