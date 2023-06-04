@@ -24,7 +24,17 @@ class GroupsPage extends StatelessWidget {
         builder: (context, state) {
           final cubit = context.read<GroupsBloc>();
           return Scaffold(
-            appBar: _appBar(context),
+            appBar: PreferredSize(
+              preferredSize: const Size(double.infinity, 100),
+              child: Builder(
+                builder: (context) {
+                  return _appBar(context);
+                }
+              ),
+            ),
+            endDrawer: const Drawer(
+              child: ProfilePage(),
+            ),
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
             floatingActionButton: Padding(
               padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
@@ -85,20 +95,21 @@ class GroupsPage extends StatelessWidget {
   AppBar _appBar(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
     return AppBar(
+      actions: [Container()],
       backgroundColor: Theme.of(context).colorScheme.secondary,
       bottom: PreferredSize(
-        preferredSize: const Size(double.infinity, 32),
+        preferredSize: const Size(double.infinity, 64),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("Splitsby",
+              Text("Splitsbee",
                   style: SplitsbyTextTheme.splitsbyTitle(context)),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(ProfilePage.getRoute());
+                  Scaffold.of(context).openEndDrawer();
                 },
                 child: ProfilePictureView(person: cubit.user, size: 50),
               )

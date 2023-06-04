@@ -19,7 +19,7 @@ class SplitsbyTextTheme extends TextTheme {
           titleLarge: const TextStyle(fontSize: baseFontSize * 1.9),
           displaySmall: const TextStyle(fontSize: baseFontSize * 2),
           displayMedium: const TextStyle(fontSize: baseFontSize * 2.1),
-          displayLarge: const TextStyle(fontSize: baseFontSize * 2.2),
+          displayLarge: const TextStyle(fontSize: baseFontSize * 2.5),
         );
 
   // generic
@@ -48,8 +48,7 @@ class SplitsbyTextTheme extends TextTheme {
 
   // Home page
   static TextStyle splitsbyTitle(BuildContext context) => TextStyle(
-      fontSize: Theme.of(context).textTheme.displaySmall?.fontSize,
-      fontWeight: FontWeight.w700);
+      fontSize: Theme.of(context).textTheme.displayLarge?.fontSize);
 
   // group view
   static TextStyle _groupViewDebt(BuildContext context) =>
