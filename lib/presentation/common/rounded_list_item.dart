@@ -25,6 +25,7 @@ class RoundedListItem extends StatelessWidget {
     return Container(
       width: width,
       height: height,
+      clipBehavior: Clip.antiAlias,
       alignment: align ?? Alignment.center,
       decoration: BoxDecoration(
           color: color ?? Theme.of(context).colorScheme.primaryContainer,

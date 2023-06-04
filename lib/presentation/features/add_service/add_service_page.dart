@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_bloc.dart';
@@ -11,7 +12,7 @@ import 'package:billsplit_flutter/presentation/features/add_service/widgets/serv
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
@@ -50,7 +51,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
   late final _nameTextController =
       TextEditingController(text: widget.service.nameState);
 
-  late final _expenseTextController = TextEditingController(
+  late final _expenseTextController = ExpenseTextFieldController(
       text: widget.service.monthlyExpenseState.fmt2dec(readOnly: false));
 
   bool showCannotBe0ZeroError = false;

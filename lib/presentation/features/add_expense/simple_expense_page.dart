@@ -1,7 +1,9 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
@@ -15,7 +17,7 @@ import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../common/default_text_field.dart';
+import '../../common/expense_textfield/default_text_field.dart';
 
 class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
@@ -31,7 +33,7 @@ class SimpleExpensePage extends StatefulWidget with WidgetsBindingObserver {
 class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
   late final expense = widget.groupExpense.sharedExpensesState.first;
   late final textController =
-      TextEditingController(text: expense.expenseState.fmtTextField());
+      ExpenseTextFieldController(text: expense.expenseState.fmtTextField());
 
   @override
   Widget build(BuildContext context) {
@@ -50,17 +52,39 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                       height: 64,
                       padding: EdgeInsets.zero,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: ExpenseTextField(
-                        onChange: (value) {
-                          cubit.updateSharedExpense(expense, value);
-                        },
-                        showErrorText: false,
-                        canBeZero: true,
-                        fontSize:
-                            Theme.of(context).textTheme.titleLarge?.fontSize,
-                        textAlign: TextAlign.center,
-                        autoFocus: textController.text.isEmpty,
-                        textEditingController: textController,
+                      child: Column(
+                        mainAxisAlignment: builder(() {
+                          if (textController.hasError) {
+                            return MainAxisAlignment.spaceBetween;
+                          }
+                          return MainAxisAlignment.center;
+                        }),
+                        children: [
+                          ExpenseTextField(
+                            onChange: (value) {
+                              cubit.updateSharedExpense(expense, value);
+                            },
+                            showErrorText: false,
+                            canBeZero: false,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.fontSize,
+                            textAlign: TextAlign.center,
+                            autoFocus: textController.text.isEmpty,
+                            textEditingController: textController,
+                          ),
+                          if (textController.hasError)
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                height: 10,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer,
+                              ),
+                            )
+                        ],
                       ),
                     ),
                   ),

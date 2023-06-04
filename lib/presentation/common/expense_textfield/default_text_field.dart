@@ -1,11 +1,12 @@
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseTextField extends StatefulWidget {
-  final TextEditingController textEditingController;
+  final ExpenseTextFieldController textEditingController;
   final void Function(num) onChange;
   final bool canBeZero;
   final bool autoFocus;
@@ -38,6 +39,7 @@ class ExpenseTextField extends StatefulWidget {
   State<ExpenseTextField> createState() => _ExpenseTextFieldState();
 
   static const maxInput = 9999999.99; // max 7 chars + 2 decimals
+  static const minInput = -9999999.99; // max 7 chars + 2 decimals
 }
 
 class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
@@ -66,9 +68,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
       decoration: InputDecoration(
         isDense: true,
         hintText: "${widget.prefix} 0.00",
-        errorStyle: SplitsbyTextTheme.textFieldErrorText(context),
         border: InputBorder.none,
-        errorText: _textFieldErrorText(),
         counterText: "",
         hintStyle: _getHintStyle(context),
         prefixIconConstraints: const BoxConstraints(),
@@ -85,7 +85,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
 
   TextStyle _getHintStyle(BuildContext context) {
     final TextStyle baseHintStyle = builder(() {
-      if (!widget.showErrorText && _errorText() != null) {
+      if (!widget.showErrorText && widget.textEditingController.hasError) {
         return SplitsbyTextTheme.textFieldErrorText(context);
       }
       return SplitsbyTextTheme.textFieldHintStyle(context);
@@ -113,7 +113,6 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
     try {
       final number = num.parse(text);
       if (!widget.canBeZero && number <= 0) return "Must be positive";
-      if (number < 0) return "Input < 0";
       return null;
     } catch (e) {
       return "Invalid input";
@@ -121,7 +120,8 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   }
 
   double get parseInput {
-    double inputAsNumber = 0.00;
+    double inputAsNumber = 0;
+    if (text.isEmpty) return 0;
     try {
       final input = double.parse(text);
       if (!widget.canBeZero && input <= 0) {
@@ -151,7 +151,11 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   }
 
   void _onChange() {
-    if (text.isNotEmpty && text == "0.00") {
+    widget.textEditingController.errorText = _errorText();
+    if (text.isNotEmpty && text == 0.fmt2dec()) {
+      text = "";
+    }
+    if (text.startsWith("0")) {
       text = "";
     }
     if (isInputOverMaxValue()) {
@@ -196,17 +200,14 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
     );
   }
 
-  String? _textFieldErrorText() {
-    if (!widget.showErrorText) return null;
-    return _errorText();
-  }
-
   TextStyle _getStyle() {
-    if (widget.fontSize != null) {
-      return SplitsbyTextTheme.textFieldStyle(context)
-          .copyWith(fontSize: widget.fontSize);
-    } else {
-      return SplitsbyTextTheme.textFieldStyle(context);
+    TextStyle baseStyle = SplitsbyTextTheme.textFieldStyle(context);
+    if (widget.showError && widget.textEditingController.hasError) {
+      baseStyle = SplitsbyTextTheme.textFieldErrorText(context);
     }
+    if (widget.fontSize != null) {
+      baseStyle = baseStyle.copyWith(fontSize: widget.fontSize);
+    }
+    return baseStyle;
   }
 }

@@ -1,9 +1,10 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_description_view.dart';
-import 'package:billsplit_flutter/presentation/common/default_text_field.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
@@ -31,7 +32,7 @@ class SharedExpenseView extends StatefulWidget {
 }
 
 class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
-  late final textController = TextEditingController(
+  late final textController = ExpenseTextFieldController(
       text: widget.sharedExpense.expenseState.fmtTextField());
   final double participantsIconSize = 20;
 
@@ -85,6 +86,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                       flex: 5,
                       child: ExpenseTextField(
                         showErrorText: false,
+                        canBeZero: true,
                         fontSize:
                             Theme.of(context).textTheme.labelLarge?.fontSize,
                         prefix: cubit.groupExpense.currencyState.symbol.toUpperCase(),
