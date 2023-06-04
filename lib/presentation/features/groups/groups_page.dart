@@ -3,7 +3,6 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
@@ -26,11 +25,9 @@ class GroupsPage extends StatelessWidget {
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size(double.infinity, 100),
-              child: Builder(
-                builder: (context) {
-                  return _appBar(context);
-                }
-              ),
+              child: Builder(builder: (context) {
+                return _appBar(context);
+              }),
             ),
             endDrawer: const Drawer(
               child: ProfilePage(),
@@ -93,10 +90,9 @@ class GroupsPage extends StatelessWidget {
   }
 
   AppBar _appBar(BuildContext context) {
-    final cubit = context.read<GroupsBloc>();
     return AppBar(
-      actions: [Container()],
       backgroundColor: Theme.of(context).colorScheme.secondary,
+      actions: [Container()],
       bottom: PreferredSize(
         preferredSize: const Size(double.infinity, 64),
         child: Padding(
@@ -107,12 +103,11 @@ class GroupsPage extends StatelessWidget {
             children: [
               Text("Splitsbee",
                   style: SplitsbyTextTheme.splitsbyTitle(context)),
-              InkWell(
-                onTap: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-                child: ProfilePictureView(person: cubit.user, size: 50),
-              )
+              IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  icon: const Icon(Icons.menu))
             ],
           ),
         ),
