@@ -35,18 +35,17 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
         // https://stackoverflow.com/questions/63437671/flutter-how-to-remove-icon-from-expansion-panel
         ExpansionPanel(
             headerBuilder: (context, isExpanded) {
-              return Column(
-                children: [
-                  ClickableListItem(
-                    height: 64,
-                    padding: EdgeInsets.zero,
-                    borderRadius: _getRadius(isExpanded),
-                    onClick: () {
-                      setState(() {
-                        this.isExpanded = !this.isExpanded;
-                      });
-                    },
-                    child: Row(
+              return ClickableListItem(
+                padding: EdgeInsets.zero,
+                borderRadius: _getRadius(isExpanded),
+                onClick: () {
+                  setState(() {
+                    this.isExpanded = !this.isExpanded;
+                  });
+                },
+                child: Column(
+                  children: [
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
@@ -60,21 +59,19 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
                           padding: const EdgeInsets.all(8.0),
                           child: ProfilePictureView(
                               size: 40, person: cubit.groupExpense.payerState),
-                        )
+                        ),
                       ],
                     ),
-                  ),
-                  if (!isExpanded)
-                    RoundedListItem(
-                      height: 10,
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.zero,
-                        bottom: Radius.circular(10),
-                      ),
-                      child: const SizedBox(),
-                    )
-                ],
+                    if (!isExpanded)
+                      Container(
+                        height: 10,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer,
+                      )
+
+                  ],
+                ),
               );
             },
             backgroundColor: Colors.transparent,
@@ -106,7 +103,7 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
     }
     return const BorderRadius.vertical(
       top: Radius.circular(10),
-      bottom: Radius.circular(0),
+      bottom: Radius.circular(10),
     );
   }
 }

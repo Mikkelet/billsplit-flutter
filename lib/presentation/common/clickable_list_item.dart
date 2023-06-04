@@ -35,6 +35,7 @@ class ClickableListItem extends StatelessWidget {
       width: width,
       child: Card(
         margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
         elevation: elevation,
