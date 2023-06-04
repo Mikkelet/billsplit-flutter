@@ -8,11 +8,9 @@ import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expe
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/quick_add_shared_expense_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/scan_receipt_button.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_view.dart';
-import 'package:collection/collection.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expenses_view.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/list_position.dart';
 
 class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
@@ -35,18 +33,9 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             // Shared Expenses
             Column(
               children: [
-                ...groupExpense.sharedExpensesState.mapIndexed((i, e) {
-                  final listPos = ListPosition.calculatePosition(
-                      i, groupExpense.sharedExpensesState);
-                  final autoFocus = (listPos == ListPosition.last ||
-                      listPos == ListPosition.single) && e.expenseState == 0;
-                  return SharedExpenseView(
-                    key: Key("${e.hashCode}"),
-                    sharedExpense: e,
-                    listPosition: listPos,
-                    autoFocus: autoFocus,
-                  );
-                }),
+                SharedExpensesView(
+                    showAll: groupExpense.sharedExpensesState.length <= 3),
+                const SizedBox(height: 4),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
