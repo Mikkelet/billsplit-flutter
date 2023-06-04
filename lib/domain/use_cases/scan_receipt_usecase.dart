@@ -46,7 +46,7 @@ class ScanReceiptUseCase {
         .where((element) => element.text.length < 10)
         .map((e) {
       final cleanText =
-          e.text.replaceAll(RegExp("[^0-9.,]"), "").replaceAll(",", ".");
+          e.text.replaceAll(RegExp("[^0-9.,-]"), "").replaceAll(",", ".");
 
       return TextElement(
           text: cleanText,

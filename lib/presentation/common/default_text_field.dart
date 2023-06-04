@@ -13,8 +13,10 @@ class ExpenseTextField extends StatefulWidget {
   final String prefix;
   final TextAlign textAlign;
   final double? fontSize;
+
   /// Toggle whether any error should be shown as text or, alternatively, as color the hint-text red.
   final bool showErrorText;
+
   /// Toggle to show input validation error. Will override [showErrorText].
   final bool showError;
 
@@ -55,44 +57,25 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   Widget build(BuildContext context) {
     return TextField(
       autofocus: widget.autoFocus,
-      maxLength: 7,
+      maxLength: _getTextLength(),
       textAlign: widget.textAlign,
       maxLines: 1,
       focusNode: focusNode,
       controller: widget.textEditingController,
-      style: builder(() {
-        if (widget.fontSize != null) {
-          return SplitsbyTextTheme.textFieldStyle(context)
-              .copyWith(fontSize: widget.fontSize);
-        } else {
-          return SplitsbyTextTheme.textFieldStyle(context);
-        }
-      }),
+      style: _getStyle(),
       decoration: InputDecoration(
         isDense: true,
         hintText: "${widget.prefix} 0.00",
         errorStyle: SplitsbyTextTheme.textFieldErrorText(context),
         border: InputBorder.none,
-        errorText: builder(() {
-          if (!widget.showErrorText) return null;
-          return _errorText();
-        }),
+        errorText: _textFieldErrorText(),
         counterText: "",
         hintStyle: _getHintStyle(context),
         prefixIconConstraints: const BoxConstraints(),
-        suffix: widget.maxValue != null
-            ? TextButton(
-                onPressed: onMaxPressed,
-                child: Builder(builder: (context) {
-                  Color textColor = Colors.grey;
-                  if (!isInputMaxValue()) {
-                    textColor = Theme.of(context).colorScheme.onSurface;
-                  }
-                  return Text("max", style: TextStyle(color: textColor));
-                }))
-            : null,
+        suffix: _getSuffix(),
       ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      keyboardType:
+          const TextInputType.numberWithOptions(decimal: true, signed: true),
       textInputAction: TextInputAction.done,
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -117,8 +100,6 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
 
   void onMaxPressed() {
     text = widget.maxValue!.fmtTextField();
-    widget.textEditingController.selection =
-        TextSelection.collapsed(offset: text.length);
   }
 
   String? _errorText() {
@@ -131,7 +112,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
     }
     try {
       final number = num.parse(text);
-      if (!widget.canBeZero && number == 0) return "Expense is 0";
+      if (!widget.canBeZero && number <= 0) return "Must be positive";
       if (number < 0) return "Input < 0";
       return null;
     } catch (e) {
@@ -143,7 +124,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
     double inputAsNumber = 0.00;
     try {
       final input = double.parse(text);
-      if (input < 0) {
+      if (!widget.canBeZero && input <= 0) {
         inputAsNumber = 0;
       } else if (input > ExpenseTextField.maxInput) {
         inputAsNumber = ExpenseTextField.maxInput;
@@ -170,20 +151,14 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
   }
 
   void _onChange() {
-    if (text.isNotEmpty && parseInput == 0) {
+    if (text.isNotEmpty && text == "0.00") {
       text = "";
-      widget.textEditingController.selection =
-          TextSelection.collapsed(offset: text.length);
     }
     if (isInputOverMaxValue()) {
       text = widget.maxValue!.fmtTextField();
-      widget.textEditingController.selection =
-          TextSelection.collapsed(offset: text.length);
     }
     if (text.contains(",")) {
       text = text.replaceAll(",", ".");
-      widget.textEditingController.selection =
-          TextSelection.collapsed(offset: text.length);
     }
   }
 
@@ -191,5 +166,47 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
 
   set text(String text) {
     widget.textEditingController.text = text;
+    widget.textEditingController.selection =
+        TextSelection.collapsed(offset: text.length);
+  }
+
+  int _getTextLength() {
+    if (parseInput < 0) {
+      return 8;
+    } else {
+      return 7;
+    }
+  }
+
+  Widget? _getSuffix() {
+    if (widget.maxValue == null) {
+      return null;
+    }
+    return TextButton(
+      onPressed: onMaxPressed,
+      child: Builder(
+        builder: (context) {
+          Color textColor = Colors.grey;
+          if (!isInputMaxValue()) {
+            textColor = Theme.of(context).colorScheme.onSurface;
+          }
+          return Text("max", style: TextStyle(color: textColor));
+        },
+      ),
+    );
+  }
+
+  String? _textFieldErrorText() {
+    if (!widget.showErrorText) return null;
+    return _errorText();
+  }
+
+  TextStyle _getStyle() {
+    if (widget.fontSize != null) {
+      return SplitsbyTextTheme.textFieldStyle(context)
+          .copyWith(fontSize: widget.fontSize);
+    } else {
+      return SplitsbyTextTheme.textFieldStyle(context);
+    }
   }
 }
