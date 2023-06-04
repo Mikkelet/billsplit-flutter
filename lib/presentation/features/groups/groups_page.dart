@@ -24,7 +24,7 @@ class GroupsPage extends StatelessWidget {
           final cubit = context.read<GroupsBloc>();
           return Scaffold(
             appBar: PreferredSize(
-              preferredSize: const Size(double.infinity, 100),
+              preferredSize: const Size(double.infinity, 64),
               child: Builder(builder: (context) {
                 return _appBar(context);
               }),
@@ -101,7 +101,7 @@ class GroupsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("Splitsbee",
+              Text("Splitsby",
                   style: SplitsbyTextTheme.splitsbyTitle(context)),
               IconButton(
                   onPressed: () {

@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
@@ -26,7 +27,12 @@ class GroupView extends StatelessWidget {
     return Center(
       child: ClickableListItem(
         color: Theme.of(context).colorScheme.primaryContainer,
-        elevation: 4,
+        elevation: builder(() {
+          if (Theme.of(context).colorScheme.brightness == Brightness.dark) {
+            return 0;
+          }
+          return 10;
+        }),
         onClick: () {
           _onClick(context);
         },
