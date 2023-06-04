@@ -39,9 +39,8 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    final canSwipe = cubit.groupExpense.sharedExpensesState.length > 1;
     final showAnimation =
-        canSwipe && !cubit.sharedPrefs.hasDeletedSharedExpense;
+        _canSwipe(context) && !cubit.sharedPrefs.hasDeletedSharedExpense;
 
     return Column(
       children: [
@@ -53,8 +52,9 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
               cubit.sharedPrefs.hasDeletedSharedExpense = true;
             }
           },
-          direction:
-              canSwipe ? DismissDirection.endToStart : DismissDirection.none,
+          direction: _canSwipe(context)
+              ? DismissDirection.endToStart
+              : DismissDirection.none,
           onDismissed: (direction) {
             cubit.removeSharedExpense(widget.sharedExpense);
           },
@@ -89,9 +89,11 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                         canBeZero: true,
                         fontSize:
                             Theme.of(context).textTheme.labelLarge?.fontSize,
-                        prefix: cubit.groupExpense.currencyState.symbol.toUpperCase(),
+                        prefix: cubit.groupExpense.currencyState.symbol
+                            .toUpperCase(),
                         onChange: (value) {
-                          cubit.updateSharedExpense(widget.sharedExpense, value);
+                          cubit.updateSharedExpense(
+                              widget.sharedExpense, value);
                         },
                         autoFocus: widget.autoFocus,
                         textEditingController: textController,
@@ -159,6 +161,11 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
     if (response is List<Person>) {
       cubit.updateParticipantsForExpense(widget.sharedExpense, response);
     }
+  }
+
+  bool _canSwipe(BuildContext context) {
+    final cubit = context.read<AddExpenseBloc>();
+    return cubit.groupExpense.sharedExpensesState.length > 1;
   }
 
   @override
