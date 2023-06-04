@@ -38,12 +38,9 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
               return Column(
                 children: [
                   ClickableListItem(
-                    height: 54,
+                    height: 64,
                     padding: EdgeInsets.zero,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(10),
-                      bottom: Radius.zero,
-                    ),
+                    borderRadius: _getRadius(isExpanded),
                     onClick: () {
                       setState(() {
                         this.isExpanded = !this.isExpanded;
@@ -67,49 +64,49 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
                       ],
                     ),
                   ),
-                  RoundedListItem(
-                    height: 10,
-                    color: _getBottomBarColor(isExpanded),
-                    borderRadius: _getBottomBarRadius(isExpanded),
-                    child: const SizedBox(),
-                  )
+                  if (!isExpanded)
+                    RoundedListItem(
+                      height: 10,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.zero,
+                        bottom: Radius.circular(10),
+                      ),
+                      child: const SizedBox(),
+                    )
                 ],
               );
             },
             backgroundColor: Colors.transparent,
             isExpanded: isExpanded,
-            body: Column(
-              children: [
-                ...widget.participants.mapIndexed(
-                  (i, e) => Padding(
-                    padding: EdgeInsets.only(top: i > 0 ? 4.0 : 0),
-                    child: IndividualExpenseView(e, showExpense: true),
-                  ),
-                )
-              ],
+            body: RoundedListItem(
+              borderRadius: BorderRadius.circular(10),
+              child: Column(
+                children: [
+                  ...widget.participants.mapIndexed(
+                    (i, e) => Padding(
+                      padding: EdgeInsets.only(top: i > 0 ? 8.0 : 0),
+                      child: IndividualExpenseView(e, showExpense: true),
+                    ),
+                  )
+                ],
+              ),
             ),
             canTapOnHeader: true)
       ],
     );
   }
 
-  Color _getBottomBarColor(bool isExpanded) {
-    if (isExpanded) {
-      return Theme.of(context).colorScheme.primaryContainer;
-    }
-    return Theme.of(context).colorScheme.secondaryContainer;
-  }
-
-  BorderRadius _getBottomBarRadius(bool isExpanded) {
+  BorderRadius _getRadius(bool isExpanded) {
     if (isExpanded) {
       return const BorderRadius.vertical(
-        top: Radius.zero,
-        bottom: Radius.circular(30),
+        top: Radius.circular(10),
+        bottom: Radius.circular(10),
       );
     }
     return const BorderRadius.vertical(
-      top: Radius.zero,
-      bottom: Radius.circular(10),
+      top: Radius.circular(10),
+      bottom: Radius.circular(0),
     );
   }
 }

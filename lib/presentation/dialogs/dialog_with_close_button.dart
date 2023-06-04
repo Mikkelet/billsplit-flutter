@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class DialogWithCloseButton extends StatelessWidget {
   final Widget child;
+  final String title;
 
-  const DialogWithCloseButton({Key? key, required this.child})
+  const DialogWithCloseButton({Key? key, required this.child, this.title = ""})
       : super(key: key);
 
   @override
@@ -15,13 +16,20 @@ class DialogWithCloseButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 16, top: 16),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                color: Theme.of(context).colorScheme.onBackground,
-                icon: const Icon(Icons.close),
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: Text(title, style: Theme.of(context).textTheme.labelLarge,)),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    visualDensity: VisualDensity.compact,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
               ),
             ),
             child

@@ -143,6 +143,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
       context: context,
       builder: (context) {
         return DialogWithCloseButton(
+          title: "Expense Participants",
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: ParticipantsPickerDialog(

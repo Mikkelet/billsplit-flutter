@@ -20,10 +20,11 @@ class CurrencyPickerDialog extends StatefulWidget {
   @override
   State<CurrencyPickerDialog> createState() => _CurrencyPickerDialogState();
 
-  static getRoute({String? convertToCurrency}) =>
-      slideUpRoute(CurrencyPickerDialog(
-        convertToCurrency: convertToCurrency,
-      ));
+  static getRoute({String? convertToCurrency}) => slideUpRoute(
+        CurrencyPickerDialog(
+          convertToCurrency: convertToCurrency,
+        ),
+      );
 }
 
 class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {

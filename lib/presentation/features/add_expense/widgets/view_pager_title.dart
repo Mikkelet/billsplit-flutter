@@ -18,9 +18,9 @@ class _ExpenseViewPagerTitleState extends SafeState<ExpenseViewPagerTitle> {
   @override
   void initState() {
     widget.pageController.addListener(() {
-        setState(() {
-          page = widget.pageController.page ?? 0.0;
-        });
+      setState(() {
+        page = widget.pageController.page ?? 0.0;
+      });
     });
     super.initState();
   }
@@ -39,14 +39,14 @@ class _ExpenseViewPagerTitleState extends SafeState<ExpenseViewPagerTitle> {
                   widget.pageController.animateToPage(0,
                       duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
                 },
-                child: Text("Single",
+                child: Text("Single item",
                     style: TextStyle(fontSize: 12 * ((page - 1).abs() + 1)))),
             TextButton(
                 onPressed: () {
                   widget.pageController.animateToPage(1,
                       duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
                 },
-                child: Text("Multiple",
+                child: Text("Multiple items",
                     style: TextStyle(fontSize: 12 * (page + 1)))),
           ]),
     );

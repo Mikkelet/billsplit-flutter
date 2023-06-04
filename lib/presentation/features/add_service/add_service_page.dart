@@ -280,6 +280,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                       context: context,
                                       builder: (context) =>
                                           DialogWithCloseButton(
+                                        title: "Expense Participants",
                                         child: Padding(
                                           padding: const EdgeInsets.all(16),
                                           child: ParticipantsPickerDialog(
