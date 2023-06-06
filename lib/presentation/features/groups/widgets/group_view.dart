@@ -27,12 +27,14 @@ class GroupView extends StatelessWidget {
     return Center(
       child: ClickableListItem(
         color: Theme.of(context).colorScheme.primaryContainer,
-        elevation: builder(() {
-          if (Theme.of(context).colorScheme.brightness == Brightness.dark) {
-            return 0;
-          }
-          return 10;
-        }),
+        elevation: builder(
+          () {
+            if (Theme.of(context).colorScheme.brightness == Brightness.dark) {
+              return 0;
+            }
+            return 2;
+          },
+        ),
         onClick: () {
           _onClick(context);
         },

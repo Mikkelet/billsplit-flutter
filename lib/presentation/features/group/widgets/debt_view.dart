@@ -35,53 +35,56 @@ class DebtView extends StatelessWidget {
           "${debt.first.displayName} owes you $defaultCurrency ${convertDebt.abs().fmt2dec()}";
       style = SplitsbyTextTheme.groupViewPositiveDebt(context);
     }
-    return SizedBox(
-      child: Row(
-        children: [
-          Expanded(
-            child: RoundedListItem(
-              borderRadius: builder(() {
-                if (isDebt) {
-                  return const BorderRadius.horizontal(
-                      right: Radius.circular(10), left: Radius.circular(30));
-                } else {
-                  return null;
-                }
-              }),
-              align: Alignment.centerLeft,
-              height: 64,
-              child: Text(text, style: style),
-            ),
-          ),
-          if (isDebt) const SizedBox(width: 4),
-          if (isDebt)
-            ClickableListItem(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(10),
-                right: Radius.circular(30),
-              ),
-              height: 64,
-              width: 64,
-              onClick: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => PayCustomDebtView(
-                    debt: Pair(debt.first,
-                        groupCubit.convertToDefaultCurrency(debt.second)),
-                    group: groupCubit.group,
-                  ),
+    return Row(
+      children: [
+        Expanded(
+          child: RoundedListItem(
+            borderRadius: builder(() {
+              if (isDebt) {
+                return const BorderRadius.horizontal(
+                  right: Radius.circular(10),
+                  left: Radius.circular(30),
                 );
-              },
-              child: Text(
-                "Pay",
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondary),
-              ),
-            )
-        ],
-      ),
+              } else {
+                return null;
+              }
+            }),
+            align: Alignment.centerLeft,
+            height: 64,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(text, style: style),
+          ),
+        ),
+        if (isDebt) const SizedBox(width: 4),
+        if (isDebt)
+          ClickableListItem(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(10),
+              right: Radius.circular(30),
+            ),
+            height: 64,
+            width: 64,
+            onClick: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => PayCustomDebtView(
+                  debt: Pair(debt.first,
+                      groupCubit.convertToDefaultCurrency(debt.second)),
+                  group: groupCubit.group,
+                ),
+              );
+            },
+            child: Text(
+              "Pay",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+            ),
+          )
+      ],
     );
   }
 }
