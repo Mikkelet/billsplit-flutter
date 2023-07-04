@@ -1,63 +1,68 @@
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
-import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/bloc/update_name_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_upload_pfp_screen.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class OnboardingStepChangeDisplayName extends StatelessWidget {
+import '../bloc/onboarding_bloc.dart';
+
+class OnboardingStepChangeDisplayName extends StatefulWidget {
   const OnboardingStepChangeDisplayName({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BaseBlocWidget<UpdateNameCubit>(
-      create: (context) => UpdateNameCubit(),
-      child: BaseBlocBuilder<UpdateNameCubit>(builder: (cubit, state) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: null,
-            actions: [
-              CloseButton(
-                onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                },
-              )
-            ],
-          ),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                children: [
-                  const SizedBox(height: 64),
-                  const Text(
-                    "What's your name?",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  const SizedBox(height: 64),
-                  UpdatableTextField(
-                      initState: cubit.user.nameState,
-                      hintText: "Your name",
-                      updateFuture: cubit.updateName),
-                  const SizedBox(height: 64),
-                  SimpleButton(
-                    onClick: () {
-                      Navigator.of(context)
-                          .push(OnboardingStepUploadProfilePicture.getRoute());
-                    },
-                    child: const Text("Next"),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      }),
-    );
-  }
+  State<OnboardingStepChangeDisplayName> createState() =>
+      _OnboardingStepChangeDisplayNameState();
 
   static Route getRoute() =>
       slideLeftRoute(const OnboardingStepChangeDisplayName());
+}
+
+class _OnboardingStepChangeDisplayNameState
+    extends State<OnboardingStepChangeDisplayName> {
+  final textController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<OnboardingBloc>();
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          children: [
+            const SizedBox(height: 64),
+            const Text(
+              "What's your name?",
+              style: TextStyle(fontSize: 25),
+            ),
+            const SizedBox(height: 64),
+            RoundedListItem(
+                child: TextField(
+              autofocus: true,
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.labelLarge?.fontSize),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "Enter your name",
+                counterText: "",
+              ),
+              maxLines: 1,
+              maxLength: 40,
+              controller: textController..text = cubit.name,
+              onChanged: (value) {
+                cubit.onNameChanged(value);
+              },
+            )),
+            const SizedBox(height: 64),
+            SimpleButton(
+              onClick: () {
+                cubit.onNextClicked();
+              },
+              child: const Text("Next"),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }

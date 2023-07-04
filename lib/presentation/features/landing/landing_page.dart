@@ -25,7 +25,7 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Splitby",
+          "Splitsby",
           style: Theme.of(context)
               .textTheme
               .displaySmall
