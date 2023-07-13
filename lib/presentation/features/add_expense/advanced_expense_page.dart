@@ -6,7 +6,6 @@ import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/quick_add_shared_expense_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/scan_receipt_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expenses_view.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +54,6 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                           ),
                         ),
                       ),
-                      const QuickAddSharedExpenseButton(),
-                      const SizedBox(width: 4),
                       const AddSharedExpenseButton(),
                     ],
                   ),
