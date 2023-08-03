@@ -65,9 +65,13 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
                     if (!isExpanded)
                       Container(
                         height: 10,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondaryContainer,
+                        ),
+                        child: Center(child: Container(height: 1, width: 64, color: Theme.of(context).colorScheme.onSecondaryContainer,)),
                       )
 
                   ],

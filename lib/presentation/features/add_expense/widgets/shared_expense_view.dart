@@ -145,9 +145,12 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
     final response = await showModalBottomSheet(
       context: context,
       builder: (context) {
-        return ParticipantsPickerDialog(
-          participants: [...widget.sharedExpense.participantsState],
-          people: cubit.group.people,
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ParticipantsPickerDialog(
+            participants: [...widget.sharedExpense.participantsState],
+            people: cubit.group.people,
+          ),
         );
       },
     );

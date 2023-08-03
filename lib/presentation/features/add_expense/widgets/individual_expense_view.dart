@@ -16,86 +16,93 @@ class IndividualExpenseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          flex: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              PayerView(
-                person: person,
-                isPayer: _isPayer(person, cubit),
-                size: 40,
-                onClick: () {
-                  cubit.onPayerSelected(person);
+    final isPayer = cubit.groupExpense.payerState.uid == person.uid;
+    return Container(
+      decoration: isPayer
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Theme.of(context).colorScheme.secondaryContainer)
+          : null,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                PayerView(
+                  person: person,
+                  isPayer: isPayer,
+                  size: 40,
+                  onClick: () {
+                    cubit.onPayerSelected(person);
+                  },
+                ),
+                const SizedBox(width: 8),
+                Builder(
+                  builder: (context) {
+                    return Expanded(
+                      child: MaterialButton(
+                        padding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        onPressed: () {
+                          cubit.onPayerSelected(person);
+                        },
+                        onLongPress: () {
+                          HapticFeedback.heavyImpact();
+                          cubit.addExpenseForUser(person);
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Builder(builder: (context) {
+                            final displayName = isPayer
+                                ? "${person.displayName} is paying"
+                                : person.displayName;
+                            return Text(
+                              displayName,
+                              style: Theme.of(context).textTheme.labelSmall,
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                            );
+                          }),
+                        ),
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+          if (showExpense)
+            Flexible(
+              flex: 1,
+              child: Builder(
+                builder: (context) {
+                  if (getTotalForUser(cubit) > 0) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        "${getTotalForUser(cubit).fmt2dec()} ${cubit.groupExpense.currencyState.symbol.toUpperCase()}",
+                        style: Theme.of(context).textTheme.labelSmall,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      ),
+                    );
+                  }
+                  return const SizedBox();
                 },
               ),
-              const SizedBox(width: 8),
-              Builder(
-                builder: (context) {
-                  return Expanded(
-                    child: MaterialButton(
-                      padding: EdgeInsets.zero,
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      onPressed: () {
-                        cubit.onPayerSelected(person);
-                      },
-                      onLongPress: () {
-                        HapticFeedback.heavyImpact();
-                        cubit.addExpenseForUser(person);
-                      },
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Builder(builder: (context) {
-                          final displayName = _isPayer(person, cubit)
-                              ? "${person.displayName} is paying"
-                              : person.displayName;
-                          return Text(
-                            displayName,
-                            style: Theme.of(context).textTheme.labelSmall,
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                          );
-                        }),
-                      ),
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
-        ),
-        if (showExpense)
-          Flexible(
-            flex: 1,
-            child: Builder(
-              builder: (context) {
-                if (getTotalForUser(cubit) > 0) {
-                  return Text(
-                    "${getTotalForUser(cubit).fmt2dec()} ${cubit.groupExpense.currencyState.symbol.toUpperCase()}",
-                    style: Theme.of(context).textTheme.labelSmall,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-          )
-      ],
+            )
+        ],
+      ),
     );
   }
 
   num getTotalForUser(AddExpenseBloc cubit) {
     return cubit.groupExpense.getSharedExpensesForPerson(person);
-  }
-
-  bool _isPayer(Person person, AddExpenseBloc cubit) {
-    return cubit.groupExpense.payerState.uid == person.uid;
   }
 }

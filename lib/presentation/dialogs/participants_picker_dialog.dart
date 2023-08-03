@@ -42,11 +42,9 @@ class _ParticipantsPickerDialogState
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(children: [
+    return Scaffold(
+      appBar: AppBar(
+          actions: [
             if (widget.showSubmit)
               IconButton(
                 onPressed: () {
@@ -56,11 +54,10 @@ class _ParticipantsPickerDialogState
                 color: Theme.of(context).colorScheme.onBackground,
                 icon: const Icon(Icons.check),
               )
-
-          ],),
-          const SizedBox(height: 4),
-          if (widget.people.length >= 3)
-            Row(
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(40),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
@@ -83,39 +80,43 @@ class _ParticipantsPickerDialogState
                   onChanged: _isEveryoneSelected()
                       ? null
                       : (value) {
-                    if (value == false) {
-                      widget.participants.clear();
-                      widget.participants.addAll(widget.people);
-                      updateState();
-                    }
-                  },
+                          if (value == false) {
+                            widget.participants.clear();
+                            widget.participants.addAll(widget.people);
+                            updateState();
+                          }
+                        },
                 )
               ],
             ),
-          const SizedBox(height: 4),
-          ...widget.people.map(
-                (person) => _participantView(person),
-          ),
-          const SizedBox(height: 8),
-          if (showMin1PersonError)
-            Text(
-              "Must include at least one person",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Theme.of(context).colorScheme.error),
+          )),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 4),
+            ...widget.people.map(
+              (person) => _participantView(person),
             ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (widget.extraAction != null)
-                widget.extraAction!
-              else
-                const SizedBox(),
-            ],
-          )
-        ],
+            const SizedBox(height: 8),
+            if (showMin1PersonError)
+              Text(
+                "Must include at least one person",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Theme.of(context).colorScheme.error),
+              ),
+            if (widget.extraAction != null) const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (widget.extraAction != null)
+                  widget.extraAction!
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -145,7 +146,6 @@ class _ParticipantsPickerDialogState
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
