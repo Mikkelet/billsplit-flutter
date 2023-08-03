@@ -20,6 +20,7 @@ extension EventDTOExt on EventDTO? {
           timestamp: this!.timestamp,
           description: (this as GroupExpenseDTO).description,
           createdBy: this!.createdBy.toPerson(),
+          tempParticipants: [],
           payer: (this as GroupExpenseDTO).payee.toPerson(),
           sharedExpenses:
               (this as GroupExpenseDTO).sharedExpenses.toSharedExpense(),

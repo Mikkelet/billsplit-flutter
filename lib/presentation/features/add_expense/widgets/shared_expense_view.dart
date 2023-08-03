@@ -6,7 +6,6 @@ import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_exp
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
-import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/utils/list_position.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
@@ -143,18 +142,12 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
 
   void _editParticipants(BuildContext context) async {
     final cubit = context.read<AddExpenseBloc>();
-    final response = await showDialog(
+    final response = await showModalBottomSheet(
       context: context,
       builder: (context) {
-        return DialogWithCloseButton(
-          title: "Expense Participants",
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ParticipantsPickerDialog(
-              participants: [...widget.sharedExpense.participantsState],
-              people: cubit.group.people,
-            ),
-          ),
+        return ParticipantsPickerDialog(
+          participants: [...widget.sharedExpense.participantsState],
+          people: cubit.group.people,
         );
       },
     );

@@ -113,4 +113,8 @@ class AddExpenseBloc extends BaseCubit {
         groupExpense.sharedExpensesState.sublist(0, 1);
     onExpensesUpdated();
   }
+
+  void onAddTempParticipant() {
+
+  }
 }

@@ -5,7 +5,6 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
-import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
@@ -151,16 +150,18 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       onClick: () async {
-                        final response = await showDialog(
+                        final response = await showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return DialogWithCloseButton(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: ParticipantsPickerDialog(
-                                  participants: expense.participantsState,
-                                  people: cubit.group.people,
-                                ),
+                            return Padding(
+                              padding: const EdgeInsets.all(16),
+                              child:
+                              ParticipantsPickerDialog(
+                                participants: expense.participantsState,
+                                people: cubit.group.people,
+                                onAddTempParticipant: () {
+                                  cubit.onAddTempParticipant();
+                                },
                               ),
                             );
                           },

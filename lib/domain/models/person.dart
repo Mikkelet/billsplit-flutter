@@ -12,6 +12,12 @@ class Person {
       : _name = name,
         _pfpUrl = pfpUrl;
 
+  Person.temp()
+      : uid = "",
+        email = "",
+        _name = "New person",
+        _pfpUrl = "";
+
   String get displayName => nameState.isEmpty ? "Splitsby user" : nameState;
 
   Person.dummy(num seed)

@@ -221,6 +221,7 @@ extension PaymentExt on Payment {
       createdBy: createdBy,
       timestamp: timestamp,
       description: "",
+      tempParticipants: [],
       payer: createdBy,
       sharedExpenses: [
         SharedExpense(expense: amount, participants: [paidTo], description: "")

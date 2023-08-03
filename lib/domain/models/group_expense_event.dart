@@ -15,6 +15,7 @@ class GroupExpense extends Event {
   final Iterable<SharedExpense> _sharedExpenses;
   final SyncState syncState;
   final Currency _currency;
+  final List<Person> _tempParticipants;
 
   // modifiable values
   late Person payerState = _payer;
@@ -30,10 +31,12 @@ class GroupExpense extends Event {
     required Iterable<SharedExpense> sharedExpenses,
     required Person payer,
     required Currency currency,
+    required List<Person> tempParticipants,
     required this.syncState,
   })  : _payer = payer,
         _sharedExpenses = sharedExpenses,
         _description = description,
+        _tempParticipants = tempParticipants,
         _currency = currency,
         super(id, createdBy, timestamp);
 
@@ -77,6 +80,7 @@ class GroupExpense extends Event {
             sharedExpenses: [SharedExpense.newInstance(group.people)],
             syncState: SyncState.synced,
             payer: user,
+            tempParticipants: [],
             currency: Currency(symbol: group.defaultCurrencyState, rate: 1),
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
@@ -98,5 +102,13 @@ class GroupExpense extends Event {
 
   void removeSharedExpense(SharedExpense sharedExpense) {
     sharedExpensesState.remove(sharedExpense);
+  }
+
+  void addTempParticipant() {
+    _tempParticipants.add(Person.temp());
+  }
+
+  void removeTempParticipant(Person person) {
+    _tempParticipants.remove(person);
   }
 }
