@@ -289,7 +289,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                               ...service.participantsState
                                             ],
                                             people: cubit.group.people,
-                                            onAddTempParticipant: () {},
+                                            onAddTempParticipant: (name) {},
                                           ),
                                         ),
                                       ),

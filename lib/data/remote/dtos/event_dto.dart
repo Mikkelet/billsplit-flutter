@@ -54,6 +54,7 @@ class GroupExpenseDTO extends EventDTO {
   final PersonDTO payee;
   final CurrencyDTO currency;
   final Iterable<SharedExpenseDTO> sharedExpenses;
+  final Iterable<PersonDTO> tempParticipants;
 
   GroupExpenseDTO(
       {required String id,
@@ -62,6 +63,7 @@ class GroupExpenseDTO extends EventDTO {
       String type = "expense",
       required this.description,
       required this.currency,
+      required this.tempParticipants,
       required this.payee,
       required this.sharedExpenses})
       : super(id: id, createdBy: createdBy, timestamp: timestamp, type: type);

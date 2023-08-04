@@ -149,7 +149,10 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
           padding: const EdgeInsets.all(16.0),
           child: ParticipantsPickerDialog(
             participants: [...widget.sharedExpense.participantsState],
-            people: cubit.group.people,
+            people: cubit.people,
+            onAddTempParticipant: (name) {
+              cubit.onAddTempParticipant(name, widget.sharedExpense);
+            },
           ),
         );
       },

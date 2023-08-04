@@ -158,9 +158,9 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                               child:
                               ParticipantsPickerDialog(
                                 participants: expense.participantsState,
-                                people: cubit.group.people,
-                                onAddTempParticipant: () {
-                                  cubit.onAddTempParticipant();
+                                people: cubit.people,
+                                onAddTempParticipant: (name) {
+                                  cubit.onAddTempParticipant(name, widget.groupExpense.sharedExpensesState.first);
                                 },
                               ),
                             );

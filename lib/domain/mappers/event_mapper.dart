@@ -37,6 +37,7 @@ extension EventExt on Event {
       final realId = id.startsWith(tempIdPrefix) ? "" : id;
       return GroupExpenseDTO(
           id: realId,
+          tempParticipants: (this as GroupExpense).tempParticipants.map((e) => e.toDTO()),
           createdBy: createdBy.toDTO(),
           timestamp: timestamp,
           description: (this as GroupExpense).descriptionState,

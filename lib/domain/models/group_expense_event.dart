@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:collection/collection.dart';
+import 'package:uuid/uuid.dart';
 
 import 'shared_expense.dart';
 
@@ -84,6 +85,8 @@ class GroupExpense extends Event {
             currency: Currency(symbol: group.defaultCurrencyState, rate: 1),
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
+  Iterable<Person> get tempParticipants => _tempParticipants;
+
   @override
   String toString() {
     return "GroupExpense(id=$id, createdBy=$createdBy, description=$_description, sharedExpenses=$sharedExpensesState, payer=$payerState)";
@@ -104,8 +107,11 @@ class GroupExpense extends Event {
     sharedExpensesState.remove(sharedExpense);
   }
 
-  void addTempParticipant() {
-    _tempParticipants.add(Person.temp());
+  void addTempParticipant(String name, SharedExpense sharedExpense) {
+    final uuid = const Uuid().v4();
+    final person = Person("temp-$uuid", name);
+    _tempParticipants.add(person);
+    sharedExpense.participantsState.add(person);
   }
 
   void removeTempParticipant(Person person) {

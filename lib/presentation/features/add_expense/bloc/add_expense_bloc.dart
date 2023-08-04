@@ -34,6 +34,8 @@ class AddExpenseBloc extends BaseCubit {
     }
   }
 
+  Iterable<Person> get people => group.people + groupExpense.tempParticipants.toList();
+
   void onExpensesUpdated() {
     emit(Main());
   }
@@ -114,7 +116,8 @@ class AddExpenseBloc extends BaseCubit {
     onExpensesUpdated();
   }
 
-  void onAddTempParticipant() {
-
+  void onAddTempParticipant(String name, SharedExpense sharedExpense) {
+    groupExpense.addTempParticipant(name, sharedExpense);
+    onExpensesUpdated();
   }
 }

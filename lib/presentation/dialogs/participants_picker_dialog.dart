@@ -2,14 +2,13 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class ParticipantsPickerDialog extends StatefulWidget {
   final List<Person> participants;
   final Iterable<Person> people;
   final Widget? extraAction;
   final bool showSubmit;
-  final Function? onAddTempParticipant;
+  final Function(String)? onAddTempParticipant;
 
   const ParticipantsPickerDialog({
     Key? key,
@@ -39,6 +38,8 @@ class _ParticipantsPickerDialogState
       widget.people.length == widget.participants.length;
 
   bool showMin1PersonError = false;
+
+  final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +100,33 @@ class _ParticipantsPickerDialogState
               (person) => _participantView(person),
             ),
             const SizedBox(height: 8),
+            Row(
+              children: [
+                ProfilePictureView(person: Person("","")),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: TextField(
+                    controller: _textEditingController,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (name) {
+                      widget.onAddTempParticipant?.call(name);
+                      _textEditingController.clear();
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Enter a name for a temporary person",
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .labelMedium
+                          ?.copyWith(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
             if (showMin1PersonError)
               Text(
                 "Must include at least one person",
@@ -110,10 +138,7 @@ class _ParticipantsPickerDialogState
             if (widget.extraAction != null) const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (widget.extraAction != null)
-                  widget.extraAction!
-              ],
+              children: [if (widget.extraAction != null) widget.extraAction!],
             )
           ],
         ),

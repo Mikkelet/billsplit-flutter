@@ -35,7 +35,7 @@ class IndividualExpenseView extends StatelessWidget {
                 PayerView(
                   person: person,
                   isPayer: isPayer,
-                  size: 40,
+                  size: 48,
                   onClick: () {
                     cubit.onPayerSelected(person);
                   },

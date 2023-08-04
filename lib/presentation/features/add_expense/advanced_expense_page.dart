@@ -60,7 +60,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                 ),
               ],
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             DescriptionTextField(initialText: groupExpense.descriptionState),
             //const LongPressTipView(),
             const SizedBox(height: 4),
