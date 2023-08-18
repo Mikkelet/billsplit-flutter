@@ -1,7 +1,9 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_groups_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_groups_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -12,6 +14,8 @@ class GroupsBloc extends BaseCubit {
   final _getFriendsUseCase = GetFriendsUseCase();
   final _observeGroupsUseCase = ObserveGroupsUseCase();
   final _convertCurrencyUseCase = ConvertCurrencyUseCase();
+  final _observeDebtsUseCase = ObserveDebtsUseCase();
+
 
   GroupsBloc() : super();
 
@@ -31,6 +35,14 @@ class GroupsBloc extends BaseCubit {
     });
   }
 
+  Stream<num> getDebtsStream(String groupId) =>
+      _observeDebtsUseCase.observe(groupId).map((event) {
+        if (event.length > 1) {
+          return event.map((e) => e.second).sum;
+        }
+        return event.first.second;
+      });
+
   Future refreshGroups() async {
     try {
       await _getGroupsUseCase.launch();
@@ -40,6 +52,6 @@ class GroupsBloc extends BaseCubit {
   }
 
   num convertToDefault(Group group, num debt) {
-    return _convertCurrencyUseCase.launch(debt, "usd", group.defaultCurrencyState);
+    return _convertCurrencyUseCase.launch(debt, Currency.USD().symbol, group.defaultCurrencyState);
   }
 }

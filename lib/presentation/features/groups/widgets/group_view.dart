@@ -6,7 +6,6 @@ import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,11 +17,6 @@ class GroupView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
-    final yourDebts = group.debtState
-            .where((element) => element.userId == cubit.user.uid)
-            .firstOrNull
-            ?.owes ??
-        0;
 
     return Center(
       child: ClickableListItem(
@@ -58,7 +52,16 @@ class GroupView extends StatelessWidget {
                       size: 30,
                       limit: 3,
                     ),
-                    Expanded(child: _debtView(context, group, yourDebts)),
+                    StreamBuilder(
+                        stream: cubit.getDebtsStream(group.id),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Expanded(
+                                child: _debtView(
+                                    context, group, snapshot.requireData));
+                          }
+                          return const SizedBox();
+                        })
                   ],
                 ),
               ],

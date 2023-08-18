@@ -37,8 +37,9 @@ class GroupPage extends StatelessWidget {
               builder: (context) {
                 if (state is GroupState) {
                   if (state.nav == GroupPageNav.debt) return const SizedBox();
-                  if (state.nav == GroupPageNav.settings)
+                  if (state.nav == GroupPageNav.settings) {
                     return const SizedBox();
+                  }
                   String text = state.nav == GroupPageNav.events
                       ? "Add expense"
                       : "Add subscription";
