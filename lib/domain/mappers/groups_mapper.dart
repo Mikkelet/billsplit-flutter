@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
-import 'package:billsplit_flutter/domain/mappers/debts_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
@@ -24,8 +23,7 @@ extension GroupDtoExt on GroupDTO {
       createdBy: createdBy.toPerson(),
       pastMembers: pastMembers?.toPeople() ?? [],
       timestamp: timestamp,
-      latestEvent: latestEvent.toEvent(),
-      debts: debts.toDebts());
+      latestEvent: latestEvent.toEvent());
 
   GroupDb toDb() => GroupDb(groupId: id, group: json.encode(toJson()));
 }
@@ -39,7 +37,6 @@ extension GroupExt on Group {
       pastMembers: pastMembers.toDTO(),
       createdBy: createdBy.toDTO(),
       timestamp: timestamp,
-      debts: debtState.map((e) => e.toDTO()).toList(),
       latestEvent: latestEventState?.toEventDTO());
 
   GroupDb toDb() => toDTO().toDb();

@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/data/remote/dtos/debts_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
@@ -14,7 +13,6 @@ class GroupDTO {
   final List<PersonDTO>? pastMembers;
   final PersonDTO createdBy;
   final num timestamp;
-  final List<DebtDTO> debts;
   final EventDTO? latestEvent;
   final String defaultCurrency;
 
@@ -26,7 +24,6 @@ class GroupDTO {
       required this.pastMembers,
       required this.createdBy,
       required this.timestamp,
-      required this.debts,
       required this.latestEvent});
 
   factory GroupDTO.fromJson(Json json) => _$GroupDTOFromJson(json);

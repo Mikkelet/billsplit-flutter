@@ -3,7 +3,6 @@ import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/api_service.dart';
 import 'package:billsplit_flutter/data/remote/dtos/debts_dto.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
-import 'package:billsplit_flutter/domain/mappers/debts_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/group_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
@@ -28,7 +27,6 @@ class DeleteExpenseUseCase {
     await _database.groupExpenseDAO.deleteExpense(expense.id);
 
     // update group
-    group.debtState = debtDTO.toDebts();
     await _database.groupsDAO.insertGroup(group.toDb());
   }
 
