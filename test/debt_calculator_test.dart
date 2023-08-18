@@ -23,7 +23,6 @@ final sampleGroup = Group(
     people: samplePeopleShera,
     createdBy: samplePeopleShera.first,
     timestamp: 0,
-    debts: [],
     latestEvent: null);
 
 final sampleIndividualExpenses = samplePeopleShera.toList().mapIndexed(
