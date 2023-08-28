@@ -1,10 +1,13 @@
+import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
+import 'package:billsplit_flutter/presentation/features/mandatory_update/mandatory_update_page.dart';
 import 'package:billsplit_flutter/presentation/features/permissions/notifications_rationale.dart';
+import 'package:billsplit_flutter/presentation/features/splash/splash_page.dart';
 import 'package:billsplit_flutter/presentation/main_cubit.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:billsplit_flutter/presentation/notifications/fcm_background_handler.dart';
@@ -76,6 +79,10 @@ class _BillSplitAppState extends State<BillSplitApp>
           if (state is ShowNotificationPermissionRationale) {
             Navigator.of(context).push(NotificationsRationale.getRoute());
           }
+          if (state is MandatoryUpdateState) {
+            Navigator.of(context)
+                .push(MandatoryUpdatePage.getRoute(state.appVersion));
+          }
         },
         child: BaseBlocBuilder<MainCubit>(
           builder: (cubit, state) {
@@ -84,19 +91,23 @@ class _BillSplitAppState extends State<BillSplitApp>
                   body: Center(child: CircularProgressIndicator()));
             }
             if (state is Main) {
-              return StreamBuilder<String?>(
+              return StreamBuilder<AuthState>(
                 stream: cubit.observeAuthState(),
+                initialData: null,
                 builder: (context, snapshot) {
-                  final uid = snapshot.data;
-                  if (uid == null) {
-                    _onUserLoggedOut(uid, context);
+                  final authState = snapshot.data;
+                  if (authState is LoggedOutState) {
+                    _onUserLoggedOut(context);
                     return const LandingPage();
+                  } else if (authState is LoggedInState) {
+                    return GroupsPage();
+                  } else {
+                    return const SplashPage();
                   }
-                  return GroupsPage();
                 },
               );
             }
-            return const Placeholder();
+            return const LandingPage();
           },
         ),
       ),
@@ -104,12 +115,9 @@ class _BillSplitAppState extends State<BillSplitApp>
   }
 
   // delay popUntil to reduce false nulls
-  _onUserLoggedOut(String? uid, BuildContext context) {
-    Future.delayed(const Duration(seconds: 1)).then((value) {
-      if (uid == null) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      }
-    });
+  _onUserLoggedOut(BuildContext context) {
+    Navigator.of(context).popUntil((route) =>
+        route.settings.name == "/${MandatoryUpdatePage.routeName}" || route.isFirst);
   }
 
   @override

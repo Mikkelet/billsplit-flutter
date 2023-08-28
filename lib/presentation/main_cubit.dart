@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:billsplit_flutter/data/auth/auth_provider.dart';
+import 'package:billsplit_flutter/domain/use_cases/app_data/get_app_version.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_fcm_token_permission.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_local_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_auth_state_usecase.dart';
@@ -17,16 +19,18 @@ class MainCubit extends BaseCubit {
   final _initializeAuthUseCase = InitializeAuthUseCase();
   final _getFCMTokenPermission = GetNotificationPermission();
   final _getGroupUseCase = GetLocalGroupUseCase();
+  final _getAppVersion = GetAppVersion();
 
   StreamSubscription? _fcmTokenDisposable;
   StreamSubscription? _onMessageOpenedDisposable;
 
   MainCubit() : super.withState(Loading());
 
-  Stream<String?> observeAuthState() {
-    return _observeAuthStateUseCase.observe().doOnData((auth) {
-      if (auth != null) {
-        FirebaseMessaging.instance.subscribeToTopic("user-$auth");
+  Stream<AuthState> observeAuthState() {
+    return _observeAuthStateUseCase.observe().doOnData((authState) {
+      if (authState is LoggedInState) {
+        final userId = authState.user;
+        FirebaseMessaging.instance.subscribeToTopic("user-$userId");
         initializePushNotification();
       }
     });
@@ -36,6 +40,7 @@ class MainCubit extends BaseCubit {
     showLoading();
     _initialiseAuth();
     _initialiseOnMessageOpened();
+    _checkAppVersion();
   }
 
   void initializePushNotification() {
@@ -68,6 +73,25 @@ class MainCubit extends BaseCubit {
     }, onError: (error, st) {
       showError(error, st);
     });
+  }
+
+  void _checkAppVersion() {
+    print("qqq check app version");
+    Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+      _getAppVersion.launch().then((appVersion) {
+        if (appVersion.mandatoryUpdateAvailable) {
+          emit(MandatoryUpdateState(appVersion));
+        }
+      }).catchError((err, stackTrace) {
+        showError(err, stackTrace);
+      });
+    });
+  }
+
+  @override
+  void emit(UiState state) {
+    if (this.state is MandatoryUpdateState) return;
+    super.emit(state);
   }
 
   void _initialiseAuth() {
