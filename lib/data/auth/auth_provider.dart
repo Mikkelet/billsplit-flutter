@@ -3,10 +3,21 @@ import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+class AuthState {}
+class LoggedInState extends AuthState {
+  final Person user;
+
+  LoggedInState(this.user);
+}
+class LoadingUserState extends AuthState {}
+class LoggedOutState extends AuthState {}
+
+
 class AuthProvider {
   late final FirebaseAuth _firebaseAuth;
 
   Person? _user;
+  AuthState authState = LoadingUserState();
 
   Future init(FirebaseApp firebaseApp) async {
     _firebaseAuth = FirebaseAuth.instanceFor(app: firebaseApp);
@@ -28,13 +39,15 @@ class AuthProvider {
     return await user.getIdToken(refresh);
   }
 
-  Stream<String?> authListener() {
+  Stream<AuthState> authListener() {
     return _firebaseAuth.userChanges().map((event) {
-      _user = event == null
-          ? null
-          : Person(event.uid, event.displayName ?? "",
-              pfpUrl: event.photoURL ?? "", email: event.email ?? "");
-      return _user?.uid;
+      if (event == null) {
+        return LoggedOutState();
+      }
+      final user = Person(event.uid, event.displayName ?? "",
+          pfpUrl: event.photoURL ?? "", email: event.email ?? "");
+      _user = user;
+      return LoggedInState(user);
     });
   }
 

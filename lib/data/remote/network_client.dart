@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class NetworkClient {
   static bool allowNetworkLogging = false;
@@ -34,17 +35,20 @@ class NetworkClient {
     _client.close();
   }
 
-  Future<Json> get(String path, {bool refreshToken = false}) async {
+  Future<Json> get(String path,
+      {bool refreshToken = false, bool authorized = true}) async {
     if (allowNetworkLogging) {
       print("qqq baseUrl=$baseUrl$path");
     }
     final url = Uri.parse("$baseUrl$path");
-    final token = refreshToken
-        ? await _authProvider.getToken(true)
-        : await _authProvider.getToken(false);
-    final headers = {
-      HttpHeaders.authorizationHeader: token,
-    };
+    final Map<String, String> headers = {};
+    headers[HttpHeaders.userAgentHeader] = await _getUserAgent();
+    if (authorized) {
+      final token = refreshToken
+          ? await _authProvider.getToken(true)
+          : await _authProvider.getToken(false);
+      headers[HttpHeaders.authorizationHeader] = token;
+    }
     final response = await _client.get(url, headers: headers);
     if (allowNetworkLogging) {
       print("Request: ${response.request}");
@@ -67,8 +71,9 @@ class NetworkClient {
         ? await _authProvider.getToken(true)
         : await _authProvider.getToken(false);
     final headers = {
-      HttpHeaders.authorizationHeader: "$token",
-      HttpHeaders.contentTypeHeader: "application/json"
+      HttpHeaders.authorizationHeader: token,
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.userAgentHeader: await _getUserAgent()
     };
 
     final response =
@@ -160,6 +165,11 @@ class NetworkClient {
       throw UiException(error.code, error.message);
     }
     return response.toJson();
+  }
+
+  Future<String> _getUserAgent() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return "OS=${Platform.operatingSystem},V=${packageInfo.version} (${packageInfo.buildNumber})";
   }
 }
 
