@@ -14,6 +14,7 @@ import 'package:billsplit_flutter/presentation/notifications/fcm_background_hand
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_theme3_dark.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:camera/camera.dart';
 import 'package:eraser/eraser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -45,8 +46,9 @@ class BillSplitApp extends StatefulWidget {
   State<BillSplitApp> createState() => _BillSplitAppState();
 }
 
-class _BillSplitAppState extends State<BillSplitApp>
+class _BillSplitAppState extends SafeState<BillSplitApp>
     with WidgetsBindingObserver {
+
   @override
   void initState() {
     super.initState();
@@ -91,6 +93,7 @@ class _BillSplitAppState extends State<BillSplitApp>
                   body: Center(child: CircularProgressIndicator()));
             }
             if (state is Main) {
+              cubit.checkAppVersion();
               return StreamBuilder<AuthState>(
                 stream: cubit.observeAuthState(),
                 initialData: null,
@@ -122,10 +125,11 @@ class _BillSplitAppState extends State<BillSplitApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       Eraser.clearAllAppNotifications();
+      updateState();
     }
-    super.didChangeAppLifecycleState(state);
   }
 
   @override

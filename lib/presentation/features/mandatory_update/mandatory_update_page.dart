@@ -28,7 +28,7 @@ class MandatoryUpdatePage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 32),
                 Text(
-                    "A new mandatory update has been released. Please go to $appUpdaterName to update your app!",
+                    "A new mandatory update has been released. Please go to $appUpdaterName and update Splitsby.",
                     style: Theme.of(context).textTheme.labelLarge),
                 const SizedBox(height: 16),
                 Text(

@@ -40,7 +40,6 @@ class MainCubit extends BaseCubit {
     showLoading();
     _initialiseAuth();
     _initialiseOnMessageOpened();
-    _checkAppVersion();
   }
 
   void initializePushNotification() {
@@ -75,8 +74,7 @@ class MainCubit extends BaseCubit {
     });
   }
 
-  void _checkAppVersion() {
-    print("qqq check app version");
+  void checkAppVersion() {
     Future.delayed(const Duration(seconds: 2)).whenComplete(() {
       _getAppVersion.launch().then((appVersion) {
         if (appVersion.mandatoryUpdateAvailable) {
