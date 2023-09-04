@@ -6,9 +6,11 @@ import 'package:billsplit_flutter/data/remote/errors/billsplit_error.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
+import 'package:json_pretty/json_pretty.dart';
 
 class NetworkClient {
   static bool allowNetworkLogging = false;
@@ -36,7 +38,7 @@ class NetworkClient {
 
   Future<Json> get(String path, {bool refreshToken = false}) async {
     if (allowNetworkLogging) {
-      print("qqq baseUrl=$baseUrl$path");
+      debugPrint("qqq baseUrl=$baseUrl$path");
     }
     final url = Uri.parse("$baseUrl$path");
     final token = refreshToken
@@ -47,10 +49,10 @@ class NetworkClient {
     };
     final response = await _client.get(url, headers: headers);
     if (allowNetworkLogging) {
-      print("Request: ${response.request}");
-      print("Request: ${response.request?.headers}");
-      print('Response status: ${response.statusCode}');
-      print('Response body:${response.body}');
+      debugPrint("Request: ${response.request}");
+      debugPrint("Request: ${response.request?.headers}", wrapWidth: 1024);
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body:${prettyPrintJson(response.body)}');
     }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
@@ -74,12 +76,12 @@ class NetworkClient {
     final response =
         await _client.post(url, body: json.encode(body), headers: headers);
     if (allowNetworkLogging) {
-      print('Request body:$body');
-      print("Request headers: $headers");
-      print("Request: ${response.request}");
-      print("Response headers: ${response.request?.headers}");
-      print('Response status: ${response.statusCode}');
-      print('Response body:${response.body}');
+      debugPrint('Request body:$body');
+      debugPrint("Request headers: $headers");
+      debugPrint("Request: ${response.request}");
+      debugPrint("Response headers: ${response.request?.headers}");
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body:${prettyPrintJson(response.body)}');
     }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
@@ -103,13 +105,14 @@ class NetworkClient {
     final response =
         await _client.put(url, body: json.encode(body), headers: headers);
     if (allowNetworkLogging) {
-      print('Request body:$body');
-      print("Request headers: $headers");
+      debugPrint('Request body:$body');
+      debugPrint("Request headers: $headers");
 
-      print("Request: ${response.request}");
-      print("Response headers: ${response.request?.headers}");
-      print('Response status: ${response.statusCode}');
-      print('Response body:${response.body}');
+      debugPrint("Request: ${response.request}");
+      debugPrint("Response headers: ${response.request?.headers}");
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body:${prettyPrintJson(response.body)}');
+
     }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);
@@ -143,11 +146,11 @@ class NetworkClient {
           await _client.delete(url, body: json.encode(body), headers: headers);
     }
     if (allowNetworkLogging) {
-      print('Request body:$body');
-      print("Request headers: $headers");
-      print("Request body: ${response.body}");
-      print("Response headers: ${response.request?.headers}");
-      print('Response status: ${response.statusCode}');
+      debugPrint('Request body:$body');
+      debugPrint("Request headers: $headers");
+      debugPrint("Request body: ${response.body}");
+      debugPrint("Response headers: ${response.request?.headers}");
+      debugPrint('Response body:${prettyPrintJson(response.body)}');
     }
     if (response.statusCode == 408) {
       return get(path, refreshToken: true);

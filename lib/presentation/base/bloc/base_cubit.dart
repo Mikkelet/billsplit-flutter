@@ -29,6 +29,7 @@ abstract class BaseCubit extends Cubit<UiState> {
   void showError(dynamic err, StackTrace? stackTrace) {
     FirebaseCrashlytics.instance.log("error=$err, stackTrace=$stackTrace");
     if (err is Error) {
+      print("qqq err: $err, stackTrace=$stackTrace");
       emit(Failure(UiException(-1, err.toString())));
     } else if (err is UiException) {
       emit(Failure(err));
@@ -47,7 +48,6 @@ abstract class BaseCubit extends Cubit<UiState> {
       print("qqq err: ${err.runtimeType.toString()}");
       emit(Failure(UiException(-1, "${err.runtimeType}: $err")));
     }
-    print(stackTrace.toString());
   }
 
   Person get user => authProvider.user ?? Person("", "User Logged out");
