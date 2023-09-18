@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/data/debt_calculator.dart';
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
@@ -16,11 +17,12 @@ class ObserveDebtsUseCase {
     return _observeEventsUseCase.observe(groupId).asyncMap((events) async {
       final response = await _database.groupsDAO.getGroup(groupId);
       final group = response.toGroup();
+      final temps = events.whereType<GroupExpense>()
+          .fold([], (previousValue, element) => [...previousValue, ...element.tempParticipants]);
       final calculator = DebtCalculator.fromCombined(
-          {...group.people, ...group.pastMembers}, events);
+          {...group.people, ...group.pastMembers, ...temps}, events);
       final user = _authProvider.user!;
       final debts = calculator.calculateEffectiveDebt(user);
-      print(debts);
       return debts.where((element) => element.second != 0);
     });
   }

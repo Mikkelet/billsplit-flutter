@@ -32,7 +32,8 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
         ExpansionPanel(
             headerBuilder: (context, isExpanded) {
               return ClickableListItem(
-                padding: EdgeInsets.symmetric(horizontal: isExpanded ? 16 : 8, vertical: 16),
+                padding: EdgeInsets.symmetric(
+                    horizontal: isExpanded ? 16 : 8, vertical: 16),
                 borderRadius: isExpanded
                     ? const BorderRadius.vertical(
                         top: Radius.circular(30),
@@ -73,19 +74,21 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                   borderRadius: BorderRadius.circular(10),
                   child: Column(
                     children: [
-                      ...cubit.group.people.mapIndexed((i, person) => Padding(
-                            padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
-                            child: Row(
-                              children: [
-                                ProfilePictureView(person: person),
-                                const SizedBox(width: 8),
-                                Text(
-                                  person.displayName,
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                )
-                              ],
-                            ),
-                          ))
+                      ...cubit.group.people.mapIndexed(
+                        (i, person) => Padding(
+                          padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
+                          child: Row(
+                            children: [
+                              ProfilePictureView(person: person),
+                              const SizedBox(width: 8),
+                              Text(
+                                person.displayName,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -98,11 +101,10 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       width: 48,
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(30)
-                      ),
+                          topRight: Radius.circular(10),
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(30)),
                       onClick: () async {
                         showDialog(
                           context: context,

@@ -39,8 +39,8 @@ class ApiService {
   }
 
   Future<AddEventResponse> addEvent(
-      String groupId, EventDTO eventDTO, List<DebtDTO> debts) async {
-    final request = AddEventRequest(groupId, eventDTO, debts);
+      String groupId, EventDTO eventDTO) async {
+    final request = AddEventRequest(groupId, eventDTO);
     final response = await _client.post("event", request.toJson());
     return AddEventResponse.fromJson(response);
   }

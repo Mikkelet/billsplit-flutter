@@ -18,7 +18,7 @@ class DebtsView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(64.0),
                 child: Text(
-                  "Your debts are settled!",
+                  "All debts are settled!",
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
@@ -26,12 +26,13 @@ class DebtsView extends StatelessWidget {
             );
           }
           return ListView.builder(
-              itemCount: debts.length,
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: DebtView(debt: debts.toList()[index]),
-                  ));
+            itemCount: debts.length,
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: DebtView(debt: debts.toList()[index]),
+            ),
+          );
         });
   }
 }

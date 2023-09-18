@@ -32,12 +32,12 @@ class GroupExpense extends Event {
     required Iterable<SharedExpense> sharedExpenses,
     required Person payer,
     required Currency currency,
-    required List<Person> tempParticipants,
+    required Iterable<Person> tempParticipants,
     required this.syncState,
   })  : _payer = payer,
         _sharedExpenses = sharedExpenses,
         _description = description,
-        _tempParticipants = tempParticipants,
+        _tempParticipants = tempParticipants.toList(),
         _currency = currency,
         super(id, createdBy, timestamp);
 
@@ -111,7 +111,6 @@ class GroupExpense extends Event {
     final uuid = const Uuid().v4();
     final person = Person("temp-$uuid", name);
     _tempParticipants.add(person);
-    sharedExpense.participantsState.add(person);
   }
 
   void removeTempParticipant(Person person) {

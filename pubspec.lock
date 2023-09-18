@@ -720,6 +720,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  json_pretty:
+    dependency: "direct main"
+    description:
+      name: json_pretty
+      sha256: "03795063131b8e4af00fb95a5b09cfa98abb710298f9a891a321fb7349d1f600"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   json_serializable:
     dependency: "direct dev"
     description:
@@ -800,6 +808,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  package_info_plus:
+    dependency: "direct main"
+    description:
+      name: package_info_plus
+      sha256: "6ff267fcd9d48cb61c8df74a82680e8b82e940231bb5f68356672fde0397334a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   path:
     dependency: "direct main"
     description:

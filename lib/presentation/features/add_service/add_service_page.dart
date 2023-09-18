@@ -16,7 +16,7 @@ import 'package:billsplit_flutter/presentation/common/expense_textfield/default_
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
-import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';

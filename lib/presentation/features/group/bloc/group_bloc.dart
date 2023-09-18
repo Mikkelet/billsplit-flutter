@@ -20,6 +20,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 
 class GroupBloc extends BaseCubit {
@@ -48,7 +49,13 @@ class GroupBloc extends BaseCubit {
           (event) => event.toList().sortedBy((element) => element.nameState));
 
   Stream<Iterable<Pair<Person, num>>> getDebtsStream() =>
-      _observeDebtsUseCase.observe(group.id);
+      _observeDebtsUseCase.observe(group.id).map((event) {
+        return event.map((e) {
+          final converted = _convertCurrencyUseCase.launch(
+              e.second, Currency.USD().symbol, group.defaultCurrencyState);
+          return Pair(e.first, converted);
+        }).where((element) => element.second.fmt2dec() != "0");
+      });
 
   void loadGroup() async {
     _getExchangeRatesUseCase.launch();

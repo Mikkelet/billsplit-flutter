@@ -13,8 +13,7 @@ ServiceDTO _$ServiceDTOFromJson(Map<String, dynamic> json) => ServiceDTO(
       monthlyExpense: json['monthlyExpense'] as num,
       createdBy: PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
       participants: (json['participants'] as List<dynamic>)
-          .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>)),
       payer: PersonDTO.fromJson(json['payer'] as Map<String, dynamic>),
       currency: json['currency'] as String,
     );

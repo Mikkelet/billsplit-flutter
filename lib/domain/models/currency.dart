@@ -11,4 +11,9 @@ class Currency {
     if (other is! Currency) return false;
     return symbol.toLowerCase() == other.symbol.toLowerCase();
   }
+
+  @override
+  String toString() {
+    return "Currency(symbol=$symbol, rate=$rate)";
+  }
 }

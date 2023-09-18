@@ -1,4 +1,6 @@
+import 'package:billsplit_flutter/data/currency_converter.dart';
 import 'package:billsplit_flutter/data/debt_calculator.dart';
+import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
@@ -8,6 +10,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:collection/collection.dart';
+import 'package:get_it/get_it.dart';
 
 final samplePeopleShera = [
   Person("0", "Aang"),
@@ -100,6 +103,7 @@ List<Payment> get samplePayments {
     Payment(
       id: "",
       createdBy: person2,
+      paidBy: person2,
       timestamp: 6,
       currency: Currency(symbol: "usd", rate: 1),
       paidTo: person3,
@@ -108,6 +112,7 @@ List<Payment> get samplePayments {
     Payment(
       id: "",
       createdBy: person1,
+      paidBy: person1,
       currency: Currency(symbol: "usd", rate: 1),
       timestamp: 7,
       paidTo: person3,
@@ -116,6 +121,7 @@ List<Payment> get samplePayments {
     Payment(
       id: "",
       createdBy: person2,
+      paidBy: person2,
       currency: Currency(symbol: "usd", rate: 1),
       timestamp: 8,
       paidTo: person1,
@@ -125,6 +131,9 @@ List<Payment> get samplePayments {
 }
 
 void main() {
+  GetIt.instance.registerSingleton(SharedPrefs());
+  GetIt.instance.registerSingleton(CurrencyConverter());
+
   final debtCalculator =
       DebtCalculator(samplePeopleShera, sampleSharedExpenses, samplePayments);
 

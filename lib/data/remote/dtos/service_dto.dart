@@ -13,7 +13,7 @@ class ServiceDTO {
   final PersonDTO payer;
   final PersonDTO createdBy;
   final String currency;
-  final List<PersonDTO> participants;
+  final Iterable<PersonDTO> participants;
 
   ServiceDTO(
       {required this.id,

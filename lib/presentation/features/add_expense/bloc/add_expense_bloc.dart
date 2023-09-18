@@ -18,13 +18,8 @@ class AddExpenseBloc extends BaseCubit {
 
   AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main()) {
     if (groupExpense.id.isEmpty) {
-      print(group.defaultCurrencyState);
-      sharedPrefs.latestExchangeRates.forEach((key, value) {
-        print("$key: $value");
-      });
       final groupDefCurrencyRate = sharedPrefs
           .latestExchangeRates[group.defaultCurrencyState.toUpperCase()];
-      print(groupDefCurrencyRate);
       if (groupDefCurrencyRate == null) {
         updateCurrency(Currency.USD());
       } else {
@@ -34,7 +29,9 @@ class AddExpenseBloc extends BaseCubit {
     }
   }
 
-  Iterable<Person> get people => group.people + groupExpense.tempParticipants.toList();
+  Iterable<Person> get people {
+    return [...group.people, ...groupExpense.tempParticipants];
+}
 
   void onExpensesUpdated() {
     emit(Main());
@@ -72,7 +69,6 @@ class AddExpenseBloc extends BaseCubit {
   }
 
   void updateCurrency(Currency currency) {
-    print("Updating current = ${currency.symbol}");
     groupExpense.currencyState = currency;
     onExpensesUpdated();
   }

@@ -55,6 +55,7 @@ PaymentDTO _$PaymentDTOFromJson(Map<String, dynamic> json) => PaymentDTO(
       timestamp: json['timestamp'] as num,
       type: json['type'] as String? ?? "payment",
       currency: CurrencyDTO.fromJson(json['currency'] as Map<String, dynamic>),
+      paidBy: PersonDTO.fromJson(json['paidBy'] as Map<String, dynamic>),
       paidTo: PersonDTO.fromJson(json['paidTo'] as Map<String, dynamic>),
       amount: json['amount'] as num,
     );
@@ -68,4 +69,5 @@ Map<String, dynamic> _$PaymentDTOToJson(PaymentDTO instance) =>
       'paidTo': instance.paidTo.toJson(),
       'amount': instance.amount,
       'currency': instance.currency.toJson(),
+      'paidBy': instance.paidBy.toJson(),
     };

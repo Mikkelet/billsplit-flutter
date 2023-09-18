@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/dialogs/participant_picker/temporary_participant_view.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -38,8 +39,6 @@ class _ParticipantsPickerDialogState
       widget.people.length == widget.participants.length;
 
   bool showMin1PersonError = false;
-
-  final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -99,33 +98,10 @@ class _ParticipantsPickerDialogState
             ...widget.people.map(
               (person) => _participantView(person),
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                ProfilePictureView(person: Person("","")),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: TextField(
-                    controller: _textEditingController,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (name) {
-                      widget.onAddTempParticipant?.call(name);
-                      _textEditingController.clear();
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Enter a name for a temporary person",
-                      hintStyle: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            if(widget.onAddTempParticipant != null)
+              const SizedBox(height: 8),
+            if(widget.onAddTempParticipant != null)
+              TemporaryParticipantView(onAddTempParticipant: widget.onAddTempParticipant),
             const SizedBox(height: 8),
             if (showMin1PersonError)
               Text(

@@ -9,8 +9,8 @@ part 'group_dto.g.dart';
 class GroupDTO {
   final String id;
   final String name;
-  final List<PersonDTO> people;
-  final List<PersonDTO>? pastMembers;
+  final Iterable<PersonDTO> people;
+  final Iterable<PersonDTO>? pastMembers;
   final PersonDTO createdBy;
   final num timestamp;
   final EventDTO? latestEvent;

@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/shared_expense_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:json_pretty/json_pretty.dart';
 
 part 'event_dto.g.dart';
 
@@ -80,6 +81,7 @@ class PaymentDTO extends EventDTO {
   final PersonDTO paidTo;
   final num amount;
   final CurrencyDTO currency;
+  final PersonDTO paidBy;
 
   PaymentDTO(
       {required String id,
@@ -87,6 +89,7 @@ class PaymentDTO extends EventDTO {
       required num timestamp,
       String type = "payment",
       required this.currency,
+      required this.paidBy,
       required this.paidTo,
       required this.amount})
       : super(
@@ -100,4 +103,9 @@ class PaymentDTO extends EventDTO {
 
   @override
   Json toJson() => _$PaymentDTOToJson(this);
+
+  @override
+  String toString() {
+    return prettyPrintJson(toJson().toString());
+  }
 }

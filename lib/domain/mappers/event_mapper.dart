@@ -20,7 +20,8 @@ extension EventDTOExt on EventDTO? {
           timestamp: this!.timestamp,
           description: (this as GroupExpenseDTO).description,
           createdBy: this!.createdBy.toPerson(),
-          tempParticipants: [],
+          tempParticipants:
+              (this as GroupExpenseDTO).tempParticipants.toPeople(),
           payer: (this as GroupExpenseDTO).payee.toPerson(),
           sharedExpenses:
               (this as GroupExpenseDTO).sharedExpenses.toSharedExpense(),
@@ -37,7 +38,8 @@ extension EventExt on Event {
       final realId = id.startsWith(tempIdPrefix) ? "" : id;
       return GroupExpenseDTO(
           id: realId,
-          tempParticipants: (this as GroupExpense).tempParticipants.map((e) => e.toDTO()),
+          tempParticipants:
+              (this as GroupExpense).tempParticipants.map((e) => e.toDTO()),
           createdBy: createdBy.toDTO(),
           timestamp: timestamp,
           description: (this as GroupExpense).descriptionState,
@@ -50,6 +52,7 @@ extension EventExt on Event {
         createdBy: createdBy.toDTO(),
         timestamp: timestamp,
         paidTo: (this as Payment).paidTo.toDTO(),
+        paidBy: (this as Payment).paidBy.toDTO(),
         currency: (this as Payment).currency.toDTO(),
         amount: (this as Payment).amount);
   }

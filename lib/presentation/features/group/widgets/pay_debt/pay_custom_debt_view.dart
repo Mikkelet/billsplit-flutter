@@ -1,9 +1,11 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
+import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_cubit.dart';
@@ -12,9 +14,6 @@ import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../domain/models/group.dart';
-import '../../../../common/expense_textfield/expense_textfield_controller.dart';
 
 class PayCustomDebtView extends StatefulWidget {
   final Group group;
@@ -28,11 +27,17 @@ class PayCustomDebtView extends StatefulWidget {
 }
 
 class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
-  late final controller =
-      ExpenseTextFieldController(text: widget.debt.second.fmtTextField());
+  late final controller = ExpenseTextFieldController();
 
   @override
   Widget build(BuildContext context) {
+    String title;
+
+    if(widget.debt.second > 0){
+      title = "Pay your debt to ${widget.debt.first.nameState}";
+    }else {
+      title = "Mark ${widget.debt.first.nameState}'s debt as paid";
+    }
     return BaseBlocWidget<DebtCubit>(
       listener: (context, cubit, state) {
         if (state is DebtPayed) {
@@ -43,6 +48,8 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
       },
       create: (context) => DebtCubit(widget.group, widget.debt),
       child: BaseBlocBuilder<DebtCubit>(builder: (cubit, state) {
+        controller.text = cubit.maxAmount.fmt2dec();
+
         return SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
@@ -50,6 +57,8 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                const SizedBox(height: 32),
+                Text(title, style: Theme.of(context).textTheme.labelLarge),
                 const SizedBox(height: 32),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

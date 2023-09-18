@@ -59,11 +59,8 @@ class IndividualExpenseView extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Builder(builder: (context) {
-                            final displayName = isPayer
-                                ? "${person.displayName} is paying"
-                                : person.displayName;
                             return Text(
-                              displayName,
+                              person.displayName,
                               style: Theme.of(context).textTheme.labelSmall,
                               maxLines: 2,
                               textAlign: TextAlign.start,

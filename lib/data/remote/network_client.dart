@@ -16,15 +16,15 @@ class NetworkClient {
   static bool allowNetworkLogging = false;
   static bool debug = false;
   static bool emulator = false;
+  static String apiVersion = "v4";
   static String debugBaseUrl = Platform.isAndroid
-      ? "http://10.0.2.2:5000/billsplittapp/us-central1/v3/"
-      : "http://localhost:5000/billsplittapp/us-central1/v3/";
+      ? "http://10.0.2.2:5000/billsplittapp/us-central1/$apiVersion/"
+      : "http://localhost:5000/billsplittapp/us-central1/$apiVersion/";
   static String devUrl =
-      "http://192.168.8.227:5000/billsplittapp/us-central1/v3/";
+      "http://192.168.8.227:5000/billsplittapp/us-central1/$apiVersion/";
   static String releaseBaseUrl =
-      "https://us-central1-billsplittapp.cloudfunctions.net/v3/";
-  static String baseUrl = debug
-      ? emulator
+      "https://us-central1-billsplittapp.cloudfunctions.net/$apiVersion/";
+  static String baseUrl = debug ? emulator
           ? debugBaseUrl
           : devUrl
       : releaseBaseUrl;
@@ -84,7 +84,7 @@ class NetworkClient {
       debugPrint('Response body:${prettyPrintJson(response.body)}');
     }
     if (response.statusCode == 408) {
-      return get(path, refreshToken: true);
+      return post(path, body, refreshToken: true);
     }
     if (!response.statusCode.toString().startsWith("2")) {
       final error = BillSplitError.fromJson(response.toJson());
@@ -99,7 +99,7 @@ class NetworkClient {
         ? await _authProvider.getToken(true)
         : await _authProvider.getToken(false);
     final headers = {
-      HttpHeaders.authorizationHeader: "$token",
+      HttpHeaders.authorizationHeader: token,
       HttpHeaders.contentTypeHeader: "application/json"
     };
     final response =
@@ -115,7 +115,7 @@ class NetworkClient {
 
     }
     if (response.statusCode == 408) {
-      return get(path, refreshToken: true);
+      return put(path, body, refreshToken: true);
     }
     if (response.statusCode == 204) {
       return null;
@@ -153,7 +153,7 @@ class NetworkClient {
       debugPrint('Response body:${prettyPrintJson(response.body)}');
     }
     if (response.statusCode == 408) {
-      return get(path, refreshToken: true);
+      return delete(path, body: body, refreshToken: true);
     }
     if (response.statusCode == 204) {
       return null;

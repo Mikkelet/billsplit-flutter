@@ -10,8 +10,7 @@ SharedExpenseDTO _$SharedExpenseDTOFromJson(Map<String, dynamic> json) =>
     SharedExpenseDTO(
       json['description'] as String,
       (json['participants'] as List<dynamic>)
-          .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>)),
       json['expense'] as num,
     );
 

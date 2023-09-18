@@ -5,7 +5,7 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
-import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_currency.dart';

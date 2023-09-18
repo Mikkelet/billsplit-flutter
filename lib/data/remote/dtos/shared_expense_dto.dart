@@ -7,7 +7,7 @@ part 'shared_expense_dto.g.dart';
 @JsonSerializable()
 class SharedExpenseDTO {
   final String description;
-  final List<PersonDTO> participants;
+  final Iterable<PersonDTO> participants;
   final num expense;
 
   SharedExpenseDTO(this.description, this.participants, this.expense);

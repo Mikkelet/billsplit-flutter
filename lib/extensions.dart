@@ -1,4 +1,6 @@
 
+import 'package:billsplit_flutter/domain/models/person.dart';
+
 import 'domain/models/individual_expense.dart';
 
 extension IterableExt<T> on Iterable<T> {
@@ -22,6 +24,12 @@ extension Sum on List<IndividualExpense> {
 extension MapExt<T> on Iterable<Iterable<T>> {
   Iterable<T> flatMap() {
     return fold([], (previousValue, element) => [...previousValue, ...element]);
+  }
+}
+
+extension PersonExt on Person {
+  bool isTemp(){
+    return uid.startsWith("temp");
   }
 }
 

@@ -11,11 +11,9 @@ GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
       defaultCurrency: json['defaultCurrency'] as String,
       name: json['name'] as String,
       people: (json['people'] as List<dynamic>)
-          .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>)),
       pastMembers: (json['pastMembers'] as List<dynamic>?)
-          ?.map((e) => PersonDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          ?.map((e) => PersonDTO.fromJson(e as Map<String, dynamic>)),
       createdBy: PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
       timestamp: json['timestamp'] as num,
       latestEvent: json['latestEvent'] == null

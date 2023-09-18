@@ -21,6 +21,7 @@ extension PaymentDtoExt on PaymentDTO {
       currency: currency.toCurrency(),
       createdBy: createdBy.toPerson(),
       timestamp: timestamp,
+      paidBy: paidBy.toPerson(),
       paidTo: paidTo.toPerson(),
       amount: amount);
 }

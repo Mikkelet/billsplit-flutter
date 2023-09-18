@@ -21,26 +21,25 @@ class DebtView extends StatelessWidget {
 
     String text = "";
     TextStyle style = Theme.of(context).textTheme.bodyLarge!;
-    final String defaultCurrency =
-        groupCubit.group.defaultCurrencyState.toUpperCase();
-    final convertDebt = groupCubit.convertToDefaultCurrency(debt.second);
+    final String defaultCurrency = groupCubit.group.defaultCurrencyState.toUpperCase();
     final isDebt = debt.second > 0;
 
     if (isDebt) {
       text =
-          "You owe $defaultCurrency ${convertDebt.fmt2dec()} to ${debt.first.displayName}";
+          "You owe $defaultCurrency ${debt.second.fmt2dec()} to ${debt.first.displayName}";
       style = SplitsbyTextTheme.groupViewNegativeDebt(context);
     } else if (debt.second < 0) {
       text =
-          "${debt.first.displayName} owes you $defaultCurrency ${convertDebt.abs().fmt2dec()}";
+          "${debt.first.displayName} owes you $defaultCurrency ${debt.second.abs().fmt2dec()}";
       style = SplitsbyTextTheme.groupViewPositiveDebt(context);
     }
+    final showPayButton = isDebt || debt.first.isTemp();
     return Row(
       children: [
         Expanded(
           child: RoundedListItem(
             borderRadius: builder(() {
-              if (isDebt) {
+              if (showPayButton) {
                 return const BorderRadius.horizontal(
                   right: Radius.circular(10),
                   left: Radius.circular(30),
@@ -55,8 +54,8 @@ class DebtView extends StatelessWidget {
             child: Text(text, style: style),
           ),
         ),
-        if (isDebt) const SizedBox(width: 4),
-        if (isDebt)
+        if (showPayButton) const SizedBox(width: 4),
+        if (showPayButton)
           ClickableListItem(
             color: Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: const BorderRadius.horizontal(
@@ -70,21 +69,30 @@ class DebtView extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) => PayCustomDebtView(
-                  debt: Pair(debt.first,
-                      groupCubit.convertToDefaultCurrency(debt.second)),
+                  debt: debt,
                   group: groupCubit.group,
                 ),
               );
             },
-            child: Text(
-              "Pay",
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
-            ),
+            child: _payButtonContent(context),
           )
       ],
+    );
+  }
+
+  Widget _payButtonContent(BuildContext context) {
+    if (debt.first.isTemp()) {
+      return Icon(
+        Icons.check,
+        color: Theme.of(context).colorScheme.onSecondary,
+      );
+    }
+    return Text(
+      "Pay",
+      style: Theme.of(context)
+          .textTheme
+          .labelMedium
+          ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
     );
   }
 }

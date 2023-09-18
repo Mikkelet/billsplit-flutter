@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_exp
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_description_view.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
-import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/utils/list_position.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';

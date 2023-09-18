@@ -64,10 +64,8 @@ class DebtCalculator {
     return allDebtsByPayer.map((debtsByPayer) {
       final payer = debtsByPayer.first;
       final owedByPayer = allDebtsByPayer
-          .where((element) =>
-              element.first.uid !=
-              payer
-                  .uid) // filter expenses not paid by payee, as payee cannot have debt to themselves
+          // filter expenses not paid by payee, as payee cannot have debt to themselves
+          .where((element) => element.first.uid != payer.uid)
           .map((debts) {
         final indebted = debts.first;
         final debtToPayer = debts.second
@@ -103,7 +101,6 @@ class DebtCalculator {
     });
   }
 
-  // POSSIBLE USES PAYMENTS TWICE, SINCE THEY'RE ALREADY INCLUDED
   Iterable<Pair<Person, num>> calculateDebtsAfterPayments(Person person) {
     // get debts owed by person
     final effectiveDebt = calculateEffectiveDebt(person);
@@ -114,7 +111,7 @@ class DebtCalculator {
       if (debtAmount > 0) {
         // if debt exists, find payments paid by person to debtee
         final paymentsByPerson = payments.where((element) =>
-            element.createdBy.uid == person.uid &&
+            element.paidBy.uid == person.uid &&
             element.paidTo.uid == debtee.uid);
         final accPayments = paymentsByPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount - accPayments);
@@ -122,7 +119,7 @@ class DebtCalculator {
         // if debt is owed TO person (negative debt), find payments made by debtee to person
         final paymentsToPerson = payments.where((element) =>
             element.paidTo.uid == person.uid &&
-            element.createdBy.uid == debtee.uid);
+            element.paidBy.uid == debtee.uid);
         final accPayments = paymentsToPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount + accPayments);
       }
@@ -183,7 +180,7 @@ class DebtCalculator {
     print("");
     for (var it in payments) {
       print(
-          "${it.createdBy.displayName} paid \$${it.amount} to ${it.paidTo.displayName}");
+          "${it.paidBy.displayName} paid \$${it.amount} to ${it.paidTo.displayName}");
     }
     print("");
     for (var person in people) {
@@ -222,7 +219,7 @@ extension PaymentExt on Payment {
       timestamp: timestamp,
       description: "",
       tempParticipants: [],
-      payer: createdBy,
+      payer: paidBy,
       sharedExpenses: [
         SharedExpense(expense: amount, participants: [paidTo], description: "")
       ],

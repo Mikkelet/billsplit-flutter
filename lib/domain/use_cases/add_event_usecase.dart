@@ -1,19 +1,14 @@
-import 'package:billsplit_flutter/data/debt_calculator.dart';
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/api_service.dart';
-import 'package:billsplit_flutter/data/remote/dtos/debts_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/group_expense_mapper.dart';
-import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
-import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/utils/constants.dart';
-import 'package:billsplit_flutter/utils/pair.dart';
 
 class AddEventUseCase {
   final _apiService = getIt<ApiService>();
@@ -29,13 +24,7 @@ class AddEventUseCase {
     }
 
     try {
-      final debtResponse = (event is Payment)
-          ? await _getDebtWithAddedEvent(groupId, event)
-          : await _getDebtWithAddedEvent(groupId, null);
-
-      final debt = debtResponse.map((e) => DebtDTO(e.first, e.second)).toList();
-      final response =
-          await _apiService.addEvent(groupId, event.toEventDTO(), debt);
+      final response = await _apiService.addEvent(groupId, event.toEventDTO());
 
       final EventDTO eventDto = response.event!;
 
@@ -55,22 +44,5 @@ class AddEventUseCase {
       }
       rethrow;
     }
-  }
-
-  Future<Iterable<Pair<String, num>>> _getDebtWithAddedEvent(
-      String groupId, Payment? payment) async {
-    final groupDb = await _database.groupsDAO.getGroup(groupId);
-    final group = groupDb.toGroup();
-    final people = group.allPeople.toList();
-    final groupExpenseDb = await _database.groupExpenseDAO.watch(groupId).first;
-    final groupExpenses = groupExpenseDb.toGroupExpenses();
-    final paymentsDb = await _database.paymentsDAO.watch(groupId).first;
-    Iterable<Payment> payments = paymentsDb.toPayments();
-    final paymentsWithExtra =
-        payment == null ? payments : [...payments, payment];
-
-    final debt = DebtCalculator(people, groupExpenses, paymentsWithExtra)
-        .calculateEffectiveDebtForGroup();
-    return debt;
   }
 }

@@ -10,7 +10,6 @@ Map<String, dynamic> _$AddEventRequestToJson(AddEventRequest instance) =>
     <String, dynamic>{
       'groupId': instance.groupId,
       'event': instance.event.toJson(),
-      'debts': instance.debts.map((e) => e.toJson()).toList(),
     };
 
 AddEventResponse _$AddEventResponseFromJson(Map<String, dynamic> json) =>
