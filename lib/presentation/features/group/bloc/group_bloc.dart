@@ -16,6 +16,7 @@ import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_services_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/storage/upload_group_picture_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
@@ -34,6 +35,7 @@ class GroupBloc extends BaseCubit {
   final _addExpenseUseCase = AddEventUseCase();
   final _convertCurrencyUseCase = ConvertCurrencyUseCase();
   final _getExchangeRatesUseCase = GetExchangeRatesUseCase();
+  final _uploadGroupPicture = UploadGroupPictureUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
@@ -120,5 +122,13 @@ class GroupBloc extends BaseCubit {
   void updateCurrency(Currency currency) {
     group.defaultCurrencyState = currency.symbol;
     emit(Main());
+  }
+
+  void uploadGroupPicture() {
+    _uploadGroupPicture.launch(group).then((value) {
+      emit(Main());
+    }).catchError((err, st) {
+      showError(err, st);
+    });
   }
 }

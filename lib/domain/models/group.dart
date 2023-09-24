@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 class Group {
   final String id;
   final String _name;
+  final String _coverImageUrl;
   final List<Person> people;
   final List<Person> pastMembers;
   final Person createdBy;
@@ -15,10 +16,12 @@ class Group {
   late String nameState = _name;
   late Event? latestEventState = _latestEvent;
   late String defaultCurrencyState = _defaultCurrency;
+  late String coverImageUrlState = _coverImageUrl;
 
   Group(
       {required this.id,
       required String name,
+      required String coverImageUrl,
       required this.people,
       required this.pastMembers,
       required this.createdBy,
@@ -27,6 +30,7 @@ class Group {
       required String defaultCurrency})
       : _latestEvent = latestEvent,
         _name = name,
+        _coverImageUrl = coverImageUrl,
         _defaultCurrency = defaultCurrency;
 
   Iterable<Person> get allPeople => [...people, ...pastMembers];
@@ -35,6 +39,7 @@ class Group {
       : this(
           id: "",
           createdBy: createdBy,
+          coverImageUrl: "",
           name: name,
           people: people,
           pastMembers: [],
@@ -47,6 +52,7 @@ class Group {
       : this(
             id: "G$seed",
             name: "Group $seed",
+            coverImageUrl: "",
             pastMembers: [],
             people: [],
             createdBy: Person.dummy(2),

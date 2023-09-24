@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/features/group/notifications_sett
 import 'package:billsplit_flutter/presentation/features/group/widgets/default_currency/default_group_currency_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/group_members_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/leave_group_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class GroupSettings extends StatelessWidget {
@@ -18,6 +19,26 @@ class GroupSettings extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 32),
+            ClickableListItem(
+                height: 64,
+                onClick: () {
+                  cubit.uploadGroupPicture();
+                },
+                child: Builder(builder: (context) {
+                  if (cubit.group.coverImageUrlState.isNotEmpty) {
+                    return SizedBox(
+                      height: 64,
+                      width: double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl: cubit.group.coverImageUrlState,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  }
+                  return Text("Upload group picture",
+                      style: Theme.of(context).textTheme.labelLarge);
+                })),
+            const SizedBox(height: 4),
             UpdatableTextField(
               initState: cubit.group.nameState,
               updateFuture: cubit.updateGroupName,

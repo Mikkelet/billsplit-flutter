@@ -7,7 +7,7 @@ class UpdateProfilePictureUseCase {
   final _storageProvider = getIt<FirebaseStorageProvider>();
 
   Future<String> launch(Uri uri) async {
-    final downloadUrl = await _storageProvider.uploadPhoto(_authProvider.user!.uid, uri);
+    final downloadUrl = await _storageProvider.uploadProfilePicture(_authProvider.user!.uid, uri);
     _authProvider.updateProfilePicture(downloadUrl);
     return downloadUrl;
   }
