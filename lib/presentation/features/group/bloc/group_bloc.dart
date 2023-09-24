@@ -9,7 +9,6 @@ import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_person_to_group_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/leave_group_usecase.dart';
@@ -21,7 +20,6 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
-import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 
 class GroupBloc extends BaseCubit {
@@ -33,7 +31,6 @@ class GroupBloc extends BaseCubit {
   final _addPersonToGroupUseCase = AddPersonToGroupUseCase();
   final _addGroupUseCase = AddGroupUseCase();
   final _addExpenseUseCase = AddEventUseCase();
-  final _convertCurrencyUseCase = ConvertCurrencyUseCase();
   final _getExchangeRatesUseCase = GetExchangeRatesUseCase();
   final _uploadGroupPicture = UploadGroupPictureUseCase();
 
@@ -51,13 +48,7 @@ class GroupBloc extends BaseCubit {
           (event) => event.toList().sortedBy((element) => element.nameState));
 
   Stream<Iterable<Pair<Person, num>>> getDebtsStream() =>
-      _observeDebtsUseCase.observe(group.id).map((event) {
-        return event.map((e) {
-          final converted = _convertCurrencyUseCase.launch(
-              e.second, Currency.USD().symbol, group.defaultCurrencyState);
-          return Pair(e.first, converted);
-        }).where((element) => element.second.fmt2dec() != "0");
-      });
+      _observeDebtsUseCase.observe(group);
 
   void loadGroup() async {
     _getExchangeRatesUseCase.launch();
@@ -111,12 +102,6 @@ class GroupBloc extends BaseCubit {
 
   void retryAddExpense(GroupExpense expense) {
     _addExpenseUseCase.launch(group.id, expense);
-  }
-
-  num convertToDefaultCurrency(num amount) {
-    // debt is always calculated in USD
-    return _convertCurrencyUseCase.launch(
-        amount, "usd", group.defaultCurrencyState);
   }
 
   void updateCurrency(Currency currency) {

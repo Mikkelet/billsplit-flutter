@@ -12,7 +12,7 @@ class ServicesView extends StatelessWidget {
     final cubit = context.read<GroupBloc>();
     return DefaultStreamBuilder(
       stream: cubit.getServicesStream(),
-      body: (services) {
+      builder: (_, services) {
         if (services.isEmpty) {
           return Center(
             child: Padding(

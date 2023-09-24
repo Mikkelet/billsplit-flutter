@@ -21,7 +21,7 @@ class EventsView extends StatelessWidget {
     return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
       return DefaultStreamBuilder(
           stream: cubit.getEventsStream(),
-          body: (events) {
+          builder: (_, events) {
             if (events.isEmpty) {
               return Center(
                   child: Text(

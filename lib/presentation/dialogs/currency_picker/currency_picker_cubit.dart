@@ -25,7 +25,7 @@ class CurrencyPickerCubit extends BaseCubit {
 
   num getRateForCurrency(String currency) {
     final convertTo = convertToCurrency ?? sharedPrefs.userPrefDefaultCurrency;
-    return _convertCurrencyUseCase.launch(1, currency, convertTo);
+    return _convertCurrencyUseCase.launch(1, currency.toUpperCase(), convertTo);
   }
 
   Iterable<Currency> get recentCurrencies {

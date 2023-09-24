@@ -38,7 +38,10 @@ class AuthProvider {
     });
   }
 
-  Person? get user => _user;
+  Person get user {
+    if(_user == null) throw Exception("User not found");
+    return _user!;
+  }
 
   Future signOut() async {
     await _firebaseAuth.signOut();

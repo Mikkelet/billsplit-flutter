@@ -46,8 +46,7 @@ class SharedPrefs {
     if (json.isEmpty) return <String, num>{};
     final decode = jsonDecode(json);
     final cast = (decode as Map).map(
-        (key, value) => MapEntry<String, num>(key as String, value as num));
-
+        (key, value) => MapEntry<String, num>((key as String).toUpperCase(), value as num));
     return cast;
   }
 
@@ -57,7 +56,7 @@ class SharedPrefs {
 
   // user preference: default currency
   String get userPrefDefaultCurrency =>
-      _sharedPrefs.getString(userPrefDefaultCurrencyKey) ?? "usd";
+      _sharedPrefs.getString(userPrefDefaultCurrencyKey) ?? "USD";
 
   set userPrefDefaultCurrency(String symbol) =>
       _sharedPrefs.setString(userPrefDefaultCurrencyKey, symbol);
@@ -68,7 +67,10 @@ class SharedPrefs {
     if (lsJson.isEmpty) return [];
     final recentSorted =
         lsJson.map((e) => RecentCurrency.fromJson(jsonDecode(e))).toList();
-    return recentSorted.map((e) => Currency(symbol: e.symbol, rate: 0));
+    return recentSorted.map((e) {
+      final rate = latestExchangeRates[e.symbol.toUpperCase()];
+      return Currency(symbol: e.symbol, rate: rate!);
+    });
   }
 
   set recentCurrencies(Iterable<Currency> currencies) {

@@ -64,7 +64,7 @@ class GroupView extends StatelessWidget {
                           limit: 3,
                         ),
                         StreamBuilder(
-                            stream: cubit.getDebtsStream(group.id),
+                            stream: cubit.getDebtsStream(group),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return Expanded(
@@ -114,11 +114,8 @@ class GroupView extends StatelessWidget {
   }
 
   Widget _debtView(BuildContext context, Group group, num debt) {
-    final cubit = context.read<GroupsBloc>();
-    final convertDebt = debt;
-    print("qqq debt=$debt");
     final String currency = group.defaultCurrencyState.toUpperCase();
-    if (convertDebt == 0) {
+    if (debt == 0) {
       return const SizedBox();
     }
     return Row(
@@ -126,7 +123,7 @@ class GroupView extends StatelessWidget {
         const Expanded(child: SizedBox()),
         if (debt > 0)
           Expanded(
-            child: Text(convertDebt.fmt2dec(),
+            child: Text(debt.fmt2dec(),
                 textAlign: TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -134,7 +131,7 @@ class GroupView extends StatelessWidget {
           ),
         if (debt < 0)
           Expanded(
-            child: Text(convertDebt.abs().fmt2dec(),
+            child: Text(debt.abs().fmt2dec(),
                 textAlign: TextAlign.end,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

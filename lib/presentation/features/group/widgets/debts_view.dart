@@ -12,7 +12,7 @@ class DebtsView extends StatelessWidget {
     final cubit = context.read<GroupBloc>();
     return DefaultStreamBuilder(
         stream: cubit.getDebtsStream(),
-        body: (debts) {
+        builder: (_, debts) {
           if (debts.isEmpty) {
             return Center(
               child: Padding(
