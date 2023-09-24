@@ -39,7 +39,7 @@ class FriendsPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       DefaultStreamBuilder(
                         stream: cubit.friendsStream(),
-                        body: (friends) {
+                        builder: (_, friends) {
                           if (cubit.state is Loading && friends.isEmpty) {
                             return const Center(
                                 child: CircularProgressIndicator());

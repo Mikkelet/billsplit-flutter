@@ -81,24 +81,24 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
                         _currencyButton(Key(currency.symbol), cubit, currency)),
                   if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
                     const Text("All currencies"),
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: cubit.currencies
+                  Builder(builder: (context) {
+                    final filtered = cubit.currencies
                         .where((element) => filter.isNotEmpty
                             ? element.symbol.toLowerCase().startsWith(filter)
                             : true)
-                        .length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final items = cubit.currencies
-                          .where((element) => filter.isNotEmpty
-                              ? element.symbol.toLowerCase().startsWith(filter)
-                              : true)
-                          .toList();
-                      final item = items[index];
-                      return _currencyButton(Key(item.symbol), cubit, item);
-                    },
-                  )
+                        .toList();
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: filtered.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final currency = filtered[index];
+                        if(currency.symbol == "THB") print("qqq thb=$currency");
+                        return _currencyButton(
+                            Key(currency.symbol), cubit, currency);
+                      },
+                    );
+                  })
                 ],
               ),
             ),

@@ -25,7 +25,6 @@ class AddEventUseCase {
 
     try {
       final response = await _apiService.addEvent(groupId, event.toEventDTO());
-
       final EventDTO eventDto = response.event!;
 
       if (eventDto is GroupExpenseDTO) {
@@ -36,7 +35,6 @@ class AddEventUseCase {
         final paymentDb = eventDto.toDb(groupId);
         await _database.paymentsDAO.insert(paymentDb);
       }
-
     } catch (e) {
       if (event is GroupExpense) {
         final expenseDb = event.toDb(groupId, SyncState.failed, tempId: tempId);

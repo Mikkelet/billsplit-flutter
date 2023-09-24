@@ -26,7 +26,7 @@ class FriendPickerDialog extends StatelessWidget {
           builder: (cubit, state) {
             return DefaultStreamBuilder(
               stream: cubit.friendsStream,
-              body: (friends) {
+              builder: (_, friends) {
                 if (friends.isEmpty) {
                   return const NoFriendsDialog();
                 }

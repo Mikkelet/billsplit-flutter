@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class DefaultStreamBuilder<T> extends StatelessWidget {
   final Stream<T> stream;
-  final Widget Function(T) body;
+  final Widget Function(BuildContext, T) builder;
 
   const DefaultStreamBuilder(
-      {Key? key, required this.stream, required this.body})
+      {Key? key, required this.stream, required this.builder})
       : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
             return const Center(child: Text("No data"));
           }
           final data = snapshot.data!;
-          return body(data);
+          return builder(context, data);
         });
   }
 }
