@@ -8,8 +8,9 @@ part of 'group_dto.dart';
 
 GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
       id: json['id'] as String,
-      defaultCurrency: json['defaultCurrency'] as String,
       name: json['name'] as String,
+      coverImageUrl: json['coverImageUrl'] as String,
+      defaultCurrency: json['defaultCurrency'] as String,
       people: (json['people'] as List<dynamic>)
           .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>)),
       pastMembers: (json['pastMembers'] as List<dynamic>?)
@@ -24,6 +25,7 @@ GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
 Map<String, dynamic> _$GroupDTOToJson(GroupDTO instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'coverImageUrl': instance.coverImageUrl,
       'people': instance.people.map((e) => e.toJson()).toList(),
       'pastMembers': instance.pastMembers?.map((e) => e.toJson()).toList(),
       'createdBy': instance.createdBy.toJson(),

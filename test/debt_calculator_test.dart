@@ -21,6 +21,7 @@ final samplePeopleShera = [
 final sampleGroup = Group(
     id: "GROUP0",
     name: "My group",
+    coverImageUrl: "",
     pastMembers: [],
     defaultCurrency: "usd",
     people: samplePeopleShera,

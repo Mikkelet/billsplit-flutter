@@ -9,6 +9,7 @@ part 'group_dto.g.dart';
 class GroupDTO {
   final String id;
   final String name;
+  final String coverImageUrl;
   final Iterable<PersonDTO> people;
   final Iterable<PersonDTO>? pastMembers;
   final PersonDTO createdBy;
@@ -18,8 +19,9 @@ class GroupDTO {
 
   GroupDTO(
       {required this.id,
-      required this.defaultCurrency,
       required this.name,
+      required this.coverImageUrl,
+      required this.defaultCurrency,
       required this.people,
       required this.pastMembers,
       required this.createdBy,

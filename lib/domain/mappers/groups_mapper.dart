@@ -18,6 +18,7 @@ extension GroupDtoExt on GroupDTO {
   Group toGroup() => Group(
       id: id,
       name: name,
+      coverImageUrl: coverImageUrl,
       defaultCurrency: defaultCurrency,
       people: people.toPeople(),
       createdBy: createdBy.toPerson(),
@@ -32,6 +33,7 @@ extension GroupExt on Group {
   GroupDTO toDTO() => GroupDTO(
       id: id,
       name: nameState,
+      coverImageUrl: coverImageUrlState,
       people: people.toDTO(),
       defaultCurrency: defaultCurrencyState,
       pastMembers: pastMembers.toDTO(),

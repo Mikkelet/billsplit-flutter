@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
@@ -21,82 +20,103 @@ class GroupView extends StatelessWidget {
     return Center(
       child: ClickableListItem(
         color: Theme.of(context).colorScheme.primaryContainer,
-        elevation: builder(
-          () {
-            if (Theme.of(context).colorScheme.brightness == Brightness.dark) {
-              return 0;
-            }
-            return 2;
-          },
-        ),
+        elevation: _getElevation(context),
         onClick: () {
           _onClick(context);
         },
+        padding: EdgeInsets.zero,
         cornerRadius: 10,
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.bottomLeft,
               children: [
-                Text(group.nameState,
-                    style: Theme.of(context).textTheme.titleSmall,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ProfilePictureStack(
-                      people: group.people,
-                      size: 30,
-                      limit: 3,
-                    ),
-                    StreamBuilder(
-                        stream: cubit.getDebtsStream(group.id),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Expanded(
-                                child: _debtView(
-                                    context, group, snapshot.requireData));
-                          }
-                          return const SizedBox();
-                        })
-                  ],
+                groupPicture(),
+                Container(
+                  constraints: const BoxConstraints(minHeight: 32),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(group.nameState,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: Colors.white),
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis),
                 ),
               ],
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ProfilePictureStack(
+                          people: group.people,
+                          size: 30,
+                          limit: 3,
+                        ),
+                        StreamBuilder(
+                            stream: cubit.getDebtsStream(group.id),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Expanded(
+                                    child: _debtView(
+                                        context, group, snapshot.requireData));
+                              }
+                              return const SizedBox();
+                            })
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // TODO Consider
   Widget groupPicture() {
+    if (group.coverImageUrlState.isEmpty) {
+      return Container(
+        decoration: const BoxDecoration(color: Colors.white),
+      );
+    }
     return Container(
-        height: 100,
-        width: 100,
-        decoration: const BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            )),
-        child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
-            child: Image.network(
-              "https://i.imgur.com/iIbMzPG.jpeg",
-              fit: BoxFit.cover,
-            )));
+      height: 100,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          )),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+        child: Image.network(
+          group.coverImageUrlState,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 
   Widget _debtView(BuildContext context, Group group, num debt) {
     final cubit = context.read<GroupsBloc>();
-    final convertDebt = cubit.convertToDefault(group, debt);
+    final convertDebt = debt;
+    print("qqq debt=$debt");
     final String currency = group.defaultCurrencyState.toUpperCase();
     if (convertDebt == 0) {
       return const SizedBox();
@@ -131,5 +151,12 @@ class GroupView extends StatelessWidget {
 
   void _onClick(BuildContext context) {
     Navigator.of(context).push(GroupPage.getRoute(group));
+  }
+
+  double _getElevation(BuildContext context) {
+    if (Theme.of(context).colorScheme.brightness == Brightness.dark) {
+      return 0;
+    }
+    return 2;
   }
 }
