@@ -16,10 +16,11 @@ class GroupsBloc extends BaseCubit {
   GroupsBloc() : super();
 
   Stream<List<Group>> getGroupStream() =>
-      _observeGroupsUseCase.observe().map((event) => event
-          .sortedBy<num>((group) => group.latestEventState?.timestamp ?? 0)
-          .reversed
-          .toList());
+      _observeGroupsUseCase.observe().map((event) =>
+          event
+              .sortedBy<num>((group) => group.latestEventState?.timestamp ?? 0)
+              .reversed
+              .toList());
 
   void loadProfile() async {
     emit(Loading());
@@ -37,7 +38,9 @@ class GroupsBloc extends BaseCubit {
           return 0;
         }
         if (event.length > 1) {
-          return event.map((e) => e.second).sum;
+          return event
+              .map((e) => e.second)
+              .sum;
         }
         return event.first.second;
       });
@@ -47,6 +50,22 @@ class GroupsBloc extends BaseCubit {
       await _getGroupsUseCase.launch();
     } catch (e, st) {
       showError(e, st);
+    }
+  }
+
+  String getGreeting() {
+    final now = DateTime.now();
+    final morning = DateTime.now().copyWith(hour: 5, minute: 0);
+    final noon = DateTime.now().copyWith(hour: 12, minute: 0);
+    final evening = DateTime.now().copyWith(hour: 18, minute: 0);
+    final name = user.displayName.replaceRange(
+        0, 1, user.displayName[0].toUpperCase());
+    if (now.isAfter(morning) && now.isBefore(noon)) {
+      return "Good morning, $name";
+    } else if (now.isAfter(noon) && now.isBefore(evening)) {
+      return "Good afternoon, $name";
+    } else {
+      return "Good evening, $name";
     }
   }
 }

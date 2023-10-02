@@ -22,6 +22,7 @@ class ProfilePage extends StatelessWidget {
       child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.background,
             leading: const BackButton(),
           ),
           body: Builder(builder: (context) {

@@ -6,7 +6,6 @@ import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
-import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,9 +24,12 @@ class GroupsPage extends StatelessWidget {
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size(double.infinity, 64),
-              child: Builder(builder: (context) {
-                return _appBar(context);
-              }),
+              child: Builder(
+                builder: (context) {
+                  // Needs to wrapped in Builder to get appdrawer to work
+                  return _appBar(context);
+                }
+              ),
             ),
             endDrawer: const Drawer(
               child: ProfilePage(),
@@ -44,11 +46,11 @@ class GroupsPage extends StatelessWidget {
                 },
               ),
             ),
-            body: Center(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await cubit.refreshGroups();
-                },
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await cubit.refreshGroups();
+              },
+              child: Center(
                 child: DefaultStreamBuilder(
                   stream: cubit.getGroupStream(),
                   builder: (_, groups) {
@@ -67,17 +69,29 @@ class GroupsPage extends StatelessWidget {
                         ),
                       );
                     }
-                    return ListView.builder(
-                      controller: scrollingController,
-                      itemCount: groups.length,
+                    return Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 32, horizontal: 16),
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: GroupView(group: groups[index]),
-                        );
-                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(cubit.getGreeting(), style: Theme.of(context).textTheme.displayLarge),
+                          const SizedBox(height: 16),
+                          Expanded(
+                            child: ListView.builder(
+                              controller: scrollingController,
+                              itemCount: groups.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: GroupView(group: groups[index]),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -91,8 +105,9 @@ class GroupsPage extends StatelessWidget {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.secondary,
+      backgroundColor: Theme.of(context).colorScheme.background,
       actions: [Container()],
+      scrolledUnderElevation: 0,
       bottom: PreferredSize(
         preferredSize: const Size(double.infinity, 64),
         child: Padding(
@@ -101,8 +116,7 @@ class GroupsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("Splitsby",
-                  style: SplitsbyTextTheme.splitsbyTitle(context)),
+              const Spacer(),
               IconButton(
                   onPressed: () {
                     Scaffold.of(context).openEndDrawer();
