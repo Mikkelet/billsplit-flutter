@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ClickableListItem extends StatelessWidget {
-  final Function() onClick;
+  final VoidCallback onClick;
   final Widget child;
   final Color? color;
-  final EdgeInsets? padding;
-  final Alignment? alignment;
+  final EdgeInsets padding;
+  final Alignment alignment;
   final BorderRadius? borderRadius;
   final double cornerRadius;
   final double elevation;
@@ -22,10 +22,10 @@ class ClickableListItem extends StatelessWidget {
       this.color,
       this.height,
       this.width,
-      this.padding,
-      this.alignment,
-      this.borderRadius,
+      this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      this.alignment = Alignment.center,
       this.cornerRadius = 30,
+      this.borderRadius,
       this.elevation = 0});
 
   @override
@@ -41,13 +41,12 @@ class ClickableListItem extends StatelessWidget {
         elevation: elevation,
         color: color ?? Theme.of(context).colorScheme.primaryContainer,
         child: InkWell(
-          borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
+          borderRadius: borderRadius,
           onTap: enabled ? onClick : null,
           child: Padding(
-            padding:
-                padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            padding: padding,
             child: Align(
-              alignment: alignment ?? Alignment.center,
+              alignment: alignment,
               child: child,
             ),
           ),

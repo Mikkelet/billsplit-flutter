@@ -30,24 +30,7 @@ class GroupView extends StatelessWidget {
           children: [
             Stack(
               alignment: Alignment.bottomLeft,
-              children: [
-                groupPicture(),
-                Container(
-                  constraints: const BoxConstraints(minHeight: 32),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(group.nameState,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(color: Colors.white),
-                      softWrap: false,
-                      overflow: TextOverflow.ellipsis),
-                ),
-              ],
+              children: [_groupPicture(), _getGroupTitle(context)],
             ),
             Padding(
               padding: const EdgeInsets.all(8),
@@ -68,8 +51,9 @@ class GroupView extends StatelessWidget {
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return Expanded(
-                                    child: _debtView(
-                                        context, group, snapshot.requireData));
+                                  child:
+                                      _debtView(context, snapshot.requireData),
+                                );
                               }
                               return const SizedBox();
                             })
@@ -85,7 +69,7 @@ class GroupView extends StatelessWidget {
     );
   }
 
-  Widget groupPicture() {
+  Widget _groupPicture() {
     if (group.coverImageUrlState.isEmpty) {
       return Container(
         decoration: const BoxDecoration(color: Colors.white),
@@ -113,7 +97,32 @@ class GroupView extends StatelessWidget {
     );
   }
 
-  Widget _debtView(BuildContext context, Group group, num debt) {
+  Widget _getGroupTitle(BuildContext context) {
+    final BoxDecoration? deco = group.coverImageUrlState.isNotEmpty
+        ? BoxDecoration(color: Colors.black.withOpacity(0.5))
+        : null;
+    final textColor = group.coverImageUrlState.isEmpty
+        ? Theme.of(context).colorScheme.onBackground
+        : Colors.white;
+    final padding = group.coverImageUrlState.isEmpty
+        ? const EdgeInsets.all(8)
+        : const EdgeInsets.only(left: 8);
+    return Container(
+      constraints: const BoxConstraints(minHeight: 32),
+      decoration: deco,
+      alignment: Alignment.centerLeft,
+      padding: padding,
+      child: Text(group.nameState,
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: textColor),
+          softWrap: false,
+          overflow: TextOverflow.ellipsis),
+    );
+  }
+
+  Widget _debtView(BuildContext context, num debt) {
     final String currency = group.defaultCurrencyState.toUpperCase();
     if (debt == 0) {
       return const SizedBox();
