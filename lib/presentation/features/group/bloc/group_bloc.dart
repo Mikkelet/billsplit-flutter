@@ -131,4 +131,8 @@ class GroupBloc extends BaseCubit {
       showError(err, st);
     });
   }
+
+  void deleteGroupPicture() {
+
+  }
 }

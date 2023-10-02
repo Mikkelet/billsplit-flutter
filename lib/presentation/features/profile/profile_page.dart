@@ -106,6 +106,16 @@ class ProfilePage extends StatelessWidget {
                         color: Theme.of(context).colorScheme.inversePrimary),
                     const SizedBox(height: 32),
                     const SignOutButton(),
+                    const SizedBox(height: 32),
+                    FutureBuilder(
+                      future: cubit.syncVersion(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Text("");
+                        }
+                        return Text(snapshot.data!);
+                      },
+                    ),
                   ],
                 ),
               ),

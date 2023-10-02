@@ -31,9 +31,9 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
   channel = const AndroidNotificationChannel(
-    notificationChannelId, // id
-    notificationChannelTitle, // title
-    description: notificationChannelDesc, // description
+    notificationChannelId,
+    notificationChannelTitle,
+    description: notificationChannelDesc,
     importance: Importance.defaultImportance,
   );
 
@@ -70,6 +70,7 @@ void showFlutterNotification(RemoteMessage message) {
         ),
       ),
     );
-  } else
+  } else {
     print("qqq cannot send notication");
+  }
 }
