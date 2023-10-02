@@ -1,29 +1,38 @@
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/data/debt_calculator.dart';
-import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
-import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
+import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 
 class ObserveDebtsUseCase {
-  final _database = getIt<SplitsbyDatabase>();
   final _authProvider = getIt<AuthProvider>();
   final _observeEventsUseCase = ObserveEventsUseCase();
+  final _convertCurrencyUseCase = ConvertCurrencyUseCase();
 
-  Stream<Iterable<Pair<Person, num>>> observe(String groupId) {
-    return _observeEventsUseCase.observe(groupId).asyncMap((events) async {
-      final response = await _database.groupsDAO.getGroup(groupId);
-      final group = response.toGroup();
-      final temps = events.whereType<GroupExpense>()
-          .fold([], (previousValue, element) => [...previousValue, ...element.tempParticipants]);
-      final calculator = DebtCalculator.fromCombined(
-          {...group.people, ...group.pastMembers, ...temps}, events);
-      final user = _authProvider.user!;
+  /// returns a list of debts to user denoted in group's default currency
+  Stream<Iterable<Pair<Person, num>>> observe(Group group) {
+    return _observeEventsUseCase.observe(group.id).asyncMap((events) async {
+      final temps = _getTemps(events.whereType<GroupExpense>());
+      final people = {...group.people, ...group.pastMembers, ...temps};
+      final calculator = DebtCalculator.fromCombined(people, events);
+      final user = _authProvider.user;
       final debts = calculator.calculateEffectiveDebt(user);
-      return debts.where((element) => element.second != 0);
+      final debtsConverted = debts.map((e) {
+        final converted = _convertCurrencyUseCase.launch(
+            e.second, Currency.USD().symbol, group.defaultCurrencyState);
+        return Pair(e.first, converted);
+      });
+      return debtsConverted.where((element) => element.second != 0);
     });
+  }
+
+  Iterable<Person> _getTemps(Iterable<GroupExpense> expenses) {
+    return expenses.fold([], (previousValue, element) =>
+        [...previousValue, ...element.tempParticipants]);
   }
 }

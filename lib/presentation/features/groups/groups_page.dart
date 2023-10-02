@@ -51,7 +51,7 @@ class GroupsPage extends StatelessWidget {
                 },
                 child: DefaultStreamBuilder(
                   stream: cubit.getGroupStream(),
-                  body: (groups) {
+                  builder: (_, groups) {
                     if (state is Loading && groups.isEmpty) {
                       return const Center(child: CircularProgressIndicator());
                     }

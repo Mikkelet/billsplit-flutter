@@ -73,7 +73,6 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
                         ),
                         child: Center(child: Container(height: 1, width: 64, color: Theme.of(context).colorScheme.onSecondaryContainer,)),
                       )
-
                   ],
                 ),
               );

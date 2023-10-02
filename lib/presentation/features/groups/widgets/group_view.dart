@@ -47,7 +47,7 @@ class GroupView extends StatelessWidget {
                           limit: 3,
                         ),
                         StreamBuilder(
-                            stream: cubit.getDebtsStream(group.id),
+                            stream: cubit.getDebtsStream(group),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return Expanded(
