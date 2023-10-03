@@ -33,7 +33,7 @@ class UpdateUserDefaultCurrencyView extends StatelessWidget {
                 cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
-              const Icon(Icons.edit)
+              const Icon(Icons.arrow_right)
             ],
           ),
         );

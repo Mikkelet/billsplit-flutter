@@ -65,6 +65,7 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "USD, EUR",
+                          suffixIcon: const Icon(Icons.search),
                           hintStyle: TextStyle(
                               color:
                                   Theme.of(context).colorScheme.inversePrimary),

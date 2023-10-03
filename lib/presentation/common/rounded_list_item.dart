@@ -29,7 +29,7 @@ class RoundedListItem extends StatelessWidget {
       alignment: align ?? Alignment.center,
       decoration: BoxDecoration(
           color: color ?? Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: borderRadius ?? BorderRadius.circular(30)),
+          borderRadius: borderRadius ?? BorderRadius.circular(10)),
       child: Padding(
         padding: padding ?? const EdgeInsets.all(16),
         child: child,

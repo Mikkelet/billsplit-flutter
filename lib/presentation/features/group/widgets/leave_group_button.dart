@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +34,7 @@ class LeaveGroupButton extends StatelessWidget {
         },
         child: Text(
           "Leave group",
-          style: Theme.of(context).textTheme.labelSmall,
+          style: SplitsbyTextTheme.signOutButtonText(context),
         ),
       ),
     );

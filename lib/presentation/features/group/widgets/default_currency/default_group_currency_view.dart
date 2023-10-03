@@ -21,7 +21,7 @@ class DefaultGroupCurrencyView extends StatelessWidget {
       child: BaseBlocBuilder<DefaultGroupCurrencyCubit>(
         builder: (cubit, state) {
           return ClickableListItem(
-            height: 48,
+            height: 64,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             onClick: () async {
               final response = await Navigator.of(context).push(
@@ -41,7 +41,7 @@ class DefaultGroupCurrencyView extends StatelessWidget {
                 if (state is Loading)
                   const CircularProgressIndicator()
                 else
-                  const Icon(Icons.edit)
+                  const Icon(Icons.arrow_right)
               ],
             ),
           );

@@ -24,7 +24,7 @@ class ClickableListItem extends StatelessWidget {
       this.width,
       this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       this.alignment = Alignment.center,
-      this.cornerRadius = 30,
+      this.cornerRadius = 10,
       this.borderRadius,
       this.elevation = 0});
 

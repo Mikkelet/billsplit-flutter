@@ -33,12 +33,6 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
             headerBuilder: (context, isExpanded) {
               return ClickableListItem(
                 padding: EdgeInsets.zero,
-                borderRadius: isExpanded
-                    ? const BorderRadius.vertical(
-                        top: Radius.circular(30),
-                        bottom: Radius.circular(10),
-                      )
-                    : BorderRadius.circular(30),
                 alignment: Alignment.centerLeft,
                 onClick: () {
                   setState(() {

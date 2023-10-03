@@ -39,20 +39,17 @@ class ProfilePage extends StatelessWidget {
                     UpdatableTextField(
                         initState: cubit.user.nameState,
                         updateFuture: cubit.updateDisplayName),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 12),
                     RoundedListItem(
                       align: Alignment.centerLeft,
                       height: 64,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(30),
-                          bottom: Radius.circular(30)),
                       child: Text(cubit.user.email,
                           style: Theme.of(context).textTheme.labelLarge),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 12),
                     const UpdateUserDefaultCurrencyView(),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 12),
                     ClickableListItem(
                       height: 48,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -75,7 +72,7 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 12),
                     ClickableListItem(
                       height: 48,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -100,12 +97,7 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    Divider(
-                        endIndent: 16,
-                        indent: 16,
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16),
                     const SignOutButton(),
                     const SizedBox(height: 32),
                     FutureBuilder(

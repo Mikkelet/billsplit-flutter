@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 class GroupSettings extends StatelessWidget {
   const GroupSettings({Key? key}) : super(key: key);
+  static const double _spacing = 12;
 
   @override
   Widget build(BuildContext context) {
@@ -16,20 +17,18 @@ class GroupSettings extends StatelessWidget {
       builder: (cubit, state) => SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 32),
+            const SizedBox(height: _spacing),
             const GroupPictureButton(),
-            const SizedBox(height: 4),
+            const SizedBox(height: _spacing),
             UpdatableTextField(
               initState: cubit.group.nameState,
               updateFuture: cubit.updateGroupName,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: _spacing),
             const GroupMembersView(),
-            const SizedBox(height: 4),
+            const SizedBox(height: _spacing),
             DefaultGroupCurrencyView(group: cubit.group),
-            const SizedBox(height: 4),
-            const Divider(indent: 16, endIndent: 16),
-            const SizedBox(height: 40),
+            const SizedBox(height: _spacing),
             const LeaveGroupButton(),
             const SizedBox(height: 40),
           ],

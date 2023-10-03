@@ -55,14 +55,6 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     height: 64,
                     align: Alignment.centerLeft,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    borderRadius: BorderRadius.only(
-                      topRight: const Radius.circular(10),
-                      topLeft: widget.borderRadius?.topLeft ??
-                          const Radius.circular(30),
-                      bottomLeft: widget.borderRadius?.bottomLeft ??
-                          const Radius.circular(30),
-                      bottomRight: const Radius.circular(10),
-                    ),
                     child: Text(
                       currentState,
                       overflow: TextOverflow.ellipsis,
@@ -73,14 +65,6 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                 ),
                 const SizedBox(width: 4),
                 ClickableListItem(
-                  borderRadius: BorderRadius.only(
-                    topRight: widget.borderRadius?.topRight ??
-                        const Radius.circular(30),
-                    topLeft: const Radius.circular(10),
-                    bottomLeft: const Radius.circular(10),
-                    bottomRight: widget.borderRadius?.bottomRight ??
-                        const Radius.circular(30),
-                  ),
                   height: 64,
                   width: 64,
                   padding: EdgeInsets.zero,
@@ -101,14 +85,6 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                 child: RoundedListItem(
                   height: 64,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  borderRadius: BorderRadius.only(
-                    topRight: const Radius.circular(10),
-                    topLeft: widget.borderRadius?.topLeft ??
-                        const Radius.circular(30),
-                    bottomLeft: widget.borderRadius?.bottomLeft ??
-                        const Radius.circular(30),
-                    bottomRight: const Radius.circular(10),
-                  ),
                   child: TextField(
                     autofocus: true,
                     style: TextStyle(
