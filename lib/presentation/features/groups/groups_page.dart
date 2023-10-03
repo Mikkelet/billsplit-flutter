@@ -87,6 +87,7 @@ class GroupsPage extends StatelessWidget {
                         ),
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
+                            childCount: groups.length,
                             (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
