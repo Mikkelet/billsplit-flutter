@@ -9,14 +9,9 @@ enum ListButtonAction {
   deleteImage;
 }
 
-class GroupPictureButton extends StatefulWidget {
-  const GroupPictureButton({super.key});
+class GroupPictureButton extends StatelessWidget {
+  GroupPictureButton({super.key});
 
-  @override
-  State<GroupPictureButton> createState() => _GroupPictureButtonState();
-}
-
-class _GroupPictureButtonState extends State<GroupPictureButton> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
@@ -31,9 +26,9 @@ class _GroupPictureButtonState extends State<GroupPictureButton> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 16),
-                  _listButton("Update image", ListButtonAction.updateImage),
+                  _listButton(context, "Update image", ListButtonAction.updateImage),
                   const SizedBox(height: 16),
-                  _listButton("Delete image", ListButtonAction.deleteImage),
+                  _listButton(context, "Delete image", ListButtonAction.deleteImage),
                   const SizedBox(height: 16),
                 ],
               );
@@ -51,7 +46,7 @@ class _GroupPictureButtonState extends State<GroupPictureButton> {
         builder: (context) {
           if (cubit.group.coverImageUrlState.isNotEmpty) {
             return ClipRRect(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
                 width: double.infinity,
                 imageUrl: cubit.group.coverImageUrlState,
@@ -66,7 +61,7 @@ class _GroupPictureButtonState extends State<GroupPictureButton> {
     );
   }
 
-  Widget _listButton(String text, ListButtonAction action) {
+  Widget _listButton(BuildContext context, String text, ListButtonAction action) {
     return TextButton(
       onPressed: () {
         Navigator.of(context).pop(action);

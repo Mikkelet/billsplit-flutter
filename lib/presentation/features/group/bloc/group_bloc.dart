@@ -110,7 +110,7 @@ class GroupBloc extends BaseCubit {
   }
 
   void uploadGroupPicture() {
-    _uploadGroupPicture.launch(group).then((value) {
+    _uploadGroupPicture.launch(group).then((_) {
       emit(Main());
     }).catchError((err, st) {
       showError(err, st);

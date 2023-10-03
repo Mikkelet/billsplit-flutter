@@ -40,7 +40,7 @@ class GroupPage extends StatelessWidget {
                   if (state.nav == GroupPageNav.settings) {
                     return const SizedBox();
                   }
-                  String text = state.nav == GroupPageNav.events
+                  final text = state.nav == GroupPageNav.events
                       ? "Add expense"
                       : "Add subscription";
                   return ExtendedFloatingActionButton(
@@ -68,45 +68,47 @@ class GroupPage extends StatelessWidget {
                 ],
                 leading: const BackButton()),
             bottomNavigationBar: const GroupBottomNav(),
-            body: Builder(builder: (context) {
-              if (state is Loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: WillPopScope(
-                  child: Stack(
-                    children: [
-                      Builder(builder: (context) {
-                        switch (cubit.navIndex) {
-                          case GroupPageNav.services:
-                            return const ServicesView();
-                          case GroupPageNav.debt:
-                            return const DebtsView();
-                          case GroupPageNav.settings:
-                            return const GroupSettings();
-                          default:
-                            return const EventsView();
-                        }
-                      }),
-                      if (cubit.state is SyncingGroup)
-                        const Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: EdgeInsets.all(32.0),
-                              child: SizedBox(
-                                  height: 16,
-                                  width: 16,
-                                  child: CircularProgressIndicator()),
-                            ))
-                    ],
+            body: Builder(
+              builder: (context) {
+                if (state is Loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: WillPopScope(
+                    child: Stack(
+                      children: [
+                        Builder(builder: (context) {
+                          switch (cubit.navIndex) {
+                            case GroupPageNav.services:
+                              return const ServicesView();
+                            case GroupPageNav.debt:
+                              return const DebtsView();
+                            case GroupPageNav.settings:
+                              return GroupSettings();
+                            default:
+                              return const EventsView();
+                          }
+                        }),
+                        if (cubit.state is SyncingGroup)
+                          const Align(
+                              alignment: Alignment.topCenter,
+                              child: Padding(
+                                padding: EdgeInsets.all(32.0),
+                                child: SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator()),
+                              ))
+                      ],
+                    ),
+                    onWillPop: () async {
+                      return _tryPop(cubit);
+                    },
                   ),
-                  onWillPop: () async {
-                    return _tryPop(cubit);
-                  },
-                ),
-              );
-            }),
+                );
+              },
+            ),
           );
         },
       ),

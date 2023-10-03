@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupMembersView extends StatefulWidget {
-  const GroupMembersView({Key? key}) : super(key: key);
+  GroupMembersView({Key? key}) : super(key: key);
 
   @override
   State<GroupMembersView> createState() => _GroupMembersViewState();

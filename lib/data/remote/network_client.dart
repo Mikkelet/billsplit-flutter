@@ -13,18 +13,18 @@ import 'package:http/retry.dart';
 import 'package:json_pretty/json_pretty.dart';
 
 class NetworkClient {
-  static bool allowNetworkLogging = false;
-  static bool debug = false;
-  static bool emulator = false;
-  static String apiVersion = "v4";
-  static String debugBaseUrl = Platform.isAndroid
+  static const bool allowNetworkLogging = false;
+  static const bool debug = false;
+  static const bool emulator = false;
+  static const String apiVersion = "v4";
+  static final String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/$apiVersion/"
       : "http://localhost:5000/billsplittapp/us-central1/$apiVersion/";
-  static String devUrl =
+  static const String devUrl =
       "http://192.168.8.227:5000/billsplittapp/us-central1/$apiVersion/";
-  static String releaseBaseUrl =
+  static const String releaseBaseUrl =
       "https://us-central1-billsplittapp.cloudfunctions.net/$apiVersion/";
-  static String baseUrl = debug ? emulator
+  static final String baseUrl = debug ? emulator
           ? debugBaseUrl
           : devUrl
       : releaseBaseUrl;
