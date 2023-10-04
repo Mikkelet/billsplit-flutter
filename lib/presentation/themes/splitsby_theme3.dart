@@ -17,7 +17,7 @@ class SplitsbyTheme3 extends ColorScheme {
           secondaryContainer: const Color(0xFFDFD7E2),
           onSecondaryContainer: Colors.black,
           brightness: Brightness.light,
-          surface: const Color(0xFFF3F3F3),
+          surface: Colors.white,
           onSurface: Colors.black,
           tertiary: const Color(0xFFA3B6E3),
           onTertiary: Colors.black,

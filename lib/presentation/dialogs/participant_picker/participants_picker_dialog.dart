@@ -43,6 +43,7 @@ class _ParticipantsPickerDialogState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
           actions: [
             if (widget.showSubmit)
