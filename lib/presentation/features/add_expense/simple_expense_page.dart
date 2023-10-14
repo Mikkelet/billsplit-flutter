@@ -155,12 +155,14 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                           builder: (context) {
                             return Padding(
                               padding: const EdgeInsets.all(16),
-                              child:
-                              ParticipantsPickerDialog(
+                              child: ParticipantsPickerDialog(
                                 participants: expense.participantsState,
                                 people: cubit.people,
                                 onAddTempParticipant: (name) {
-                                  cubit.onAddTempParticipant(name, widget.groupExpense.sharedExpensesState.first);
+                                  cubit.onAddTempParticipant(
+                                      name,
+                                      widget.groupExpense.sharedExpensesState
+                                          .first);
                                 },
                               ),
                             );
@@ -180,7 +182,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
               ),
               const SizedBox(height: 4),
               PaidByDropDownView(
-                  participants: getParticipatingPeople(), showExpenses: false),
+                  people: getParticipatingPeople(), showExpenses: false),
               const SizedBox(height: 120),
             ],
           ),
@@ -195,6 +197,10 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
 
   Set<Person> getParticipatingPeople() {
     final Iterable<Person> pastMembers = expense.participantsState;
-    return <Person>{...pastMembers, ...widget.group.people};
+    return <Person>{
+      ...pastMembers,
+      ...widget.group.people,
+      ...widget.groupExpense.tempParticipants
+    };
   }
 }

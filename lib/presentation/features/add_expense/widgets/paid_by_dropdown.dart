@@ -10,11 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PaidByDropDownView extends StatefulWidget {
-  final Iterable<Person> participants;
+  final Iterable<Person> people;
   final bool showExpenses;
 
   const PaidByDropDownView(
-      {Key? key, required this.participants, this.showExpenses = true})
+      {Key? key, required this.people, this.showExpenses = true})
       : super(key: key);
 
   @override
@@ -83,7 +83,7 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
               borderRadius: BorderRadius.circular(10),
               child: Column(
                 children: [
-                  ...widget.participants.mapIndexed(
+                  ...widget.people.mapIndexed(
                     (i, e) => Padding(
                       padding: EdgeInsets.only(top: i > 0 ? 8.0 : 0),
                       child: IndividualExpenseView(e, showExpense: true),

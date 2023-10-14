@@ -66,7 +66,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             const SizedBox(height: 4),
             const ExpenseTotalView(),
             const SizedBox(height: 4),
-            PaidByDropDownView(participants: getParticipatingPeople()),
+            PaidByDropDownView(people: getParticipatingPeople()),
             const SizedBox(height: 120),
           ],
         ),
