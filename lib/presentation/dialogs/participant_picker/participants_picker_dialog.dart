@@ -38,59 +38,62 @@ class _ParticipantsPickerDialogState
   bool _isEveryoneSelected() =>
       widget.people.length == widget.participants.length;
 
-  bool showMin1PersonError = false;
+  bool _showMin1PersonError = false;
 
   @override
   Widget build(BuildContext context) {
+    final allowTempParticipants = widget.onAddTempParticipant != null;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-          actions: [
-            if (widget.showSubmit)
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop(widget.participants);
-                },
-                disabledColor: Theme.of(context).disabledColor,
-                color: Theme.of(context).colorScheme.onBackground,
-                icon: const Icon(Icons.check),
-              )
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(40),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Text(
-                    "tip: tap a friend's name to select only them!",
-                    style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
+        backgroundColor: Colors.transparent,
+        actions: [
+          if (widget.showSubmit)
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop(widget.participants);
+              },
+              disabledColor: Theme.of(context).disabledColor,
+              color: Theme.of(context).colorScheme.onBackground,
+              icon: const Icon(Icons.check),
+            )
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(40),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text(
+                  "tip: tap a friend's name to select only them!",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Theme.of(context).colorScheme.inversePrimary),
                 ),
-                Checkbox(
-                  fillColor: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Theme.of(context).colorScheme.inversePrimary;
-                    }
-                    return Theme.of(context).colorScheme.secondaryContainer;
-                  }),
-                  tristate: true,
-                  value: (_isEveryoneSelected()) ? true : null,
-                  onChanged: _isEveryoneSelected()
-                      ? null
-                      : (value) {
-                          if (value == false) {
-                            widget.participants.clear();
-                            widget.participants.addAll(widget.people);
-                            updateState();
-                          }
-                        },
-                )
-              ],
-            ),
-          )),
+              ),
+              Checkbox(
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return Theme.of(context).colorScheme.inversePrimary;
+                  }
+                  return Theme.of(context).colorScheme.secondaryContainer;
+                }),
+                tristate: true,
+                value: (_isEveryoneSelected()) ? true : null,
+                onChanged: _isEveryoneSelected()
+                    ? null
+                    : (value) {
+                        if (value == false) {
+                          widget.participants.clear();
+                          widget.participants.addAll(widget.people);
+                          updateState();
+                        }
+                      },
+              )
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -99,12 +102,12 @@ class _ParticipantsPickerDialogState
             ...widget.people.map(
               (person) => _participantView(person),
             ),
-            if(widget.onAddTempParticipant != null)
-              const SizedBox(height: 8),
-            if(widget.onAddTempParticipant != null)
-              TemporaryParticipantView(onAddTempParticipant: widget.onAddTempParticipant),
+            if (allowTempParticipants) const SizedBox(height: 8),
+            if (allowTempParticipants)
+              TemporaryParticipantView(
+                  onAddTempParticipant: widget.onAddTempParticipant),
             const SizedBox(height: 8),
-            if (showMin1PersonError)
+            if (_showMin1PersonError)
               Text(
                 "Must include at least one person",
                 style: Theme.of(context)
@@ -161,9 +164,9 @@ class _ParticipantsPickerDialogState
           onChanged: (isParticipant) {
             if (isParticipant == false && widget.participants.length == 1) {
               // cannot have 0 participants
-              showMin1PersonError = true;
+              _showMin1PersonError = true;
             } else {
-              showMin1PersonError = false;
+              _showMin1PersonError = false;
               changeParticipantStatus(person, isParticipant ?? false);
             }
             updateState();

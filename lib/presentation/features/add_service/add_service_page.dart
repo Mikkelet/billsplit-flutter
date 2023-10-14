@@ -15,7 +15,6 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
-import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
@@ -277,22 +276,17 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                 alignment: Alignment.centerRight,
                                 child: IconButton(
                                   onPressed: () async {
-                                    final response = await showDialog(
+                                    final response = await showModalBottomSheet(
                                       context: context,
+                                      backgroundColor: Theme.of(context).colorScheme.surface,
                                       builder: (context) =>
-                                          DialogWithCloseButton(
-                                        title: "Expense Participants",
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: ParticipantsPickerDialog(
-                                            participants: [
-                                              ...service.participantsState
-                                            ],
-                                            people: cubit.group.people,
-                                            onAddTempParticipant: (name) {},
+                                          Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: ParticipantsPickerDialog(
+                                              participants: service.participantsState,
+                                              people: cubit.group.people,
+                                            ),
                                           ),
-                                        ),
-                                      ),
                                     );
                                     if (response is List<Person>) {
                                       cubit.updateParticipants(response);
