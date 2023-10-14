@@ -84,7 +84,7 @@ class DebtView extends StatelessWidget {
     if (debt.first.isTemp()) {
       return Icon(
         Icons.check,
-        color: Theme.of(context).colorScheme.onSecondary,
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
       );
     }
     return Text(
@@ -92,7 +92,7 @@ class DebtView extends StatelessWidget {
       style: Theme.of(context)
           .textTheme
           .labelMedium
-          ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+          ?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
     );
   }
 }
