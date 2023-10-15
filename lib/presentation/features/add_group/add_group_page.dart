@@ -64,10 +64,7 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       RoundedListItem(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(30),
-                            bottom: Radius.circular(10),
-                          ),
+                          borderRadius: BorderRadius.circular(10),
                           child: TextField(
                             autofocus: cubit.groupName.isEmpty,
                             maxLines: 1,

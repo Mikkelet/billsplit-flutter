@@ -26,16 +26,13 @@ class GroupsPage extends StatelessWidget {
               child: ProfilePage(),
             ),
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-              child: ExtendedFloatingActionButton(
-                scrollController: scrollingController,
-                label: "Add group",
-                icon: Icons.group_add_rounded,
-                onPressed: () {
-                  Navigator.of(context).push(AddGroupPage.getRoute());
-                },
-              ),
+            floatingActionButton: ExtendedFloatingActionButton(
+              scrollController: scrollingController,
+              label: "Add group",
+              icon: Icons.group_add_rounded,
+              onPressed: () {
+                Navigator.of(context).push(AddGroupPage.getRoute());
+              },
             ),
             body: RefreshIndicator(
               onRefresh: () async {
@@ -90,8 +87,8 @@ class GroupsPage extends StatelessWidget {
                             childCount: groups.length,
                             (context, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: GroupView(group: groups[index]),
                               );
                             },
