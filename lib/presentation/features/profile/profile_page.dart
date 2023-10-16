@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -97,7 +97,7 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     const SignOutButton(),
                     const SizedBox(height: 32),
                     FutureBuilder(

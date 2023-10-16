@@ -88,7 +88,7 @@ class GroupsPage extends StatelessWidget {
                             (context, index) {
                               return Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
                                 child: GroupView(group: groups[index]),
                               );
                             },

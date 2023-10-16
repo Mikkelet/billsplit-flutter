@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,8 +90,9 @@ class GroupView extends StatelessWidget {
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
-        child: Image.network(
-          group.coverImageUrlState,
+        child: CachedNetworkImage(
+          imageUrl: group.coverImageUrlState,
+          fadeInDuration: Duration.zero,
           fit: BoxFit.cover,
         ),
       ),
