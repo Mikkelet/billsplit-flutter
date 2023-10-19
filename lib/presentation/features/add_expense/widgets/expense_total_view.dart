@@ -18,8 +18,6 @@ class ExpenseTotalView extends StatelessWidget {
             Expanded(
               child: RoundedListItem(
                 height: 64,
-                borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(10), right: Radius.circular(10)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -33,14 +31,11 @@ class ExpenseTotalView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 8),
             const SizedBox(
                 width: 64,
                 height: 64,
-                child: ExpenseCurrencyButton(
-                  borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10), right: Radius.circular(10)),
-                ))
+                child: ExpenseCurrencyButton())
           ],
         );
       }

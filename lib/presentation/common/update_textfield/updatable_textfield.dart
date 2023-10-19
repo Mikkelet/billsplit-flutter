@@ -45,16 +45,15 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
   Widget build(BuildContext context) {
     return BaseBlocWidget<UpdateTextFieldCubit>(
       create: (context) => UpdateTextFieldCubit(widget.updateFuture),
-      child: BaseBlocBuilder<UpdateTextFieldCubit>(
-        builder: (cubit, state) {
-          if (state is DisplayText) {
-            return Row(
-              children: [
-                Expanded(
-                  child: RoundedListItem(
-                    height: 64,
-                    align: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: RoundedListItem(
+        height: 64,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: BaseBlocBuilder<UpdateTextFieldCubit>(
+          builder: (cubit, state) {
+            if (state is DisplayText) {
+              return Row(
+                children: [
+                  Expanded(
                     child: Text(
                       currentState,
                       overflow: TextOverflow.ellipsis,
@@ -62,29 +61,25 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                ClickableListItem(
-                  height: 64,
-                  width: 64,
-                  padding: EdgeInsets.zero,
-                  onClick: () {
-                    HapticFeedback.heavyImpact();
-                    cubit.onEditPressed();
-                  },
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  child: const Icon(Icons.edit),
-                )
-              ],
-            );
-          }
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: RoundedListItem(
-                  height: 64,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  const SizedBox(width: 4),
+                  ClickableListItem(
+                    height: 40,
+                    width: 40,
+                    padding: EdgeInsets.zero,
+                    onClick: () {
+                      HapticFeedback.heavyImpact();
+                      cubit.onEditPressed();
+                    },
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: const Icon(Icons.edit),
+                  )
+                ],
+              );
+            }
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
                   child: TextField(
                     autofocus: true,
                     style: TextStyle(
@@ -103,51 +98,42 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     },
                   ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              if (state is Loading)
-                const CircularProgressIndicator()
-              else ...[
-                ClickableListItem(
-                  height: 48,
-                  width: 48,
-                  padding: EdgeInsets.zero,
-                  borderRadius: BorderRadius.circular(10),
-                  onClick: () {
-                    if (currentState != widget.initState) {
-                      cubit.onUpdatePressed(currentState);
-                    } else {
-                      cubit.onCancelPressed();
-                    }
-                  },
-                  color: Colors.green,
-                  child: const Icon(Icons.check),
-                ),
                 const SizedBox(width: 4),
-                ClickableListItem(
-                  height: 48,
-                  width: 48,
-                  padding: EdgeInsets.zero,
-                  borderRadius: BorderRadius.only(
-                    topRight: widget.borderRadius?.topRight ??
-                        const Radius.circular(10),
-                    topLeft: const Radius.circular(10),
-                    bottomLeft: const Radius.circular(10),
-                    bottomRight: widget.borderRadius?.bottomRight ??
-                        const Radius.circular(10),
+                if (state is Loading)
+                  const CircularProgressIndicator()
+                else ...[
+                  ClickableListItem(
+                    height: 40,
+                    width: 40,
+                    padding: EdgeInsets.zero,
+                    onClick: () {
+                      if (currentState != widget.initState) {
+                        cubit.onUpdatePressed(currentState);
+                      } else {
+                        cubit.onCancelPressed();
+                      }
+                    },
+                    color: Colors.green,
+                    child: const Icon(Icons.check),
                   ),
-                  onClick: () {
-                    currentState = widget.initState;
-                    controller.text = widget.initState;
-                    cubit.onCancelPressed();
-                  },
-                  color: Colors.red,
-                  child: const Icon(Icons.close),
-                ),
-              ]
-            ],
-          );
-        },
+                  const SizedBox(width: 4),
+                  ClickableListItem(
+                    height: 40,
+                    width: 40,
+                    padding: EdgeInsets.zero,
+                    onClick: () {
+                      currentState = widget.initState;
+                      controller.text = widget.initState;
+                      cubit.onCancelPressed();
+                    },
+                    color: Colors.red,
+                    child: const Icon(Icons.close),
+                  ),
+                ]
+              ],
+            );
+          },
+        ),
       ),
     );
   }

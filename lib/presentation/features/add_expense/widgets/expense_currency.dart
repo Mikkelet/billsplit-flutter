@@ -7,9 +7,8 @@ import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_exp
 import 'package:flutter/material.dart';
 
 class ExpenseCurrencyButton extends StatelessWidget {
-  final BorderRadius? borderRadius;
 
-  const ExpenseCurrencyButton({Key? key, this.borderRadius}) : super(key: key);
+  const ExpenseCurrencyButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +16,6 @@ class ExpenseCurrencyButton extends StatelessWidget {
       builder: (cubit, state) => ClickableListItem(
         padding: EdgeInsets.zero,
         color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: borderRadius ??
-            const BorderRadius.vertical(
-              top: Radius.circular(10),
-              bottom: Radius.circular(10),
-            ),
         onClick: () async {
           if (cubit.groupExpense.id.isNotEmpty) {
             final warningResponse = await showDialog(

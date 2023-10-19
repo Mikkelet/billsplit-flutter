@@ -50,7 +50,6 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
         ),
         if (!showAll)
           ClickableListItem(
-              borderRadius: BorderRadius.circular(10),
               height: 48,
               onClick: () {
                 setState(() {

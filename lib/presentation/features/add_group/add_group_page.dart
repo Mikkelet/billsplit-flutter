@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/widgets/add_people_to_group_view.dart';
@@ -32,8 +33,9 @@ class AddGroupPage extends StatelessWidget {
       },
       child: BaseBlocBuilder<AddGroupCubit>(
         builder: (cubit, state) {
-          return Scaffold(
+          return BaseScaffold(
             appBar: AppBar(
+              forceMaterialTransparency: true,
               leading: const BackButton(),
               actions: [
                 IconButton(
@@ -64,10 +66,6 @@ class AddGroupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       RoundedListItem(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(30),
-                            bottom: Radius.circular(10),
-                          ),
                           child: TextField(
                             autofocus: cubit.groupName.isEmpty,
                             maxLines: 1,
@@ -85,10 +83,9 @@ class AddGroupPage extends StatelessWidget {
                                 border: InputBorder.none,
                                 hintText: "Enter group name"),
                           )),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 16),
                       ClickableListItem(
                         padding: const EdgeInsets.all(16),
-                        borderRadius: BorderRadius.circular(10),
                         onClick: () async {
                           final response = await Navigator.of(context)
                               .push(CurrencyPickerDialog.getRoute());
@@ -107,15 +104,10 @@ class AddGroupPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 18),
                       Column(
                         children: [
                           RoundedListItem(
-                            borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
                             child: Column(
                               children: [
                                 if (cubit.people.isEmpty)
@@ -127,7 +119,7 @@ class AddGroupPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 8),
                           const Align(
                             alignment: Alignment.centerRight,
                             child: AddPeopleToGroupView(),

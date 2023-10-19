@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,53 +18,64 @@ class GroupView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
 
-    return Center(
-      child: ClickableListItem(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        elevation: _getElevation(context),
-        onClick: () {
-          _onClick(context);
-        },
-        padding: EdgeInsets.zero,
-        cornerRadius: 10,
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.bottomLeft,
-              children: [_groupPicture(), _getGroupTitle(context)],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ProfilePictureStack(
-                          people: group.people,
-                          size: 30,
-                          limit: 3,
-                        ),
-                        StreamBuilder(
-                            stream: cubit.getDebtsStream(group),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Expanded(
-                                  child:
-                                      _debtView(context, snapshot.requireData),
-                                );
-                              }
-                              return const SizedBox();
-                            })
-                      ],
-                    ),
-                  ],
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 10,
+            spreadRadius: 1,
+            color: Colors.black12,
+            offset: Offset(0, 8)
+          )
+        ]
+      ),
+      child: Center(
+        child: ClickableListItem(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          onClick: () {
+            _onClick(context);
+          },
+          padding: EdgeInsets.zero,
+          cornerRadius: 10,
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.bottomLeft,
+                children: [_groupPicture(), _getGroupTitle(context)],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ProfilePictureStack(
+                            people: group.people,
+                            size: 30,
+                            limit: 3,
+                          ),
+                          StreamBuilder(
+                              stream: cubit.getDebtsStream(group),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Expanded(
+                                    child:
+                                        _debtView(context, snapshot.requireData),
+                                  );
+                                }
+                                return const SizedBox();
+                              })
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -79,18 +91,18 @@ class GroupView extends StatelessWidget {
       height: 100,
       width: double.infinity,
       decoration: const BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          )),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+        color: Colors.grey,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(10),
         ),
-        child: Image.network(
-          group.coverImageUrlState,
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(10),
+        ),
+        child: CachedNetworkImage(
+          imageUrl: group.coverImageUrlState,
+          fadeInDuration: Duration.zero,
           fit: BoxFit.cover,
         ),
       ),
@@ -157,12 +169,5 @@ class GroupView extends StatelessWidget {
 
   void _onClick(BuildContext context) {
     Navigator.of(context).push(GroupPage.getRoute(group));
-  }
-
-  double _getElevation(BuildContext context) {
-    if (Theme.of(context).colorScheme.brightness == Brightness.dark) {
-      return 0;
-    }
-    return 2;
   }
 }

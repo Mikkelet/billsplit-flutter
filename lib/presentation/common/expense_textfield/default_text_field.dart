@@ -147,16 +147,18 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
     if (widget.maxValue == null) return false;
     return parseInput > widget.maxValue! &&
         (parseInput.fmt2dec() != widget.maxValue!.fmt2dec() ||
-            text.length > widget.maxValue!.fmt2dec().length);
+            text.length > widget.maxValue!.fmtTextField().length);
   }
 
   void _onChange() {
     widget.textEditingController.errorText = _errorText();
-    if (text.isNotEmpty && text == 0.fmt2dec()) {
+    if (text.isNotEmpty && text == 0.fmtTextField()) {
       text = "";
     }
     if (text.startsWith("0")) {
-      text = "";
+      if (text.length == 1) {
+        text = "";
+      }
     }
     if (isInputOverMaxValue()) {
       text = widget.maxValue!.fmtTextField();

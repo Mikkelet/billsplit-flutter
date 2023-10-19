@@ -30,10 +30,6 @@ class _DescriptionTextFieldState extends SafeState<DescriptionTextField> {
     return RoundedListItem(
       height: 64,
       padding: EdgeInsets.zero,
-      borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(10),
-        bottom: Radius.circular(10),
-      ),
       child: TextField(
         controller: textController,
         textInputAction: TextInputAction.next,

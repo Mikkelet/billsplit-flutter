@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/features/friends/bloc/friends_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/friends/widgets/add_friend_textfield.dart';
@@ -14,11 +15,11 @@ class FriendsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocWidget(
       create: (context) => FriendsCubit()..getFriends(),
-      child: Scaffold(
+      child: BaseScaffold(
         appBar: AppBar(
+          forceMaterialTransparency: true,
           surfaceTintColor: Theme.of(context).colorScheme.surface,
           title: const Text("Friends"),
-
           leading: const BackButton(),
         ),
         body: Builder(

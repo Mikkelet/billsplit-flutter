@@ -20,7 +20,12 @@ class DialogWithCloseButton extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(child: Text(title, style: Theme.of(context).textTheme.labelLarge,)),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();

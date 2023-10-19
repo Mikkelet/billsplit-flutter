@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/add_service_page.dart';
@@ -12,7 +13,9 @@ import 'package:billsplit_flutter/presentation/features/group/widgets/events_vie
 import 'package:billsplit_flutter/presentation/features/group/widgets/group_bottom_nav.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/group_settings.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/services_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupPage extends StatelessWidget {
@@ -31,7 +34,7 @@ class GroupPage extends StatelessWidget {
       create: (context) => GroupBloc(group)..loadGroup(),
       child: BaseBlocBuilder<GroupBloc>(
         builder: (cubit, state) {
-          return Scaffold(
+          return BaseScaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: Builder(
               builder: (context) {
@@ -57,7 +60,28 @@ class GroupPage extends StatelessWidget {
             ),
             appBar: AppBar(
                 elevation: 0,
+                foregroundColor: group.coverImageUrlState.isEmpty ? null : Colors.white,
                 title: Text(group.nameState),
+                systemOverlayStyle: group.coverImageUrlState.isEmpty ? null : const SystemUiOverlayStyle(
+                  statusBarIconBrightness: Brightness.light,
+                  statusBarBrightness: Brightness.light,
+                ),
+                flexibleSpace: Builder(builder: (context) {
+                  if (group.coverImageUrlState.isEmpty) return Container(color: Theme.of(context).colorScheme.tertiary,);
+                  return Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: group.coverImageUrlState,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        color: Colors.black38,
+                      )
+                    ],
+                  );
+                }),
                 surfaceTintColor: Theme.of(context).colorScheme.surface,
                 actions: [
                   IconButton(

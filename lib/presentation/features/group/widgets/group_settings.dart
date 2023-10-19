@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupSettings extends StatelessWidget {
-  const GroupSettings({Key? key}) : super(key: key);
+  // Should not be const to force state updates
+  GroupSettings({Key? key}) : super(key: key);
   static const double _spacing = 12;
 
   @override

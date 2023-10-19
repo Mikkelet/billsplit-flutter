@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/advanced_expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
@@ -87,8 +88,9 @@ class _AddExpensePageState extends SafeState<AddExpensePage> {
         },
         child: BaseBlocBuilder<AddExpenseBloc>(
           builder: (cubit, state) {
-            return Scaffold(
+            return BaseScaffold(
               appBar: AppBar(
+                forceMaterialTransparency: true,
                 surfaceTintColor: Theme.of(context).colorScheme.surface,
                 title: Builder(builder: (context) {
                   if (cubit.groupExpense.id.isEmpty) {

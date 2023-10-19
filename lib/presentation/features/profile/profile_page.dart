@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
@@ -20,9 +21,9 @@ class ProfilePage extends StatelessWidget {
     return BaseBlocWidget<ProfileCubit>(
       create: (context) => ProfileCubit(),
       child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
-        return Scaffold(
+        return BaseScaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            forceMaterialTransparency: true,
             leading: const BackButton(),
           ),
           body: Builder(builder: (context) {
@@ -30,7 +31,7 @@ class ProfilePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -97,7 +98,7 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     const SignOutButton(),
                     const SizedBox(height: 32),
                     FutureBuilder(
@@ -109,6 +110,7 @@ class ProfilePage extends StatelessWidget {
                         return Text(snapshot.data!);
                       },
                     ),
+                    Divider()
                   ],
                 ),
               ),

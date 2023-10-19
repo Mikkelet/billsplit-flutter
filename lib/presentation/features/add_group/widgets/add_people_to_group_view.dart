@@ -15,9 +15,9 @@ class AddPeopleToGroupView extends StatelessWidget {
         height: 48,
         width: 48,
         borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
+            topRight: Radius.circular(15),
+            topLeft: Radius.circular(15),
+            bottomLeft: Radius.circular(15),
             bottomRight: Radius.circular(30)),
         color: Theme.of(context).colorScheme.secondaryContainer,
         child: const Icon(Icons.group_add),

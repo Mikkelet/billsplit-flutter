@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
@@ -15,7 +16,6 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
-import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
@@ -78,12 +78,13 @@ class _AddServicePageState extends SafeState<AddServicePage> {
       create: (context) => AddServiceBloc(service, widget.group),
       child: BaseBlocBuilder<AddServiceBloc>(
         builder: (cubit, state) {
-          return Scaffold(
+          return BaseScaffold(
             appBar: builder(() {
               if (state is Loading) {
                 return null;
               }
               return AppBar(
+                  forceMaterialTransparency: true,
                   title: Builder(builder: (context) {
                     if (service.id.isEmpty) {
                       return const Text("New Subscription");
@@ -277,20 +278,16 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                 alignment: Alignment.centerRight,
                                 child: IconButton(
                                   onPressed: () async {
-                                    final response = await showDialog(
+                                    final response = await showModalBottomSheet(
                                       context: context,
-                                      builder: (context) =>
-                                          DialogWithCloseButton(
-                                        title: "Expense Participants",
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: ParticipantsPickerDialog(
-                                            participants: [
-                                              ...service.participantsState
-                                            ],
-                                            people: cubit.group.people,
-                                            onAddTempParticipant: (name) {},
-                                          ),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.surface,
+                                      builder: (context) => Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: ParticipantsPickerDialog(
+                                          participants:
+                                              service.participantsState,
+                                          people: cubit.group.people,
                                         ),
                                       ),
                                     );

@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
@@ -38,8 +39,9 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         surfaceTintColor: Theme.of(context).colorScheme.surface,
         automaticallyImplyLeading: false,
         actions: const [CloseButton()],

@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/page_view_title.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_view.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_up_view.dart';
@@ -22,8 +23,9 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: Text(
           "Splitsby",
           style: Theme.of(context)

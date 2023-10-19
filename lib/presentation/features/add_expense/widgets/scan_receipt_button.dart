@@ -15,7 +15,6 @@ class ScanReceiptButton extends StatelessWidget {
     return ClickableListItem(
         padding: EdgeInsets.zero,
         color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(10),
         height: 48,
         width: 48,
         onClick: () async {

@@ -33,9 +33,9 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
   Widget build(BuildContext context) {
     String title;
 
-    if(widget.debt.second > 0){
+    if (widget.debt.second > 0) {
       title = "Pay your debt to ${widget.debt.first.nameState}";
-    }else {
+    } else {
       title = "Mark ${widget.debt.first.nameState}'s debt as paid";
     }
     return BaseBlocWidget<DebtCubit>(
@@ -48,7 +48,7 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
       },
       create: (context) => DebtCubit(widget.group, widget.debt),
       child: BaseBlocBuilder<DebtCubit>(builder: (cubit, state) {
-        controller.text = cubit.maxAmount.fmt2dec();
+        controller.text = cubit.amount.fmtTextField();
 
         return SingleChildScrollView(
           child: Padding(
