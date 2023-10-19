@@ -106,7 +106,6 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     height: 40,
                     width: 40,
                     padding: EdgeInsets.zero,
-                    borderRadius: BorderRadius.circular(10),
                     onClick: () {
                       if (currentState != widget.initState) {
                         cubit.onUpdatePressed(currentState);
@@ -122,14 +121,6 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     height: 40,
                     width: 40,
                     padding: EdgeInsets.zero,
-                    borderRadius: BorderRadius.only(
-                      topRight: widget.borderRadius?.topRight ??
-                          const Radius.circular(10),
-                      topLeft: const Radius.circular(10),
-                      bottomLeft: const Radius.circular(10),
-                      bottomRight: widget.borderRadius?.bottomRight ??
-                          const Radius.circular(10),
-                    ),
                     onClick: () {
                       currentState = widget.initState;
                       controller.text = widget.initState;

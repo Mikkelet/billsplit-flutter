@@ -67,8 +67,6 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
             ),
           ),
           child: RoundedListItem(
-            borderRadius: widget.listPosition
-                .getBorderRadius(hardCorner: 10, softCorner: 10),
             child: Column(
               children: [
                 Row(

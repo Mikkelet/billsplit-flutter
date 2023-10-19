@@ -37,7 +37,6 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
             headerBuilder: (context, isExpanded) {
               return ClickableListItem(
                 padding: EdgeInsets.zero,
-                borderRadius: _getRadius(isExpanded),
                 onClick: () {
                   setState(() {
                     this.isExpanded = !this.isExpanded;
@@ -80,7 +79,6 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
             backgroundColor: Colors.transparent,
             isExpanded: isExpanded,
             body: RoundedListItem(
-              borderRadius: BorderRadius.circular(10),
               child: Column(
                 children: [
                   ...widget.people.mapIndexed(
@@ -94,19 +92,6 @@ class _PaidByDropDownViewState extends SafeState<PaidByDropDownView> {
             ),
             canTapOnHeader: true)
       ],
-    );
-  }
-
-  BorderRadius _getRadius(bool isExpanded) {
-    if (isExpanded) {
-      return const BorderRadius.vertical(
-        top: Radius.circular(10),
-        bottom: Radius.circular(10),
-      );
-    }
-    return const BorderRadius.vertical(
-      top: Radius.circular(10),
-      bottom: Radius.circular(10),
     );
   }
 }

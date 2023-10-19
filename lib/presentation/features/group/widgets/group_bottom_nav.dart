@@ -29,6 +29,9 @@ class _GroupBottomNavState extends SafeState<GroupBottomNav> {
         NavigationDestination(icon: Icon(Icons.monetization_on_outlined), label: "Debts")
       ];
       return NavigationBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        indicatorColor: Theme.of(context).colorScheme.tertiary,
         selectedIndex: navIndex > destinations.length - 1 ? 0 : navIndex,
         destinations: destinations,
         onDestinationSelected: (index) {

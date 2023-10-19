@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GroupsPage extends StatelessWidget {
   GroupsPage({Key? key}) : super(key: key);
 
-  final scrollingController = ScrollController();
+  final _scrollingController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,13 @@ class GroupsPage extends StatelessWidget {
       child: BlocBuilder<GroupsBloc, UiState>(
         builder: (context, state) {
           final cubit = context.read<GroupsBloc>();
-          return Scaffold(
+          return BaseScaffold(
             endDrawer: const Drawer(
               child: ProfilePage(),
             ),
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-            floatingActionButton: ExtendedFloatingActionButton(
-              scrollController: scrollingController,
+              floatingActionButton: ExtendedFloatingActionButton(
+              scrollController: _scrollingController,
               label: "Add group",
               icon: Icons.group_add_rounded,
               onPressed: () {
@@ -58,15 +59,16 @@ class GroupsPage extends StatelessWidget {
                       );
                     }
                     return CustomScrollView(
+                      controller: _scrollingController,
                       slivers: [
                         SliverAppBar(
                           pinned: true,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
                           expandedHeight: 200.0,
-                          scrolledUnderElevation: 0,
-                          stretch: true,
+                          forceMaterialTransparency: true,
                           flexibleSpace: FlexibleSpaceBar(
+                            background: Container(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
                             title: Row(
                               children: [
                                 Expanded(
@@ -87,8 +89,8 @@ class GroupsPage extends StatelessWidget {
                             childCount: groups.length,
                             (context, index) {
                               return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0, horizontal: 8),
                                 child: GroupView(group: groups[index]),
                               );
                             },
@@ -102,6 +104,63 @@ class GroupsPage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class FadeContainer extends StatefulWidget {
+  @protected
+  final ScrollController scrollController;
+
+  const FadeContainer({super.key, required this.scrollController});
+
+  @override
+  State<FadeContainer> createState() => _FadeAppBarState();
+}
+
+class _FadeAppBarState extends State<FadeContainer> {
+  double _opacity = 0.0;
+
+  _scrollListen() {
+    final offset = widget.scrollController.offset;
+    if (offset > 200) {
+      if (_opacity != 1.0) {
+        setState(() {
+          _opacity = 1.0;
+        });
+      }
+    } else if (offset < 10) {
+      if (_opacity != 0.0) {
+        setState(() {
+          _opacity = 0.0;
+        });
+      }
+    } else {
+      setState(() {
+        _opacity = offset / 200;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_scrollListen);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_scrollListen);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: _opacity,
+      child: Container(
+        decoration: BoxDecoration(color: Colors.red),
       ),
     );
   }

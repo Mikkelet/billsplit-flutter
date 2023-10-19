@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_state.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_change_display_name.dart';
@@ -40,7 +41,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       },
       child: BaseBlocBuilder<OnboardingBloc>(
         builder: (cubit, state) {
-          return Scaffold(
+          return BaseScaffold(
             appBar: AppBar(
               leading: BackButton(
                 onPressed: () {

@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/gradient_background.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
@@ -38,73 +39,77 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Theme.of(context).colorScheme.surface,
-        automaticallyImplyLeading: false,
-        actions: const [CloseButton()],
-      ),
-      body: BaseBlocWidget(
-        create: (context) =>
-            CurrencyPickerCubit(widget.convertToCurrency)..loadCurrencies(),
-        child: BaseBlocBuilder<CurrencyPickerCubit>(builder: (cubit, state) {
-          if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return SingleChildScrollView(
-            primary: false,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const SizedBox(height: 32),
-                  RoundedListItem(
-                    child: TextField(
-                      onChanged: _onChange,
-                      style: SplitsbyTextTheme.textFieldStyle(context),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "USD, EUR",
-                          suffixIcon: const Icon(Icons.search),
-                          hintStyle: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                          counterText: ""),
-                      maxLength: 10,
-                      maxLines: 1,
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+          surfaceTintColor: Theme.of(context).colorScheme.surface,
+          automaticallyImplyLeading: false,
+          actions: const [CloseButton()],
+        ),
+        body: BaseBlocWidget(
+          create: (context) =>
+              CurrencyPickerCubit(widget.convertToCurrency)..loadCurrencies(),
+          child: BaseBlocBuilder<CurrencyPickerCubit>(builder: (cubit, state) {
+            if (state is Loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return SingleChildScrollView(
+              primary: false,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 32),
+                    RoundedListItem(
+                      child: TextField(
+                        onChanged: _onChange,
+                        style: SplitsbyTextTheme.textFieldStyle(context),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "USD, EUR",
+                            suffixIcon: const Icon(Icons.search),
+                            hintStyle: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.inversePrimary),
+                            counterText: ""),
+                        maxLength: 10,
+                        maxLines: 1,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
-                    const Text("Recent currencies"),
-                  if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
-                    ...cubit.recentCurrencies.map((currency) =>
-                        _currencyButton(Key(currency.symbol), cubit, currency)),
-                  if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
-                    const Text("All currencies"),
-                  Builder(builder: (context) {
-                    final filtered = cubit.currencies
-                        .where((element) => filter.isNotEmpty
-                            ? element.symbol.toLowerCase().startsWith(filter)
-                            : true)
-                        .toList();
-                    return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: filtered.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final currency = filtered[index];
-                        if(currency.symbol == "THB") print("qqq thb=$currency");
-                        return _currencyButton(
-                            Key(currency.symbol), cubit, currency);
-                      },
-                    );
-                  })
-                ],
+                    const SizedBox(height: 32),
+                    if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
+                      const Text("Recent currencies"),
+                    if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
+                      ...cubit.recentCurrencies.map((currency) =>
+                          _currencyButton(Key(currency.symbol), cubit, currency)),
+                    if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
+                      const Text("All currencies"),
+                    Builder(builder: (context) {
+                      final filtered = cubit.currencies
+                          .where((element) => filter.isNotEmpty
+                              ? element.symbol.toLowerCase().startsWith(filter)
+                              : true)
+                          .toList();
+                      return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: filtered.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final currency = filtered[index];
+                          if(currency.symbol == "THB") print("qqq thb=$currency");
+                          return _currencyButton(
+                              Key(currency.symbol), cubit, currency);
+                        },
+                      );
+                    })
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

@@ -26,7 +26,7 @@ class GroupPictureButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 16),
-                  _listButton(context, "Update image", ListButtonAction.updateImage),
+                  _listButton(context, "Upload image", ListButtonAction.updateImage),
                   const SizedBox(height: 16),
                   _listButton(context, "Delete image", ListButtonAction.deleteImage),
                   const SizedBox(height: 16),

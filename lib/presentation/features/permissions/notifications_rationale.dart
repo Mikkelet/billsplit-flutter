@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,7 +29,7 @@ class _NotificationsRationaleState extends SafeState<NotificationsRationale> {
   Widget build(BuildContext context) {
     final prefs = getIt<SharedPrefs>();
     prefs.hasSeenPushNotificationPermissionRationale = true;
-    return Scaffold(
+    return BaseScaffold(
       body: Center(
         child: SingleChildScrollView(
           child: Padding(

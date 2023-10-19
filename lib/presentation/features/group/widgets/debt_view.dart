@@ -21,7 +21,8 @@ class DebtView extends StatelessWidget {
 
     String text = "";
     TextStyle style = Theme.of(context).textTheme.bodyLarge!;
-    final String defaultCurrency = groupCubit.group.defaultCurrencyState.toUpperCase();
+    final String defaultCurrency =
+        groupCubit.group.defaultCurrencyState.toUpperCase();
     final isDebt = debt.second > 0;
 
     if (isDebt) {
@@ -38,16 +39,6 @@ class DebtView extends StatelessWidget {
       children: [
         Expanded(
           child: RoundedListItem(
-            borderRadius: builder(() {
-              if (showPayButton) {
-                return const BorderRadius.horizontal(
-                  right: Radius.circular(10),
-                  left: Radius.circular(30),
-                );
-              } else {
-                return null;
-              }
-            }),
             align: Alignment.centerLeft,
             height: 64,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -58,10 +49,6 @@ class DebtView extends StatelessWidget {
         if (showPayButton)
           ClickableListItem(
             color: Theme.of(context).colorScheme.secondaryContainer,
-            borderRadius: const BorderRadius.horizontal(
-              left: Radius.circular(10),
-              right: Radius.circular(30),
-            ),
             height: 64,
             width: 64,
             onClick: () {
