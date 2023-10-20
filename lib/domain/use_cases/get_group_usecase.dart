@@ -23,7 +23,8 @@ class GetGroupUseCase {
     await _database.groupExpenseDAO.clearForGroup(groupId);
     await _database.groupExpenseDAO.insertAll(groupExpenses.toDb(groupId));
 
-    final Iterable<PaymentDTO> payments = response.events.whereType<PaymentDTO>();
+    final Iterable<PaymentDTO> payments =
+        response.events.whereType<PaymentDTO>();
     await _database.paymentsDAO.clearForGroup(groupId);
     await _database.paymentsDAO.insertAll(payments.toDb(groupId));
   }

@@ -27,6 +27,7 @@ final sampleGroup = Group(
     people: samplePeopleShera,
     createdBy: samplePeopleShera.first,
     timestamp: 0,
+    lastUpdated: 0,
     latestEvent: null);
 
 final sampleIndividualExpenses = samplePeopleShera.toList().mapIndexed(
@@ -50,6 +51,7 @@ List<GroupExpense> get sampleSharedExpenses {
         tempParticipants: [],
         currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
+        receiptImageUrl: "",
         sharedExpenses: sampleSharedExpense),
     GroupExpense(
       id: "1",
@@ -59,6 +61,7 @@ List<GroupExpense> get sampleSharedExpenses {
       tempParticipants: [],
       currency: Currency(symbol: "usd", rate: 1),
       timestamp: 2,
+      receiptImageUrl: "",
       syncState: SyncState.synced,
       sharedExpenses: sampleSharedExpense,
     ),
@@ -68,6 +71,7 @@ List<GroupExpense> get sampleSharedExpenses {
         description: "Appa haircut",
         payer: samplePeopleShera[2],
         timestamp: 3,
+        receiptImageUrl: "",
         tempParticipants: [],
         currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
@@ -78,6 +82,7 @@ List<GroupExpense> get sampleSharedExpenses {
         description: "",
         payer: samplePeopleShera[2],
         timestamp: 4,
+        receiptImageUrl: "",
         tempParticipants: [],
         currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
@@ -89,6 +94,7 @@ List<GroupExpense> get sampleSharedExpenses {
         payer: samplePeopleShera[2],
         tempParticipants: [],
         timestamp: 5,
+        receiptImageUrl: "",
         currency: Currency(symbol: "usd", rate: 1),
         syncState: SyncState.synced,
         sharedExpenses: sampleSharedExpense),

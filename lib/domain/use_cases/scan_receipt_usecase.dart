@@ -27,10 +27,16 @@ class ScanReceiptUseCase {
         .flatMap()
         .map((e) => e.elements)
         .flatMap()
-        .map((e) => TextElement(
-            text: e.text,
-            boundingBox: translateRect(e.boundingBox),
-            cornerPoints: e.cornerPoints));
+        .map(
+          (e) => TextElement(
+              text: e.text,
+              boundingBox: translateRect(e.boundingBox),
+              cornerPoints: e.cornerPoints,
+              angle: null,
+              confidence: null,
+              recognizedLanguages: [],
+              symbols: []),
+        );
     final expenses = _deriveExpenses(imageSize, texts);
     return ScannedReceipt(imageSize, expenses, file);
   }
@@ -51,7 +57,11 @@ class ScanReceiptUseCase {
       return TextElement(
           text: cleanText,
           boundingBox: e.boundingBox,
-          cornerPoints: e.cornerPoints);
+          cornerPoints: e.cornerPoints,
+          angle: null,
+          confidence: null,
+          recognizedLanguages: [],
+          symbols: []);
     });
 
     return _findExpenseDescriptions(texts, textsWithNumbers);

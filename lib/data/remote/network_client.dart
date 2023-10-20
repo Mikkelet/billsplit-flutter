@@ -13,10 +13,10 @@ import 'package:http/retry.dart';
 import 'package:json_pretty/json_pretty.dart';
 
 class NetworkClient {
-  static const bool allowNetworkLogging = false;
-  static const bool debug = false;
-  static const bool emulator = false;
-  static const String apiVersion = "v4";
+  static const bool allowNetworkLogging = true;
+  static const bool debug = true;
+  static const bool emulator = true;
+  static const String apiVersion = "v5";
   static final String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/$apiVersion/"
       : "http://localhost:5000/billsplittapp/us-central1/$apiVersion/";

@@ -25,7 +25,8 @@ class AuthProvider {
   Future<String> getToken(bool refresh) async {
     final user = _firebaseAuth.currentUser;
     if (user == null) throw UiException(404, "User not logged in");
-    return await user.getIdToken(refresh);
+    final token = await user.getIdToken(refresh);
+    return token ?? "";
   }
 
   Stream<String?> authListener() {

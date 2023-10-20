@@ -20,6 +20,7 @@ extension EventDTOExt on EventDTO? {
           timestamp: this!.timestamp,
           description: (this as GroupExpenseDTO).description,
           createdBy: this!.createdBy.toPerson(),
+          receiptImageUrl: (this as GroupExpenseDTO).receiptImageUrl,
           tempParticipants:
               (this as GroupExpenseDTO).tempParticipants.toPeople(),
           payer: (this as GroupExpenseDTO).payee.toPerson(),
@@ -41,6 +42,7 @@ extension EventExt on Event {
           tempParticipants:
               (this as GroupExpense).tempParticipants.map((e) => e.toDTO()),
           createdBy: createdBy.toDTO(),
+          receiptImageUrl: (this as GroupExpense).receiptImageUrlState,
           timestamp: timestamp,
           description: (this as GroupExpense).descriptionState,
           payee: (this as GroupExpense).payerState.toDTO(),

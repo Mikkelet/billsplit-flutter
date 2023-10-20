@@ -15,6 +15,10 @@ class PaymentsDAO extends DatabaseAccessor<SplitsbyDatabase>
   Future insertAll(Iterable<PaymentDb> expenses) => batch((batch) => batch
       .insertAll(paymentsTable, expenses, mode: InsertMode.insertOrReplace));
 
+  Future<PaymentDb> get(String id) {
+    return (select(paymentsTable)..where((tbl) => tbl.groupId.equals(id))).getSingle();
+  }
+
   Stream<Iterable<PaymentDb>> watch(String groupId) {
     return (select(paymentsTable)..where((tbl) => tbl.groupId.equals(groupId)))
         .watch();

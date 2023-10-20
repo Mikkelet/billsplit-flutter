@@ -218,6 +218,7 @@ extension PaymentExt on Payment {
       createdBy: createdBy,
       timestamp: timestamp,
       description: "",
+      receiptImageUrl: "",
       tempParticipants: [],
       payer: paidBy,
       sharedExpenses: [

@@ -56,12 +56,14 @@ class GroupExpenseDTO extends EventDTO {
   final CurrencyDTO currency;
   final Iterable<SharedExpenseDTO> sharedExpenses;
   final Iterable<PersonDTO> tempParticipants;
+  final String receiptImageUrl;
 
   GroupExpenseDTO(
       {required String id,
       required PersonDTO createdBy,
       required num timestamp,
       String type = "expense",
+      required this.receiptImageUrl,
       required this.description,
       required this.currency,
       required this.tempParticipants,

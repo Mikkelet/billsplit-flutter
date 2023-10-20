@@ -15,10 +15,10 @@ class GroupDTO {
   final PersonDTO createdBy;
   final num timestamp;
   final EventDTO? latestEvent;
+  final num lastUpdated;
   final String defaultCurrency;
 
-  GroupDTO(
-      {required this.id,
+  GroupDTO({required this.id,
       required this.name,
       required this.coverImageUrl,
       required this.defaultCurrency,
@@ -26,6 +26,7 @@ class GroupDTO {
       required this.pastMembers,
       required this.createdBy,
       required this.timestamp,
+      required this.lastUpdated,
       required this.latestEvent});
 
   factory GroupDTO.fromJson(Json json) => _$GroupDTOFromJson(json);

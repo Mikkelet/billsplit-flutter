@@ -25,9 +25,10 @@ class $GroupsTableTable extends GroupsTable
   @override
   List<GeneratedColumn> get $columns => [groupId, group];
   @override
-  String get aliasedName => _alias ?? 'groups_table';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'groups_table';
+  String get actualTableName => $name;
+  static const String $name = 'groups_table';
   @override
   VerificationContext validateIntegrity(Insertable<GroupDb> instance,
       {bool isInserting = false}) {
@@ -222,9 +223,10 @@ class $GroupExpenseTableTable extends GroupExpenseTable
   @override
   List<GeneratedColumn> get $columns => [id, groupId, groupExpense, syncState];
   @override
-  String get aliasedName => _alias ?? 'group_expense_table';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'group_expense_table';
+  String get actualTableName => $name;
+  static const String $name = 'group_expense_table';
   @override
   VerificationContext validateIntegrity(Insertable<GroupExpenseDb> instance,
       {bool isInserting = false}) {
@@ -474,9 +476,10 @@ class $FriendsTableTable extends FriendsTable
   @override
   List<GeneratedColumn> get $columns => [id, friend];
   @override
-  String get aliasedName => _alias ?? 'friends_table';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'friends_table';
+  String get actualTableName => $name;
+  static const String $name = 'friends_table';
   @override
   VerificationContext validateIntegrity(Insertable<FriendDb> instance,
       {bool isInserting = false}) {
@@ -662,9 +665,10 @@ class $ServicesTableTable extends ServicesTable
   @override
   List<GeneratedColumn> get $columns => [id, groupId, service];
   @override
-  String get aliasedName => _alias ?? 'services_table';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'services_table';
+  String get actualTableName => $name;
+  static const String $name = 'services_table';
   @override
   VerificationContext validateIntegrity(Insertable<ServiceDb> instance,
       {bool isInserting = false}) {
@@ -884,9 +888,10 @@ class $PaymentsTableTable extends PaymentsTable
   @override
   List<GeneratedColumn> get $columns => [id, groupId, payment];
   @override
-  String get aliasedName => _alias ?? 'payments_table';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'payments_table';
+  String get actualTableName => $name;
+  static const String $name = 'payments_table';
   @override
   VerificationContext validateIntegrity(Insertable<PaymentDb> instance,
       {bool isInserting = false}) {
