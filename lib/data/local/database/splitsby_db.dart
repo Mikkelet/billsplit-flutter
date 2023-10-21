@@ -24,7 +24,7 @@ class SplitsbyDatabase extends _$SplitsbyDatabase {
   SplitsbyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => destructiveFallback;

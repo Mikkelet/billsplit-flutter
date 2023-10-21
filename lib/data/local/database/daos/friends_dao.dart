@@ -7,7 +7,7 @@ part 'friends_dao.g.dart';
 @DriftAccessor(tables: [FriendsTable])
 class FriendsDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$FriendsDAOMixin {
-  FriendsDAO(SplitsbyDatabase db) : super(db);
+  FriendsDAO(super.db);
 
   Future insert(FriendDb expense) =>
       into(friendsTable).insert(expense, mode: InsertMode.insertOrReplace);

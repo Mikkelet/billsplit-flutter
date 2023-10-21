@@ -13,6 +13,8 @@ class GetGroupUseCase {
 
   Future<void> launch(String groupId) async {
     final response = await _apiService.getGroup(groupId);
+    final shouldSync = await _shouldSync(groupId);
+    if (!shouldSync) return;
     await _database.groupsDAO.insertGroup(response.group.toDb());
 
     await _database.servicesDao.clearForGroup(groupId);
@@ -27,5 +29,19 @@ class GetGroupUseCase {
         response.events.whereType<PaymentDTO>();
     await _database.paymentsDAO.clearForGroup(groupId);
     await _database.paymentsDAO.insertAll(payments.toDb(groupId));
+
+    await _database.groupsDAO.updateLastSynced(groupId);
+  }
+
+  Future<bool> _shouldSync(String groupId) async {
+    final groupDb = await _database.groupsDAO.getGroup(groupId);
+    final group = groupDb.toGroup();
+    final lastSynced = groupDb.lastUpdated;
+    final lastUpdated = group.lastUpdatedState;
+    print("qqq lastSync=$lastSynced");
+    print("qqq lastUpdate=$lastUpdated");
+    print("qqq shouldUpdate=${lastUpdated > (lastSynced ?? 0)}");
+    if(lastSynced == null) return true;
+    return lastUpdated > lastSynced;
   }
 }

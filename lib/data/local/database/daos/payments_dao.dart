@@ -7,7 +7,7 @@ part 'payments_dao.g.dart';
 @DriftAccessor(tables: [PaymentsTable])
 class PaymentsDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$PaymentsDAOMixin {
-  PaymentsDAO(SplitsbyDatabase db) : super(db);
+  PaymentsDAO(super.db);
 
   Future insert(PaymentDb payment) =>
       into(paymentsTable).insert(payment, mode: InsertMode.insertOrReplace);

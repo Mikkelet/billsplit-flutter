@@ -160,7 +160,7 @@ class _FadeAppBarState extends State<FadeContainer> {
     return Opacity(
       opacity: _opacity,
       child: Container(
-        decoration: BoxDecoration(color: Colors.red),
+        decoration: const BoxDecoration(color: Colors.red),
       ),
     );
   }

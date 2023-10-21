@@ -8,7 +8,7 @@ part 'group_expense_dao.g.dart';
 @DriftAccessor(tables: [GroupExpenseTable])
 class GroupExpenseDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$GroupExpenseDAOMixin {
-  GroupExpenseDAO(SplitsbyDatabase db) : super(db);
+  GroupExpenseDAO(super.db);
 
   Future insert(GroupExpenseDb expense) =>
       into(groupExpenseTable).insert(expense, mode: InsertMode.insertOrReplace);

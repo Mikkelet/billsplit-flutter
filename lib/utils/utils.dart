@@ -16,6 +16,8 @@ extension NumExt on num {
   String fmtTextField() => fmt2dec(readOnly: false).replaceAll(",", "");
 }
 
+int get nowEpoch => DateTime.now().millisecondsSinceEpoch;
+
 const List<String> monthNames = [
   'January',
   'February',

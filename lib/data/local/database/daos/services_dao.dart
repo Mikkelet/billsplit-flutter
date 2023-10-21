@@ -7,7 +7,7 @@ part 'services_dao.g.dart';
 @DriftAccessor(tables: [ServicesTable])
 class ServicesDao extends DatabaseAccessor<SplitsbyDatabase>
     with _$ServicesDaoMixin {
-  ServicesDao(SplitsbyDatabase db) : super(db);
+  ServicesDao(super.db);
 
   Future insert(ServiceDb service) =>
       into(servicesTable).insert(service, mode: InsertMode.insertOrReplace);

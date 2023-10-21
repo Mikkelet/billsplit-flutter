@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 
 extension GroupDtosExt on Iterable<GroupDTO> {
   Iterable<Group> toGroups() {
@@ -27,7 +28,11 @@ extension GroupDtoExt on GroupDTO {
       timestamp: timestamp,
       latestEvent: latestEvent.toEvent());
 
-  GroupDb toDb() => GroupDb(groupId: id, group: json.encode(toJson()));
+  GroupDb toDb() => GroupDb(
+        groupId: id,
+        group: json.encode(toJson()),
+        lastUpdated: nowEpoch,
+      );
 }
 
 extension GroupExt on Group {

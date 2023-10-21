@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
@@ -29,7 +30,8 @@ abstract class BaseCubit extends Cubit<UiState> {
   void showError(dynamic err, StackTrace? stackTrace) {
     FirebaseCrashlytics.instance.log("error=$err, stackTrace=$stackTrace");
     if (err is Error) {
-      print("qqq err: $err, stackTrace=$stackTrace");
+      debugPrint("qqq err: $err");
+      debugPrintStack(stackTrace: stackTrace);
       emit(Failure(UiException(-1, err.toString())));
     } else if (err is UiException) {
       emit(Failure(err));
@@ -42,7 +44,8 @@ abstract class BaseCubit extends Cubit<UiState> {
         emit(Failure(UiException(1000, "${err.message}")));
       }
     } else if (err is Exception) {
-      print("qqq err: ${(err).toString()}");
+      debugPrint("qqq err: $err");
+      debugPrintStack(stackTrace: stackTrace);
       emit(Failure(err.toUiException()));
     } else {
       print("qqq err: ${err.runtimeType.toString()}");
@@ -50,7 +53,7 @@ abstract class BaseCubit extends Cubit<UiState> {
     }
   }
 
-  Person get user => authProvider.user ?? Person("", "User Logged out");
+  Person get user => authProvider.user;
 
   void showToast(String message) {
     emit(ShowToast(message));

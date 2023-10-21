@@ -17,13 +17,19 @@ class $GroupsTableTable extends GroupsTable
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _lastUpdatedMeta =
+      const VerificationMeta('lastUpdated');
+  @override
+  late final GeneratedColumn<int> lastUpdated = GeneratedColumn<int>(
+      'last_updated', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _groupMeta = const VerificationMeta('group');
   @override
   late final GeneratedColumn<String> group = GeneratedColumn<String>(
       'group', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [groupId, group];
+  List<GeneratedColumn> get $columns => [groupId, lastUpdated, group];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -40,6 +46,12 @@ class $GroupsTableTable extends GroupsTable
     } else if (isInserting) {
       context.missing(_groupIdMeta);
     }
+    if (data.containsKey('last_updated')) {
+      context.handle(
+          _lastUpdatedMeta,
+          lastUpdated.isAcceptableOrUnknown(
+              data['last_updated']!, _lastUpdatedMeta));
+    }
     if (data.containsKey('group')) {
       context.handle(
           _groupMeta, group.isAcceptableOrUnknown(data['group']!, _groupMeta));
@@ -50,13 +62,15 @@ class $GroupsTableTable extends GroupsTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {groupId, group};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
   GroupDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GroupDb(
       groupId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
+      lastUpdated: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}last_updated']),
       group: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}group'])!,
     );
@@ -70,12 +84,16 @@ class $GroupsTableTable extends GroupsTable
 
 class GroupDb extends DataClass implements Insertable<GroupDb> {
   final String groupId;
+  final int? lastUpdated;
   final String group;
-  const GroupDb({required this.groupId, required this.group});
+  const GroupDb({required this.groupId, this.lastUpdated, required this.group});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['group_id'] = Variable<String>(groupId);
+    if (!nullToAbsent || lastUpdated != null) {
+      map['last_updated'] = Variable<int>(lastUpdated);
+    }
     map['group'] = Variable<String>(group);
     return map;
   }
@@ -83,6 +101,9 @@ class GroupDb extends DataClass implements Insertable<GroupDb> {
   GroupsTableCompanion toCompanion(bool nullToAbsent) {
     return GroupsTableCompanion(
       groupId: Value(groupId),
+      lastUpdated: lastUpdated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastUpdated),
       group: Value(group),
     );
   }
@@ -92,6 +113,7 @@ class GroupDb extends DataClass implements Insertable<GroupDb> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GroupDb(
       groupId: serializer.fromJson<String>(json['groupId']),
+      lastUpdated: serializer.fromJson<int?>(json['lastUpdated']),
       group: serializer.fromJson<String>(json['group']),
     );
   }
@@ -100,64 +122,81 @@ class GroupDb extends DataClass implements Insertable<GroupDb> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'groupId': serializer.toJson<String>(groupId),
+      'lastUpdated': serializer.toJson<int?>(lastUpdated),
       'group': serializer.toJson<String>(group),
     };
   }
 
-  GroupDb copyWith({String? groupId, String? group}) => GroupDb(
+  GroupDb copyWith(
+          {String? groupId,
+          Value<int?> lastUpdated = const Value.absent(),
+          String? group}) =>
+      GroupDb(
         groupId: groupId ?? this.groupId,
+        lastUpdated: lastUpdated.present ? lastUpdated.value : this.lastUpdated,
         group: group ?? this.group,
       );
   @override
   String toString() {
     return (StringBuffer('GroupDb(')
           ..write('groupId: $groupId, ')
+          ..write('lastUpdated: $lastUpdated, ')
           ..write('group: $group')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(groupId, group);
+  int get hashCode => Object.hash(groupId, lastUpdated, group);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is GroupDb &&
           other.groupId == this.groupId &&
+          other.lastUpdated == this.lastUpdated &&
           other.group == this.group);
 }
 
 class GroupsTableCompanion extends UpdateCompanion<GroupDb> {
   final Value<String> groupId;
+  final Value<int?> lastUpdated;
   final Value<String> group;
   final Value<int> rowid;
   const GroupsTableCompanion({
     this.groupId = const Value.absent(),
+    this.lastUpdated = const Value.absent(),
     this.group = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   GroupsTableCompanion.insert({
     required String groupId,
+    this.lastUpdated = const Value.absent(),
     required String group,
     this.rowid = const Value.absent(),
   })  : groupId = Value(groupId),
         group = Value(group);
   static Insertable<GroupDb> custom({
     Expression<String>? groupId,
+    Expression<int>? lastUpdated,
     Expression<String>? group,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (groupId != null) 'group_id': groupId,
+      if (lastUpdated != null) 'last_updated': lastUpdated,
       if (group != null) 'group': group,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   GroupsTableCompanion copyWith(
-      {Value<String>? groupId, Value<String>? group, Value<int>? rowid}) {
+      {Value<String>? groupId,
+      Value<int?>? lastUpdated,
+      Value<String>? group,
+      Value<int>? rowid}) {
     return GroupsTableCompanion(
       groupId: groupId ?? this.groupId,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
       group: group ?? this.group,
       rowid: rowid ?? this.rowid,
     );
@@ -168,6 +207,9 @@ class GroupsTableCompanion extends UpdateCompanion<GroupDb> {
     final map = <String, Expression>{};
     if (groupId.present) {
       map['group_id'] = Variable<String>(groupId.value);
+    }
+    if (lastUpdated.present) {
+      map['last_updated'] = Variable<int>(lastUpdated.value);
     }
     if (group.present) {
       map['group'] = Variable<String>(group.value);
@@ -182,6 +224,7 @@ class GroupsTableCompanion extends UpdateCompanion<GroupDb> {
   String toString() {
     return (StringBuffer('GroupsTableCompanion(')
           ..write('groupId: $groupId, ')
+          ..write('lastUpdated: $lastUpdated, ')
           ..write('group: $group, ')
           ..write('rowid: $rowid')
           ..write(')'))
