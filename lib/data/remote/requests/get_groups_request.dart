@@ -6,7 +6,7 @@ part 'get_groups_request.g.dart';
 
 @JsonSerializable()
 class GetGroupsResponse {
-  final List<GroupDTO> groups;
+  final Iterable<GroupDTO> groups;
 
   GetGroupsResponse(this.groups);
 

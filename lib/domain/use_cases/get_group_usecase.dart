@@ -13,9 +13,9 @@ class GetGroupUseCase {
 
   Future<void> launch(String groupId) async {
     final response = await _apiService.getGroup(groupId);
+    await _database.groupsDAO.insertGroup(response.group.toDb());
     final shouldSync = await _shouldSync(groupId);
     if (!shouldSync) return;
-    await _database.groupsDAO.insertGroup(response.group.toDb());
 
     await _database.servicesDao.clearForGroup(groupId);
     await _database.servicesDao.insertAll(response.services.toDb(groupId));
