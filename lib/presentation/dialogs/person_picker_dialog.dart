@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:flutter/material.dart';
 
 class PersonPickerDialog extends StatelessWidget {
-  final List<Person> people;
+  final Iterable<Person> people;
   final void Function(Person) onClick;
 
   const PersonPickerDialog(
@@ -17,23 +17,28 @@ class PersonPickerDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...people.map((person) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        ProfilePictureView(person: person),
-                        const SizedBox(width: 8),
-                        Text(person.displayName, style: Theme.of(context).textTheme.labelSmall,),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () => onClick(person),
-                      icon: const Icon(Icons.add),
-                      color: Colors.green,
-                    )
-                  ],
-                ))
+            ...people.map(
+              (person) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ProfilePictureView(person: person),
+                      const SizedBox(width: 8),
+                      Text(
+                        person.displayName,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () => onClick(person),
+                    icon: const Icon(Icons.add),
+                    color: Colors.green,
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),

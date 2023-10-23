@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -8,7 +9,6 @@ import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupsPage extends StatelessWidget {
   GroupsPage({Key? key}) : super(key: key);
@@ -19,9 +19,8 @@ class GroupsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocWidget(
       create: (context) => GroupsBloc()..loadProfile(),
-      child: BlocBuilder<GroupsBloc, UiState>(
-        builder: (context, state) {
-          final cubit = context.read<GroupsBloc>();
+      child: BaseBlocBuilder<GroupsBloc>(
+        builder: (cubit, state) {
           return BaseScaffold(
             endDrawer: const Drawer(
               child: ProfilePage(),

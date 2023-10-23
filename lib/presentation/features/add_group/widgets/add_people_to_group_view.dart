@@ -14,6 +14,7 @@ class AddPeopleToGroupView extends StatelessWidget {
     return ClickableListItem(
         height: 48,
         width: 48,
+        elevation: 2,
         borderRadius: const BorderRadius.only(
             topRight: Radius.circular(15),
             topLeft: Radius.circular(15),
@@ -22,7 +23,7 @@ class AddPeopleToGroupView extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondaryContainer,
         child: const Icon(Icons.group_add),
         onClick: () {
-          showDialog(
+          showBottomSheet(
               context: context,
               builder: (dialogContext) => FriendPickerDialog(
                     onFriendAdded: (friend) {

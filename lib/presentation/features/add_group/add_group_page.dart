@@ -67,22 +67,22 @@ class AddGroupPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       RoundedListItem(
                           child: TextField(
-                            autofocus: cubit.groupName.isEmpty,
-                            maxLines: 1,
-                            maxLength: 40,
-                            controller: nameTextController,
-                            onChanged: (value) {
-                              cubit.onUpdateGroupName(value);
-                            },
-                            textInputAction: TextInputAction.done,
-                            style: SplitsbyTextTheme.textFieldStyle(context),
-                            decoration: InputDecoration(
-                                hintStyle: SplitsbyTextTheme.textFieldHintStyle(
-                                    context),
-                                counterText: "",
-                                border: InputBorder.none,
-                                hintText: "Enter group name"),
-                          )),
+                        autofocus: cubit.groupName.isEmpty,
+                        maxLines: 1,
+                        maxLength: 40,
+                        controller: nameTextController,
+                        onChanged: (value) {
+                          cubit.onUpdateGroupName(value);
+                        },
+                        textInputAction: TextInputAction.done,
+                        style: SplitsbyTextTheme.textFieldStyle(context),
+                        decoration: InputDecoration(
+                            hintStyle:
+                                SplitsbyTextTheme.textFieldHintStyle(context),
+                            counterText: "",
+                            border: InputBorder.none,
+                            hintText: "Enter group name"),
+                      )),
                       const SizedBox(height: 16),
                       ClickableListItem(
                         padding: const EdgeInsets.all(16),
@@ -113,9 +113,9 @@ class AddGroupPage extends StatelessWidget {
                                 if (cubit.people.isEmpty)
                                   const Text("Add people to the group")
                                 else
-                                  ...cubit.people
-                                      .map((e) => AddedPersonView(person: e))
-                                      .toList(),
+                                  ...cubit.people.map(
+                                    (e) => AddedPersonView(person: e),
+                                  ),
                               ],
                             ),
                           ),
