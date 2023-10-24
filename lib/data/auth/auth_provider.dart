@@ -3,14 +3,18 @@ import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthProvider {
+  static const _googleSignInScopes = ["email"];
+  static const _appleSignInScopes = [
+    AppleIDAuthorizationScopes.email,
+    AppleIDAuthorizationScopes.fullName,
+  ];
+
   late final FirebaseAuth _firebaseAuth;
 
   Person? _user;
-  static const _googleSignInScopes = [
-    "email"
-  ];
 
   Future init(FirebaseApp firebaseApp) async {
     _firebaseAuth = FirebaseAuth.instanceFor(app: firebaseApp);
@@ -22,14 +26,22 @@ class AuthProvider {
   }
 
   Future signInWithGoogle() async {
-    final googleSignIn = GoogleSignIn(
-      scopes: _googleSignInScopes
-    );
+    final googleSignIn = GoogleSignIn(scopes: _googleSignInScopes);
     final googleSignInAccount = await googleSignIn.signIn();
 
     final auth = await googleSignInAccount!.authentication;
     final credential = GoogleAuthProvider.credential(
         accessToken: auth.accessToken, idToken: auth.idToken);
+    await _firebaseAuth.signInWithCredential(credential);
+  }
+
+  Future<void> signInWithApple() async {
+    final appleIDCredential =
+        await SignInWithApple.getAppleIDCredential(scopes: _appleSignInScopes);
+    final credential = OAuthProvider('apple.com').credential(
+      idToken: appleIDCredential.identityToken,
+      accessToken: appleIDCredential.authorizationCode,
+    );
     await _firebaseAuth.signInWithCredential(credential);
   }
 

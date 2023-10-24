@@ -40,6 +40,7 @@ dependencies:
   uuid: ^4.1.0
   json_pretty: ^1.0.4
   google_sign_in: ^6.1.5
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   json_serializable: ^6.6.1

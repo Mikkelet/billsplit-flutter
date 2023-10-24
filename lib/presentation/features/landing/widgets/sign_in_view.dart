@@ -12,7 +12,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class SignInView extends StatefulWidget {
-  const SignInView({Key? key}) : super(key: key);
+  const SignInView({super.key});
 
   @override
   State<SignInView> createState() => _SignInViewState();
@@ -123,10 +123,17 @@ class _SignInViewState extends SafeState<SignInView> {
                     ],
                   ),
                 TextButton(
-                    onPressed: () {
-                      signInCubit.signInWithGoogle();
-                    },
-                    child: const Text("Sign in with Google"))
+                  onPressed: () {
+                    signInCubit.signInWithGoogle();
+                  },
+                  child: const Text("Sign in with Google"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    signInCubit.signInWithApple();
+                  },
+                  child: const Text("Sign in with Apple"),
+                )
               ],
             ),
           ),
