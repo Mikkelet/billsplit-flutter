@@ -11,7 +11,6 @@ import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-
 class SignInView extends StatefulWidget {
   const SignInView({Key? key}) : super(key: key);
 
@@ -95,7 +94,8 @@ class _SignInViewState extends SafeState<SignInView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ForgotPasswordButton(emailController: emailFieldController),
+                      ForgotPasswordButton(
+                          emailController: emailFieldController),
                       ClickableListItem(
                         borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(10),
@@ -107,7 +107,8 @@ class _SignInViewState extends SafeState<SignInView> {
                         color: Theme.of(context).colorScheme.secondaryContainer,
                         onClick: () {
                           if (validateFields()) {
-                            final String email = emailFieldController.value.text;
+                            final String email =
+                                emailFieldController.value.text;
                             final String password =
                                 passwordFieldController.value.text;
                             signInCubit.signIn(email, password);
@@ -121,6 +122,11 @@ class _SignInViewState extends SafeState<SignInView> {
                       ),
                     ],
                   ),
+                TextButton(
+                    onPressed: () {
+                      signInCubit.signInWithGoogle();
+                    },
+                    child: const Text("Sign in with Google"))
               ],
             ),
           ),

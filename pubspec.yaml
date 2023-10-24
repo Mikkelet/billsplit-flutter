@@ -39,6 +39,7 @@ dependencies:
   package_info_plus: ^4.1.0
   uuid: ^4.1.0
   json_pretty: ^1.0.4
+  google_sign_in: ^6.1.5
 
 dev_dependencies:
   json_serializable: ^6.6.1

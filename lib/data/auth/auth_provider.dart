@@ -2,11 +2,15 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthProvider {
   late final FirebaseAuth _firebaseAuth;
 
   Person? _user;
+  static const _googleSignInScopes = [
+    "email"
+  ];
 
   Future init(FirebaseApp firebaseApp) async {
     _firebaseAuth = FirebaseAuth.instanceFor(app: firebaseApp);
@@ -15,6 +19,18 @@ class AuthProvider {
   Future signInWithEmail(String email, String password) async {
     await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
+  }
+
+  Future signInWithGoogle() async {
+    final googleSignIn = GoogleSignIn(
+      scopes: _googleSignInScopes
+    );
+    final googleSignInAccount = await googleSignIn.signIn();
+
+    final auth = await googleSignInAccount!.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: auth.accessToken, idToken: auth.idToken);
+    await _firebaseAuth.signInWithCredential(credential);
   }
 
   Future signUpWithEmail(String email, String password) async {
@@ -40,7 +56,7 @@ class AuthProvider {
   }
 
   Person get user {
-    if(_user == null) throw Exception("User not found");
+    if (_user == null) throw Exception("User not found");
     return _user!;
   }
 
