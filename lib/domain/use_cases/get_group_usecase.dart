@@ -38,9 +38,6 @@ class GetGroupUseCase {
     final group = groupDb.toGroup();
     final lastSynced = groupDb.lastUpdated;
     final lastUpdated = group.lastUpdatedState;
-    print("qqq lastSync=$lastSynced");
-    print("qqq lastUpdate=$lastUpdated");
-    print("qqq shouldUpdate=${lastUpdated > (lastSynced ?? 0)}");
     if(lastSynced == null) return true;
     return lastUpdated > lastSynced;
   }
