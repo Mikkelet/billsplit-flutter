@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
-import 'package:billsplit_flutter/presentation/features/landing/bloc/sign_up_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_welcome.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
@@ -13,7 +15,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class SignUpView extends StatefulWidget {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
@@ -68,13 +70,13 @@ class _SignUpViewState extends SafeState<SignUpView> {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => SignUpCubit(),
+      create: (context) => LandingCubit(),
       listener: (context, cubit, state) {
         if (state is SignUpSuccessful) {
           Navigator.of(context).push(OnboardingStepWelcomeView.getRoute());
         }
       },
-      child: BaseBlocBuilder<SignUpCubit>(builder: (signUpCubit, state) {
+      child: BaseBlocBuilder<LandingCubit>(builder: (signUpCubit, state) {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -131,7 +133,7 @@ class _SignUpViewState extends SafeState<SignUpView> {
                         final String email = emailFieldController.value.text;
                         final String password =
                             passwordFieldController.value.text;
-                        signUpCubit.signUp(email, password);
+                        signUpCubit.signUpWithEmail(email, password);
                       }
                       updateState();
                     },
@@ -140,6 +142,31 @@ class _SignUpViewState extends SafeState<SignUpView> {
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
+                const SizedBox(height: 32),
+                if (Platform.isIOS)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.apple),
+                      TextButton(
+                        onPressed: () {
+                          signUpCubit.signInWithApple();
+                        },
+                        child: const Text("Sign in with Apple"),
+                      ),
+                    ],
+                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        signUpCubit.signInWithGoogle();
+                      },
+                      child: const Text("Sign in with Google"),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
