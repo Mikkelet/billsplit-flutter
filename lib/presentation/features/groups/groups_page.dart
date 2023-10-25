@@ -11,7 +11,7 @@ import 'package:billsplit_flutter/presentation/features/profile/profile_page.dar
 import 'package:flutter/material.dart';
 
 class GroupsPage extends StatelessWidget {
-  GroupsPage({Key? key}) : super(key: key);
+  GroupsPage({super.key});
 
   final _scrollingController = ScrollController();
 
@@ -26,7 +26,7 @@ class GroupsPage extends StatelessWidget {
               child: ProfilePage(),
             ),
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-              floatingActionButton: ExtendedFloatingActionButton(
+            floatingActionButton: ExtendedFloatingActionButton(
               scrollController: _scrollingController,
               label: "Add group",
               icon: Icons.group_add_rounded,
@@ -42,21 +42,6 @@ class GroupsPage extends StatelessWidget {
                 child: DefaultStreamBuilder(
                   stream: cubit.getGroupStream(),
                   builder: (_, groups) {
-                    if (state is Loading && groups.isEmpty) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (groups.isEmpty) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(64.0),
-                          child: Text(
-                            "Here you can see your groups! Click below to add one!",
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ),
-                      );
-                    }
                     return CustomScrollView(
                       controller: _scrollingController,
                       slivers: [
@@ -83,18 +68,46 @@ class GroupsPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            childCount: groups.length,
-                            (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 16.0, horizontal: 8),
-                                child: GroupView(group: groups[index]),
-                              );
-                            },
-                          ),
-                        )
+                        SliverLayoutBuilder(builder: (context, _) {
+                          if (state is Loading && groups.isEmpty) {
+                            return SliverFillViewport(
+                              viewportFraction: 0.5,
+                              delegate: SliverChildListDelegate([
+                                const Center(child: CircularProgressIndicator())
+                              ]),
+                            );
+                          }
+                          if (groups.isEmpty) {
+                            return SliverFillViewport(
+                              delegate: SliverChildListDelegate([
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(64.0),
+                                    child: Text(
+                                      "Here you can see your groups! Click below to add one!",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                            );
+                          }
+                          return SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              childCount: groups.length,
+                              (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0, horizontal: 8),
+                                  child: GroupView(group: groups[index]),
+                                );
+                              },
+                            ),
+                          );
+                        })
                       ],
                     );
                   },
@@ -103,63 +116,6 @@ class GroupsPage extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class FadeContainer extends StatefulWidget {
-  @protected
-  final ScrollController scrollController;
-
-  const FadeContainer({super.key, required this.scrollController});
-
-  @override
-  State<FadeContainer> createState() => _FadeAppBarState();
-}
-
-class _FadeAppBarState extends State<FadeContainer> {
-  double _opacity = 0.0;
-
-  _scrollListen() {
-    final offset = widget.scrollController.offset;
-    if (offset > 200) {
-      if (_opacity != 1.0) {
-        setState(() {
-          _opacity = 1.0;
-        });
-      }
-    } else if (offset < 10) {
-      if (_opacity != 0.0) {
-        setState(() {
-          _opacity = 0.0;
-        });
-      }
-    } else {
-      setState(() {
-        _opacity = offset / 200;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.scrollController.addListener(_scrollListen);
-  }
-
-  @override
-  void dispose() {
-    widget.scrollController.removeListener(_scrollListen);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: _opacity,
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.red),
       ),
     );
   }
