@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/data/remote/dtos/app_version_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
@@ -98,7 +99,8 @@ class ApiService {
     await _client.put("user", updateData);
   }
 
-  Future deleteExpense(GroupDTO group, String expenseId, Iterable<DebtDTO> debts) async {
+  Future deleteExpense(
+      GroupDTO group, String expenseId, Iterable<DebtDTO> debts) async {
     final body = DeleteExpenseRequest(debts).toJson();
     await _client.delete("group/${group.id}/events/$expenseId", body: body);
   }
@@ -112,4 +114,8 @@ class ApiService {
     return GetExchangeRatesRequest.fromJson(response).rates;
   }
 
+  Future<AppVersionDTO> getAppVersion() async {
+    final response = await _client.get("appVersion", authorized: false);
+    return AppVersionDTO.fromJson(response);
+  }
 }
