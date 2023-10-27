@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ClickableListItem extends StatelessWidget {
@@ -39,7 +40,10 @@ class ClickableListItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
         elevation: elevation,
-        color: color ?? Theme.of(context).colorScheme.primaryContainer,
+        color: builder((){
+          if(!enabled) return Colors.grey;
+          return color ?? Theme.of(context).colorScheme.primaryContainer;
+        }),
         child: InkWell(
           borderRadius: borderRadius,
           onTap: enabled ? onClick : null,
