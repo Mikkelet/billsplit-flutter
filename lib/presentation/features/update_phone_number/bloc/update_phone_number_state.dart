@@ -5,3 +5,5 @@ class InvalidPhoneNumberEvent extends Main {}
 class PhoneNumberLoaded extends Main {}
 
 class UpdateStep extends Main {}
+
+class UpdateNumberSuccess extends Main {}

@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/update_phone_number_flow.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,18 @@ class PhoneNumberView extends StatelessWidget {
               },
               child: const Text("Click here to add phone number"));
         }
-        return RoundedListItem(child: Text(snapshot.data!.display));
+        return ClickableListItem(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          height: 64,
+          child: Text(
+            snapshot.data!.display,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          onClick: () {
+            Navigator.of(context).push(UpdatePhoneNumberFlow.getRoute());
+          },
+        );
       },
     );
   }

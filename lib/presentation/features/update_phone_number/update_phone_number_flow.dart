@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc/update_phone_number_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc/update_phone_number_state.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/steps/confirm_phone_number_page.dart';
@@ -34,6 +35,23 @@ class _UpdatePhoneNumberFlowState extends State<UpdatePhoneNumberFlow> {
           _pageController.animateToPage(cubit.currentStep - 1,
               duration: const Duration(milliseconds: 500),
               curve: Curves.linear);
+        } else if (state is UpdateNumberSuccess) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomDialog(
+                title: "Success",
+                text:
+                    "Your phone number has been update to ${cubit.phoneNumber}",
+                primaryText: "OK",
+                onPrimaryClick: () {
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop();
+                },
+              );
+            },
+          );
         }
       },
       create: (context) => UpdatePhoneNumberCubit(),
@@ -44,9 +62,10 @@ class _UpdatePhoneNumberFlowState extends State<UpdatePhoneNumberFlow> {
           ),
           body: PageView(
             controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               UpdatePhoneNumberPage(phoneNumber: cubit.user.phoneNumberState),
-              const ConfirmPhoneNumberPage(),
+              ConfirmPhoneNumberPage(),
             ],
           ),
         );
