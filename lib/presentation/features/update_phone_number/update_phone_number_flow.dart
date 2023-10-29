@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
@@ -54,20 +55,28 @@ class _UpdatePhoneNumberFlowState extends State<UpdatePhoneNumberFlow> {
           );
         }
       },
-      create: (context) => UpdatePhoneNumberCubit(),
+      create: (context) => UpdatePhoneNumberCubit()..init(),
       child: BaseBlocBuilder<UpdatePhoneNumberCubit>(builder: (cubit, state) {
         return BaseScaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
           ),
-          body: PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              UpdatePhoneNumberPage(phoneNumber: cubit.user.phoneNumberState),
-              ConfirmPhoneNumberPage(),
-            ],
-          ),
+          body: Builder(builder: (context) {
+            if (state is Loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                UpdatePhoneNumberPage(
+                  initialCountry: cubit.selectedCountry,
+                  phoneNumber: cubit.phoneNumber,
+                ),
+                ConfirmPhoneNumberPage(),
+              ],
+            );
+          }),
         );
       }),
     );
