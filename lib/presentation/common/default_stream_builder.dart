@@ -5,8 +5,7 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
   final Widget Function(BuildContext, T) builder;
 
   const DefaultStreamBuilder(
-      {Key? key, required this.stream, required this.builder})
-      : super(key: key);
+      {super.key, required this.stream, required this.builder});
 
   @override
   Widget build(BuildContext context) {

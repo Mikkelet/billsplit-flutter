@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/features/landing/bloc/signin_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/forgot_password_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
@@ -11,9 +13,8 @@ import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-
 class SignInView extends StatefulWidget {
-  const SignInView({Key? key}) : super(key: key);
+  const SignInView({super.key});
 
   @override
   State<SignInView> createState() => _SignInViewState();
@@ -56,8 +57,8 @@ class _SignInViewState extends SafeState<SignInView> {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => SignInCubit(),
-      child: BaseBlocBuilder<SignInCubit>(builder: (signInCubit, signInState) {
+      create: (context) => LandingCubit(),
+      child: BaseBlocBuilder<LandingCubit>(builder: (signInCubit, signInState) {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -95,7 +96,8 @@ class _SignInViewState extends SafeState<SignInView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ForgotPasswordButton(emailController: emailFieldController),
+                      ForgotPasswordButton(
+                          emailController: emailFieldController),
                       ClickableListItem(
                         borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(10),
@@ -107,10 +109,11 @@ class _SignInViewState extends SafeState<SignInView> {
                         color: Theme.of(context).colorScheme.secondaryContainer,
                         onClick: () {
                           if (validateFields()) {
-                            final String email = emailFieldController.value.text;
+                            final String email =
+                                emailFieldController.value.text;
                             final String password =
                                 passwordFieldController.value.text;
-                            signInCubit.signIn(email, password);
+                            signInCubit.signInWithEmail(email, password);
                           }
                           updateState();
                         },
@@ -121,6 +124,31 @@ class _SignInViewState extends SafeState<SignInView> {
                       ),
                     ],
                   ),
+                const SizedBox(height: 32),
+                if (Platform.isIOS)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.apple),
+                      TextButton(
+                        onPressed: () {
+                          signInCubit.signInWithApple();
+                        },
+                        child: const Text("Sign in with Apple"),
+                      ),
+                    ],
+                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        signInCubit.signInWithGoogle();
+                      },
+                      child: const Text("Sign in with Google"),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

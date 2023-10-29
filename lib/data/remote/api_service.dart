@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/data/remote/dtos/app_version_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
@@ -8,15 +9,12 @@ import 'package:billsplit_flutter/data/remote/requests/add_event_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_friend_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart';
-import 'package:billsplit_flutter/data/remote/requests/delete_expense_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_exchange_rates_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/leave_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/update_user_request.dart';
-
-import 'dtos/debts_dto.dart';
 
 class ApiService {
   final NetworkClient _client;
@@ -38,8 +36,7 @@ class ApiService {
     return GetFriendsResponse.fromJson(response);
   }
 
-  Future<AddEventResponse> addEvent(
-      String groupId, EventDTO eventDTO) async {
+  Future<AddEventResponse> addEvent(String groupId, EventDTO eventDTO) async {
     final request = AddEventRequest(groupId, eventDTO);
     final response = await _client.post("event", request.toJson());
     return AddEventResponse.fromJson(response);
@@ -98,9 +95,8 @@ class ApiService {
     await _client.put("user", updateData);
   }
 
-  Future deleteExpense(GroupDTO group, String expenseId, Iterable<DebtDTO> debts) async {
-    final body = DeleteExpenseRequest(debts).toJson();
-    await _client.delete("group/${group.id}/events/$expenseId", body: body);
+  Future deleteExpense(GroupDTO group, String expenseId) async {
+    await _client.delete("group/${group.id}/events/$expenseId");
   }
 
   void onDestroy() {
@@ -112,4 +108,8 @@ class ApiService {
     return GetExchangeRatesRequest.fromJson(response).rates;
   }
 
+  Future<AppVersionDTO> getAppVersion() async {
+    final response = await _client.get("appVersion", authorized: false);
+    return AppVersionDTO.fromJson(response);
+  }
 }

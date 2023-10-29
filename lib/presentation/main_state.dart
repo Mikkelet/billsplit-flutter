@@ -1,10 +1,17 @@
+import 'package:billsplit_flutter/domain/models/app_version.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
-class ShowNotificationPermissionRationale extends Main{}
+class ShowNotificationPermissionRationale extends Main {}
 
-class GroupOpenedFromNotification extends Main{
+class GroupOpenedFromNotification extends Main {
   final Group group;
-  GroupOpenedFromNotification(this.group);
 
+  GroupOpenedFromNotification(this.group);
+}
+
+class MandatoryUpdateState extends Main {
+  final AppVersion appVersion;
+
+  MandatoryUpdateState(this.appVersion);
 }

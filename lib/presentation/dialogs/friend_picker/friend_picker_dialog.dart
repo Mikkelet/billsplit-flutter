@@ -12,33 +12,31 @@ class FriendPickerDialog extends StatelessWidget {
   final Function(Person) onFriendAdded;
 
   const FriendPickerDialog(
-      {Key? key,
+      {super.key,
       required this.onFriendAdded,
-      required this.currentPickedFriends})
-      : super(key: key);
+      required this.currentPickedFriends});
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: BaseBlocWidget<FriendPickerCubit>(
-        create: (context) => FriendPickerCubit(currentPickedFriends),
-        child: BaseBlocBuilder<FriendPickerCubit>(
-          builder: (cubit, state) {
-            return DefaultStreamBuilder(
-              stream: cubit.friendsStream,
-              builder: (_, friends) {
-                if (friends.isEmpty) {
-                  return const NoFriendsDialog();
-                }
-                return PersonPickerDialog(
-                    people: friends.toList(),
-                    onClick: (friend) {
-                      onFriendAdded(friend);
-                    });
-              },
-            );
-          },
-        ),
+    return BaseBlocWidget<FriendPickerCubit>(
+      create: (context) => FriendPickerCubit(currentPickedFriends),
+      child: BaseBlocBuilder<FriendPickerCubit>(
+        builder: (cubit, state) {
+          return DefaultStreamBuilder(
+            stream: cubit.friendsStream,
+            builder: (_, friends) {
+              if (friends.isEmpty) {
+                return const NoFriendsDialog();
+              }
+              return PersonPickerDialog(
+                people: friends,
+                onClick: (friend) {
+                  onFriendAdded(friend);
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }

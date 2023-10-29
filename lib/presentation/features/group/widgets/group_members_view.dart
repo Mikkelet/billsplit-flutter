@@ -33,6 +33,9 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
             headerBuilder: (context, isExpanded) {
               return ClickableListItem(
                 padding: EdgeInsets.zero,
+                borderRadius: !isExpanded
+                    ? null
+                    : const BorderRadius.vertical(top: Radius.circular(15)),
                 alignment: Alignment.centerLeft,
                 onClick: () {
                   setState(() {
@@ -59,13 +62,14 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                                 .secondaryContainer,
                           ),
                           child: Center(
-                              child: Container(
-                            height: 1,
-                            width: 64,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
-                          )),
+                            child: Container(
+                              height: 1,
+                              width: 64,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                            ),
+                          ),
                         )
                       ],
                     );
@@ -91,7 +95,8 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 RoundedListItem(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius:
+                      const BorderRadius.vertical(bottom: Radius.circular(15)),
                   child: Column(
                     children: [
                       ...cubit.group.people.mapIndexed(
@@ -112,33 +117,36 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 4),
                 if (cubit.state is AddingPersonToGroup)
                   const Center(child: CircularProgressIndicator())
                 else
-                  ClickableListItem(
-                    height: 48,
-                    width: 48,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(30)),
-                    onClick: () async {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) => FriendPickerDialog(
-                          onFriendAdded: (friend) {
-                            cubit.addPersonToGroup(friend);
-                            Navigator.of(context).pop();
-                          },
-                          currentPickedFriends: cubit.group.people,
-                        ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.add,
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ClickableListItem(
+                      height: 48,
+                      width: 48,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      elevation: 2,
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(30)),
+                      onClick: () async {
+                        showBottomSheet(
+                          context: context,
+                          builder: (dialogContext) => FriendPickerDialog(
+                            onFriendAdded: (friend) {
+                              cubit.addPersonToGroup(friend);
+                              Navigator.of(context).pop();
+                            },
+                            currentPickedFriends: cubit.group.people,
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                      ),
                     ),
                   ),
               ],
