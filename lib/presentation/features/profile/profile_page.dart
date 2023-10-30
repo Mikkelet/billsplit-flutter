@@ -10,11 +10,12 @@ import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upl
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,8 @@ class ProfilePage extends StatelessWidget {
                       child: Text(cubit.user.email,
                           style: Theme.of(context).textTheme.labelLarge),
                     ),
+                    const SizedBox(height: 12),
+                    const PhoneNumberView(),
                     const SizedBox(height: 12),
                     const UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 12),
@@ -110,7 +113,6 @@ class ProfilePage extends StatelessWidget {
                         return Text(snapshot.data!);
                       },
                     ),
-                    Divider()
                   ],
                 ),
               ),

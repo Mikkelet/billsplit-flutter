@@ -1,5 +1,7 @@
 import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/domain/models/phone_number.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/sign_out_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
@@ -9,13 +11,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 class ProfileCubit extends BaseCubit {
   final _signOutUseCase = SignOutUseCase();
   final _updateDisplayNameUseCase = UpdateDisplayNameUseCase();
-
+  final _parseUsePhoneNumberUseCase = ParsePhoneNumberUseCase();
 
   void signOut() {
     showLoading();
-    _signOutUseCase.launch().then((value) {
-
-    }).catchError((error, st) {
+    _signOutUseCase.launch().then((value) {}).catchError((error, st) {
       showError(error, st);
     });
   }
@@ -31,9 +31,15 @@ class ProfileCubit extends BaseCubit {
   }
 
   Future<String> syncVersion() async {
-    final apiVersion = NetworkClient.apiVersion;
+    const apiVersion = NetworkClient.apiVersion;
     final packageInfo = await PackageInfo.fromPlatform();
     final appVersion = packageInfo.buildNumber;
     return "Version ${packageInfo.version} ($appVersion), apiVersion $apiVersion";
+  }
+
+  Future<PhoneNumber?> getPhoneNumber() async {
+    final phoneNumber =
+        await _parseUsePhoneNumberUseCase.launch(user.phoneNumberState);
+    return phoneNumber;
   }
 }

@@ -6,14 +6,16 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthState {}
+
 class LoggedInState extends AuthState {
   final Person user;
 
   LoggedInState(this.user);
 }
-class LoadingUserState extends AuthState {}
-class LoggedOutState extends AuthState {}
 
+class LoadingUserState extends AuthState {}
+
+class LoggedOutState extends AuthState {}
 
 class AuthProvider {
   static const _googleSignInScopes = ["email"];
@@ -69,12 +71,14 @@ class AuthProvider {
   }
 
   Stream<AuthState> authListener() {
-    return _firebaseAuth.userChanges().map((event) {
-      if (event == null) {
+    return _firebaseAuth.userChanges().map((fbUser) {
+      if (fbUser == null) {
         return LoggedOutState();
       }
-      final user = Person(event.uid, event.displayName ?? "",
-          pfpUrl: event.photoURL ?? "", email: event.email ?? "");
+      final user = Person(fbUser.uid, fbUser.displayName ?? "",
+          pfpUrl: fbUser.photoURL ?? "",
+          email: fbUser.email ?? "",
+          phoneNumber: fbUser.phoneNumber ?? "");
       _user = user;
       return LoggedInState(user);
     });
@@ -100,5 +104,30 @@ class AuthProvider {
 
   Future forgotPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> updatePhoneNumber(
+      {required String phoneNumber,
+      required Function(String verificationId) onCodeSent}) async {
+    await _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(minutes: 2),
+      verificationCompleted: (credential) async {
+        await _firebaseAuth.currentUser!.updatePhoneNumber(credential);
+      },
+      verificationFailed: (e) {
+        throw e;
+      },
+      codeSent: (verificationId, forceResendToken) async {
+        onCodeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (verificationId) {},
+    );
+  }
+
+  Future<void> submitSmsCode(String verificationId, String smsCode) async {
+    final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: smsCode);
+    await _firebaseAuth.currentUser!.updatePhoneNumber(credential);
   }
 }
