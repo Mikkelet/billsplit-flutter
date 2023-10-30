@@ -46,6 +46,7 @@ class _AddFriendPhoneViewState extends SafeState<AddFriendPhoneView> {
                   child: TextField(
                     style: SplitsbyTextTheme.textFieldStyle(context),
                     controller: _textFieldController,
+                    keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                         errorText: errorText,
                         hintStyle:

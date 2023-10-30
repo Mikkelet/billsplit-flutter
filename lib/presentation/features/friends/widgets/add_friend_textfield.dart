@@ -8,14 +8,14 @@ import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddFriendTextField extends StatefulWidget {
-  const AddFriendTextField({super.key});
+class AddFriendView extends StatefulWidget {
+  const AddFriendView({super.key});
 
   @override
-  State<AddFriendTextField> createState() => _AddFriendTextFieldState();
+  State<AddFriendView> createState() => _AddFriendViewState();
 }
 
-class _AddFriendTextFieldState extends SafeState<AddFriendTextField> {
+class _AddFriendViewState extends SafeState<AddFriendView> {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(

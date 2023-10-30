@@ -36,7 +36,7 @@ class FriendsPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SizedBox(height: 16),
-                      const AddFriendTextField(),
+                      const AddFriendView(),
                       const SizedBox(height: 16),
                       DefaultStreamBuilder(
                         stream: cubit.friendsStream(),
