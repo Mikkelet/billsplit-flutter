@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FriendsPage extends StatelessWidget {
-  const FriendsPage({Key? key}) : super(key: key);
+  const FriendsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +46,18 @@ class FriendsPage extends StatelessWidget {
                                 child: CircularProgressIndicator());
                           }
                           if (friends.isEmpty) {
-                            return const Text("Type an email above to add a friend!");
+                            return const Text(
+                                "Type an email above to add a friend!");
                           }
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              ...friends
-                                  .map(
-                                    (e) => Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: FriendView(friend: e),
-                                    ),
-                                  )
-                                  .toList()
+                              ...friends.map(
+                                (e) => Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: FriendView(friend: e),
+                                ),
+                              )
                             ],
                           );
                         },

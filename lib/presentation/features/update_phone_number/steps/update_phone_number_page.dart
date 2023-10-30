@@ -1,9 +1,9 @@
+import 'package:billsplit_flutter/presentation/common/billsplit_country_picker.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc/update_phone_number_cubit.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,22 +49,11 @@ class _UpdatePhoneNumberPageState extends SafeState<UpdatePhoneNumberPage> {
           const SizedBox(height: 16),
           Row(
             children: [
-              RoundedListItem(
-                height: 64,
-                padding: EdgeInsets.zero,
-                child: CountryCodePicker(
-                  padding: EdgeInsets.zero,
-                  initialSelection: widget.initialCountry,
-                  countryFilter: const ["DK", "TH"],
-                  searchDecoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  dialogBackgroundColor: Theme.of(context).colorScheme.background,
-                  onChanged: (country) {
-                    cubit.changeCountryCode(country);
-                  },
-                  boxDecoration: const BoxDecoration(),
-                ),
+              BillSplitCountryPicker(
+                initialCountry: widget.initialCountry,
+                onChange: (countryCode) {
+                  cubit.changeCountryCode(countryCode);
+                },
               ),
               const SizedBox(width: 8),
               Expanded(

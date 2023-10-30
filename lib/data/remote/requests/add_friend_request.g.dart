@@ -27,3 +27,9 @@ Map<String, dynamic> _$RequestTypeUserIdToJson(RequestTypeUserId instance) =>
       'type': instance.type,
       'friendId': instance.friendId,
     };
+
+Map<String, dynamic> _$RequestTypePhoneToJson(RequestTypePhone instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'phoneNumber': instance.phoneNumber,
+    };

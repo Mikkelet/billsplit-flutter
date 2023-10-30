@@ -9,8 +9,7 @@ part of 'get_groups_request.dart';
 GetGroupsResponse _$GetGroupsResponseFromJson(Map<String, dynamic> json) =>
     GetGroupsResponse(
       (json['groups'] as List<dynamic>)
-          .map((e) => GroupDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          .map((e) => GroupDTO.fromJson(e as Map<String, dynamic>)),
     );
 
 Map<String, dynamic> _$GetGroupsResponseToJson(GetGroupsResponse instance) =>
