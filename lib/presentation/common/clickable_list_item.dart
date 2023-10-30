@@ -38,12 +38,15 @@ class ClickableListItem extends StatelessWidget {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-            borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius)),
+          borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
+        ),
         elevation: elevation,
-        color: builder((){
-          if(!enabled) return Colors.grey;
-          return color ?? Theme.of(context).colorScheme.primaryContainer;
-        }),
+        color: builder(
+          () {
+            if (!enabled) return Colors.grey.withOpacity(0.2);
+            return color ?? Theme.of(context).colorScheme.primaryContainer;
+          },
+        ),
         child: InkWell(
           borderRadius: borderRadius,
           onTap: enabled ? onClick : null,

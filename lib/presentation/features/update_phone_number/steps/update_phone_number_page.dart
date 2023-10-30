@@ -56,9 +56,14 @@ class _UpdatePhoneNumberPageState extends SafeState<UpdatePhoneNumberPage> {
                   padding: EdgeInsets.zero,
                   initialSelection: widget.initialCountry,
                   countryFilter: const ["DK", "TH"],
+                  searchDecoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  dialogBackgroundColor: Theme.of(context).colorScheme.background,
                   onChanged: (country) {
                     cubit.changeCountryCode(country);
                   },
+                  boxDecoration: const BoxDecoration(),
                 ),
               ),
               const SizedBox(width: 8),
