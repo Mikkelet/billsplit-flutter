@@ -15,12 +15,16 @@ class GroupsBloc extends BaseCubit {
 
   GroupsBloc() : super();
 
+  Map<String, num> debts = {};
+
   Stream<List<Group>> getGroupStream() =>
-      _observeGroupsUseCase.observe().map((event) =>
-          event
+      _observeGroupsUseCase.observe().map((event) => event
               .sortedBy<num>((group) => group.latestEventState?.timestamp ?? 0)
               .reversed
-              .toList());
+              .map((e) {
+            _getDebtsStream(e);
+            return e;
+          }).toList());
 
   void loadProfile() async {
     emit(Loading());
@@ -32,18 +36,19 @@ class GroupsBloc extends BaseCubit {
     });
   }
 
-  Stream<num> getDebtsStream(Group group) =>
-      _observeDebtsUseCase.observe(group).map((event) {
-        if (event.isEmpty) {
-          return 0;
-        }
-        if (event.length > 1) {
-          return event
-              .map((e) => e.second)
-              .sum;
-        }
-        return event.first.second;
-      });
+  void _getDebtsStream(Group group) async {
+    final debtsResult = await _observeDebtsUseCase.observe(group).first;
+    if (debtsResult.isEmpty) return;
+    if (debtsResult.length > 1) {
+      debts[group.id] = debtsResult.map((e) => e.second).sum;
+    } else {
+      debts[group.id] = debtsResult.first.second;
+    }
+  }
+
+  num getDebtForGroup(Group group) {
+    return debts[group.id] ?? 0;
+  }
 
   Future refreshGroups() async {
     try {
@@ -58,8 +63,8 @@ class GroupsBloc extends BaseCubit {
     final morning = DateTime.now().copyWith(hour: 5, minute: 0);
     final noon = DateTime.now().copyWith(hour: 12, minute: 0);
     final evening = DateTime.now().copyWith(hour: 18, minute: 0);
-    final name = user.displayName.replaceRange(
-        0, 1, user.displayName[0].toUpperCase());
+    final name =
+        user.displayName.replaceRange(0, 1, user.displayName[0].toUpperCase());
     if (now.isAfter(morning) && now.isBefore(noon)) {
       return "Good morning, $name";
     } else if (now.isAfter(noon) && now.isBefore(evening)) {

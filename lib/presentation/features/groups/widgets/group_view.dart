@@ -12,23 +12,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GroupView extends StatelessWidget {
   final Group group;
 
-  const GroupView({Key? key, required this.group}) : super(key: key);
+  const GroupView({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
 
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
+      decoration: const BoxDecoration(boxShadow: [
+        BoxShadow(
             blurRadius: 10,
             spreadRadius: 1,
             color: Colors.black12,
-            offset: Offset(0, 8)
-          )
-        ]
-      ),
+            offset: Offset(0, 8))
+      ]),
       child: Center(
         child: ClickableListItem(
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -57,17 +54,12 @@ class GroupView extends StatelessWidget {
                             size: 30,
                             limit: 3,
                           ),
-                          StreamBuilder(
-                              stream: cubit.getDebtsStream(group),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Expanded(
-                                    child:
-                                        _debtView(context, snapshot.requireData),
-                                  );
-                                }
-                                return const SizedBox();
-                              })
+                          Expanded(
+                            child: _debtView(
+                              context,
+                              cubit.getDebtForGroup(group),
+                            ),
+                          ),
                         ],
                       ),
                     ],

@@ -16,7 +16,7 @@ class ObserveDebtsUseCase {
 
   /// returns a list of debts to user denoted in group's default currency
   Stream<Iterable<Pair<Person, num>>> observe(Group group) {
-    return _observeEventsUseCase.observe(group.id).asyncMap((events) async {
+    return _observeEventsUseCase.observe(group.id).map((events) {
       final temps = _getTemps(events.whereType<GroupExpense>());
       final people = {...group.people, ...group.pastMembers, ...temps};
       final calculator = DebtCalculator.fromCombined(people, events);

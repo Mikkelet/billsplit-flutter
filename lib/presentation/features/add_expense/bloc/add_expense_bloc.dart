@@ -38,7 +38,7 @@ class AddExpenseBloc extends BaseCubit {
   }
 
   void addExpense() {
-    _addExpenseUseCase.launch(group.id, groupExpense);
+    _addExpenseUseCase.launch(group, groupExpense);
     emit(AddExpenseSuccess());
   }
 

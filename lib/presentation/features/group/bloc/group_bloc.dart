@@ -101,7 +101,7 @@ class GroupBloc extends BaseCubit {
   }
 
   void retryAddExpense(GroupExpense expense) {
-    _addExpenseUseCase.launch(group.id, expense);
+    _addExpenseUseCase.launch(group, expense);
   }
 
   void updateCurrency(Currency currency) {

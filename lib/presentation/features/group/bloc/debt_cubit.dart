@@ -58,7 +58,7 @@ class DebtCubit extends BaseCubit {
     );
 
     emit(Loading());
-    _addEventUseCase.launch(group.id, payment).then((_) {
+    _addEventUseCase.launch(group, payment).then((_) {
       emit(DebtPayed());
     }).catchError((error, st) {
       showError(error, st);
@@ -99,7 +99,7 @@ class DebtCubit extends BaseCubit {
     }
 
     emit(Loading());
-    _addEventUseCase.launch(group.id, payment).then((_) {
+    _addEventUseCase.launch(group, payment).then((_) {
       emit(DebtPayed());
     }).catchError((error, st) {
       showError(error, st);
