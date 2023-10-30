@@ -17,6 +17,7 @@ import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/dialog_with_close_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
+import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -31,18 +32,15 @@ class AddServicePage extends StatefulWidget {
   @override
   State<AddServicePage> createState() => _AddServicePageState();
 
-  static Route<AddServicePage> getRoute(
+  static Route getRoute(
       Person user, Group group, SubscriptionService? subscriptionService) {
     if (subscriptionService == null) {
-      return MaterialPageRoute(
-          builder: (context) => AddServicePage(
-              group: group,
-              service:
-                  SubscriptionService.newService(group: group, user: user)));
+      return slideUpRoute(AddServicePage(
+          group: group,
+          service: SubscriptionService.newService(group: group, user: user)));
     }
-    return MaterialPageRoute(
-        builder: (context) =>
-            AddServicePage(group: group, service: subscriptionService));
+    return slideUpRoute(
+        AddServicePage(group: group, service: subscriptionService));
   }
 }
 
@@ -79,6 +77,9 @@ class _AddServicePageState extends State<AddServicePage> {
         builder: (cubit, state) {
           return Scaffold(
             appBar: builder(() {
+              if (state is Loading) {
+                return null;
+              }
               return AppBar(
                   leading: const BackButton(),
                   surfaceTintColor: Theme.of(context).colorScheme.surface,
@@ -97,7 +98,6 @@ class _AddServicePageState extends State<AddServicePage> {
                               },
                               secondaryText: "Yes, delete it",
                               onSecondaryClick: () {
-                                Navigator.of(context).pop();
                                 cubit.deleteService(service);
                               },
                             ),
@@ -136,13 +136,13 @@ class _AddServicePageState extends State<AddServicePage> {
                 }
                 return true;
               },
-              child: SingleChildScrollView(
-                child: Builder(
-                  builder: (context) {
-                    if (state is Loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return Padding(
+              child: Builder(
+                builder: (context) {
+                  if (state is Loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return SingleChildScrollView(
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 40),
                       child: Column(
@@ -161,7 +161,10 @@ class _AddServicePageState extends State<AddServicePage> {
                                 FocusManager.instance.primaryFocus?.unfocus();
                               },
                               decoration: InputDecoration(
-                                  hintStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                                  hintStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary),
                                   errorText: nameErrorText,
                                   counterText: "",
                                   border: InputBorder.none,
@@ -176,8 +179,8 @@ class _AddServicePageState extends State<AddServicePage> {
                                   onClick: () async {
                                     final response = await Navigator.of(context)
                                         .push(CurrencyPickerDialog.getRoute(
-                                            convertToCurrency: cubit
-                                                .group.defaultCurrencyState));
+                                        convertToCurrency: cubit
+                                            .group.defaultCurrencyState));
                                     if (response is Currency) {
                                       cubit.updateCurrency(response.symbol);
                                     }
@@ -188,7 +191,7 @@ class _AddServicePageState extends State<AddServicePage> {
                                 Expanded(
                                   child: ExpenseTextField(
                                       textEditingController:
-                                          _expenseTextController,
+                                      _expenseTextController,
                                       canBeZero: !showCannotBe0ZeroError,
                                       onChange: (value) {
                                         service.monthlyExpenseState = value;
@@ -211,10 +214,10 @@ class _AddServicePageState extends State<AddServicePage> {
                             final nextMonth =
                                 DateTime.now().month; // index starts at 1
                             final monthString = monthNames[
-                                nextMonth]; // index starts at 0, so we get the next month by just getting the index
+                            nextMonth]; // index starts at 0, so we get the next month by just getting the index
                             return Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 32.0),
+                              const EdgeInsets.symmetric(horizontal: 32.0),
                               child: Text(
                                   "Next expense will be submitted on 1st of $monthString"),
                             );
@@ -224,12 +227,12 @@ class _AddServicePageState extends State<AddServicePage> {
                             child: Column(
                               children: [
                                 ...service.participantsState.mapIndexed(
-                                  (i, e) {
+                                      (i, e) {
                                     if (i > 0) {
                                       return Padding(
                                         padding: const EdgeInsets.only(top: 8),
                                         child:
-                                            ServiceParticipantView(person: e),
+                                        ServiceParticipantView(person: e),
                                       );
                                     }
                                     return ServiceParticipantView(person: e);
@@ -240,20 +243,20 @@ class _AddServicePageState extends State<AddServicePage> {
                                   child: IconButton(
                                     onPressed: () async {
                                       service.participantsState =
-                                          await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (context) =>
                                             DialogWithCloseButton(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16),
-                                            child: ParticipantsPickerDialog(
-                                              participants: [
-                                                ...service.participantsState
-                                              ],
-                                              people: cubit.group.people,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(16),
+                                                child: ParticipantsPickerDialog(
+                                                  participants: [
+                                                    ...service.participantsState
+                                                  ],
+                                                  people: cubit.group.people,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
                                       );
                                       if (!service.participantsState
                                           .contains(service.payerState)) {
@@ -275,9 +278,9 @@ class _AddServicePageState extends State<AddServicePage> {
                           const SizedBox(height: 8),
                         ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                }
               ),
             ),
           );

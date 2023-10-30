@@ -31,7 +31,9 @@ class _ExpenseTextFieldState extends State<ExpenseTextField> {
     widget.textEditingController.addListener(() {
       widget.onChange(parseInput);
       _onChange();
-      setState(() {});
+      if(mounted) {
+        setState(() {});
+      }
     });
     super.initState();
   }

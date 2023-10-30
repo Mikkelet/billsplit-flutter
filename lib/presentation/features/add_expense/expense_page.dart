@@ -76,35 +76,33 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                   }
                   return true;
                 },
-                child: SingleChildScrollView(
-                  child: Builder(builder: (context) {
+                child: Builder(
+                  builder: (context) {
                     if (state is Loading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 24),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            // Shared Expenses
-                            RoundedListItem(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(30),
-                                bottom: Radius.circular(10),
-                              ),
-                              child: Column(
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 24),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              // Shared Expenses
+                              Column(
                                 children: [
                                   ...groupExpense.sharedExpensesState.map(
                                     (e) => SharedExpenseView(
-                                        key: Key("${e.hashCode}"),
-                                        sharedExpense: e,
-                                        autoFocus: builder(() {
+                                      sharedExpense: e,
+                                      autoFocus: builder(
+                                        () {
                                           if (state is QuickAddSharedExpense) {
                                             return state.sharedExpense == e;
                                           }
                                           return false;
-                                        })),
+                                        },
+                                      ),
+                                    ),
                                   ),
                                   const Align(
                                     alignment: Alignment.centerRight,
@@ -120,41 +118,41 @@ class AddExpensePage extends StatelessWidget with WidgetsBindingObserver {
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            const ExpenseDescriptionAndCurrencyView(),
-                            const LongPressTipView(),
-                            const SizedBox(height: 8),
-                            // Individual expenses
-                            RoundedListItem(
-                              borderRadius: const BorderRadius.vertical(
-                                  bottom: Radius.circular(30),
-                                  top: Radius.circular(10)),
-                              child: Column(
-                                children: [
-                                  ...getParticipatingPeople().mapIndexed(
-                                    (i, e) {
-                                      final isMiddleElement = i > 0;
-                                      if (isMiddleElement) {
-                                        return Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 16),
-                                            child: IndividualExpenseView(e));
-                                      }
-                                      return IndividualExpenseView(e);
-                                    },
-                                  ),
-                                ],
+                              const SizedBox(height: 8),
+                              const ExpenseDescriptionAndCurrencyView(),
+                              const LongPressTipView(),
+                              const SizedBox(height: 8),
+                              // Individual expenses
+                              RoundedListItem(
+                                borderRadius: const BorderRadius.vertical(
+                                    bottom: Radius.circular(30),
+                                    top: Radius.circular(10)),
+                                child: Column(
+                                  children: [
+                                    ...getParticipatingPeople().mapIndexed(
+                                      (i, e) {
+                                        final isMiddleElement = i > 0;
+                                        if (isMiddleElement) {
+                                          return Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 16),
+                                              child: IndividualExpenseView(e));
+                                        }
+                                        return IndividualExpenseView(e);
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            const ExpenseTotalView(),
-                            const SizedBox(height: 120),
-                          ],
+                              const SizedBox(height: 8),
+                              const ExpenseTotalView(),
+                              const SizedBox(height: 120),
+                            ],
+                          ),
                         ),
                       ),
                     );
-                  }),
+                  }
                 ),
               ),
             );

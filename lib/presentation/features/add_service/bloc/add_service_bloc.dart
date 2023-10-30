@@ -20,7 +20,7 @@ class AddServiceBloc extends BaseCubit {
   }
 
   void submitService() {
-    emit(Loading());
+    showLoading();
     addServiceUseCase.launch(group.id, service).then((value) {
       emit(ServiceAdded());
     }).catchError((err, st) {

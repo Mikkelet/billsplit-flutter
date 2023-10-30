@@ -87,6 +87,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  static Route<ProfilePage> getRoute() =>
+  static Route getRoute() =>
       MaterialPageRoute(builder: (context) => const ProfilePage());
 }

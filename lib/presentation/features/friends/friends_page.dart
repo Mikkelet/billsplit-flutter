@@ -74,7 +74,7 @@ class FriendsPage extends StatelessWidget {
     );
   }
 
-  static Route<FriendsPage> getRoute() {
+  static Route getRoute() {
     return MaterialPageRoute(builder: (context) => const FriendsPage());
   }
 }

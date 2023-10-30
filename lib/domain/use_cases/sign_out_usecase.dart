@@ -18,9 +18,9 @@ class SignOutUseCase {
     await _database.paymentsDAO.clearTable();
     await _database.servicesDao.clearTable();
     await _authProvider.signOut();
-    unsubscribeFromGroups();
   }
 
+  // deprecated("Moving towards user-topics only. Kept for reference")
   Future unsubscribeFromGroups() async {
     final groupIds =
         _sharedPrefs.groupNotificationSettings.map((e) => e.groupId);
