@@ -1,11 +1,24 @@
+import 'package:billsplit_flutter/domain/use_cases/add_friend/add_friend_phone_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_friend_email_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/add_friend_uid_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
+import 'package:country_code_picker/country_code_picker.dart';
+
+enum AddFriendType {
+  none,
+  email,
+  phone;
+}
 
 class AddFriendCubit extends BaseCubit {
   final _addFriendUserIdUseCase = AddFriendUserIdUseCase();
   final _addFriendEmailUseCase = AddFriendEmailUseCase();
+  final _addFriendPhoneUseCase = AddFriendPhoneUseCase();
+
+  AddFriendType selectedAddFriendType = AddFriendType.none;
+  String countryCode = "DK";
 
   void addFriendUserId(String userId) {
     emit(Loading());
@@ -22,6 +35,34 @@ class AddFriendCubit extends BaseCubit {
       emit(Main());
     }).catchError((err, st) {
       showError(err, st);
+    });
+  }
+
+  void onAddFriendTypeClicked(AddFriendType addFriendType) {
+    if (selectedAddFriendType == addFriendType) {
+      selectedAddFriendType = AddFriendType.none;
+    } else {
+      selectedAddFriendType = addFriendType;
+    }
+    emit(Main());
+  }
+
+  void changeCountryCode(CountryCode countryCode) {
+    if (countryCode.code == null) {
+      emit(Failure(UiException(400, "unexpected error occurred")));
+    } else {
+      this.countryCode = countryCode.code!;
+      emit(Main());
+    }
+  }
+
+  void addFriendPhone(String phoneNumber) {
+    emit(Loading());
+    final phoneNumberWithCountryCode = "+$countryCode$phoneNumber";
+    _addFriendPhoneUseCase.launch(phoneNumberWithCountryCode).then((_) {
+      emit(Main());
+    }).catchError((err, stackTrace) {
+      showError(err, stackTrace);
     });
   }
 }
