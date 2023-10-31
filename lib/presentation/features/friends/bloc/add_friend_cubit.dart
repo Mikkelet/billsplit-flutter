@@ -58,7 +58,7 @@ class AddFriendCubit extends BaseCubit {
 
   void addFriendPhone(String phoneNumber) {
     emit(Loading());
-    final phoneNumberWithCountryCode = "+$countryCode$phoneNumber";
+    final phoneNumberWithCountryCode = "$countryCode$phoneNumber";
     _addFriendPhoneUseCase.launch(phoneNumberWithCountryCode).then((_) {
       emit(Main());
     }).catchError((err, stackTrace) {

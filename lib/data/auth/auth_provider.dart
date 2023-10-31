@@ -108,6 +108,7 @@ class AuthProvider {
 
   Future<void> updatePhoneNumber(
       {required String phoneNumber,
+      required Function(UiException e) onFailed,
       required Function(String verificationId) onCodeSent}) async {
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -116,9 +117,9 @@ class AuthProvider {
         await _firebaseAuth.currentUser!.updatePhoneNumber(credential);
       },
       verificationFailed: (e) {
-        throw e;
+        onFailed(e.toUiException());
       },
-      codeSent: (verificationId, forceResendToken) async {
+      codeSent: (verificationId, forceResendToken) {
         onCodeSent(verificationId);
       },
       codeAutoRetrievalTimeout: (verificationId) {},

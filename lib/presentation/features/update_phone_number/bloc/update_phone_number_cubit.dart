@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
+import 'package:billsplit_flutter/domain/models/phone_number.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc/update_phone_number_state.dart';
@@ -6,43 +6,35 @@ import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
 class UpdatePhoneNumberCubit extends BaseCubit {
-  final _parsePhoneNumberUseCase = ParsePhoneNumberUseCase();
-
-  int currentStep = 1;
-  static const int _maxStep = 3;
+  int _currentStep = 0;
+  static const int _maxStep = 1;
   String verificationId = "";
   String selectedCountry = "+45";
   String phoneNumber = "";
 
-  void init() {
-    emit(Loading());
-    _parsePhoneNumberUseCase
-        .launch(user.phoneNumberState)
-        .then((parsedPhoneNumber) {
-      if (phoneNumber.isNotEmpty) {
-        if (parsedPhoneNumber == null) {
-          emit(Failure(UiException(400, "Unexpected error occurred")));
-        } else {
-          selectedCountry = parsedPhoneNumber.countryCode;
-          phoneNumber = parsedPhoneNumber.phoneNumber;
-          emit(Main());
-        }
-      } else {
-        emit(Main());
-      }
-    }).catchError((err, stackTrace) {
-      showError(err, stackTrace);
-    });
+  UpdatePhoneNumberCubit(PhoneNumber? phoneNumber) {
+    if (phoneNumber != null) {
+      this.phoneNumber = phoneNumber.phoneNumber;
+      selectedCountry = phoneNumber.countryCode;
+    }
   }
 
   void sendSms(String phoneNumber) {
     emit(Loading());
-    this.phoneNumber = "+$selectedCountry$phoneNumber";
+    this.phoneNumber = "$selectedCountry$phoneNumber";
     authProvider
-        .updatePhoneNumber(phoneNumber: phoneNumber, onCodeSent: _onCodeSent)
+        .updatePhoneNumber(
+      phoneNumber: this.phoneNumber,
+      onCodeSent: _onCodeSent,
+      onFailed: _onFailed,
+    )
         .catchError((err, stackTrace) {
       showError(err, stackTrace);
     });
+  }
+
+  void _onFailed(UiException e) {
+    showError(e, null);
   }
 
   void _onCodeSent(String verificationId) {
@@ -66,16 +58,16 @@ class UpdatePhoneNumberCubit extends BaseCubit {
   }
 
   void nextStep() {
-    if (currentStep < _maxStep) {
-      currentStep++;
-      emit(UpdateStep());
+    if (_currentStep < _maxStep) {
+      _currentStep++;
+      emit(UpdateStep(step: _currentStep));
     }
   }
 
   void previousStep() {
-    if (currentStep > 1) {
-      currentStep--;
-      emit(UpdateStep());
+    if (_currentStep > 0) {
+      _currentStep--;
+      emit(UpdateStep(step: _currentStep));
     }
   }
 

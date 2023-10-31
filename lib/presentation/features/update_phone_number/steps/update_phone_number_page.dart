@@ -20,7 +20,7 @@ class UpdatePhoneNumberPage extends StatefulWidget {
 
 class _UpdatePhoneNumberPageState extends SafeState<UpdatePhoneNumberPage> {
   late final TextEditingController _textEditingController =
-      TextEditingController()..text = widget.phoneNumber;
+      TextEditingController(text: widget.phoneNumber);
 
   @override
   void initState() {

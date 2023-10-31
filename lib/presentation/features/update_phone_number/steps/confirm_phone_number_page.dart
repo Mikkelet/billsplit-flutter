@@ -38,10 +38,10 @@ class _ConfirmPhoneNumberPageState extends State<ConfirmPhoneNumberPage> {
           const SizedBox(height: 16),
           RoundedListItem(
             child: TextField(
+              controller: _textEditingController,
               decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
-              controller: _textEditingController,
             ),
           ),
           const SizedBox(height: 8),

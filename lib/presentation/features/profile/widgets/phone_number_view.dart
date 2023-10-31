@@ -18,7 +18,6 @@ class PhoneNumberView extends StatelessWidget {
         }
         if (snapshot.hasError) {
           cubit.showError(snapshot.error, snapshot.stackTrace);
-          return Text("error ${snapshot.error}");
         }
         if (snapshot.data == null) {
           return TextButton(
@@ -36,7 +35,7 @@ class PhoneNumberView extends StatelessWidget {
             style: Theme.of(context).textTheme.labelLarge,
           ),
           onClick: () {
-            Navigator.of(context).push(UpdatePhoneNumberFlow.getRoute());
+            Navigator.of(context).push(UpdatePhoneNumberFlow.getRoute(phoneNumber: snapshot.data!));
           },
         );
       },

@@ -8,5 +8,5 @@ class PhoneNumber {
       : phoneNumber = "",
         countryCode = "";
 
-  String get display  => "+$countryCode $phoneNumber";
+  String get display  => "$countryCode $phoneNumber";
 }

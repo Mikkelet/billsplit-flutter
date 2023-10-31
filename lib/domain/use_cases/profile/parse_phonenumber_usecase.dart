@@ -7,9 +7,10 @@ class ParsePhoneNumberUseCase {
     if (phoneNumber.isEmpty) return null;
     try {
       final parse = await phone_num_parser.PhoneNumberUtil().parse(phoneNumber);
+      final countryCode = parse.countryCode.startsWith("+") ? parse.countryCode : "+${parse.countryCode}";
       return PhoneNumber(
         phoneNumber: parse.nationalNumber,
-        countryCode: parse.countryCode,
+        countryCode: countryCode,
       );
     } on PlatformException {
       return null;
