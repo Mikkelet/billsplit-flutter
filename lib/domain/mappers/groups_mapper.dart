@@ -12,7 +12,7 @@ extension GroupDtosExt on Iterable<GroupDTO> {
     return map((e) => e.toGroup()).toList();
   }
 
-  List<GroupDb> toDb() => map((e) => e.toDb()).toList();
+  Iterable<GroupDb> toDb() => map((e) => e.toDb());
 }
 
 extension GroupDtoExt on GroupDTO {
@@ -53,11 +53,16 @@ extension GroupExt on Group {
 
 extension GroupDbsExt on Iterable<GroupDb> {
   Iterable<Group> toGroups() => map((e) => e.toGroup());
+
+  Iterable<GroupDTO> toDTOs() => map((e) => e.toDTO());
 }
 
 extension GroupDbExt on GroupDb {
   Group toGroup() {
-    final dto = GroupDTO.fromJson(json.decode(group));
-    return dto.toGroup();
+    return toDTO().toGroup();
+  }
+
+  GroupDTO toDTO() {
+    return GroupDTO.fromJson(json.decode(group));
   }
 }

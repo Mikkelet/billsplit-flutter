@@ -18,7 +18,8 @@ class GroupDTO {
   final num lastUpdated;
   final String defaultCurrency;
 
-  GroupDTO({required this.id,
+  GroupDTO(
+      {required this.id,
       required this.name,
       required this.coverImageUrl,
       required this.defaultCurrency,
@@ -32,4 +33,13 @@ class GroupDTO {
   factory GroupDTO.fromJson(Json json) => _$GroupDTOFromJson(json);
 
   Json toJson() => _$GroupDTOToJson(this);
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! GroupDTO) return false;
+    return other.id == id;
+  }
 }

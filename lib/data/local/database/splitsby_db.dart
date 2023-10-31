@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/data/local/database/daos/groups_dao.dart';
 import 'package:billsplit_flutter/data/local/database/daos/payments_dao.dart';
 import 'package:billsplit_flutter/data/local/database/daos/services_dao.dart';
 import 'package:billsplit_flutter/data/local/database/tables/friend_table.dart';
-import 'package:billsplit_flutter/data/local/database/tables/group_db.dart';
+import 'package:billsplit_flutter/data/local/database/tables/group_table.dart';
 import 'package:billsplit_flutter/data/local/database/tables/group_expense_db.dart';
 import 'package:billsplit_flutter/data/local/database/tables/payment_table.dart';
 import 'package:billsplit_flutter/data/local/database/tables/services_table.dart';
@@ -24,7 +24,7 @@ class SplitsbyDatabase extends _$SplitsbyDatabase {
   SplitsbyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => destructiveFallback;

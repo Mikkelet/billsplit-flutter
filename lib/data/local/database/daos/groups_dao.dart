@@ -1,5 +1,5 @@
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
-import 'package:billsplit_flutter/data/local/database/tables/group_db.dart';
+import 'package:billsplit_flutter/data/local/database/tables/group_table.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:drift/drift.dart';
 
@@ -10,7 +10,7 @@ class GroupsDAO extends DatabaseAccessor<SplitsbyDatabase>
     with _$GroupsDAOMixin {
   GroupsDAO(super.db);
 
-  Future<void> insertGroups(List<GroupDb> groups) {
+  Future<void> insertGroups(Iterable<GroupDb> groups) {
     final inserts = groups.map((e) => GroupsTableCompanion(
           group: Value(e.group),
           groupId: Value(e.groupId),
