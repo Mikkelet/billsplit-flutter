@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'update_user_default_currency_cubit.dart';
 
 class UpdateUserDefaultCurrencyView extends StatelessWidget {
-  const UpdateUserDefaultCurrencyView({Key? key}) : super(key: key);
+  const UpdateUserDefaultCurrencyView({super.key});
 
   @override
   Widget build(BuildContext context) {
