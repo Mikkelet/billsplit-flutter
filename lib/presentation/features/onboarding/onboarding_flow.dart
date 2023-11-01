@@ -43,6 +43,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         builder: (cubit, state) {
           return BaseScaffold(
             appBar: AppBar(
+              backgroundColor: Colors.transparent,
               leading: BackButton(
                 onPressed: () {
                   cubit.onPreviousClicked();

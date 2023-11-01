@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -8,10 +9,27 @@ import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboardi
 
 class OnboardingBloc extends BaseCubit {
   final _updateNameUseCase = UpdateDisplayNameUseCase();
+  final _getCurrencies = GetExchangeRatesUseCase();
 
   String _name = "";
   Currency currency = Currency.USD();
   File? displayPhoto;
+
+  OnboardingBloc() {
+    _name = user.nameState;
+    _getCurrencies.launch().then((_) {
+      final currencyRate =
+          sharedPrefs.latestExchangeRates[sharedPrefs.userPrefDefaultCurrency];
+      if (currencyRate != null) {
+        currency = Currency(
+          symbol: sharedPrefs.userPrefDefaultCurrency,
+          rate: currencyRate,
+        );
+      }
+    }).catchError((err, stackTrace) {
+      showError(err, stackTrace);
+    });
+  }
 
   Future updateName(String name) async {
     await _updateNameUseCase.launch(name);
@@ -32,11 +50,11 @@ class OnboardingBloc extends BaseCubit {
     emit(Main());
   }
 
-  void onNextClicked(){
+  void onNextClicked() {
     emit(NextStepEvent());
   }
 
-  void onPreviousClicked(){
+  void onPreviousClicked() {
     emit(PreviousStepEvent());
   }
 
@@ -50,7 +68,7 @@ class OnboardingBloc extends BaseCubit {
   }
 
   String get greeting {
-    if(_name.isEmpty) return "Hi you!";
+    if (_name.isEmpty) return "Hi you!";
     return "Hi $_name!";
   }
 }
