@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:billsplit_flutter/domain/models/scanned_receipt.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
-import 'package:billsplit_flutter/domain/use_cases/scan_receipt_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/camera/scan_receipt_usecase.dart';
 import 'package:billsplit_flutter/main.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';

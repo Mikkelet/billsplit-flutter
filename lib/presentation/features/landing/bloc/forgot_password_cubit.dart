@@ -1,4 +1,4 @@
-import 'package:billsplit_flutter/domain/use_cases/forgot_password_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/forgot_password_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
 

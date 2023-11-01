@@ -7,8 +7,8 @@ class DeleteProfilePictureUseCase {
   final _storageProvider = getIt<FirebaseStorageProvider>();
 
   Future launch() async {
-    if (_authProvider.user != null) {
-      await _storageProvider.deleteProfilePicture(_authProvider.user!.uid);
+    if (_authProvider.user.pfpUrlState.isNotEmpty) {
+      await _storageProvider.deleteProfilePicture(_authProvider.user.uid);
     }
     await _authProvider.updateProfilePicture(null);
   }

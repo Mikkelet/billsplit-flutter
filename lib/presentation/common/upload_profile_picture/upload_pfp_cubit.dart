@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/domain/use_cases/delete_profile_picture_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/update_profile_picture_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/delete_profile_picture_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/update_profile_picture_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:image_picker/image_picker.dart';

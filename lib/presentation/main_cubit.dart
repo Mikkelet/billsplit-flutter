@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/domain/use_cases/app_data/get_app_version.dart';
-import 'package:billsplit_flutter/domain/use_cases/get_fcm_token_permission.dart';
-import 'package:billsplit_flutter/domain/use_cases/get_local_group_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/observe_auth_state_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/permissions/get_fcm_token_permission.dart';
+import 'package:billsplit_flutter/domain/use_cases/groups/get_local_group_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/auth/observe_auth_state_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/domain/use_cases/initialize_auth_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/auth/initialize_auth_usecase.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:rxdart/rxdart.dart';

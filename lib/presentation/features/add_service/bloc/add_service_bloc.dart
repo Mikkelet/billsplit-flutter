@@ -1,8 +1,8 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
-import 'package:billsplit_flutter/domain/use_cases/add_service_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/delete_service_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/services/add_service_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/services/delete_service_usecase.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';

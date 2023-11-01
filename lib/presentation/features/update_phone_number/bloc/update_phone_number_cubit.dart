@@ -1,4 +1,6 @@
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/confirm_phone_number_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/update_phone_number_use_case.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc/update_phone_number_state.dart';
@@ -6,9 +8,12 @@ import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
 class UpdatePhoneNumberCubit extends BaseCubit {
+  final _updatePhoneNumberUseCase = UpdatePhoneNumberUseCase();
+  final _confirmPhoneNumberUseCase = ConfirmPhoneNumberUseCase();
+
   int _currentStep = 0;
   static const int _maxStep = 1;
-  String verificationId = "";
+  String _verificationId = "";
   String selectedCountry = "+45";
   String phoneNumber = "";
 
@@ -22,13 +27,12 @@ class UpdatePhoneNumberCubit extends BaseCubit {
   void sendSms(String phoneNumber) {
     emit(Loading());
     this.phoneNumber = "$selectedCountry$phoneNumber";
-    authProvider
-        .updatePhoneNumber(
+    _updatePhoneNumberUseCase
+        .launch(
       phoneNumber: this.phoneNumber,
       onCodeSent: _onCodeSent,
       onFailed: _onFailed,
-    )
-        .catchError((err, stackTrace) {
+    ).catchError((err, stackTrace) {
       showError(err, stackTrace);
     });
   }
@@ -38,18 +42,13 @@ class UpdatePhoneNumberCubit extends BaseCubit {
   }
 
   void _onCodeSent(String verificationId) {
-    this.verificationId = verificationId;
+    _verificationId = verificationId;
     nextStep();
   }
 
   void submitCode(String code) {
     emit(Loading());
-    final regex = RegExp("^[0-9]{1,6}\$");
-    if (!regex.hasMatch(code)) {
-      emit(Failure(UiException(500, "Invalid code")));
-      return;
-    }
-    authProvider.submitSmsCode(verificationId, code).then((_) {
+    _confirmPhoneNumberUseCase.launch(_verificationId, code).then((_) {
       user.phoneNumberState = phoneNumber;
       emit(UpdateNumberSuccess());
     }).catchError((err, stackTrace) {
@@ -60,15 +59,15 @@ class UpdatePhoneNumberCubit extends BaseCubit {
   void nextStep() {
     if (_currentStep < _maxStep) {
       _currentStep++;
-      emit(UpdateStep(step: _currentStep));
     }
+    emit(UpdateStep(step: _currentStep));
   }
 
   void previousStep() {
     if (_currentStep > 0) {
       _currentStep--;
-      emit(UpdateStep(step: _currentStep));
     }
+    emit(UpdateStep(step: _currentStep));
   }
 
   void changeCountryCode(CountryCode country) {

@@ -11,7 +11,7 @@ class SignOutUseCase {
   final _sharedPrefs = getIt<SharedPrefs>();
 
   Future launch() async {
-    FirebaseMessaging.instance.unsubscribeFromTopic("user-${_authProvider.user?.uid}");
+    FirebaseMessaging.instance.unsubscribeFromTopic("user-${_authProvider.user.uid}");
     await _database.friendsDAO.clearTable();
     await _database.groupsDAO.clearTable();
     await _database.groupExpenseDAO.clearTable();

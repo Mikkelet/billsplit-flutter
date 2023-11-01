@@ -1,6 +1,6 @@
-import 'package:billsplit_flutter/domain/use_cases/add_friend/add_friend_phone_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/add_friend_email_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/add_friend_uid_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/friends/add_friend_email_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/friends/add_friend_phone_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/friends/add_friend_uid_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';

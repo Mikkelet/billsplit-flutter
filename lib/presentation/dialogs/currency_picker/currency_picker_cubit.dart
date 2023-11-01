@@ -1,6 +1,6 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
-import 'package:billsplit_flutter/domain/use_cases/get_currencies_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_currencies_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:collection/collection.dart';

@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
-import 'package:billsplit_flutter/domain/use_cases/observe_events_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/events/observe_events_usecase.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 
 class ObserveDebtsUseCase {

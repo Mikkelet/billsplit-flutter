@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/domain/use_cases/add_event_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';

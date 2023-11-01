@@ -1,6 +1,6 @@
 import 'package:billsplit_flutter/domain/models/friend.dart';
-import 'package:billsplit_flutter/domain/use_cases/get_friends_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/observe_friends_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/friends/get_friends_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/friends/observe_friends_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 
 class FriendsCubit extends BaseCubit {

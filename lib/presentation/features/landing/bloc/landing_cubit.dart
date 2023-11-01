@@ -1,7 +1,7 @@
-import 'package:billsplit_flutter/domain/use_cases/sign_in_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/sign_up_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/susi/sign_in_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/susi/sign_in_with_apple_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/susi/sign_in_with_google_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/susi/sign_up_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
