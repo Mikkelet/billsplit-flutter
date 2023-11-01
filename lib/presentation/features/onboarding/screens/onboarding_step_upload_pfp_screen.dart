@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/onboarding_bloc.dart';
 
 class OnboardingStepUploadProfilePicture extends StatelessWidget {
-  const OnboardingStepUploadProfilePicture({Key? key}) : super(key: key);
+  const OnboardingStepUploadProfilePicture({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -19,13 +19,12 @@ class UpdatableTextField extends StatefulWidget {
   final BorderRadius? borderRadius;
 
   const UpdatableTextField(
-      {Key? key,
+      {super.key,
       required this.initState,
       required this.updateFuture,
       this.borderRadius,
       this.hintText = "",
-      this.charLimit = 40})
-      : super(key: key);
+      this.charLimit = 40});
 
   @override
   State<UpdatableTextField> createState() => _UpdatableTextField();
@@ -55,7 +54,7 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                 children: [
                   Expanded(
                     child: Text(
-                      currentState,
+                      widget.initState,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.labelLarge,
@@ -68,6 +67,7 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     padding: EdgeInsets.zero,
                     onClick: () {
                       HapticFeedback.heavyImpact();
+                      currentState = widget.initState;
                       cubit.onEditPressed();
                     },
                     color: Theme.of(context).colorScheme.secondaryContainer,

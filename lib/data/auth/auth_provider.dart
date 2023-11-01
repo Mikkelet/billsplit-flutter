@@ -99,7 +99,7 @@ class AuthProvider {
 
   Future updateUserName(String name) async {
     await _firebaseAuth.currentUser!.updateDisplayName(name);
-    _user?.nameState = name;
+    user.nameState = name;
   }
 
   Future forgotPassword(String email) async {

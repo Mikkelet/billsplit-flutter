@@ -21,8 +21,10 @@ class PhoneNumberView extends StatelessWidget {
         }
         if (snapshot.data == null) {
           return TextButton(
-              onPressed: () {
-                Navigator.of(context).push(UpdatePhoneNumberFlow.getRoute());
+              onPressed: () async {
+                await Navigator.of(context)
+                    .push(UpdatePhoneNumberFlow.getRoute());
+                cubit.update();
               },
               child: const Text("Click here to add phone number"));
         }
@@ -34,8 +36,10 @@ class PhoneNumberView extends StatelessWidget {
             snapshot.data!.display,
             style: Theme.of(context).textTheme.labelLarge,
           ),
-          onClick: () {
-            Navigator.of(context).push(UpdatePhoneNumberFlow.getRoute(phoneNumber: snapshot.data!));
+          onClick: () async {
+            await Navigator.of(context).push(
+                UpdatePhoneNumberFlow.getRoute(phoneNumber: snapshot.data!));
+            cubit.update();
           },
         );
       },

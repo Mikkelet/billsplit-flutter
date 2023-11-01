@@ -17,6 +17,10 @@ abstract class BaseCubit extends Cubit<UiState> {
 
   BaseCubit.withState(super.initialState) : super();
 
+  void update() {
+    emit(Main());
+  }
+
   void showLoading() {
     emit(Loading());
   }

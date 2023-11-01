@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_fl
 import 'package:flutter/material.dart';
 
 class DeveloperSettingsPage extends StatelessWidget {
-  const DeveloperSettingsPage({Key? key}) : super(key: key);
+  const DeveloperSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

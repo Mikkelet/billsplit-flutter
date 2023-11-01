@@ -52,7 +52,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 12),
                     const PhoneNumberView(),
                     const SizedBox(height: 12),
-                    const UpdateUserDefaultCurrencyView(),
+                    UpdateUserDefaultCurrencyView(),
                     const SizedBox(height: 12),
                     ClickableListItem(
                       height: 48,
@@ -80,9 +80,10 @@ class ProfilePage extends StatelessWidget {
                     ClickableListItem(
                       height: 48,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      onClick: () {
-                        Navigator.of(context)
+                      onClick: () async {
+                        await Navigator.of(context)
                             .push(DeveloperSettingsPage.getRoute());
+                        cubit.update();
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,5 +125,5 @@ class ProfilePage extends StatelessWidget {
   }
 
   static Route getRoute() =>
-      MaterialPageRoute(builder: (context) => const ProfilePage());
+      MaterialPageRoute(builder: (context) => ProfilePage());
 }

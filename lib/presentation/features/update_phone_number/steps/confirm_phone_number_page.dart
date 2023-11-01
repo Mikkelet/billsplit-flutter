@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ConfirmPhoneNumberPage extends StatefulWidget {
 
   // cannot be const due to update state
-  ConfirmPhoneNumberPage({super.key});
+  const ConfirmPhoneNumberPage({super.key});
 
   @override
   State<ConfirmPhoneNumberPage> createState() => _ConfirmPhoneNumberPageState();
