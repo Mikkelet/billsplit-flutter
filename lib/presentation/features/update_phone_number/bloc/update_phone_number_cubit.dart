@@ -71,10 +71,10 @@ class UpdatePhoneNumberCubit extends BaseCubit {
   }
 
   void changeCountryCode(CountryCode country) {
-    if (country.code == null) {
+    if (country.dialCode == null) {
       emit(Failure(UiException(400, "unexpected error occurred")));
     } else {
-      selectedCountry = country.code!;
+      selectedCountry = country.dialCode!;
       emit(Main());
     }
   }
