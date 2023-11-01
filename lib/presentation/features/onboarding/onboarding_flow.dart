@@ -12,16 +12,16 @@ import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({super.key});
+class OnboardingFlow extends StatefulWidget {
+  const OnboardingFlow({super.key});
 
   @override
-  State<OnboardingPage> createState() => _OnboardingPageState();
+  State<OnboardingFlow> createState() => _OnboardingFlowState();
 
-  static Route getRoute() => slideUpRoute(const OnboardingPage());
+  static Route getRoute() => slideUpRoute(const OnboardingFlow());
 }
 
-class _OnboardingPageState extends State<OnboardingPage> {
+class _OnboardingFlowState extends State<OnboardingFlow> {
   final controller = PageController();
 
   @override
@@ -35,7 +35,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           _onPrevStepEvent(context);
         } else if (event is ImReadyEvent) {
           _onImReadyEvent(context);
-        }else if(event is SubmitUserSuccessEvent){
+        } else if (event is SubmitUserSuccessEvent) {
           _onSubmitSuccess(context);
         }
       },
@@ -56,22 +56,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 )
               ],
             ),
-            body: Builder(
-              builder: (context) {
-                if(state is Loading){
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return PageView(
-                  controller: controller,
-                  children: const [
-                    OnboardingStepWelcomeView(),
-                    OnboardingStepChangeDisplayName(),
-                    OnboardingStepUploadProfilePicture(),
-                    OnboardingStepDefaultCurrency()
-                  ],
-                );
+            body: Builder(builder: (context) {
+              if (state is Loading) {
+                return const Center(child: CircularProgressIndicator());
               }
-            ),
+              return PageView(
+                controller: controller,
+                children: const [
+                  OnboardingStepWelcomeView(),
+                  OnboardingStepChangeDisplayName(),
+                  OnboardingStepUploadProfilePicture(),
+                  OnboardingStepDefaultCurrency()
+                ],
+              );
+            }),
           );
         },
       ),
@@ -85,7 +83,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void _onPrevStepEvent(BuildContext context) {
-    if ((controller.page?.round() ?? 0) == 0) {
+    final currentPage = controller.page?.round() ?? 0;
+    if (currentPage == 0) {
       Navigator.of(context).pop();
     } else {
       final prevPage = (controller.page ?? 0).round() - 1;

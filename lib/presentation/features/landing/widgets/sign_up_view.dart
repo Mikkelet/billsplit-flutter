@@ -8,7 +8,7 @@ import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_welcome.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_flow.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
@@ -73,7 +73,7 @@ class _SignUpViewState extends SafeState<SignUpView> {
       create: (context) => LandingCubit(),
       listener: (context, cubit, state) {
         if (state is SignUpSuccessful) {
-          Navigator.of(context).push(OnboardingStepWelcomeView.getRoute());
+          Navigator.of(context).push(OnboardingFlow.getRoute());
         }
       },
       child: BaseBlocBuilder<LandingCubit>(builder: (signUpCubit, state) {

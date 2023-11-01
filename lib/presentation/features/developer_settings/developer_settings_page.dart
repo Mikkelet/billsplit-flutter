@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_page.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_flow.dart';
 import 'package:flutter/material.dart';
 
 class DeveloperSettingsPage extends StatelessWidget {
@@ -27,7 +27,7 @@ class DeveloperSettingsPage extends StatelessWidget {
                     child: const Text("Reset guides")),
                 ClickableListItem(
                     onClick: () {
-                      Navigator.of(context).push(OnboardingPage.getRoute());
+                      Navigator.of(context).push(OnboardingFlow.getRoute());
                     },
                     child: const Text("Start onboarding"))
               ],
