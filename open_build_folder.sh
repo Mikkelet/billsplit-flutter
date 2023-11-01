@@ -1,0 +1,1 @@
+open ./build/app/outputs/flutter-apk/
