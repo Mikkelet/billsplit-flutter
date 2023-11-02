@@ -63,10 +63,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
               }
               return PageView(
                 controller: controller,
-                children: const [
-                  OnboardingStepWelcomeView(),
-                  OnboardingStepChangeDisplayName(),
-                  OnboardingStepUploadProfilePicture(),
+                children:  [
+                  const OnboardingStepWelcomeView(),
+                  const OnboardingStepChangeDisplayName(),
+                  const OnboardingStepUploadProfilePicture(),
                   OnboardingStepDefaultCurrency()
                 ],
               );

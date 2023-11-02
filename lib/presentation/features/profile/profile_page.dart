@@ -52,7 +52,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 12),
                     const PhoneNumberView(),
                     const SizedBox(height: 12),
-                    UpdateUserDefaultCurrencyView(),
+                    UpdateUserDefaultCurrencyView<ProfileCubit>(),
                     const SizedBox(height: 12),
                     ClickableListItem(
                       height: 48,
@@ -123,7 +123,4 @@ class ProfilePage extends StatelessWidget {
       }),
     );
   }
-
-  static Route getRoute() =>
-      MaterialPageRoute(builder: (context) => ProfilePage());
 }
