@@ -22,7 +22,7 @@ class ProfileCubit extends BaseCubit {
 
   Future updateDisplayName(String newName) async {
     await _updateDisplayNameUseCase.launch(newName);
-    user.nameState = newName;
+    update();
   }
 
   void updateCurrency(Currency currency) {
@@ -39,7 +39,7 @@ class ProfileCubit extends BaseCubit {
 
   Future<PhoneNumber?> getPhoneNumber() async {
     final phoneNumber =
-        await _parseUsePhoneNumberUseCase.launch(user.phoneNumberState);
+        await _parseUsePhoneNumberUseCase.launch(user.phoneNumberState.dial);
     return phoneNumber;
   }
 }

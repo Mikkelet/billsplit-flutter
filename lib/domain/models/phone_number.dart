@@ -4,11 +4,13 @@ class PhoneNumber {
 
   PhoneNumber({required this.phoneNumber, required this.countryCode});
 
-  PhoneNumber.none()
+  const PhoneNumber.none()
       : phoneNumber = "",
         countryCode = "";
 
   String get display  => "$countryCode $phoneNumber";
+
+  String get dial => "$countryCode$phoneNumber";
 
   @override
   String toString() {

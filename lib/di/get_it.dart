@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/data/remote/api_service.dart';
 import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/data/remote/storage/storage_provider.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -21,5 +22,6 @@ void setupGetIt() {
   getIt.registerSingleton<SharedPrefs>(SharedPrefs());
   getIt.registerSingleton<CurrencyConverter>(CurrencyConverter());
 
-  // usecases
+  // Repositories
+  getIt.registerSingleton<AuthRepository>(AuthRepository());
 }

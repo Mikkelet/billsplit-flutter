@@ -1,16 +1,16 @@
-import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/data/debt_calculator.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_events_usecase.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 
 class ObserveDebtsUseCase {
-  final _authProvider = getIt<AuthProvider>();
+  final _authRepository = getIt<AuthRepository>();
   final _observeEventsUseCase = ObserveEventsUseCase();
   final _convertCurrencyUseCase = ConvertCurrencyUseCase();
 
@@ -20,7 +20,7 @@ class ObserveDebtsUseCase {
       final temps = _getTemps(events.whereType<GroupExpense>());
       final people = {...group.people, ...group.pastMembers, ...temps};
       final calculator = DebtCalculator.fromCombined(people, events);
-      final user = _authProvider.user;
+      final user = _authRepository.loggedInUser;
       final debts = calculator.calculateEffectiveDebt(user);
       final debtsConverted = debts.map((e) {
         final converted = _convertCurrencyUseCase.launch(
@@ -32,7 +32,9 @@ class ObserveDebtsUseCase {
   }
 
   Iterable<Person> _getTemps(Iterable<GroupExpense> expenses) {
-    return expenses.fold([], (previousValue, element) =>
-        [...previousValue, ...element.tempParticipants]);
+    return expenses.fold(
+        [],
+        (previousValue, element) =>
+            [...previousValue, ...element.tempParticipants]);
   }
 }

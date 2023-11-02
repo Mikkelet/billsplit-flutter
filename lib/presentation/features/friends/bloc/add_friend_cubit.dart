@@ -23,7 +23,7 @@ class AddFriendCubit extends BaseCubit {
   String countryCode = "+45";
 
   void init() {
-    _parsePhoneNumberUseCase.launch(user.phoneNumberState).then((parsed) {
+    _parsePhoneNumberUseCase.launch(user.phoneNumberState.dial).then((parsed) {
       if (parsed == null) return;
       countryCode = parsed.countryCode;
     });

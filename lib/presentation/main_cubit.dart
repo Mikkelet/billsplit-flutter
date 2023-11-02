@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/domain/use_cases/app_data/get_app_version.dart';
 import 'package:billsplit_flutter/domain/use_cases/permissions/get_fcm_token_permission.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/get_local_group_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/auth/observe_auth_state_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/domain/use_cases/auth/initialize_auth_usecase.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
@@ -15,7 +16,7 @@ import 'package:rxdart/rxdart.dart';
 import 'base/bloc/base_state.dart';
 
 class MainCubit extends BaseCubit {
-  final _observeAuthStateUseCase = ObserveAuthStateUseCase();
+  final _authRepository = getIt<AuthRepository>();
   final _initializeAuthUseCase = InitializeAuthUseCase();
   final _getFCMTokenPermission = GetNotificationPermission();
   final _getGroupUseCase = GetLocalGroupUseCase();
@@ -27,7 +28,7 @@ class MainCubit extends BaseCubit {
   MainCubit() : super.withState(Loading());
 
   Stream<AuthState> observeAuthState() {
-    return _observeAuthStateUseCase.observe().doOnData((authState) {
+    return _authRepository.observeAuthState().doOnData((authState) {
       if (authState is LoggedInState) {
         final userId = authState.user;
         FirebaseMessaging.instance.subscribeToTopic("user-$userId");

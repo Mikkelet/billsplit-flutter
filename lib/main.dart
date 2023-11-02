@@ -100,7 +100,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
               cubit.checkAppVersion();
               return StreamBuilder<AuthState>(
                 stream: cubit.observeAuthState(),
-                initialData: null,
+                initialData: LoadingUserState(),
                 builder: (context, snapshot) {
                   final authState = snapshot.data;
                   if (authState is LoggedOutState) {

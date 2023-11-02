@@ -4,7 +4,9 @@ import 'package:phone_number/phone_number.dart' as phone_num_parser;
 
 class ParsePhoneNumberUseCase {
 
-  Future<PhoneNumber?> launch(String phoneNumber) async {
+  Future<PhoneNumber?> launch(String? phoneNumber) async {
+
+    if(phoneNumber == null) return null;
     if (phoneNumber.isEmpty) return null;
     try {
       final parse = await phone_num_parser.PhoneNumberUtil().parse(phoneNumber);

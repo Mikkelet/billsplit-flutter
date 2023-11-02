@@ -29,9 +29,9 @@ class OnboardingStepDefaultCurrency extends StatelessWidget {
               const SizedBox(height: 64),
               SimpleButton(
                 onClick: () {
-                  cubit.submitProfile();
+                  cubit.onNextClicked();
                 },
-                child: const Text("I'm ready!"),
+                child: const Text("Next"),
               )
             ],
           ),
