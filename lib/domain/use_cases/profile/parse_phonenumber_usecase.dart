@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:phone_number/phone_number.dart' as phone_num_parser;
 
 class ParsePhoneNumberUseCase {
+
   Future<PhoneNumber?> launch(String phoneNumber) async {
     if (phoneNumber.isEmpty) return null;
     try {
