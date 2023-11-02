@@ -37,15 +37,6 @@ class NoFriendsDialog extends StatelessWidget {
                       .colorScheme
                       .primaryContainer,
                   onClick: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("OK")),
-              SimpleButton(
-                  color: Theme
-                      .of(context)
-                      .colorScheme
-                      .primaryContainer,
-                  onClick: () {
                     Navigator.of(context).push(FriendsPage.getRoute());
                   },
                   child: const Text("Go to friends")),

@@ -8,7 +8,9 @@ class AddFriendPhoneUseCase {
   final _database = getIt<SplitsbyDatabase>();
 
   Future launch(String phone) async {
-    final response = await _apiService.addFriendPhone(phone);
+    final prefix = phone.startsWith("+") ? "" : "+";
+    final phoneWithPrefix = "$prefix$phone";
+    final response = await _apiService.addFriendPhone(phoneWithPrefix);
     _database.friendsDAO.insert(response.toDb());
   }
 }

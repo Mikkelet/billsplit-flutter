@@ -22,9 +22,7 @@ class GroupsPage extends StatelessWidget {
       child: BaseBlocBuilder<GroupsBloc>(
         builder: (cubit, state) {
           return BaseScaffold(
-            endDrawer: const Drawer(
-              child: ProfilePage(),
-            ),
+            endDrawer: const Drawer(child: ProfilePage()),
             floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
             floatingActionButton: ExtendedFloatingActionButton(
               scrollController: _scrollingController,
@@ -42,6 +40,7 @@ class GroupsPage extends StatelessWidget {
                 child: DefaultStreamBuilder(
                   stream: cubit.getGroupStream(),
                   builder: (_, groups) {
+
                     return CustomScrollView(
                       controller: _scrollingController,
                       slivers: [

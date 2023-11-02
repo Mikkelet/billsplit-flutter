@@ -19,7 +19,7 @@ class _AddFriendViewState extends SafeState<AddFriendView> {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => AddFriendCubit(),
+      create: (context) => AddFriendCubit()..init(),
       child: BaseBlocBuilder<AddFriendCubit>(
         builder: (cubit, state) {
           return Column(

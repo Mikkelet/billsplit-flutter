@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddFriendPhoneView extends StatefulWidget {
+
+  // removed const to trigger state changes
   AddFriendPhoneView({super.key});
 
   @override
@@ -30,7 +32,7 @@ class _AddFriendPhoneViewState extends SafeState<AddFriendPhoneView> {
     return Row(
       children: [
         BillSplitCountryPicker(
-          initialCountry: "DK",
+          initialCountry: cubit.countryCode,
           onChange: (countryCode) {
             cubit.changeCountryCode(countryCode);
           },

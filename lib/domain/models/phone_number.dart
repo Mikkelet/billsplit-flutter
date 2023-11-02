@@ -9,4 +9,9 @@ class PhoneNumber {
         countryCode = "";
 
   String get display  => "$countryCode $phoneNumber";
+
+  @override
+  String toString() {
+    return "PhoneNumber(phoneNumber=$phoneNumber, countryCode=$countryCode)";
+  }
 }
