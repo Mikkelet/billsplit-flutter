@@ -50,7 +50,7 @@ class ProfilePage extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelLarge),
                     ),
                     const SizedBox(height: 12),
-                    const PhoneNumberView(),
+                    PhoneNumberView<ProfileCubit>(),
                     const SizedBox(height: 12),
                     UpdateUserDefaultCurrencyView<ProfileCubit>(),
                     const SizedBox(height: 12),

@@ -26,7 +26,7 @@ class AuthProvider {
 
   late final FirebaseAuth _firebaseAuth;
 
-  Person? _user;
+  User? user;
   AuthState authState = LoadingUserState();
 
   Future init(FirebaseApp firebaseApp) async {
@@ -70,23 +70,8 @@ class AuthProvider {
     return token ?? "";
   }
 
-  Stream<AuthState> authListener() {
-    return _firebaseAuth.userChanges().map((fbUser) {
-      if (fbUser == null) {
-        return LoggedOutState();
-      }
-      final user = Person(fbUser.uid, fbUser.displayName ?? "",
-          pfpUrl: fbUser.photoURL ?? "",
-          email: fbUser.email ?? "",
-          phoneNumber: fbUser.phoneNumber ?? "");
-      _user = user;
-      return LoggedInState(user);
-    });
-  }
-
-  Person get user {
-    if (_user == null) throw Exception("User not found");
-    return _user!;
+  Stream<User?> authListener() {
+    return _firebaseAuth.userChanges();
   }
 
   Future signOut() async {
@@ -99,7 +84,6 @@ class AuthProvider {
 
   Future updateUserName(String name) async {
     await _firebaseAuth.currentUser!.updateDisplayName(name);
-    user.nameState = name;
   }
 
   Future forgotPassword(String email) async {

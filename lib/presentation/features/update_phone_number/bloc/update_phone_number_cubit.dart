@@ -49,7 +49,6 @@ class UpdatePhoneNumberCubit extends BaseCubit {
   void submitCode(String code) {
     emit(Loading());
     _confirmPhoneNumberUseCase.launch(_verificationId, code).then((_) {
-      user.phoneNumberState = phoneNumber;
       emit(UpdateNumberSuccess());
     }).catchError((err, stackTrace) {
       showError(err, stackTrace);

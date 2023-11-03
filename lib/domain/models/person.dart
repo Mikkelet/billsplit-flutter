@@ -1,20 +1,22 @@
+import 'package:billsplit_flutter/domain/models/phone_number.dart';
+
 class Person {
   final String uid;
   final String _name;
   final String _pfpUrl;
-  final String _phoneNumber;
+  final PhoneNumber _phoneNumber;
   final String email;
 
   // modifiable values
   late String nameState = _name;
   late String pfpUrlState = _pfpUrl;
-  late String phoneNumberState = _phoneNumber;
+  late PhoneNumber phoneNumberState = _phoneNumber;
 
   Person(
     this.uid,
     String name, {
     String pfpUrl = "",
-    String phoneNumber = "",
+    PhoneNumber phoneNumber = const PhoneNumber.none(),
     this.email = "",
   })  : _name = name,
         _phoneNumber = phoneNumber,
@@ -23,7 +25,7 @@ class Person {
   Person.temp()
       : uid = "",
         email = "",
-        _phoneNumber = "",
+        _phoneNumber = const PhoneNumber.none(),
         _name = "New person",
         _pfpUrl = "";
 
@@ -33,7 +35,7 @@ class Person {
       : uid = "P$seed",
         _name = "Person $seed",
         email = "dummy@test.dk",
-        _phoneNumber = "",
+        _phoneNumber = const PhoneNumber.none(),
         _pfpUrl = "";
 
   @override

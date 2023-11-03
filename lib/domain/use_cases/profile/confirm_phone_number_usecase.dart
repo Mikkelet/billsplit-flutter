@@ -10,7 +10,6 @@ class ConfirmPhoneNumberUseCase {
     if (!regex.hasMatch(smsCode)) {
       throw UiException(500, "Invalid code");
     }
-
     await _authProvider.submitSmsCode(verificationId, smsCode);
   }
 }

@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboardi
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_state.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_change_display_name.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_default_currency.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_phone_number.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_upload_pfp_screen.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_welcome.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
@@ -63,11 +64,12 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
               }
               return PageView(
                 controller: controller,
-                children:  [
+                children: [
                   const OnboardingStepWelcomeView(),
                   const OnboardingStepChangeDisplayName(),
                   const OnboardingStepUploadProfilePicture(),
-                  OnboardingStepDefaultCurrency()
+                  OnboardingStepDefaultCurrency(),
+                  const OnboardingStepPhoneNumber(),
                 ],
               );
             }),
@@ -78,18 +80,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   void _onNextStepEvent() {
-    final nextPage = (controller.page ?? 0).round() + 1;
-    controller.animateToPage(nextPage,
+    controller.nextPage(
         duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
   }
 
   void _onPrevStepEvent(BuildContext context) {
     final currentPage = controller.page?.round() ?? 0;
-    if (currentPage == 0) {
+    if (currentPage < 1) {
       Navigator.of(context).pop();
     } else {
-      final prevPage = (controller.page ?? 0).round() - 1;
-      controller.animateToPage(prevPage,
+      controller.previousPage(
           duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
     }
   }
