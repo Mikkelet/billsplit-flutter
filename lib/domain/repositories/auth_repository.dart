@@ -15,7 +15,6 @@ class AuthRepository {
       if (firebaseUser == null) {
         return LoggedOutState();
       }
-      print("qqq phoneNUmber=${firebaseUser.phoneNumber}");
 
       final parsedPhoneNumber =
           await _parsePhoneNumberUseCase.launch(firebaseUser.phoneNumber);
