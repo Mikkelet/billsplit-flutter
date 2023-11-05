@@ -8,7 +8,7 @@ import '../bloc/add_group_cubit.dart';
 class AddedPersonView extends StatelessWidget {
   final Person person;
 
-  const AddedPersonView({Key? key, required this.person}) : super(key: key);
+  const AddedPersonView({super.key, required this.person});
 
   @override
   Widget build(BuildContext context) {

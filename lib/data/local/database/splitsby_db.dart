@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:billsplit_flutter/data/local/database/daos/friends_dao.dart';
 import 'package:billsplit_flutter/data/local/database/daos/group_expense_dao.dart';
+import 'package:billsplit_flutter/data/local/database/daos/group_invites_dao.dart';
 import 'package:billsplit_flutter/data/local/database/daos/groups_dao.dart';
 import 'package:billsplit_flutter/data/local/database/daos/payments_dao.dart';
 import 'package:billsplit_flutter/data/local/database/daos/services_dao.dart';
 import 'package:billsplit_flutter/data/local/database/tables/friend_table.dart';
+import 'package:billsplit_flutter/data/local/database/tables/group_invites_table.dart';
 import 'package:billsplit_flutter/data/local/database/tables/group_table.dart';
 import 'package:billsplit_flutter/data/local/database/tables/group_expense_db.dart';
 import 'package:billsplit_flutter/data/local/database/tables/payment_table.dart';
@@ -18,13 +20,13 @@ import 'package:path/path.dart' as p;
 part 'splitsby_db.g.dart';
 
 @DriftDatabase(
-    tables: [GroupsTable, GroupExpenseTable, FriendsTable, ServicesTable, PaymentsTable],
-    daos: [GroupsDAO, GroupExpenseDAO, ServicesDao, FriendsDAO, PaymentsDAO])
+    tables: [GroupsTable, GroupExpenseTable, FriendsTable, ServicesTable, PaymentsTable, GroupInvitesTable],
+    daos: [GroupsDAO, GroupExpenseDAO, ServicesDao, FriendsDAO, PaymentsDAO, GroupInvitesDAO])
 class SplitsbyDatabase extends _$SplitsbyDatabase {
   SplitsbyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => destructiveFallback;

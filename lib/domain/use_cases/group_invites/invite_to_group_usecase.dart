@@ -5,11 +5,12 @@ import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 
-class AddPersonToGroupUseCase {
+class InviteToGroupUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
 
-  Future launch(Group group, Person person) async {
+
+  Future<void> launch(Group group, Person person) async {
     await _apiService.invitePersonToGroup(group.id, person.uid);
     group.invites.add(person);
     await _database.groupsDAO.insertGroup(group.toDb());

@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/friends/bloc/add_friend_cubit.dart';
@@ -49,7 +50,7 @@ class _AddFriendEmailViewState extends SafeState<AddFriendEmailView> {
             ),
           ),
           LoadingView(
-            state: cubit.state,
+            isLoading: cubit.state is Loading,
             child: IconButton(
               onPressed: () {
                 if (!_isEmailValid()) {

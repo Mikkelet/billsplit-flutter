@@ -2,7 +2,6 @@ import 'package:billsplit_flutter/data/remote/dtos/app_version_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
-import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/service_dto.dart';
 import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_event_request.dart';
@@ -11,9 +10,12 @@ import 'package:billsplit_flutter/data/remote/requests/add_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_exchange_rates_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_group_invites_response.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
-import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_groups_response.dart';
+import 'package:billsplit_flutter/data/remote/requests/invite_to_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/leave_group_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/respond_to_group_invite_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/update_user_request.dart';
 
 class ApiService {
@@ -93,9 +95,9 @@ class ApiService {
     return AddGroupResponse.fromJson(response).group;
   }
 
-  Future addPersonToGroup(String groupId, PersonDTO person) async {
-    final body = {"userId": person.id};
-    await _client.post("group/$groupId/user", body);
+  Future invitePersonToGroup(String groupId, String uid) async {
+    final body = InviteToGroupRequest(groupId: groupId, userId: uid);
+    await _client.post("group/invite", body.toJson());
   }
 
   Future updateFCMToken(String? fcmToken) async {
@@ -103,8 +105,8 @@ class ApiService {
     await _client.put("user", updateData);
   }
 
-  Future deleteExpense(GroupDTO group, String expenseId) async {
-    await _client.delete("group/${group.id}/events/$expenseId");
+  Future deleteExpense(String groupId, String expenseId) async {
+    await _client.delete("group/$groupId/events/$expenseId");
   }
 
   void onDestroy() {
@@ -119,5 +121,15 @@ class ApiService {
   Future<AppVersionDTO> getAppVersion() async {
     final response = await _client.get("appVersion", authorized: false);
     return AppVersionDTO.fromJson(response);
+  }
+
+  Future<GetGroupInvitesResponse> getGroupInvites() async {
+    final response = await _client.get("groupInvites");
+    return GetGroupInvitesResponse.fromJson(response);
+  }
+
+  Future respondToGroupInvite(String groupId, bool accept) async {
+    final body = RespondToGroupInviteRequest(groupId, accept);
+    await _client.post("groupInvite/$groupId", body.toJson());
   }
 }

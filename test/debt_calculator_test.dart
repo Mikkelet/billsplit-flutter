@@ -23,6 +23,7 @@ final sampleGroup = Group(
     name: "My group",
     coverImageUrl: "",
     pastMembers: [],
+    invites: [],
     defaultCurrency: "usd",
     people: samplePeopleShera,
     createdBy: samplePeopleShera.first,

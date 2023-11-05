@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/billsplit_country_picker.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
@@ -63,7 +64,7 @@ class _AddFriendPhoneViewState extends SafeState<AddFriendPhoneView> {
                   ),
                 ),
                 LoadingView(
-                  state: cubit.state,
+                  isLoading: cubit.state is Loading,
                   child: IconButton(
                     onPressed: () {
                       if (!_isPhoneValid()) {

@@ -37,17 +37,18 @@ extension EventExt on Event {
   EventDTO toEventDTO() {
     if (this is GroupExpense) {
       final realId = id.startsWith(tempIdPrefix) ? "" : id;
+      final expense = this as GroupExpense;
       return GroupExpenseDTO(
-          id: realId,
-          tempParticipants:
-              (this as GroupExpense).tempParticipants.map((e) => e.toDTO()),
-          createdBy: createdBy.toDTO(),
-          receiptImageUrl: (this as GroupExpense).receiptImageUrlState,
-          timestamp: timestamp,
-          description: (this as GroupExpense).descriptionState,
-          payee: (this as GroupExpense).payerState.toDTO(),
-          sharedExpenses: (this as GroupExpense).sharedExpensesState.toDTO(),
-          currency: (this as GroupExpense).currencyState.toDTO());
+        id: realId,
+        tempParticipants: expense.tempParticipants.map((e) => e.toDTO()),
+        createdBy: createdBy.toDTO(),
+        receiptImageUrl: expense.receiptImageUrlState,
+        timestamp: timestamp,
+        description: expense.descriptionState,
+        payee: expense.payerState.toDTO(),
+        sharedExpenses: expense.sharedExpensesState.toDTO(),
+        currency: expense.currencyState.toDTO(),
+      );
     }
     return PaymentDTO(
         id: id,

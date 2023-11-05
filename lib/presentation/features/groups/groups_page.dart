@@ -40,7 +40,6 @@ class GroupsPage extends StatelessWidget {
                 child: DefaultStreamBuilder(
                   stream: cubit.getGroupStream(),
                   builder: (_, groups) {
-
                     return CustomScrollView(
                       controller: _scrollingController,
                       slivers: [

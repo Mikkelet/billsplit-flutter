@@ -5,6 +5,8 @@ import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/group_invite.dart';
+import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 
 extension GroupDtosExt on Iterable<GroupDTO> {
@@ -13,6 +15,8 @@ extension GroupDtosExt on Iterable<GroupDTO> {
   }
 
   Iterable<GroupDb> toDb() => map((e) => e.toDb());
+
+  Iterable<GroupInviteDb> toGroupInviteDb() => map((e) => e.toGroupInviteDb());
 }
 
 extension GroupDtoExt on GroupDTO {
@@ -23,8 +27,9 @@ extension GroupDtoExt on GroupDTO {
       defaultCurrency: defaultCurrency,
       lastUpdated: lastUpdated,
       people: people.toPeople(),
+      invites: invites?.toPeople() ?? [],
       createdBy: createdBy.toPerson(),
-      pastMembers: pastMembers?.toPeople() ?? [],
+      pastMembers: pastMembers.toPeople(),
       timestamp: timestamp,
       latestEvent: latestEvent.toEvent());
 
@@ -33,6 +38,14 @@ extension GroupDtoExt on GroupDTO {
         group: json.encode(toJson()),
         lastUpdated: nowEpoch,
       );
+
+  GroupInvite toGroupInvite() =>
+      GroupInvite(group: toGroup(), syncState: SyncState.synced);
+
+  GroupInviteDb toGroupInviteDb() => GroupInviteDb(
+      groupId: id,
+      syncState: SyncState.synced.index,
+      group: json.encode(toJson()));
 }
 
 extension GroupExt on Group {
@@ -41,6 +54,7 @@ extension GroupExt on Group {
       name: nameState,
       coverImageUrl: coverImageUrlState,
       people: people.toDTO(),
+      invites: invites.toDTO(),
       lastUpdated: lastUpdatedState,
       defaultCurrency: defaultCurrencyState,
       pastMembers: pastMembers.toDTO(),

@@ -11,20 +11,22 @@ class GroupDTO {
   final String name;
   final String coverImageUrl;
   final Iterable<PersonDTO> people;
-  final Iterable<PersonDTO>? pastMembers;
+  final Iterable<PersonDTO> pastMembers;
+  final Iterable<PersonDTO>? invites;
   final PersonDTO createdBy;
   final num timestamp;
   final EventDTO? latestEvent;
   final num lastUpdated;
   final String defaultCurrency;
 
-  GroupDTO(
+    GroupDTO(
       {required this.id,
       required this.name,
       required this.coverImageUrl,
       required this.defaultCurrency,
       required this.people,
       required this.pastMembers,
+      required this.invites,
       required this.createdBy,
       required this.timestamp,
       required this.lastUpdated,

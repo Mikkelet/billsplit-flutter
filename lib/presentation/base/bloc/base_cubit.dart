@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
-  final authProvider = getIt<AuthProvider>();
   final _authRepository = getIt<AuthRepository>();
   final sharedPrefs = getIt<SharedPrefs>();
 

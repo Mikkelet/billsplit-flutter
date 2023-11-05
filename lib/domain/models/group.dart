@@ -7,6 +7,7 @@ class Group {
   final String _coverImageUrl;
   final List<Person> people;
   final List<Person> pastMembers;
+  final List<Person> invites;
   final Person createdBy;
   final num timestamp;
   final Event? _latestEvent;
@@ -26,6 +27,7 @@ class Group {
       required String coverImageUrl,
       required this.people,
       required this.pastMembers,
+      required this.invites,
       required this.createdBy,
       required this.timestamp,
       required num lastUpdated,
@@ -46,8 +48,9 @@ class Group {
           createdBy: createdBy,
           coverImageUrl: "",
           name: name,
-          people: people,
+          people: [createdBy],
           pastMembers: [],
+          invites: people,
           timestamp: DateTime.now().millisecondsSinceEpoch,
           lastUpdated: DateTime.now().millisecondsSinceEpoch,
           latestEvent: null,
@@ -61,6 +64,7 @@ class Group {
           coverImageUrl: "",
           pastMembers: [],
           people: [],
+          invites: [],
           createdBy: Person.dummy(2),
           timestamp: 0,
           lastUpdated: 0,

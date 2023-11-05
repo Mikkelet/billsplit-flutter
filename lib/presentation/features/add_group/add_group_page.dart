@@ -110,6 +110,7 @@ class AddGroupPage extends StatelessWidget {
                           RoundedListItem(
                             child: Column(
                               children: [
+                                AddedPersonView(person: cubit.user),
                                 if (cubit.people.isEmpty)
                                   const Text("Add people to the group")
                                 else

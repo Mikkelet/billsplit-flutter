@@ -14,7 +14,7 @@ class LoadingFriends extends Main {}
 class AddGroupCubit extends BaseCubit {
   String groupName = "";
   String currency = Currency.USD().symbol;
-  late final List<Person> _people = [user];
+  late final List<Person> _people = [];
   final _observeFriendsUseCase = ObserveFriendsUseCase();
   final _getFriendsUseCase = GetFriendsUseCase();
   final _addGroupUseCase = AddGroupUseCase();

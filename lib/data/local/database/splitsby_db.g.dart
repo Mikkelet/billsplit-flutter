@@ -1124,6 +1124,228 @@ class PaymentsTableCompanion extends UpdateCompanion<PaymentDb> {
   }
 }
 
+class $GroupInvitesTableTable extends GroupInvitesTable
+    with TableInfo<$GroupInvitesTableTable, GroupInviteDb> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GroupInvitesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _groupIdMeta =
+      const VerificationMeta('groupId');
+  @override
+  late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
+      'group_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _syncStateMeta =
+      const VerificationMeta('syncState');
+  @override
+  late final GeneratedColumn<int> syncState = GeneratedColumn<int>(
+      'sync_state', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _groupMeta = const VerificationMeta('group');
+  @override
+  late final GeneratedColumn<String> group = GeneratedColumn<String>(
+      'group', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [groupId, syncState, group];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'group_invites_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<GroupInviteDb> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('group_id')) {
+      context.handle(_groupIdMeta,
+          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+    } else if (isInserting) {
+      context.missing(_groupIdMeta);
+    }
+    if (data.containsKey('sync_state')) {
+      context.handle(_syncStateMeta,
+          syncState.isAcceptableOrUnknown(data['sync_state']!, _syncStateMeta));
+    } else if (isInserting) {
+      context.missing(_syncStateMeta);
+    }
+    if (data.containsKey('group')) {
+      context.handle(
+          _groupMeta, group.isAcceptableOrUnknown(data['group']!, _groupMeta));
+    } else if (isInserting) {
+      context.missing(_groupMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {groupId};
+  @override
+  GroupInviteDb map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GroupInviteDb(
+      groupId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
+      syncState: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sync_state'])!,
+      group: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}group'])!,
+    );
+  }
+
+  @override
+  $GroupInvitesTableTable createAlias(String alias) {
+    return $GroupInvitesTableTable(attachedDatabase, alias);
+  }
+}
+
+class GroupInviteDb extends DataClass implements Insertable<GroupInviteDb> {
+  final String groupId;
+  final int syncState;
+  final String group;
+  const GroupInviteDb(
+      {required this.groupId, required this.syncState, required this.group});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['group_id'] = Variable<String>(groupId);
+    map['sync_state'] = Variable<int>(syncState);
+    map['group'] = Variable<String>(group);
+    return map;
+  }
+
+  GroupInvitesTableCompanion toCompanion(bool nullToAbsent) {
+    return GroupInvitesTableCompanion(
+      groupId: Value(groupId),
+      syncState: Value(syncState),
+      group: Value(group),
+    );
+  }
+
+  factory GroupInviteDb.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GroupInviteDb(
+      groupId: serializer.fromJson<String>(json['groupId']),
+      syncState: serializer.fromJson<int>(json['syncState']),
+      group: serializer.fromJson<String>(json['group']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'groupId': serializer.toJson<String>(groupId),
+      'syncState': serializer.toJson<int>(syncState),
+      'group': serializer.toJson<String>(group),
+    };
+  }
+
+  GroupInviteDb copyWith({String? groupId, int? syncState, String? group}) =>
+      GroupInviteDb(
+        groupId: groupId ?? this.groupId,
+        syncState: syncState ?? this.syncState,
+        group: group ?? this.group,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('GroupInviteDb(')
+          ..write('groupId: $groupId, ')
+          ..write('syncState: $syncState, ')
+          ..write('group: $group')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(groupId, syncState, group);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GroupInviteDb &&
+          other.groupId == this.groupId &&
+          other.syncState == this.syncState &&
+          other.group == this.group);
+}
+
+class GroupInvitesTableCompanion extends UpdateCompanion<GroupInviteDb> {
+  final Value<String> groupId;
+  final Value<int> syncState;
+  final Value<String> group;
+  final Value<int> rowid;
+  const GroupInvitesTableCompanion({
+    this.groupId = const Value.absent(),
+    this.syncState = const Value.absent(),
+    this.group = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GroupInvitesTableCompanion.insert({
+    required String groupId,
+    required int syncState,
+    required String group,
+    this.rowid = const Value.absent(),
+  })  : groupId = Value(groupId),
+        syncState = Value(syncState),
+        group = Value(group);
+  static Insertable<GroupInviteDb> custom({
+    Expression<String>? groupId,
+    Expression<int>? syncState,
+    Expression<String>? group,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (groupId != null) 'group_id': groupId,
+      if (syncState != null) 'sync_state': syncState,
+      if (group != null) 'group': group,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GroupInvitesTableCompanion copyWith(
+      {Value<String>? groupId,
+      Value<int>? syncState,
+      Value<String>? group,
+      Value<int>? rowid}) {
+    return GroupInvitesTableCompanion(
+      groupId: groupId ?? this.groupId,
+      syncState: syncState ?? this.syncState,
+      group: group ?? this.group,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (groupId.present) {
+      map['group_id'] = Variable<String>(groupId.value);
+    }
+    if (syncState.present) {
+      map['sync_state'] = Variable<int>(syncState.value);
+    }
+    if (group.present) {
+      map['group'] = Variable<String>(group.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GroupInvitesTableCompanion(')
+          ..write('groupId: $groupId, ')
+          ..write('syncState: $syncState, ')
+          ..write('group: $group, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$SplitsbyDatabase extends GeneratedDatabase {
   _$SplitsbyDatabase(QueryExecutor e) : super(e);
   late final $GroupsTableTable groupsTable = $GroupsTableTable(this);
@@ -1132,12 +1354,16 @@ abstract class _$SplitsbyDatabase extends GeneratedDatabase {
   late final $FriendsTableTable friendsTable = $FriendsTableTable(this);
   late final $ServicesTableTable servicesTable = $ServicesTableTable(this);
   late final $PaymentsTableTable paymentsTable = $PaymentsTableTable(this);
+  late final $GroupInvitesTableTable groupInvitesTable =
+      $GroupInvitesTableTable(this);
   late final GroupsDAO groupsDAO = GroupsDAO(this as SplitsbyDatabase);
   late final GroupExpenseDAO groupExpenseDAO =
       GroupExpenseDAO(this as SplitsbyDatabase);
   late final ServicesDao servicesDao = ServicesDao(this as SplitsbyDatabase);
   late final FriendsDAO friendsDAO = FriendsDAO(this as SplitsbyDatabase);
   late final PaymentsDAO paymentsDAO = PaymentsDAO(this as SplitsbyDatabase);
+  late final GroupInvitesDAO groupInvitesDAO =
+      GroupInvitesDAO(this as SplitsbyDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1147,6 +1373,7 @@ abstract class _$SplitsbyDatabase extends GeneratedDatabase {
         groupExpenseTable,
         friendsTable,
         servicesTable,
-        paymentsTable
+        paymentsTable,
+        groupInvitesTable
       ];
 }

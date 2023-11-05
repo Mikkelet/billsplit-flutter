@@ -3,9 +3,9 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
-import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
-import 'package:billsplit_flutter/utils/utils.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/group_debt_view.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/group_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +38,10 @@ class GroupView extends StatelessWidget {
             children: [
               Stack(
                 alignment: Alignment.bottomLeft,
-                children: [_groupPicture(), _getGroupTitle(context)],
+                children: [
+                  GroupPictureView(group: group),
+                  GroupTitleView(group: group)
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -55,9 +58,9 @@ class GroupView extends StatelessWidget {
                             limit: 3,
                           ),
                           Expanded(
-                            child: _debtView(
-                              context,
-                              cubit.getDebtForGroup(group),
+                            child: GroupDebtView(
+                              group: group,
+                              debt: cubit.getDebtForGroup(group),
                             ),
                           ),
                         ],
@@ -70,92 +73,6 @@ class GroupView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _groupPicture() {
-    if (group.coverImageUrlState.isEmpty) {
-      return Container(
-        decoration: const BoxDecoration(color: Colors.white),
-      );
-    }
-    return Container(
-      height: 100,
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(10),
-        ),
-        child: CachedNetworkImage(
-          imageUrl: group.coverImageUrlState,
-          fadeInDuration: Duration.zero,
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-
-  Widget _getGroupTitle(BuildContext context) {
-    final BoxDecoration? deco = group.coverImageUrlState.isNotEmpty
-        ? BoxDecoration(color: Colors.black.withOpacity(0.5))
-        : null;
-    final textColor = group.coverImageUrlState.isEmpty
-        ? Theme.of(context).colorScheme.onBackground
-        : Colors.white;
-    final padding = group.coverImageUrlState.isEmpty
-        ? const EdgeInsets.all(8)
-        : const EdgeInsets.only(left: 8);
-    return Container(
-      constraints: const BoxConstraints(minHeight: 32),
-      decoration: deco,
-      alignment: Alignment.centerLeft,
-      padding: padding,
-      child: Text(group.nameState,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: textColor),
-          softWrap: false,
-          overflow: TextOverflow.ellipsis),
-    );
-  }
-
-  Widget _debtView(BuildContext context, num debt) {
-    final String currency = group.defaultCurrencyState.toUpperCase();
-    if (debt == 0) {
-      return const SizedBox();
-    }
-    return Row(
-      children: [
-        const Expanded(child: SizedBox()),
-        if (debt > 0)
-          Expanded(
-            child: Text(debt.fmt2dec(),
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: SplitsbyTextTheme.groupViewNegativeDebt(context)),
-          ),
-        if (debt < 0)
-          Expanded(
-            child: Text(debt.abs().fmt2dec(),
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: SplitsbyTextTheme.groupViewPositiveDebt(context)),
-          ),
-        const SizedBox(width: 4),
-        Text(
-          currency,
-          style: SplitsbyTextTheme.groupViewDebtCurrency(context),
-        )
-      ],
     );
   }
 
