@@ -12,7 +12,7 @@ class ServicesDao extends DatabaseAccessor<SplitsbyDatabase>
   Future insert(ServiceDb service) =>
       into(servicesTable).insert(service, mode: InsertMode.insertOrReplace);
 
-  Future insertAll(List<ServiceDb> expenses) => batch((batch) => batch
+  Future insertAll(Iterable<ServiceDb> expenses) => batch((batch) => batch
       .insertAll(servicesTable, expenses, mode: InsertMode.insertOrReplace));
 
   Future deleteService(String id) =>

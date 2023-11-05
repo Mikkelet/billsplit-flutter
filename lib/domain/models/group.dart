@@ -41,6 +41,17 @@ class Group {
 
   Iterable<Person> get allPeople => [...people, ...pastMembers];
 
+  void respondToInvite(Person user, bool accept) {
+    invites.remove(user);
+    if (accept) {
+      people.add(user);
+    }
+  }
+
+  void invitePerson(Person person){
+    invites.add(person);
+  }
+
   Group.newGroup(
       Person createdBy, String name, List<Person> people, String currency)
       : this(

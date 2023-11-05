@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GroupPage extends StatelessWidget {
   final Group group;
 
-  const GroupPage({Key? key, required this.group}) : super(key: key);
+  const GroupPage({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {

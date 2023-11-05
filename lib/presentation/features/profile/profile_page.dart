@@ -53,14 +53,14 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 12),
                     PhoneNumberView<ProfileCubit>(),
                     const SizedBox(height: 12),
+                    UpdateUserDefaultCurrencyView<ProfileCubit>(),
+                    const SizedBox(height: 12),
                     ProfileListItem(
                       text: "Group invites",
                       onClick: () {
                         Navigator.of(context).push(GroupInvitesPage.route);
                       },
                     ),
-                    const SizedBox(height: 12),
-                    UpdateUserDefaultCurrencyView<ProfileCubit>(),
                     const SizedBox(height: 12),
                     ProfileListItem(
                         text: "Friends",

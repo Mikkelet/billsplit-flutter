@@ -28,7 +28,7 @@ class GroupBloc extends BaseCubit {
   final _observeServicesUseCase = ObserveServicesUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
   final _leaveGroupUseCase = LeaveGroupUseCase();
-  final _addPersonToGroupUseCase = AddPersonToGroupUseCase();
+  final _invitePersonToGroupUseCase = InvitePersonToGroupUseCase();
   final _addGroupUseCase = AddGroupUseCase();
   final _addExpenseUseCase = AddEventUseCase();
   final _getExchangeRatesUseCase = GetExchangeRatesUseCase();
@@ -88,7 +88,7 @@ class GroupBloc extends BaseCubit {
 
   void addPersonToGroup(Person person) {
     emit(AddingPersonToGroup());
-    _addPersonToGroupUseCase.launch(group, person).then((value) {
+    _invitePersonToGroupUseCase.launch(group, person).then((value) {
       emit(Main());
     }).catchError((onError, st) {
       showError(onError, st);

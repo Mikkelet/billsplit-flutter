@@ -11,6 +11,7 @@ class SyncGroupInvitesUseCase {
     final response = await _apiService.getGroupInvites();
     final groups = response.groups;
     final groupInvitesDb = groups.toGroupInviteDb();
+    await _database.groupInvitesDAO.clear();
     await _database.groupInvitesDAO.insertGroups(groupInvitesDb);
   }
 }

@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/data/remote/requests/add_event_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_friend_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_events_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_exchange_rates_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_invites_response.dart';
@@ -33,6 +34,11 @@ class ApiService {
     return GetGroupResponse.fromJson(body);
   }
 
+  Future<GetEventsResponse> getEvents(String groupId) async {
+    final body = await _client.get("group/$groupId/events");
+    return GetEventsResponse.fromJson(body);
+  }
+
   Future<GetFriendsResponse> getFriends() async {
     final response = await _client.get("friends");
     return GetFriendsResponse.fromJson(response);
@@ -41,14 +47,14 @@ class ApiService {
   Future<AddEventResponse> addEvent(String groupId, EventDTO eventDTO) async {
     final request = AddEventRequest(groupId, eventDTO);
     final response = await _client.post("event", request.toJson());
-    return AddEventResponse.fromJson(response);
+    return AddEventResponse.fromJson(response!);
   }
 
   Future<ServiceDTO> addService(String groupId, ServiceDTO service) async {
     final data = AddServiceRequest(service);
     final response =
         await _client.post("group/$groupId/service", data.toJson());
-    return AddServiceResponse.fromJson(response).service;
+    return AddServiceResponse.fromJson(response!).service;
   }
 
   Future updateService(String groupId, ServiceDTO service) async {
@@ -86,18 +92,13 @@ class ApiService {
         requestType = RequestTypeUserId(value);
     }
     final response = await _client.post("friends", requestType.toJson());
-    return AddFriendResponse.fromJson(response).friend;
+    return AddFriendResponse.fromJson(response!).friend;
   }
 
   Future<GroupDTO> addGroup(GroupDTO group) async {
     final body = AddGroupRequest(group);
     final response = await _client.post("group", body.toJson());
-    return AddGroupResponse.fromJson(response).group;
-  }
-
-  Future invitePersonToGroup(String groupId, String uid) async {
-    final body = InviteToGroupRequest(groupId: groupId, userId: uid);
-    await _client.post("group/invite", body.toJson());
+    return AddGroupResponse.fromJson(response!).group;
   }
 
   Future updateFCMToken(String? fcmToken) async {
@@ -128,8 +129,13 @@ class ApiService {
     return GetGroupInvitesResponse.fromJson(response);
   }
 
+  Future invitePersonToGroup(String groupId, String uid) async {
+    final body = InviteToGroupRequest(groupId: groupId, userId: uid);
+    await _client.post("group/invite", body.toJson());
+  }
+
   Future respondToGroupInvite(String groupId, bool accept) async {
     final body = RespondToGroupInviteRequest(groupId, accept);
-    await _client.post("groupInvite/$groupId", body.toJson());
+    await _client.post("group/invitation", body.toJson());
   }
 }

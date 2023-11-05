@@ -5,10 +5,10 @@ import 'package:billsplit_flutter/data/remote/dtos/service_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 
-extension ServicesDtoExt on List<ServiceDTO> {
-  List<SubscriptionService> toServices() => map((e) => e.toService()).toList();
+extension ServicesDtoExt on Iterable<ServiceDTO> {
+  Iterable<SubscriptionService> toServices() => map((e) => e.toService());
 
-  List<ServiceDb> toDb(String groupId) => map((e) => e.toDb(groupId)).toList();
+  Iterable<ServiceDb> toDb(String groupId) => map((e) => e.toDb(groupId));
 }
 
 extension ServiceDtoExt on ServiceDTO {

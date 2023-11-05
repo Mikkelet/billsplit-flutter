@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/get_friends_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/group_invites/sync_group_invites.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/get_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/observe_groups_usecase.dart';
@@ -12,6 +13,7 @@ class GroupsBloc extends BaseCubit {
   final _getFriendsUseCase = GetFriendsUseCase();
   final _observeGroupsUseCase = ObserveGroupsUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
+  final _getGroupInvites = SyncGroupInvitesUseCase();
 
   GroupsBloc() : super();
 
@@ -28,7 +30,7 @@ class GroupsBloc extends BaseCubit {
 
   void loadProfile() async {
     emit(Loading());
-    Future.value([_getFriendsUseCase.launch(), _getGroupsUseCase.launch()])
+    Future.value([_getFriendsUseCase.launch(), _getGroupsUseCase.launch(), _getGroupInvites.launch()])
         .then((value) {
       emit(Main());
     }).catchError((error, st) {

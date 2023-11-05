@@ -17,17 +17,26 @@ class GroupInvitesPage extends StatelessWidget {
       child: BaseBlocBuilder<GroupInvitesCubit>(
         builder: (cubit, state) {
           return BaseScaffold(
-            appBar: AppBar(backgroundColor: Colors.transparent),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: const Text("Group invites"),
+            ),
             body: DefaultStreamBuilder(
               stream: cubit.groupsStream(),
               builder: (context, snapshot) {
                 final groups = snapshot.toList();
-                print("qqq groups=${groups.length}");
+                if (groups.isEmpty) {
+                  return const Center(child: Text("You do not have any new invites"));
+                }
                 return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: snapshot.length,
                   itemBuilder: (context, index) {
                     final group = groups[index];
-                    return GroupInviteView(groupInvite: group);
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: GroupInviteView(groupInvite: group),
+                    );
                   },
                 );
               },

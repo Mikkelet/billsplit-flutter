@@ -56,34 +56,35 @@ class GroupInviteView extends StatelessWidget {
                           ),
                         ],
                       ),
-
-                      LoadingView(
-                        isLoading: groupInvite.syncState == SyncState.pending,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ClickableListItem(
-                              onClick: () {
-                                cubit.respond(group, false);
-                              },
-                              child: Text(
-                                "Decline",
-                                style: Theme.of(context).textTheme.labelLarge,
+                      Center(
+                        child: LoadingView(
+                          isLoading: groupInvite.syncState == SyncState.pending,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ClickableListItem(
+                                onClick: () {
+                                  cubit.respond(group, false);
+                                },
+                                child: Text(
+                                  "Decline",
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
                               ),
-                            ),
-                            ClickableListItem(
-                              onClick: () {
-                                cubit.respond(group, true);
-                              },
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                              child: Text(
-                                "Accept",
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            )
-                          ],
+                              ClickableListItem(
+                                onClick: () {
+                                  cubit.respond(group, true);
+                                },
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
+                                child: Text(
+                                  "Accept",
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],

@@ -113,6 +113,26 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                             ],
                           ),
                         ),
+                      ),
+                      ...cubit.group.invites.mapIndexed(
+                        (index, person) => Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            children: [
+                              ProfilePictureView(person: person),
+                              const SizedBox(width: 8),
+                              Text(
+                                person.displayName,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              const Spacer(),
+                              Text(
+                                "invited",
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),
