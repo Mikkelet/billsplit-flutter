@@ -46,7 +46,7 @@ class GroupsPage extends StatelessWidget {
                       slivers: [
                         SliverAppBar(
                           pinned: true,
-                          actions: [DrawerActionView()],
+                          actions: const [DrawerActionView()],
                           expandedHeight: 200.0,
                           forceMaterialTransparency: true,
                           flexibleSpace: FlexibleSpaceBar(
