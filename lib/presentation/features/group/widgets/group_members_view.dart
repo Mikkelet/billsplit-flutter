@@ -155,6 +155,7 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       onClick: () async {
                         showBottomSheet(
                           context: context,
+                          enableDrag: true,
                           builder: (dialogContext) => FriendPickerDialog(
                             onFriendAdded: (friend) {
                               cubit.addPersonToGroup(friend);

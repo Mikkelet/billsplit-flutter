@@ -1,15 +1,15 @@
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../features/add_group/bloc/add_group_cubit.dart';
 
 class NoFriendsDialog extends StatelessWidget {
 
-  const NoFriendsDialog({Key? key})
-      : super(key: key);
+  const NoFriendsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +41,18 @@ class NoFriendsDialog extends StatelessWidget {
                   },
                   child: const Text("Go to friends")),
               Builder(builder: (context) {
-                if (cubit.state is LoadingFriends) {
-                  return const CircularProgressIndicator();
-                }
-                return IconButton(
-                    icon: const Icon(Icons.refresh),
-                    color: Theme
-                        .of(context)
-                        .colorScheme
-                        .primary,
-                    onPressed: () {
-                      cubit.onLoadFriends();
-                    });
+                return LoadingView(
+                  isLoading: cubit.state is Loading,
+                  child: IconButton(
+                      icon: const Icon(Icons.refresh),
+                      color: Theme
+                          .of(context)
+                          .colorScheme
+                          .primary,
+                      onPressed: () {
+                        cubit.onLoadFriends();
+                      }),
+                );
               })
             ],
           )

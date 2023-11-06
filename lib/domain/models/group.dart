@@ -11,12 +11,12 @@ class Group {
   final Person createdBy;
   final num timestamp;
   final Event? _latestEvent;
-  final num _lastUpdated;
+  final int _lastUpdated;
   final String _defaultCurrency;
 
   // modifiable values
   late String nameState = _name;
-  late num lastUpdatedState = _lastUpdated;
+  late int lastUpdatedState = _lastUpdated;
   late Event? latestEventState = _latestEvent;
   late String defaultCurrencyState = _defaultCurrency;
   late String coverImageUrlState = _coverImageUrl;
@@ -30,7 +30,7 @@ class Group {
       required this.invites,
       required this.createdBy,
       required this.timestamp,
-      required num lastUpdated,
+      required int lastUpdated,
       required Event? latestEvent,
       required String defaultCurrency})
       : _latestEvent = latestEvent,

@@ -8,8 +8,8 @@ part of 'get_events_request.dart';
 
 GetEventsResponse _$GetEventsResponseFromJson(Map<String, dynamic> json) =>
     GetEventsResponse(
-      events: (json['events'] as List<dynamic>)
-          .map((e) => EventDTO.fromJson(e as Map<String, dynamic>)),
+      events: (json['events'] as List<dynamic>).map((e) =>
+          e == null ? null : EventDTO.fromJson(e as Map<String, dynamic>)),
       services: (json['services'] as List<dynamic>)
           .map((e) => ServiceDTO.fromJson(e as Map<String, dynamic>)),
     );

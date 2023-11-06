@@ -16,7 +16,7 @@ class GroupDTO {
   final PersonDTO createdBy;
   final num timestamp;
   final EventDTO? latestEvent;
-  final num lastUpdated;
+  final int lastUpdated;
   final String defaultCurrency;
 
     GroupDTO(

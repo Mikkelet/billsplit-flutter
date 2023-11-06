@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/api_service.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
-import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/get_events_usecase.dart';
 
 class GetGroupUseCase {
@@ -11,18 +10,15 @@ class GetGroupUseCase {
 
   Future<void> launch(String groupId) async {
     final response = await _apiService.getGroup(groupId);
-    await _database.groupsDAO.insertGroup(response.group.toDb());
-    final shouldSync = await _shouldSync(groupId);
+    final shouldSync = await _shouldSync(groupId, response.group.lastUpdated);
     if (!shouldSync) return;
     await _getEventsUseCase.launch(groupId);
   }
 
-  Future<bool> _shouldSync(String groupId) async {
-    final groupDb = await _database.groupsDAO.getGroup(groupId);
-    final group = groupDb.toGroup();
-    final lastSynced = groupDb.lastUpdated;
-    final lastUpdated = group.lastUpdatedState;
-    if (lastSynced == null) return true;
-    return lastUpdated > lastSynced;
+  Future<bool> _shouldSync(String groupId, int remoteLastSync) async {
+    final localGroup = await _database.groupsDAO.getGroup(groupId);
+    final localLastSync = localGroup.lastUpdated;
+    if (localLastSync == null) return true;
+    return remoteLastSync > localLastSync;
   }
 }

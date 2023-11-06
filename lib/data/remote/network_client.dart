@@ -17,7 +17,7 @@ class NetworkClient {
   static const bool allowNetworkLogging = false;
   static const bool debug = false;
   static const bool emulator = false;
-  static const String apiVersion = "v5";
+  static const String apiVersion = "v6";
   static final String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/$apiVersion/"
       : "http://localhost:5000/billsplittapp/us-central1/$apiVersion/";
@@ -25,7 +25,8 @@ class NetworkClient {
       "http://192.168.8.227:5000/billsplittapp/us-central1/$apiVersion/";
   static const String releaseBaseUrl =
       "https://us-central1-billsplittapp.cloudfunctions.net/$apiVersion/";
-  static final String baseUrl = debug ? emulator
+  static final String baseUrl = debug
+      ? emulator
           ? debugBaseUrl
           : devUrl
       : releaseBaseUrl;
@@ -67,7 +68,8 @@ class NetworkClient {
     return response.toJson();
   }
 
-  Future<Json> post(String path, Json body, {bool refreshToken = false}) async {
+  Future<Json?> post(String path, Json body,
+      {bool refreshToken = false}) async {
     final url = Uri.parse("$baseUrl$path");
     final token = refreshToken
         ? await _authProvider.getToken(true)
@@ -78,18 +80,24 @@ class NetworkClient {
       HttpHeaders.userAgentHeader: await _getUserAgent()
     };
 
+    if (allowNetworkLogging) {
+      debugPrint('> REQ body:$body');
+      debugPrint("> REQ headers: $headers");
+      debugPrint("> REQ POST $url}");
+    }
     final response =
         await _client.post(url, body: json.encode(body), headers: headers);
     if (allowNetworkLogging) {
-      debugPrint('Request body:$body');
-      debugPrint("Request headers: $headers");
-      debugPrint("Request: ${response.request}");
-      debugPrint("Response headers: ${response.request?.headers}");
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response body:${prettyPrintJson(response.body)}');
+      debugPrint('< RES status: ${response.statusCode}');
+      if (response.body.isNotEmpty) {
+        debugPrint('< RES body: ${prettyPrintJson(response.body)}');
+      }
     }
     if (response.statusCode == 408) {
       return post(path, body, refreshToken: true);
+    }
+    if (response.statusCode == 204) {
+      return null;
     }
     if (!response.statusCode.toString().startsWith("2")) {
       final error = BillSplitError.fromJson(response.toJson());
@@ -110,14 +118,12 @@ class NetworkClient {
     final response =
         await _client.put(url, body: json.encode(body), headers: headers);
     if (allowNetworkLogging) {
-      debugPrint('Request body:$body');
-      debugPrint("Request headers: $headers");
-
-      debugPrint("Request: ${response.request}");
-      debugPrint("Response headers: ${response.request?.headers}");
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response body:${prettyPrintJson(response.body)}');
-
+      debugPrint("REQ: ${response.request}");
+      debugPrint("REQ headers: $headers");
+      debugPrint('REQ body:$body');
+      debugPrint("RES headers: ${response.request?.headers}");
+      debugPrint('RES status: ${response.statusCode}');
+      debugPrint('RES body:${prettyPrintJson(response.body)}');
     }
     if (response.statusCode == 408) {
       return put(path, body, refreshToken: true);

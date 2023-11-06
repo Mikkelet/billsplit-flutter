@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<ProfileCubit>(
-      create: (context) => ProfileCubit(),
+      create: (context) => ProfileCubit()..loadNotifications(),
       child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
         return BaseScaffold(
           appBar: AppBar(
@@ -57,6 +57,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 12),
                     ProfileListItem(
                       text: "Group invites",
+                      counter: cubit.groupInvitesCounter,
                       onClick: () {
                         Navigator.of(context).push(GroupInvitesPage.route);
                       },
@@ -64,8 +65,10 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 12),
                     ProfileListItem(
                         text: "Friends",
-                        onClick: () {
-                          Navigator.of(context).push(FriendsPage.getRoute());
+                        counter: cubit.friendsCounter,
+                        onClick: () async {
+                          await Navigator.of(context).push(FriendsPage.getRoute());
+                          cubit.loadNotifications();
                         }),
                     const SizedBox(height: 12),
                     ProfileListItem(

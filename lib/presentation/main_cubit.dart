@@ -25,6 +25,8 @@ class MainCubit extends BaseCubit {
   StreamSubscription? _fcmTokenDisposable;
   StreamSubscription? _onMessageOpenedDisposable;
 
+  int notificationsCounter = 0;
+
   MainCubit() : super.withState(Loading());
 
   Stream<AuthState> observeAuthState() {

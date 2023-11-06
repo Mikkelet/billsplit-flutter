@@ -31,10 +31,9 @@ class PersonPickerDialog extends StatelessWidget {
                       ),
                     ],
                   ),
-                  IconButton(
+                  TextButton(
                     onPressed: () => onClick(person),
-                    icon: const Icon(Icons.add),
-                    color: Colors.green,
+                    child: const Text("invite"),
                   )
                 ],
               ),

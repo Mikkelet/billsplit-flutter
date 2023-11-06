@@ -112,7 +112,10 @@ class AddGroupPage extends StatelessWidget {
                               children: [
                                 AddedPersonView(person: cubit.user),
                                 if (cubit.people.isEmpty)
-                                  const Text("Add people to the group")
+                                  const Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text("Invite people to the group"),
+                                  )
                                 else
                                   ...cubit.people.map(
                                     (e) => AddedPersonView(person: e),

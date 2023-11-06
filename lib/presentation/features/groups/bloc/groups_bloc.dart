@@ -1,5 +1,8 @@
+import 'package:billsplit_flutter/domain/models/friend.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/get_friends_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/friends/observe_friends_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/group_invites/observe_group_invites_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/group_invites/sync_group_invites.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/get_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
@@ -14,13 +17,15 @@ class GroupsBloc extends BaseCubit {
   final _observeGroupsUseCase = ObserveGroupsUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
   final _getGroupInvites = SyncGroupInvitesUseCase();
+  final _observeFriendsUseCase = ObserveFriendsUseCase();
+  final _observeGroupInvitesUseCase = ObserveGroupInvitesUseCase();
 
-  GroupsBloc() : super();
-
-  Map<String, num> debts = {};
+  final Map<String, num> _debts = {};
+  int notificationsCounter = 0;
 
   Stream<List<Group>> getGroupStream() =>
-      _observeGroupsUseCase.observe().map((event) => event
+      _observeGroupsUseCase.observe().map((event) =>
+          event
               .sortedBy<num>((group) => group.latestEventState?.timestamp ?? 0)
               .reversed
               .map((e) {
@@ -30,34 +35,49 @@ class GroupsBloc extends BaseCubit {
 
   void loadProfile() async {
     emit(Loading());
-    Future.value([_getFriendsUseCase.launch(), _getGroupsUseCase.launch(), _getGroupInvites.launch()])
-        .then((value) {
-      emit(Main());
+    Future.value([
+      _getFriendsUseCase.launch(),
+      _getGroupsUseCase.launch(),
+      _getGroupInvites.launch()
+    ]).then((value) {
+      countNotifications();
+      update();
     }).catchError((error, st) {
       showError(error, st);
     });
   }
 
+  void countNotifications() async {
+    final friends = await _observeFriendsUseCase
+        .observe()
+        .first;
+    final requests = friends
+        .where((element) => element.status == FriendStatus.requestReceived);
+    final friendsCounter = requests.length;
+    final invites = await _observeGroupInvitesUseCase
+        .observe()
+        .first;
+    final groupInvitesCounter = invites.length;
+    notificationsCounter = groupInvitesCounter + friendsCounter;
+    update();
+  }
+
   void _getDebtsStream(Group group) async {
-    final debtsResult = await _observeDebtsUseCase.observe(group).first;
+    final debtsResult = await _observeDebtsUseCase
+        .observe(group)
+        .first;
     if (debtsResult.isEmpty) return;
     if (debtsResult.length > 1) {
-      debts[group.id] = debtsResult.map((e) => e.second).sum;
+      _debts[group.id] = debtsResult
+          .map((e) => e.second)
+          .sum;
     } else {
-      debts[group.id] = debtsResult.first.second;
+      _debts[group.id] = debtsResult.first.second;
     }
   }
 
   num getDebtForGroup(Group group) {
-    return debts[group.id] ?? 0;
-  }
-
-  Future refreshGroups() async {
-    try {
-      await _getGroupsUseCase.launch();
-    } catch (e, st) {
-      showError(e, st);
-    }
+    return _debts[group.id] ?? 0;
   }
 
   String getGreeting() {
@@ -66,7 +86,7 @@ class GroupsBloc extends BaseCubit {
     final noon = DateTime.now().copyWith(hour: 12, minute: 0);
     final evening = DateTime.now().copyWith(hour: 18, minute: 0);
     final name =
-        user.displayName.replaceRange(0, 1, user.displayName[0].toUpperCase());
+    user.displayName.replaceRange(0, 1, user.displayName[0].toUpperCase());
     if (now.isAfter(morning) && now.isBefore(noon)) {
       return "Good morning, $name";
     } else if (now.isAfter(noon) && now.isBefore(evening)) {

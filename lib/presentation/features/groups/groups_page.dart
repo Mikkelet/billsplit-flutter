@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/drawer_action_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class GroupsPage extends StatelessWidget {
             ),
             body: RefreshIndicator(
               onRefresh: () async {
-                await cubit.refreshGroups();
+                cubit.loadProfile();
               },
               child: Center(
                 child: DefaultStreamBuilder(
@@ -45,6 +46,7 @@ class GroupsPage extends StatelessWidget {
                       slivers: [
                         SliverAppBar(
                           pinned: true,
+                          actions: [DrawerActionView()],
                           expandedHeight: 200.0,
                           forceMaterialTransparency: true,
                           flexibleSpace: FlexibleSpaceBar(

@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/common/default_stream_builder.dar
 import 'package:billsplit_flutter/presentation/features/friends/bloc/friends_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/friends/widgets/add_friend_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/friends/widgets/friend_view.dart';
+import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -74,7 +75,5 @@ class FriendsPage extends StatelessWidget {
     );
   }
 
-  static Route getRoute() {
-    return MaterialPageRoute(builder: (context) => const FriendsPage());
-  }
+  static Route getRoute() => slideLeftRoute(const FriendsPage());
 }
