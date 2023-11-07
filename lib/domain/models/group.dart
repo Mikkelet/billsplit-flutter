@@ -13,6 +13,7 @@ class Group {
   final Event? _latestEvent;
   final int _lastUpdated;
   final String _defaultCurrency;
+  final int? lastSync;
 
   // modifiable values
   late String nameState = _name;
@@ -21,18 +22,18 @@ class Group {
   late String defaultCurrencyState = _defaultCurrency;
   late String coverImageUrlState = _coverImageUrl;
 
-  Group(
-      {required this.id,
-      required String name,
-      required String coverImageUrl,
-      required this.people,
-      required this.pastMembers,
-      required this.invites,
-      required this.createdBy,
-      required this.timestamp,
-      required int lastUpdated,
-      required Event? latestEvent,
-      required String defaultCurrency})
+  Group({required this.id,
+    required String name,
+    required String coverImageUrl,
+    required this.people,
+    required this.pastMembers,
+    required this.invites,
+    required this.createdBy,
+    required this.timestamp,
+    this.lastSync,
+    required int lastUpdated,
+    required Event? latestEvent,
+    required String defaultCurrency})
       : _latestEvent = latestEvent,
         _name = name,
         _lastUpdated = lastUpdated,
@@ -48,40 +49,44 @@ class Group {
     }
   }
 
-  void invitePerson(Person person){
+  void invitePerson(Person person) {
     invites.add(person);
   }
 
-  Group.newGroup(
-      Person createdBy, String name, List<Person> people, String currency)
+  Group.newGroup(Person createdBy, String name, List<Person> people,
+      String currency)
       : this(
-          id: "",
-          createdBy: createdBy,
-          coverImageUrl: "",
-          name: name,
-          people: [createdBy],
-          pastMembers: [],
-          invites: people,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-          lastUpdated: DateTime.now().millisecondsSinceEpoch,
-          latestEvent: null,
-          defaultCurrency: currency,
-        );
+    id: "",
+    createdBy: createdBy,
+    coverImageUrl: "",
+    name: name,
+    people: [createdBy],
+    pastMembers: [],
+    invites: people,
+    timestamp: DateTime
+        .now()
+        .millisecondsSinceEpoch,
+    lastUpdated: DateTime
+        .now()
+        .millisecondsSinceEpoch,
+    latestEvent: null,
+    defaultCurrency: currency,
+  );
 
   Group.mock(num seed)
       : this(
-          id: "G$seed",
-          name: "Group $seed",
-          coverImageUrl: "",
-          pastMembers: [],
-          people: [],
-          invites: [],
-          createdBy: Person.dummy(2),
-          timestamp: 0,
-          lastUpdated: 0,
-          defaultCurrency: "usd",
-          latestEvent: null,
-        );
+    id: "G$seed",
+    name: "Group $seed",
+    coverImageUrl: "",
+    pastMembers: [],
+    people: [],
+    invites: [],
+    createdBy: Person.dummy(2),
+    timestamp: 0,
+    lastUpdated: 0,
+    defaultCurrency: "usd",
+    latestEvent: null,
+  );
 
   void reset() {
     nameState = _name;

@@ -10,7 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
-  final _authRepository = getIt<AuthRepository>();
+  @protected
+  final authRepository = getIt<AuthRepository>();
   final sharedPrefs = getIt<SharedPrefs>();
 
   BaseCubit() : super(Main());
@@ -57,7 +58,7 @@ abstract class BaseCubit extends Cubit<UiState> {
     }
   }
 
-  Person get user => _authRepository.loggedInUser;
+  Person get user => authRepository.loggedInUser;
 
   void showToast(String message) {
     emit(ShowToast(message));

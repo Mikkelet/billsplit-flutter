@@ -16,7 +16,6 @@ class GroupDebtView extends StatelessWidget {
     }
     return Row(
       children: [
-        const Expanded(child: SizedBox()),
         if (debt > 0)
           Expanded(
             child: Text(debt.fmt2dec(),

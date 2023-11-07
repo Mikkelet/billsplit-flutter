@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_debt_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_title.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,11 +58,21 @@ class GroupView extends StatelessWidget {
                             size: 30,
                             limit: 3,
                           ),
+                          const Spacer(),
                           Expanded(
-                            child: GroupDebtView(
-                              group: group,
-                              debt: cubit.getDebtForGroup(group),
-                            ),
+                            child: Builder(builder: (context) {
+                              if (group.lastSync == null) {
+                                return Text(
+                                  "Open to synchronize",
+                                  textAlign: TextAlign.right,
+                                  style: SplitsbyTextTheme.exchangeRateLabel(context),
+                                );
+                              }
+                              return GroupDebtView(
+                                group: group,
+                                debt: cubit.getDebtForGroup(group),
+                              );
+                            }),
                           ),
                         ],
                       ),

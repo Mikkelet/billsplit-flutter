@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AuthRepository {
   final _authProvider = getIt<AuthProvider>();
@@ -13,6 +14,8 @@ class AuthRepository {
   Stream<AuthState> observeAuthState() {
     return _authProvider.authListener().asyncMap((firebaseUser) async {
       if (firebaseUser == null) {
+        await FirebaseMessaging.instance.unsubscribeFromTopic("user-${_loggedInUser?.uid}");
+        _loggedInUser = null;
         return LoggedOutState();
       }
 
@@ -25,6 +28,7 @@ class AuthRepository {
         email: firebaseUser.email ?? "",
         phoneNumber: parsedPhoneNumber ?? const PhoneNumber.none(),
       );
+      await FirebaseMessaging.instance.subscribeToTopic("user-${firebaseUser.uid}");
       return LoggedInState(_loggedInUser!);
     });
   }

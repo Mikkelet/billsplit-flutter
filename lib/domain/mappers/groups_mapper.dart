@@ -62,7 +62,10 @@ extension GroupExt on Group {
       timestamp: timestamp,
       latestEvent: latestEventState?.toEventDTO());
 
-  GroupDb toDb() => toDTO().toDb();
+  GroupDb toDb() {
+    final dtoJson = json.encode(toDTO().toJson());
+    return GroupDb(groupId: id, group: dtoJson, lastUpdated: lastSync);
+  }
 }
 
 extension GroupDbsExt on Iterable<GroupDb> {
@@ -73,7 +76,20 @@ extension GroupDbsExt on Iterable<GroupDb> {
 
 extension GroupDbExt on GroupDb {
   Group toGroup() {
-    return toDTO().toGroup();
+    final dto = toDTO();
+    return Group(
+        id: dto.id,
+        name: dto.name,
+        coverImageUrl: dto.coverImageUrl,
+        people: dto.people.toPeople(),
+        pastMembers: dto.pastMembers.toPeople(),
+        invites: dto.invites?.toPeople() ?? [],
+        createdBy: dto.createdBy.toPerson(),
+        timestamp: dto.timestamp,
+        lastUpdated: dto.lastUpdated,
+        latestEvent: dto.latestEvent.toEvent(),
+        defaultCurrency: dto.defaultCurrency,
+        lastSync: lastUpdated);
   }
 
   GroupDTO toDTO() {
