@@ -30,6 +30,7 @@ class GroupSettingsCubit extends BaseCubit {
   Future updateGroupName(String newName) async {
     group.nameState = newName;
     await _addGroupUseCase.launch(group);
+    update();
   }
 
   void updateCurrency(Currency currency) {

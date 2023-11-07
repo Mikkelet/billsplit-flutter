@@ -62,10 +62,11 @@ class GroupPage extends StatelessWidget {
                         statusBarBrightness: Brightness.light,
                       ),
                 flexibleSpace: Builder(builder: (context) {
-                  if (group.coverImageUrlState.isEmpty)
+                  if (group.coverImageUrlState.isEmpty) {
                     return Container(
                       color: Theme.of(context).colorScheme.tertiary,
                     );
+                  }
                   return Stack(
                     children: [
                       CachedNetworkImage(
@@ -83,9 +84,9 @@ class GroupPage extends StatelessWidget {
                 surfaceTintColor: Theme.of(context).colorScheme.surface,
                 actions: [
                   IconButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(GroupSettings.getRoute(group));
+                      onPressed: () async {
+                        await Navigator.of(context).push(GroupSettings.getRoute(group));
+                        cubit.update();
                       },
                       icon: const Icon(Icons.settings))
                 ],
