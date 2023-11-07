@@ -30,13 +30,3 @@ class SyncingGroup extends GroupState {
 class GroupLoaded extends GroupState {
   GroupLoaded(super.nav);
 }
-
-class GroupLeft extends Main{}
-
-class AddingPersonToGroup extends Main{}
-
-enum EditGroupNameState {
-  display,
-  isEditing,
-  isUpdating,
-}

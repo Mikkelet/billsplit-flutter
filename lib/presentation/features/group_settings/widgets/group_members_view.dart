@@ -3,15 +3,15 @@ import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupMembersView extends StatefulWidget {
-  GroupMembersView({Key? key}) : super(key: key);
+  const GroupMembersView({Key? key}) : super(key: key);
 
   @override
   State<GroupMembersView> createState() => _GroupMembersViewState();
@@ -155,7 +155,6 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       onClick: () async {
                         showBottomSheet(
                           context: context,
-                          backgroundColor: Colors.red,
                           enableDrag: true,
                           builder: (dialogContext) => FriendPickerDialog(
                             onFriendAdded: (friend) {

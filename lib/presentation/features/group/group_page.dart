@@ -26,11 +26,6 @@ class GroupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<GroupBloc>(
-      listener: (context, cubit, state) {
-        if (state is GroupLeft) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        }
-      },
       create: (context) => GroupBloc(group)..loadGroup(),
       child: BaseBlocBuilder<GroupBloc>(
         builder: (cubit, state) {
@@ -57,14 +52,20 @@ class GroupPage extends StatelessWidget {
             ),
             appBar: AppBar(
                 elevation: 0,
-                foregroundColor: group.coverImageUrlState.isEmpty ? null : Colors.white,
+                foregroundColor:
+                    group.coverImageUrlState.isEmpty ? null : Colors.white,
                 title: Text(group.nameState),
-                systemOverlayStyle: group.coverImageUrlState.isEmpty ? null : const SystemUiOverlayStyle(
-                  statusBarIconBrightness: Brightness.light,
-                  statusBarBrightness: Brightness.light,
-                ),
+                systemOverlayStyle: group.coverImageUrlState.isEmpty
+                    ? null
+                    : const SystemUiOverlayStyle(
+                        statusBarIconBrightness: Brightness.light,
+                        statusBarBrightness: Brightness.light,
+                      ),
                 flexibleSpace: Builder(builder: (context) {
-                  if (group.coverImageUrlState.isEmpty) return Container(color: Theme.of(context).colorScheme.tertiary,);
+                  if (group.coverImageUrlState.isEmpty)
+                    return Container(
+                      color: Theme.of(context).colorScheme.tertiary,
+                    );
                   return Stack(
                     children: [
                       CachedNetworkImage(
@@ -83,7 +84,8 @@ class GroupPage extends StatelessWidget {
                 actions: [
                   IconButton(
                       onPressed: () {
-                        Navigator.of(context).push(GroupSettings.getRoute(group));
+                        Navigator.of(context)
+                            .push(GroupSettings.getRoute(group));
                       },
                       icon: const Icon(Icons.settings))
                 ],

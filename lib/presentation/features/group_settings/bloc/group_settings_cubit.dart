@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/domain/use_cases/groups/add_person_to_group_us
 import 'package:billsplit_flutter/domain/use_cases/groups/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/storage/upload_group_picture_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
 
 class GroupSettingsCubit extends BaseCubit {
   final _leaveGroupUseCase = LeaveGroupUseCase();
