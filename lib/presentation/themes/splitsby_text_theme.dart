@@ -42,6 +42,10 @@ class SplitsbyTextTheme extends TextTheme {
       fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
       color: Theme.of(context).colorScheme.onError);
 
+  static TextStyle leaveGroupText(BuildContext context) => TextStyle(
+      fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+      color: Theme.of(context).colorScheme.error);
+
   static TextStyle fabText(BuildContext context) => TextStyle(
       fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
       fontFamily: "Montserrat");

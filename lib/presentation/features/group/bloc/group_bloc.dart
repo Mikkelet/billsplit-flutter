@@ -1,23 +1,17 @@
 import 'dart:async';
 
-import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/groups/add_group_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/groups/add_person_to_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/get_group_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/groups/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/services/observe_services_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/storage/upload_group_picture_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
@@ -27,12 +21,8 @@ class GroupBloc extends BaseCubit {
   final _observeEventsUseCase = ObserveEventsUseCase();
   final _observeServicesUseCase = ObserveServicesUseCase();
   final _observeDebtsUseCase = ObserveDebtsUseCase();
-  final _leaveGroupUseCase = LeaveGroupUseCase();
-  final _invitePersonToGroupUseCase = InvitePersonToGroupUseCase();
-  final _addGroupUseCase = AddGroupUseCase();
   final _addExpenseUseCase = AddEventUseCase();
   final _getExchangeRatesUseCase = GetExchangeRatesUseCase();
-  final _uploadGroupPicture = UploadGroupPictureUseCase();
 
   final Group group;
   GroupPageNav navIndex = GroupPageNav.events;
@@ -73,51 +63,7 @@ class GroupBloc extends BaseCubit {
     emit(newState);
   }
 
-  void showSettings() {
-    showPage(GroupPageNav.settings);
-  }
-
-  void leaveGroup() {
-    showLoading();
-    _leaveGroupUseCase.launch(group.id).then((value) {
-      emit(GroupLeft());
-    }).catchError((err, st) {
-      showError(err, st);
-    });
-  }
-
-  void addPersonToGroup(Person person) {
-    emit(AddingPersonToGroup());
-    _invitePersonToGroupUseCase.launch(group, person).then((value) {
-      emit(Main());
-    }).catchError((onError, st) {
-      showError(onError, st);
-    });
-  }
-
-  Future updateGroupName(String newName) async {
-    group.nameState = newName;
-    await _addGroupUseCase.launch(group);
-  }
-
   void retryAddExpense(GroupExpense expense) {
     _addExpenseUseCase.launch(group, expense);
-  }
-
-  void updateCurrency(Currency currency) {
-    group.defaultCurrencyState = currency.symbol;
-    emit(Main());
-  }
-
-  void uploadGroupPicture() {
-    _uploadGroupPicture.launch(group).then((_) {
-      emit(Main());
-    }).catchError((err, st) {
-      showError(err, st);
-    });
-  }
-
-  void deleteGroupPicture() {
-
   }
 }

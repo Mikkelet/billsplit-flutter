@@ -3,8 +3,8 @@ import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<GroupBloc>();
+    final cubit = context.read<GroupSettingsCubit>();
     return ExpansionPanelList(
       expandedHeaderPadding: const EdgeInsets.only(bottom: 4),
       elevation: 0,
@@ -155,10 +155,11 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       onClick: () async {
                         showBottomSheet(
                           context: context,
+                          backgroundColor: Colors.red,
                           enableDrag: true,
                           builder: (dialogContext) => FriendPickerDialog(
                             onFriendAdded: (friend) {
-                              cubit.addPersonToGroup(friend);
+                              cubit.invitePersonToGroup(friend);
                               Navigator.of(context).pop();
                             },
                             currentPickedFriends: cubit.group.people,

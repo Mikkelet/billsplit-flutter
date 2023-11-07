@@ -10,15 +10,14 @@ class RoundedListItem extends StatelessWidget {
   final Alignment? align;
 
   const RoundedListItem(
-      {Key? key,
+      {super.key,
       required this.child,
       this.color,
       this.width,
       this.height,
       this.align,
       this.borderRadius,
-      this.padding})
-      : super(key: key);
+      this.padding});
 
   @override
   Widget build(BuildContext context) {

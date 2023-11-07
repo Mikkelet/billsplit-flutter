@@ -11,7 +11,7 @@ import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.d
 import 'package:billsplit_flutter/presentation/features/group/widgets/debts_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/events_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/group_bottom_nav.dart';
-import 'package:billsplit_flutter/presentation/features/group/widgets/group_settings.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/services_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +40,6 @@ class GroupPage extends StatelessWidget {
               builder: (context) {
                 if (state is GroupState) {
                   if (state.nav == GroupPageNav.debt) return const SizedBox();
-                  if (state.nav == GroupPageNav.settings) {
-                    return const SizedBox();
-                  }
                   final text = state.nav == GroupPageNav.events
                       ? "Add expense"
                       : "Add subscription";
@@ -86,7 +83,7 @@ class GroupPage extends StatelessWidget {
                 actions: [
                   IconButton(
                       onPressed: () {
-                        cubit.showSettings();
+                        Navigator.of(context).push(GroupSettings.getRoute(group));
                       },
                       icon: const Icon(Icons.settings))
                 ],
@@ -108,8 +105,6 @@ class GroupPage extends StatelessWidget {
                               return const ServicesView();
                             case GroupPageNav.debt:
                               return const DebtsView();
-                            case GroupPageNav.settings:
-                              return GroupSettings();
                             default:
                               return const EventsView();
                           }

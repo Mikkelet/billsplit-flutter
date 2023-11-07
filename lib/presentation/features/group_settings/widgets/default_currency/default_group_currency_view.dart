@@ -5,7 +5,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
-import 'package:billsplit_flutter/presentation/features/group/widgets/default_currency/default_group_currency_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/widgets/default_currency/default_group_currency_cubit.dart';
 import 'package:flutter/material.dart';
 
 class DefaultGroupCurrencyView extends StatelessWidget {
