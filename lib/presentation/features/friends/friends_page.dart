@@ -75,5 +75,5 @@ class FriendsPage extends StatelessWidget {
     );
   }
 
-  static Route getRoute() => slideLeftRoute(const FriendsPage());
+  static Route get route => slideLeftRoute(const FriendsPage());
 }

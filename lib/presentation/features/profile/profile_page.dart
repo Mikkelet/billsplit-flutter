@@ -67,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                         text: "Friends",
                         counter: cubit.friendsCounter,
                         onClick: () async {
-                          await Navigator.of(context).push(FriendsPage.getRoute());
+                          await Navigator.of(context).push(FriendsPage.route);
                           cubit.loadNotifications();
                         }),
                     const SizedBox(height: 12),

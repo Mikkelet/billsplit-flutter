@@ -1,8 +1,11 @@
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
+import 'package:billsplit_flutter/domain/models/notification_action.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
 import 'package:billsplit_flutter/presentation/features/mandatory_update/mandatory_update_page.dart';
@@ -48,7 +51,6 @@ class BillSplitApp extends StatefulWidget {
 
 class _BillSplitAppState extends SafeState<BillSplitApp>
     with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();
@@ -79,23 +81,24 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
       home: BaseBlocWidget(
         create: (context) => MainCubit()..initialize(),
         listener: (context, cubit, state) async {
-          if (state is GroupOpenedFromNotification) {
-            Navigator.of(context).push(GroupPage.getRoute(state.group));
-          }
-          if (state is ShowNotificationPermissionRationale) {
+          if (state is NotificationActionEvent) {
+            final action = state.notificationAction;
+            if (action is OpenGroupAction) {
+              Navigator.of(context).push(GroupPage.getRoute(action.group));
+            } else if (action is OpenFriendInvitesAction) {
+              Navigator.of(context).push(FriendsPage.route);
+            } else if (action is OpenGroupInvitesAction) {
+              Navigator.of(context).push(GroupInvitesPage.route);
+            }
+          } else if (state is ShowNotificationPermissionRationale) {
             Navigator.of(context).push(NotificationsRationale.getRoute());
-          }
-          if (state is MandatoryUpdateState) {
+          } else if (state is MandatoryUpdateState) {
             Navigator.of(context)
                 .push(MandatoryUpdatePage.getRoute(state.appVersion));
           }
         },
         child: BaseBlocBuilder<MainCubit>(
           builder: (cubit, state) {
-            if (state is Loading) {
-              return const Scaffold(
-                  body: Center(child: CircularProgressIndicator()));
-            }
             if (state is Main) {
               cubit.checkAppVersion();
               return StreamBuilder<AuthState>(
@@ -113,8 +116,9 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
                   }
                 },
               );
+            } else {
+              return const SplashPage();
             }
-            return const LandingPage();
           },
         ),
       ),
@@ -124,7 +128,8 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
   // delay popUntil to reduce false nulls
   _onUserLoggedOut(BuildContext context) {
     Navigator.of(context).popUntil((route) =>
-        route.settings.name == "/${MandatoryUpdatePage.routeName}" || route.isFirst);
+        route.settings.name == "/${MandatoryUpdatePage.routeName}" ||
+        route.isFirst);
   }
 
   @override

@@ -37,7 +37,7 @@ class NoFriendsDialog extends StatelessWidget {
                       .colorScheme
                       .primaryContainer,
                   onClick: () {
-                    Navigator.of(context).push(FriendsPage.getRoute());
+                    Navigator.of(context).push(FriendsPage.route);
                   },
                   child: const Text("Go to friends")),
               Builder(builder: (context) {
