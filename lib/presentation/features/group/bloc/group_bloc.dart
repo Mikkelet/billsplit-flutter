@@ -53,10 +53,6 @@ class GroupBloc extends BaseCubit {
 
   void showEvents() => showPage(GroupPageNav.events);
 
-  void showServices() => showPage(GroupPageNav.services);
-
-  void showDebt() => showPage(GroupPageNav.events);
-
   void showPage(GroupPageNav nav) {
     navIndex = nav;
     final newState = GroupLoaded(navIndex);

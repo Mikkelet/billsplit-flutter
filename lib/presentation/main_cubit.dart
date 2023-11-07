@@ -8,7 +8,6 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/domain/use_cases/auth/initialize_auth_usecase.dart';
 import 'package:billsplit_flutter/presentation/main_state.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:rxdart/rxdart.dart';
 import 'base/bloc/base_state.dart';
 
 class MainCubit extends BaseCubit {
@@ -25,12 +24,13 @@ class MainCubit extends BaseCubit {
   MainCubit() : super.withState(Loading());
 
   Stream<AuthState> observeAuthState() {
-    return authRepository.observeAuthState().doOnData((authState) {
+    return authRepository.observeAuthState().map((authState) {
       if (authState is LoggedInState) {
         final userId = authState.user;
         FirebaseMessaging.instance.subscribeToTopic("user-$userId");
         initializePushNotification();
       }
+      return authState;
     });
   }
 

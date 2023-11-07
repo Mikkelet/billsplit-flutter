@@ -9,16 +9,17 @@ class HandleOnMessageOpenedUseCase {
   final _getFriendsUseCase = GetFriendsUseCase();
 
   Future<NotificationAction?> launch(Map<String, dynamic> data) async {
-    final String? groupId = data["groupId"];
-    final String? groupInvite = data["groupInvite"];
-    final String? friendInvite = data["friendInvite"];
-    if (groupId != null) {
-      final group = await _getGroupUseCase.launch(groupId);
-      return OpenGroupAction(group: group);
-    } else if (groupInvite != null) {
+    final String? type = data["type"];
+    if (type == "group") {
+      final String? groupId = data["groupId"];
+      if (groupId != null) {
+        final group = await _getGroupUseCase.launch(groupId);
+        return OpenGroupAction(group: group);
+      }
+    } else if (type == "groupInvite") {
       await _getGroupInvitesUseCase.launch();
       return OpenGroupInvitesAction();
-    } else if (friendInvite != null) {
+    } else if (type == "friendInvite") {
       await _getFriendsUseCase.launch();
       return OpenFriendInvitesAction();
     }

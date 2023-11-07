@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DebtView extends StatelessWidget {
   final Pair<Person, num> debt;
 
-  const DebtView({Key? key, required this.debt}) : super(key: key);
+  const DebtView({super.key, required this.debt});
 
   @override
   Widget build(BuildContext context) {
