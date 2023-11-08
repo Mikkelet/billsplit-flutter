@@ -16,6 +16,7 @@ import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_groups_response.dart';
 import 'package:billsplit_flutter/data/remote/requests/invite_to_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/leave_group_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/respond_to_friend_request_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/respond_to_group_invite_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/update_user_request.dart';
 
@@ -93,6 +94,13 @@ class ApiService {
     }
     final response = await _client.post("friends", requestType.toJson());
     return AddFriendResponse.fromJson(response!).friend;
+  }
+
+  Future respondToFriendRequest(
+      {required String friendUid, required bool accept}) async {
+    final body = RespondToFriendRequestRequest(
+        accept: accept, friendUid: friendUid, requestId: "");
+    await _client.post("/friendRequest", body.toJson());
   }
 
   Future<GroupDTO> addGroup(GroupDTO group) async {

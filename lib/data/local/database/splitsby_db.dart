@@ -26,10 +26,11 @@ class SplitsbyDatabase extends _$SplitsbyDatabase {
   SplitsbyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration => destructiveFallback;
+
 }
 
 LazyDatabase _openConnection() {

@@ -12,7 +12,11 @@ extension FriendsDTOExt on Iterable<FriendDTO> {
 }
 
 extension FriendDTOExt on FriendDTO {
-  FriendDb toDb() => FriendDb(id: id, friend: json.encode(this));
+  FriendDb toDb() => FriendDb(
+      uid: friend.id,
+      friend: json.encode(this),
+      status: status,
+      createdBy: createdBy);
 
   Friend toFriend() {
     final FriendStatus friendStatus;
@@ -37,4 +41,12 @@ extension FriendDbExt on FriendDb {
   FriendDTO toDto() => FriendDTO.fromJson(json.decode(friend));
 
   Friend toFriend() => toDto().toFriend();
+}
+
+extension FriendExt on Friend {
+  FriendDb toDb() => FriendDb(
+      uid: person.uid,
+      friend: json.encode(person.toDTO().toJson()),
+      status: status.dbValue,
+      createdBy: person.uid);
 }

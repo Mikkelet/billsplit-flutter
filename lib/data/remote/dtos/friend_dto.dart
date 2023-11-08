@@ -6,12 +6,11 @@ part 'friend_dto.g.dart';
 
 @JsonSerializable()
 class FriendDTO {
-  final String id;
   final String createdBy;
-  final String status;
+  final String  status;
   final PersonDTO friend;
 
-  FriendDTO(this.id, this.createdBy, this.status, this.friend);
+  FriendDTO(this.createdBy, this.status, this.friend);
 
   factory FriendDTO.fromJson(Json json) => _$FriendDTOFromJson(json);
 

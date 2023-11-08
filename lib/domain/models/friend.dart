@@ -1,9 +1,15 @@
 import 'person.dart';
 
 enum FriendStatus {
+  notFriends,
   requestReceived,
   requestSent,
   accepted;
+
+  String get dbValue {
+    if (this == FriendStatus.accepted) return "accepted";
+    return "pending";
+  }
 }
 
 class Friend {

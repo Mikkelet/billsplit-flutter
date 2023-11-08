@@ -14,8 +14,6 @@ class AuthRepository {
   Stream<AuthState> observeAuthState() {
     return _authProvider.authListener().asyncMap((firebaseUser) async {
       if (firebaseUser == null) {
-        await FirebaseMessaging.instance.unsubscribeFromTopic("user-${_loggedInUser?.uid}");
-        _loggedInUser = null;
         return LoggedOutState();
       }
 

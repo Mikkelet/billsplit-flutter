@@ -104,7 +104,8 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                           padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
                           child: Row(
                             children: [
-                              ProfilePictureView(person: person),
+                              ProfilePictureView(
+                                  person: person, canInspect: true),
                               const SizedBox(width: 8),
                               Text(
                                 person.displayName,

@@ -106,6 +106,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
                 initialData: LoadingUserState(),
                 builder: (context, snapshot) {
                   final authState = snapshot.data;
+                  print("qqq authstatus=${snapshot.data}");
                   if (authState is LoggedOutState) {
                     _onUserLoggedOut(context);
                     return const LandingPage();

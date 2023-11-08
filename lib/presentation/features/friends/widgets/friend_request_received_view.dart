@@ -7,8 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FriendRequestReceivedView extends StatelessWidget {
   final Person person;
 
-  const FriendRequestReceivedView({Key? key, required this.person})
-      : super(key: key);
+  const FriendRequestReceivedView({super.key, required this.person});
 
   @override
   Widget build(BuildContext context) {

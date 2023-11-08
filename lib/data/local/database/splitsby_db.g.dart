@@ -502,20 +502,31 @@ class $FriendsTableTable extends FriendsTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $FriendsTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _uidMeta = const VerificationMeta('uid');
   @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
+  late final GeneratedColumn<String> uid = GeneratedColumn<String>(
+      'uid', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _friendMeta = const VerificationMeta('friend');
   @override
   late final GeneratedColumn<String> friend = GeneratedColumn<String>(
       'friend', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, friend];
+  List<GeneratedColumn> get $columns => [uid, status, createdBy, friend];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -526,10 +537,23 @@ class $FriendsTableTable extends FriendsTable
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    if (data.containsKey('uid')) {
+      context.handle(
+          _uidMeta, uid.isAcceptableOrUnknown(data['uid']!, _uidMeta));
     } else if (isInserting) {
-      context.missing(_idMeta);
+      context.missing(_uidMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    } else if (isInserting) {
+      context.missing(_createdByMeta);
     }
     if (data.containsKey('friend')) {
       context.handle(_friendMeta,
@@ -546,8 +570,12 @@ class $FriendsTableTable extends FriendsTable
   FriendDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FriendDb(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      uid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uid'])!,
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by'])!,
       friend: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}friend'])!,
     );
@@ -560,20 +588,30 @@ class $FriendsTableTable extends FriendsTable
 }
 
 class FriendDb extends DataClass implements Insertable<FriendDb> {
-  final String id;
+  final String uid;
+  final String status;
+  final String createdBy;
   final String friend;
-  const FriendDb({required this.id, required this.friend});
+  const FriendDb(
+      {required this.uid,
+      required this.status,
+      required this.createdBy,
+      required this.friend});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
+    map['uid'] = Variable<String>(uid);
+    map['status'] = Variable<String>(status);
+    map['created_by'] = Variable<String>(createdBy);
     map['friend'] = Variable<String>(friend);
     return map;
   }
 
   FriendsTableCompanion toCompanion(bool nullToAbsent) {
     return FriendsTableCompanion(
-      id: Value(id),
+      uid: Value(uid),
+      status: Value(status),
+      createdBy: Value(createdBy),
       friend: Value(friend),
     );
   }
@@ -582,7 +620,9 @@ class FriendDb extends DataClass implements Insertable<FriendDb> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FriendDb(
-      id: serializer.fromJson<String>(json['id']),
+      uid: serializer.fromJson<String>(json['uid']),
+      status: serializer.fromJson<String>(json['status']),
+      createdBy: serializer.fromJson<String>(json['createdBy']),
       friend: serializer.fromJson<String>(json['friend']),
     );
   }
@@ -590,63 +630,93 @@ class FriendDb extends DataClass implements Insertable<FriendDb> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
+      'uid': serializer.toJson<String>(uid),
+      'status': serializer.toJson<String>(status),
+      'createdBy': serializer.toJson<String>(createdBy),
       'friend': serializer.toJson<String>(friend),
     };
   }
 
-  FriendDb copyWith({String? id, String? friend}) => FriendDb(
-        id: id ?? this.id,
+  FriendDb copyWith(
+          {String? uid, String? status, String? createdBy, String? friend}) =>
+      FriendDb(
+        uid: uid ?? this.uid,
+        status: status ?? this.status,
+        createdBy: createdBy ?? this.createdBy,
         friend: friend ?? this.friend,
       );
   @override
   String toString() {
     return (StringBuffer('FriendDb(')
-          ..write('id: $id, ')
+          ..write('uid: $uid, ')
+          ..write('status: $status, ')
+          ..write('createdBy: $createdBy, ')
           ..write('friend: $friend')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, friend);
+  int get hashCode => Object.hash(uid, status, createdBy, friend);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is FriendDb && other.id == this.id && other.friend == this.friend);
+      (other is FriendDb &&
+          other.uid == this.uid &&
+          other.status == this.status &&
+          other.createdBy == this.createdBy &&
+          other.friend == this.friend);
 }
 
 class FriendsTableCompanion extends UpdateCompanion<FriendDb> {
-  final Value<String> id;
+  final Value<String> uid;
+  final Value<String> status;
+  final Value<String> createdBy;
   final Value<String> friend;
   final Value<int> rowid;
   const FriendsTableCompanion({
-    this.id = const Value.absent(),
+    this.uid = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdBy = const Value.absent(),
     this.friend = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   FriendsTableCompanion.insert({
-    required String id,
+    required String uid,
+    required String status,
+    required String createdBy,
     required String friend,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
+  })  : uid = Value(uid),
+        status = Value(status),
+        createdBy = Value(createdBy),
         friend = Value(friend);
   static Insertable<FriendDb> custom({
-    Expression<String>? id,
+    Expression<String>? uid,
+    Expression<String>? status,
+    Expression<String>? createdBy,
     Expression<String>? friend,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
+      if (uid != null) 'uid': uid,
+      if (status != null) 'status': status,
+      if (createdBy != null) 'created_by': createdBy,
       if (friend != null) 'friend': friend,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   FriendsTableCompanion copyWith(
-      {Value<String>? id, Value<String>? friend, Value<int>? rowid}) {
+      {Value<String>? uid,
+      Value<String>? status,
+      Value<String>? createdBy,
+      Value<String>? friend,
+      Value<int>? rowid}) {
     return FriendsTableCompanion(
-      id: id ?? this.id,
+      uid: uid ?? this.uid,
+      status: status ?? this.status,
+      createdBy: createdBy ?? this.createdBy,
       friend: friend ?? this.friend,
       rowid: rowid ?? this.rowid,
     );
@@ -655,8 +725,14 @@ class FriendsTableCompanion extends UpdateCompanion<FriendDb> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
+    if (uid.present) {
+      map['uid'] = Variable<String>(uid.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
     }
     if (friend.present) {
       map['friend'] = Variable<String>(friend.value);
@@ -670,7 +746,9 @@ class FriendsTableCompanion extends UpdateCompanion<FriendDb> {
   @override
   String toString() {
     return (StringBuffer('FriendsTableCompanion(')
-          ..write('id: $id, ')
+          ..write('uid: $uid, ')
+          ..write('status: $status, ')
+          ..write('createdBy: $createdBy, ')
           ..write('friend: $friend, ')
           ..write('rowid: $rowid')
           ..write(')'))

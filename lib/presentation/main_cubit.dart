@@ -26,11 +26,12 @@ class MainCubit extends BaseCubit {
   Stream<AuthState> observeAuthState() {
     return authRepository.observeAuthState().map((authState) {
       if (authState is LoggedInState) {
-        final userId = authState.user;
-        FirebaseMessaging.instance.subscribeToTopic("user-$userId");
         initializePushNotification();
       }
       return authState;
+    }).handleError((err) {
+      print(err);
+      showToast("$err");
     });
   }
 
@@ -83,7 +84,7 @@ class MainCubit extends BaseCubit {
 
   void _initialiseAuth() {
     _initializeAuthUseCase.initialize().then((value) {
-      emit(Main());
+      update();
     }).catchError((err, st) {
       showError(err, st);
     });
