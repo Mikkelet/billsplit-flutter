@@ -46,6 +46,8 @@ class InspectProfilePage extends StatelessWidget {
                         child: const Text("Add friend")),
                   if (cubit.friendStatus == FriendStatus.accepted)
                     const Text("You are friends"),
+                  if(cubit.friendStatus == FriendStatus.yourself)
+                    const Text("Looking good!"),
                   if (cubit.friendStatus == FriendStatus.requestReceived)
                     Row(
                       children: [

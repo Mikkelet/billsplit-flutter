@@ -10,7 +10,7 @@ class GetFriendStatusUseCase {
 
   Future<FriendStatus> launch(String friendUid) async {
     if (friendUid == _authRepository.loggedInUser.uid) {
-      return FriendStatus.accepted;
+      return FriendStatus.yourself;
     }
     final response = await _database.friendsDAO.getFriend(friendUid);
     if (response == null) return FriendStatus.notFriends;

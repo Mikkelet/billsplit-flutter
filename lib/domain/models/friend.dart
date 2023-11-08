@@ -1,6 +1,7 @@
 import 'person.dart';
 
 enum FriendStatus {
+  yourself,
   notFriends,
   requestReceived,
   requestSent,
