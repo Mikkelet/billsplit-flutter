@@ -20,8 +20,9 @@ class FriendView extends StatelessWidget {
     return BlocProvider(
       create: (context) => AddFriendCubit(),
       child: ClickableListItem(
-        onClick: (){
-          Navigator.of(context).push(InspectProfilePage.getRoute(friend.person));
+        onClick: () {
+          Navigator.of(context)
+              .push(InspectProfilePage.getRoute(friend.person));
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -29,16 +30,18 @@ class FriendView extends StatelessWidget {
             ProfilePictureView(person: friend.person),
             const SizedBox(width: 16),
             Expanded(
-              child: Builder(builder: (context) {
-                switch (friend.status) {
-                  case FriendStatus.accepted:
-                    return FriendAcceptedView(person: friend.person);
-                  case FriendStatus.requestSent:
-                    return FriendRequestSentView(person: friend.person);
-                  default:
-                    return FriendRequestReceivedView(person: friend.person);
-                }
-              }),
+              child: Builder(
+                builder: (context) {
+                  switch (friend.status) {
+                    case FriendStatus.accepted:
+                      return FriendAcceptedView(person: friend.person);
+                    case FriendStatus.requestSent:
+                      return FriendRequestSentView(person: friend.person);
+                    default:
+                      return FriendRequestReceivedView(person: friend.person);
+                  }
+                },
+              ),
             )
           ],
         ),
