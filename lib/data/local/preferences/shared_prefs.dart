@@ -45,8 +45,8 @@ class SharedPrefs {
     final json = _sharedPrefs.getString(latestExchangeRatesKey) ?? "";
     if (json.isEmpty) return <String, num>{};
     final decode = jsonDecode(json);
-    final cast = (decode as Map).map(
-        (key, value) => MapEntry<String, num>((key as String).toUpperCase(), value as num));
+    final cast = (decode as Map).map((key, value) =>
+        MapEntry<String, num>((key as String).toUpperCase(), value as num));
     return cast;
   }
 
@@ -108,6 +108,11 @@ class SharedPrefs {
   set hasSeenSharedExpenseGuide(bool value) =>
       _sharedPrefs.setBool(hasSeenSharedExpenseGuideKey, value);
 
+  // isUserLoggedId
+  bool get isUserLoggedIn => _sharedPrefs.getBool(isUserLoggedIdKey) ?? false;
+
+  set isUserLoggedIn(bool value) => _sharedPrefs.setBool(isUserLoggedIdKey, value);
+
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
       "hasSeenHoldToAddIndividualExpenseTip";
@@ -121,4 +126,5 @@ class SharedPrefs {
   static const hasSeenScannerDisclaimerKey = "hasSeenScannerDisclaimer";
   static const hasSeenChoosePayerGuideKey = "hasSeenChoosePayerGuide";
   static const hasSeenSharedExpenseGuideKey = "hasSeenSharedExpenseGuide";
+  static const isUserLoggedIdKey = "isUserLoggedId";
 }

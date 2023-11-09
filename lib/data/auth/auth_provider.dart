@@ -1,21 +1,8 @@
-import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-class AuthState {}
-
-class LoggedInState extends AuthState {
-  final Person user;
-
-  LoggedInState(this.user);
-}
-
-class LoadingUserState extends AuthState {}
-
-class LoggedOutState extends AuthState {}
 
 class AuthProvider {
   static const _googleSignInScopes = ["email"];
@@ -25,9 +12,6 @@ class AuthProvider {
   ];
 
   late final FirebaseAuth _firebaseAuth;
-
-  User? user;
-  AuthState authState = LoadingUserState();
 
   Future init(FirebaseApp firebaseApp) async {
     _firebaseAuth = FirebaseAuth.instanceFor(app: firebaseApp);
@@ -65,7 +49,7 @@ class AuthProvider {
 
   Future<String> getToken(bool refresh) async {
     final user = _firebaseAuth.currentUser;
-    if (user == null) throw UiException(404, "User not logged in");
+    if (user == null) return "";
     final token = await user.getIdToken(refresh);
     return token ?? "";
   }

@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
   @protected
@@ -29,7 +30,11 @@ abstract class BaseCubit extends Cubit<UiState> {
   @override
   void emit(UiState state) {
     if (isClosed) return;
-    super.emit(state);
+    if (state is Main) {
+      super.emit(state);
+    } else if (this.state != state) {
+      super.emit(state);
+    }
   }
 
   void showError(dynamic err, StackTrace? stackTrace) {
@@ -40,6 +45,9 @@ abstract class BaseCubit extends Cubit<UiState> {
       emit(Failure(UiException(-1, err.toString())));
     } else if (err is UiException) {
       emit(Failure(err));
+    } else if (err is ClientException) {
+      emit(Failure(UiException(
+          1003, "Failed to connect to server. Check your internet.")));
     } else if (err is FirebaseAuthException) {
       if (err.code == "unknown") {
         emit(Failure(UiException(1001, "Enter a valid email")));

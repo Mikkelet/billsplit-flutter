@@ -1,6 +1,6 @@
-import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/notification_action.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_state.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
@@ -97,31 +97,29 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
                 .push(MandatoryUpdatePage.getRoute(state.appVersion));
           }
         },
-        child: BaseBlocBuilder<MainCubit>(
-          builder: (cubit, state) {
-            if (state is Main) {
-              cubit.checkAppVersion();
-              return StreamBuilder<AuthState>(
-                stream: cubit.observeAuthState(),
-                initialData: LoadingUserState(),
-                builder: (context, snapshot) {
-                  final authState = snapshot.data;
-                  print("qqq authstatus=${snapshot.data}");
-                  if (authState is LoggedOutState) {
-                    _onUserLoggedOut(context);
-                    return const LandingPage();
-                  } else if (authState is LoggedInState) {
-                    return GroupsPage();
-                  } else {
-                    return const SplashPage();
-                  }
-                },
-              );
-            } else {
-              return const SplashPage();
-            }
-          },
-        ),
+        child: BaseBlocBuilder<MainCubit>(builder: (cubit, state) {
+          if (state is Loading) {
+            return const SplashPage();
+          }
+          cubit.checkAppVersion();
+          return Builder(builder: (context) {
+            return StreamBuilder<AuthState>(
+              stream: cubit.observeAuthState(),
+              initialData: LoadingUserState(),
+              builder: (context, snapshot) {
+                final authState = snapshot.data;
+                if (authState is LoggedOutState) {
+                  _onUserLoggedOut(context);
+                  return const LandingPage();
+                } else if (authState is LoggedInState) {
+                  return GroupsPage();
+                } else {
+                  return const SplashPage();
+                }
+              },
+            );
+          });
+        }),
       ),
     );
   }

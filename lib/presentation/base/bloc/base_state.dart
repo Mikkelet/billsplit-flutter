@@ -1,6 +1,14 @@
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 
-abstract class UiState {}
+abstract class UiState {
+  @override
+  bool operator ==(Object other) {
+    return other.runtimeType == runtimeType;
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+}
 
 class Main extends UiState {}
 

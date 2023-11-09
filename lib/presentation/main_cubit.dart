@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:billsplit_flutter/data/auth/auth_provider.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_state.dart';
 import 'package:billsplit_flutter/domain/use_cases/app_data/get_app_version.dart';
 import 'package:billsplit_flutter/domain/use_cases/notifications/handle_on_message_open_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/permissions/get_fcm_token_permission.dart';
@@ -26,11 +26,10 @@ class MainCubit extends BaseCubit {
   Stream<AuthState> observeAuthState() {
     return authRepository.observeAuthState().map((authState) {
       if (authState is LoggedInState) {
-        initializePushNotification();
+        _initializePushNotification();
       }
       return authState;
     }).handleError((err) {
-      print(err);
       showToast("$err");
     });
   }
@@ -39,9 +38,10 @@ class MainCubit extends BaseCubit {
     showLoading();
     _initialiseAuth();
     _initialiseOnMessageOpened();
+    checkAppVersion();
   }
 
-  void initializePushNotification() {
+  void _initializePushNotification() {
     _getFCMTokenPermission.launch().then((permissionState) {
       final hasSeenRationale =
           sharedPrefs.hasSeenPushNotificationPermissionRationale;
