@@ -33,7 +33,7 @@ class GroupsBloc extends BaseCubit {
 
   void loadProfile() async {
     emit(Loading());
-    Future.value([
+    Future.wait([
       _getFriendsUseCase.launch(),
       _getGroupsUseCase.launch(),
       _getGroupInvitesUseCase.launch()
