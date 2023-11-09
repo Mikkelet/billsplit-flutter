@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/friend.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
@@ -50,12 +51,16 @@ class FriendsPage extends StatelessWidget {
                             return const Text(
                                 "Type an email above to add a friend!");
                           }
+                          final received = friends.where((element) => element.status == FriendStatus.requestReceived);
+                          final sent = friends.where((element) => element.status == FriendStatus.requestSent);
+                          final accepted = friends.where((element) => element.status == FriendStatus.accepted);
+                          final sorted = [...received, ...accepted, ...sent];
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              ...friends.map(
+                              ...sorted.map(
                                 (e) => Padding(
-                                  padding: const EdgeInsets.all(4.0),
+                                  padding: const EdgeInsets.only(top: 4.0),
                                   child: FriendView(friend: e),
                                 ),
                               )
