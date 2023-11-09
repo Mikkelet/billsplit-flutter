@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'get_exchange_rates_request.g.dart';
+part '../../../generated/remote/requests/get_exchange_rates_request.g.dart';
 
 @JsonSerializable(createToJson: false)
 class GetExchangeRatesRequest {

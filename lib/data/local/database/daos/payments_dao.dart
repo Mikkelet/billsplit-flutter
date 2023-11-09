@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/local/database/tables/payment_table.dart';
 import 'package:drift/drift.dart';
 
-part 'payments_dao.g.dart';
+part '../../../../generated/local/database/daos/payments_dao.g.dart';
 
 @DriftAccessor(tables: [PaymentsTable])
 class PaymentsDAO extends DatabaseAccessor<SplitsbyDatabase>

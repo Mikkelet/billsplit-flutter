@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'person_dto.g.dart';
+part '../../../generated/remote/dtos/person_dto.g.dart';
 
 @JsonSerializable()
 class PersonDTO {

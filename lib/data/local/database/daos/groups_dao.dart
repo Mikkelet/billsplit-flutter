@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/data/local/database/tables/group_table.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:drift/drift.dart';
 
-part 'groups_dao.g.dart';
+part '../../../../generated/local/database/daos/groups_dao.g.dart';
 
 @DriftAccessor(tables: [GroupsTable])
 class GroupsDAO extends DatabaseAccessor<SplitsbyDatabase>

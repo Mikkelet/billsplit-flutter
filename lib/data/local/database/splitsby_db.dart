@@ -17,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:drift/drift.dart';
 import 'package:path/path.dart' as p;
 
-part 'splitsby_db.g.dart';
+part '../../../generated/local/database/splitsby_db.g.dart';
 
 @DriftDatabase(
     tables: [GroupsTable, GroupExpenseTable, FriendsTable, ServicesTable, PaymentsTable, GroupInvitesTable],

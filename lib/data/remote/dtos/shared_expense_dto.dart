@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'shared_expense_dto.g.dart';
+part '../../../generated/remote/dtos/shared_expense_dto.g.dart';
 
 @JsonSerializable()
 class SharedExpenseDTO {

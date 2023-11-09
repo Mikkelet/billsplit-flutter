@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'respond_to_group_invite_request.g.dart';
+part '../../../generated/remote/requests/respond_to_group_invite_request.g.dart';
 
 @JsonSerializable(createFactory: false)
 class RespondToGroupInviteRequest {

@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/local/database/tables/friend_table.dart';
 import 'package:drift/drift.dart';
 
-part 'friends_dao.g.dart';
+part '../../../../generated/local/database/daos/friends_dao.g.dart';
 
 @DriftAccessor(tables: [FriendsTable])
 class FriendsDAO extends DatabaseAccessor<SplitsbyDatabase>

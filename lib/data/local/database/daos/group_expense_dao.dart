@@ -3,7 +3,7 @@ import 'package:billsplit_flutter/data/local/database/tables/group_expense_db.da
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:drift/drift.dart';
 
-part 'group_expense_dao.g.dart';
+part '../../../../generated/local/database/daos/group_expense_dao.g.dart';
 
 @DriftAccessor(tables: [GroupExpenseTable])
 class GroupExpenseDAO extends DatabaseAccessor<SplitsbyDatabase>

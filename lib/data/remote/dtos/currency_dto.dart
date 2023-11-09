@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'currency_dto.g.dart';
+part '../../../generated/remote/dtos/currency_dto.g.dart';
 
 @JsonSerializable()
 class CurrencyDTO {

@@ -5,7 +5,7 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_pretty/json_pretty.dart';
 
-part 'event_dto.g.dart';
+part '../../../generated/remote/dtos/event_dto.g.dart';
 
 @JsonSerializable()
 class EventDTO {
@@ -59,17 +59,16 @@ class GroupExpenseDTO extends EventDTO {
   final String receiptImageUrl;
 
   GroupExpenseDTO(
-      {required String id,
-      required PersonDTO createdBy,
-      required num timestamp,
-      String type = "expense",
+      {required super.id,
+      required super.createdBy,
+      required super.timestamp,
+      super.type = "expense",
       required this.receiptImageUrl,
       required this.description,
       required this.currency,
       required this.tempParticipants,
       required this.payee,
-      required this.sharedExpenses})
-      : super(id: id, createdBy: createdBy, timestamp: timestamp, type: type);
+      required this.sharedExpenses});
 
   factory GroupExpenseDTO.fromJson(Json json) =>
       _$GroupExpenseDTOFromJson(json);
@@ -86,20 +85,14 @@ class PaymentDTO extends EventDTO {
   final PersonDTO paidBy;
 
   PaymentDTO(
-      {required String id,
-      required PersonDTO createdBy,
-      required num timestamp,
-      String type = "payment",
+      {required super.id,
+      required super.createdBy,
+      required super.timestamp,
+      super.type = "payment",
       required this.currency,
       required this.paidBy,
       required this.paidTo,
-      required this.amount})
-      : super(
-          id: id,
-          createdBy: createdBy,
-          timestamp: timestamp,
-          type: type,
-        );
+      required this.amount});
 
   factory PaymentDTO.fromJson(Json json) => _$PaymentDTOFromJson(json);
 

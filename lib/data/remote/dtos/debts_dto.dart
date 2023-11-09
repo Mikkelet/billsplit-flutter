@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'debts_dto.g.dart';
+part '../../../generated/remote/dtos/debts_dto.g.dart';
 
 @JsonSerializable()
 class DebtDTO {
