@@ -99,10 +99,14 @@ class GroupsPage extends StatelessWidget {
                             delegate: SliverChildBuilderDelegate(
                               childCount: groups.length,
                               (context, index) {
+                                final group = groups[index];
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 16.0, horizontal: 8),
-                                  child: GroupView(group: groups[index]),
+                                  child: GroupView(
+                                    group: group,
+                                    debtToGroup: cubit.getDebtForGroup(group),
+                                  ),
                                 );
                               },
                             ),
