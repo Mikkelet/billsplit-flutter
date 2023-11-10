@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
@@ -35,7 +37,7 @@ class AuthRepository {
         email: firebaseUser.email ?? "",
         phoneNumber: parsedPhoneNumber ?? const PhoneNumber.none(),
       );
-      FirebaseMessaging.instance.subscribeToTopic("user-${firebaseUser.uid}");
+      _subscribeToUserTopic(_loggedInUser!);
       return LoggedInState(_loggedInUser!);
     }).map((event) {
       if (event is LoggedOutState) {
@@ -43,6 +45,15 @@ class AuthRepository {
       }
       return event;
     });
+  }
+
+  void _subscribeToUserTopic(Person person) async {
+    final topic = "user-${person.uid}";
+    try {
+      await FirebaseMessaging.instance.subscribeToTopic(topic);
+    } catch (e, st) {
+      log("error subscribing to topic=$topic", stackTrace: st, error: e);
+    }
   }
 
   Future updateProfilePicture(String? downloadUrl) {

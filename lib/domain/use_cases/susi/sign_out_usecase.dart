@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:billsplit_flutter/data/auth/auth_provider.dart';
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
@@ -13,12 +15,22 @@ class SignOutUseCase {
 
   Future launch() async {
     _sharedPrefs.isUserLoggedIn = false;
-    await FirebaseMessaging.instance.unsubscribeFromTopic("user-${_authRepository.loggedInUser.uid}");
+    _unsubscribeFromTopic();
     await _database.friendsDAO.clearTable();
     await _database.groupsDAO.clearTable();
     await _database.groupExpenseDAO.clearTable();
     await _database.paymentsDAO.clearTable();
     await _database.servicesDao.clearTable();
     await _authProvider.signOut();
+  }
+
+  void _unsubscribeFromTopic() async {
+    final user = _authRepository.loggedInUser;
+    final topic = "user-${user.uid}";
+    try {
+      await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+    } catch (e, st) {
+      log("error unsubscribing from topic=$topic", stackTrace: st, error: e);
+    }
   }
 }

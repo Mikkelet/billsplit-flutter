@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 
 class GroupPictureView extends StatelessWidget {
   final Group group;
+
   const GroupPictureView({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
-    if (group.coverImageUrlState.isEmpty) {
-      return Container(
-        decoration: const BoxDecoration(color: Colors.white),
-      );
-    }
     return Container(
       height: 100,
       width: double.infinity,
@@ -26,11 +22,19 @@ class GroupPictureView extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(10),
         ),
-        child: CachedNetworkImage(
-          imageUrl: group.coverImageUrlState,
-          fadeInDuration: Duration.zero,
-          fit: BoxFit.cover,
-        ),
+        child: Builder(builder: (context) {
+          if (group.coverImageUrlState.isEmpty) {
+            return const Image(
+              fit: BoxFit.fitWidth,
+              image: AssetImage('assets/splitsby_logo.jpg'),
+            );
+          }
+          return CachedNetworkImage(
+            imageUrl: group.coverImageUrlState,
+            fadeInDuration: Duration.zero,
+            fit: BoxFit.cover,
+          );
+        }),
       ),
     );
   }

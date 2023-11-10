@@ -11,13 +11,16 @@ import 'package:flutter/material.dart';
 class GroupView extends StatelessWidget {
   final Group group;
   final num debtToGroup;
+  final bool showDebt;
 
-
-  const GroupView({super.key, required this.group, required this.debtToGroup});
+  const GroupView(
+      {super.key,
+      required this.group,
+      required this.debtToGroup,
+      this.showDebt = true});
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       decoration: const BoxDecoration(boxShadow: [
         BoxShadow(
@@ -60,11 +63,13 @@ class GroupView extends StatelessWidget {
                           const Spacer(),
                           Expanded(
                             child: Builder(builder: (context) {
+                              if (!showDebt) return const SizedBox();
                               if (group.lastSync == null) {
                                 return Text(
                                   "Open to synchronize",
                                   textAlign: TextAlign.right,
-                                  style: SplitsbyTextTheme.exchangeRateLabel(context),
+                                  style: SplitsbyTextTheme.exchangeRateLabel(
+                                      context),
                                 );
                               }
                               return GroupDebtView(

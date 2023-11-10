@@ -7,15 +7,9 @@ class GroupTitleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BoxDecoration? deco = group.coverImageUrlState.isNotEmpty
-        ? BoxDecoration(color: Colors.black.withOpacity(0.5))
-        : null;
-    final textColor = group.coverImageUrlState.isEmpty
-        ? Theme.of(context).colorScheme.onBackground
-        : Colors.white;
-    final padding = group.coverImageUrlState.isEmpty
-        ? const EdgeInsets.all(8)
-        : const EdgeInsets.only(left: 8);
+    final BoxDecoration deco = BoxDecoration(color: Colors.black.withOpacity(0.5));
+    const textColor = Colors.white;
+    const padding = EdgeInsets.only(left: 8);
     return Container(
       constraints: const BoxConstraints(minHeight: 32),
       decoration: deco,
