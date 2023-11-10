@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 abstract class UiState {
   @override
   bool operator ==(Object other) {
+    if(other is Main) return false;
     return other.runtimeType == runtimeType;
   }
 

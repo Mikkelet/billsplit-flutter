@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddFriendEmailView extends StatefulWidget {
-  AddFriendEmailView({super.key});
+  const AddFriendEmailView({super.key});
 
   @override
   State<AddFriendEmailView> createState() => _AddFriendEmailViewState();

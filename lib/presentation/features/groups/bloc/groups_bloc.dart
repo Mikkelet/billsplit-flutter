@@ -8,7 +8,6 @@ import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.
 import 'package:billsplit_flutter/domain/use_cases/groups/observe_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/notifications/observe_notifications_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:collection/collection.dart';
 
 class GroupsBloc extends BaseCubit {
@@ -31,17 +30,16 @@ class GroupsBloc extends BaseCubit {
             return e;
           }).toList());
 
-  void loadProfile() async {
-    emit(Loading());
-    Future.wait([
-      _getFriendsUseCase.launch(),
-      _getGroupsUseCase.launch(),
-      _getGroupInvitesUseCase.launch()
-    ]).then((value) {
-      update();
-    }).catchError((error, st) {
-      showError(error, st);
-    });
+  Future loadProfile() async {
+    try {
+      await Future.wait([
+        _getFriendsUseCase.launch(),
+        _getGroupsUseCase.launch(),
+        _getGroupInvitesUseCase.launch(),
+      ]);
+    } catch (err, stackTrace) {
+      showError(err, stackTrace);
+    }
   }
 
   void _getDebts(Group group) async {

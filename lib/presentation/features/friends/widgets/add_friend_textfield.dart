@@ -29,24 +29,22 @@ class _AddFriendViewState extends SafeState<AddFriendView> {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const Spacer(),
                       Text(
                         "Add friend",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       const SizedBox(width: 8),
                       ClickableListItem(
-                        color: _getAddFriendTypeColor(
-                            context, AddFriendType.phone),
+                        color: _getAddFriendTypeColor(context, AddFriendType.phone),
                         onClick: () {
                           cubit.onAddFriendTypeClicked(AddFriendType.phone);
                         },
                         child: const Icon(Icons.phone),
                       ),
-
                       const SizedBox(width: 8),
                       ClickableListItem(
-                        color: _getAddFriendTypeColor(
-                            context, AddFriendType.email),
+                        color: _getAddFriendTypeColor(context, AddFriendType.email),
                         onClick: () {
                           cubit.onAddFriendTypeClicked(AddFriendType.email);
                         },
@@ -60,9 +58,9 @@ class _AddFriendViewState extends SafeState<AddFriendView> {
               Builder(builder: (context) {
                 switch (cubit.selectedAddFriendType) {
                   case AddFriendType.email:
-                    return AddFriendEmailView();
+                    return const AddFriendEmailView();
                   case AddFriendType.phone:
-                    return AddFriendPhoneView();
+                    return const AddFriendPhoneView();
                   default:
                     return const SizedBox();
                 }

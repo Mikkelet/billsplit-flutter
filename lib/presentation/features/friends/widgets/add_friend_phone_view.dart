@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddFriendPhoneView extends StatefulWidget {
 
   // removed const to trigger state changes
-  AddFriendPhoneView({super.key});
+  const AddFriendPhoneView({super.key});
 
   @override
   State<AddFriendPhoneView> createState() => _AddFriendPhoneViewState();

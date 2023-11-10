@@ -3,7 +3,6 @@ import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/drawer_action_view.dart';
@@ -35,12 +34,14 @@ class GroupsPage extends StatelessWidget {
             ),
             body: RefreshIndicator(
               onRefresh: () async {
-                cubit.loadProfile();
+                await cubit.loadProfile();
               },
               child: Center(
-                child: DefaultStreamBuilder(
+                child: StreamBuilder(
                   stream: cubit.getGroupStream(),
-                  builder: (_, groups) {
+                  initialData: const [],
+                  builder: (_, snapshot) {
+                    final groups = snapshot.data!;
                     return CustomScrollView(
                       controller: _scrollingController,
                       slivers: [
