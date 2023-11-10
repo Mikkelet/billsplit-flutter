@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 
 class Group {
@@ -10,7 +9,6 @@ class Group {
   final List<Person> invites;
   final Person createdBy;
   final num timestamp;
-  final Event? _latestEvent;
   final int _lastUpdated;
   final String _defaultCurrency;
   final int? lastSync;
@@ -18,7 +16,6 @@ class Group {
   // modifiable values
   late String nameState = _name;
   late int lastUpdatedState = _lastUpdated;
-  late Event? latestEventState = _latestEvent;
   late String defaultCurrencyState = _defaultCurrency;
   late String coverImageUrlState = _coverImageUrl;
 
@@ -32,10 +29,8 @@ class Group {
     required this.timestamp,
     this.lastSync,
     required int lastUpdated,
-    required Event? latestEvent,
     required String defaultCurrency})
-      : _latestEvent = latestEvent,
-        _name = name,
+      : _name = name,
         _lastUpdated = lastUpdated,
         _coverImageUrl = coverImageUrl,
         _defaultCurrency = defaultCurrency;
@@ -69,7 +64,6 @@ class Group {
     lastUpdated: DateTime
         .now()
         .millisecondsSinceEpoch,
-    latestEvent: null,
     defaultCurrency: currency,
   );
 
@@ -85,11 +79,5 @@ class Group {
     timestamp: 0,
     lastUpdated: 0,
     defaultCurrency: "usd",
-    latestEvent: null,
   );
-
-  void reset() {
-    nameState = _name;
-    latestEventState = _latestEvent;
-  }
 }

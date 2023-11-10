@@ -20,9 +20,6 @@ GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
       createdBy: PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
       timestamp: json['timestamp'] as num,
       lastUpdated: json['lastUpdated'] as int,
-      latestEvent: json['latestEvent'] == null
-          ? null
-          : EventDTO.fromJson(json['latestEvent'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$GroupDTOToJson(GroupDTO instance) => <String, dynamic>{
@@ -34,7 +31,6 @@ Map<String, dynamic> _$GroupDTOToJson(GroupDTO instance) => <String, dynamic>{
       'invites': instance.invites?.map((e) => e.toJson()).toList(),
       'createdBy': instance.createdBy.toJson(),
       'timestamp': instance.timestamp,
-      'latestEvent': instance.latestEvent?.toJson(),
       'lastUpdated': instance.lastUpdated,
       'defaultCurrency': instance.defaultCurrency,
     };

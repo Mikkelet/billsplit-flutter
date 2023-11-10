@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
-import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_invite.dart';
@@ -21,17 +20,17 @@ extension GroupDtosExt on Iterable<GroupDTO> {
 
 extension GroupDtoExt on GroupDTO {
   Group toGroup() => Group(
-      id: id,
-      name: name,
-      coverImageUrl: coverImageUrl,
-      defaultCurrency: defaultCurrency,
-      lastUpdated: lastUpdated,
-      people: people.toPeople(),
-      invites: invites?.toPeople() ?? [],
-      createdBy: createdBy.toPerson(),
-      pastMembers: pastMembers.toPeople(),
-      timestamp: timestamp,
-      latestEvent: latestEvent.toEvent());
+        id: id,
+        name: name,
+        coverImageUrl: coverImageUrl,
+        defaultCurrency: defaultCurrency,
+        lastUpdated: lastUpdated,
+        people: people.toPeople(),
+        invites: invites?.toPeople() ?? [],
+        createdBy: createdBy.toPerson(),
+        pastMembers: pastMembers.toPeople(),
+        timestamp: timestamp,
+      );
 
   GroupDb toDb() => GroupDb(
         groupId: id,
@@ -50,17 +49,17 @@ extension GroupDtoExt on GroupDTO {
 
 extension GroupExt on Group {
   GroupDTO toDTO() => GroupDTO(
-      id: id,
-      name: nameState,
-      coverImageUrl: coverImageUrlState,
-      people: people.toDTO(),
-      invites: invites.toDTO(),
-      lastUpdated: lastUpdatedState,
-      defaultCurrency: defaultCurrencyState,
-      pastMembers: pastMembers.toDTO(),
-      createdBy: createdBy.toDTO(),
-      timestamp: timestamp,
-      latestEvent: latestEventState?.toEventDTO());
+        id: id,
+        name: nameState,
+        coverImageUrl: coverImageUrlState,
+        people: people.toDTO(),
+        invites: invites.toDTO(),
+        lastUpdated: lastUpdatedState,
+        defaultCurrency: defaultCurrencyState,
+        pastMembers: pastMembers.toDTO(),
+        createdBy: createdBy.toDTO(),
+        timestamp: timestamp,
+      );
 
   GroupDb toDb() {
     final dtoJson = json.encode(toDTO().toJson());
@@ -87,7 +86,6 @@ extension GroupDbExt on GroupDb {
         createdBy: dto.createdBy.toPerson(),
         timestamp: dto.timestamp,
         lastUpdated: dto.lastUpdated,
-        latestEvent: dto.latestEvent.toEvent(),
         defaultCurrency: dto.defaultCurrency,
         lastSync: lastUpdated);
   }

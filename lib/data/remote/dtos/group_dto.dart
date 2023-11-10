@@ -15,22 +15,21 @@ class GroupDTO {
   final Iterable<PersonDTO>? invites;
   final PersonDTO createdBy;
   final num timestamp;
-  final EventDTO? latestEvent;
   final int lastUpdated;
   final String defaultCurrency;
 
-    GroupDTO(
-      {required this.id,
-      required this.name,
-      required this.coverImageUrl,
-      required this.defaultCurrency,
-      required this.people,
-      required this.pastMembers,
-      required this.invites,
-      required this.createdBy,
-      required this.timestamp,
-      required this.lastUpdated,
-      required this.latestEvent});
+  GroupDTO({
+    required this.id,
+    required this.name,
+    required this.coverImageUrl,
+    required this.defaultCurrency,
+    required this.people,
+    required this.pastMembers,
+    required this.invites,
+    required this.createdBy,
+    required this.timestamp,
+    required this.lastUpdated,
+  });
 
   factory GroupDTO.fromJson(Json json) => _$GroupDTOFromJson(json);
 

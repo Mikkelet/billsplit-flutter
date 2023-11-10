@@ -23,7 +23,7 @@ class GroupsBloc extends BaseCubit {
 
   Stream<List<Group>> getGroupStream() =>
       _observeGroupsUseCase.observe().map((event) => event
-              .sortedBy<num>((group) => group.latestEventState?.timestamp ?? 0)
+              .sortedBy<num>((group) => group.lastUpdatedState)
               .reversed
               .map((e) {
             _getDebts(e);

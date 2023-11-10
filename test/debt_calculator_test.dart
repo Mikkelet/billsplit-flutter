@@ -19,17 +19,17 @@ final samplePeopleShera = [
 ];
 
 final sampleGroup = Group(
-    id: "GROUP0",
-    name: "My group",
-    coverImageUrl: "",
-    pastMembers: [],
-    invites: [],
-    defaultCurrency: "usd",
-    people: samplePeopleShera,
-    createdBy: samplePeopleShera.first,
-    timestamp: 0,
-    lastUpdated: 0,
-    latestEvent: null);
+  id: "GROUP0",
+  name: "My group",
+  coverImageUrl: "",
+  pastMembers: [],
+  invites: [],
+  defaultCurrency: "usd",
+  people: samplePeopleShera,
+  createdBy: samplePeopleShera.first,
+  timestamp: 0,
+  lastUpdated: 0,
+);
 
 final sampleIndividualExpenses = samplePeopleShera.toList().mapIndexed(
     (i, p) => IndividualExpense(currency: "usd", person: p, expense: i * 100));
@@ -190,9 +190,11 @@ void main() {
       final otherPerson = element.first;
       final debt = element.second;
       if (debt > 0)
-        print("\t${otherPerson.displayName} owes \$$debt to ${person.displayName}");
+        print(
+            "\t${otherPerson.displayName} owes \$$debt to ${person.displayName}");
       else if (debt < 0)
-        print("\t${person.displayName} owes \$$debt to ${otherPerson.displayName}");
+        print(
+            "\t${person.displayName} owes \$$debt to ${otherPerson.displayName}");
     });
   });
 }

@@ -52,23 +52,26 @@ class InspectProfilePage extends StatelessWidget {
                     if (cubit.friendStatus == FriendStatus.yourself)
                       const Text("Looking good!"),
                     if (cubit.friendStatus == FriendStatus.requestReceived)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ClickableListItem(
-                            onClick: () => cubit.respondToFriendRequest(true),
-                            color: Theme.of(context).colorScheme.onInverseSurface,
-                            width: 100,
-                            height: 48,
-                            child: const Text("Accept")),
-                        ClickableListItem(
-                            onClick: () => cubit.respondToFriendRequest(false),
-                            color: Theme.of(context).colorScheme.error,
-                            width: 100,
-                            height: 48,
-                            child: const Text("Reject"))
-                      ],
-                    ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ClickableListItem(
+                              onClick: () => cubit.respondToFriendRequest(true),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onInverseSurface,
+                              width: 100,
+                              height: 48,
+                              child: const Text("Accept")),
+                          ClickableListItem(
+                              onClick: () =>
+                                  cubit.respondToFriendRequest(false),
+                              color: Theme.of(context).colorScheme.error,
+                              width: 100,
+                              height: 48,
+                              child: const Text("Reject"))
+                        ],
+                      ),
                     if (cubit.friendStatus == FriendStatus.requestSent)
                       const Text("Invite sent"),
                     const SizedBox(height: 32),
