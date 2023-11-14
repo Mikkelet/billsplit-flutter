@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_button.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/date_picker_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
@@ -62,6 +63,8 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             ),
             const SizedBox(height: 8),
             DescriptionTextField(initialText: groupExpense.descriptionState),
+            const SizedBox(height: 8),
+            const DatePickerView(),
             //const LongPressTipView(),
             const SizedBox(height: 8),
             const ExpenseTotalView(),
@@ -77,8 +80,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
   Iterable<Person> getParticipatingPeople() {
     final Iterable<Person> pastMembers = [
       ...groupExpense.sharedExpensesState
-          .map((e) => e.participantsState)
-          .toList()
+          .map((e) => e.participantsState),
     ].flatMap().toSet();
     return <Person>{...pastMembers, ...group.people};
   }

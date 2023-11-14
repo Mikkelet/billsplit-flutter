@@ -9,15 +9,16 @@ class BaseScaffold extends StatelessWidget {
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
 
-  const BaseScaffold(
-      {super.key,
-      this.body,
-      this.appBar,
-      this.endDrawer,
-      this.floatingActionButtonAnimator,
-      this.floatingActionButton,
-      this.bottomNavigationBar,
-      this.floatingActionButtonLocation});
+  const BaseScaffold({
+    super.key,
+    this.body,
+    this.appBar,
+    this.endDrawer,
+    this.floatingActionButtonAnimator,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
+    this.floatingActionButtonLocation,
+  });
 
   @override
   Widget build(BuildContext context) {

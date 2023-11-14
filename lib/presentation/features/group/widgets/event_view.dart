@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EventView extends StatelessWidget {
   final Event event;
 
-  const EventView({Key? key, required this.event}) : super(key: key);
+  const EventView({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

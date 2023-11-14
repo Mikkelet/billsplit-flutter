@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,7 +11,7 @@ class GroupDTO {
   final String coverImageUrl;
   final Iterable<PersonDTO> people;
   final Iterable<PersonDTO> pastMembers;
-  final Iterable<PersonDTO>? invites;
+  final Iterable<PersonDTO> invites;
   final PersonDTO createdBy;
   final num timestamp;
   final int lastUpdated;

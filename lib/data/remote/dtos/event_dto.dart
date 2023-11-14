@@ -15,11 +15,12 @@ class EventDTO {
   final PersonDTO createdBy;
   final num timestamp;
 
-  EventDTO(
-      {required this.id,
-      required this.createdBy,
-      required this.timestamp,
-      required this.type});
+  EventDTO({
+    required this.id,
+    required this.createdBy,
+    required this.timestamp,
+    required this.type,
+  });
 
   static EventDTO? fromJson(Json json) {
     try {
@@ -54,21 +55,24 @@ class GroupExpenseDTO extends EventDTO {
   final String description;
   final PersonDTO payee;
   final CurrencyDTO currency;
+  final String date;
   final Iterable<SharedExpenseDTO> sharedExpenses;
   final Iterable<PersonDTO> tempParticipants;
   final String receiptImageUrl;
 
-  GroupExpenseDTO(
-      {required super.id,
-      required super.createdBy,
-      required super.timestamp,
-      super.type = "expense",
-      required this.receiptImageUrl,
-      required this.description,
-      required this.currency,
-      required this.tempParticipants,
-      required this.payee,
-      required this.sharedExpenses});
+  GroupExpenseDTO({
+    required super.id,
+    required super.createdBy,
+    required super.timestamp,
+    super.type = "expense",
+    required this.date,
+    required this.receiptImageUrl,
+    required this.description,
+    required this.currency,
+    required this.tempParticipants,
+    required this.payee,
+    required this.sharedExpenses,
+  });
 
   factory GroupExpenseDTO.fromJson(Json json) =>
       _$GroupExpenseDTOFromJson(json);
@@ -84,15 +88,16 @@ class PaymentDTO extends EventDTO {
   final CurrencyDTO currency;
   final PersonDTO paidBy;
 
-  PaymentDTO(
-      {required super.id,
-      required super.createdBy,
-      required super.timestamp,
-      super.type = "payment",
-      required this.currency,
-      required this.paidBy,
-      required this.paidTo,
-      required this.amount});
+  PaymentDTO({
+    required super.id,
+    required super.createdBy,
+    required super.timestamp,
+    super.type = "payment",
+    required this.currency,
+    required this.paidBy,
+    required this.paidTo,
+    required this.amount,
+  });
 
   factory PaymentDTO.fromJson(Json json) => _$PaymentDTOFromJson(json);
 

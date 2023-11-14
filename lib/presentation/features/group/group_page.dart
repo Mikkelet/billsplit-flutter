@@ -11,6 +11,7 @@ import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.d
 import 'package:billsplit_flutter/presentation/features/group/widgets/debts_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/events_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/group_bottom_nav.dart';
+import 'package:billsplit_flutter/presentation/features/group/widgets/sort_button.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/services_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -83,12 +84,14 @@ class GroupPage extends StatelessWidget {
                 }),
                 surfaceTintColor: Theme.of(context).colorScheme.surface,
                 actions: [
+                  const SortActionButton(),
                   IconButton(
                       onPressed: () async {
-                        await Navigator.of(context).push(GroupSettings.getRoute(group));
+                        await Navigator.of(context)
+                            .push(GroupSettings.getRoute(group));
                         cubit.update();
                       },
-                      icon: const Icon(Icons.settings))
+                      icon: const Icon(Icons.settings)),
                 ],
                 leading: const BackButton()),
             bottomNavigationBar: const GroupBottomNav(),

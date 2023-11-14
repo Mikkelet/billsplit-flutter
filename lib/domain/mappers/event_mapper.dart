@@ -15,19 +15,19 @@ extension EventDTOsExt on List<EventDTO?> {
 extension EventDTOExt on EventDTO? {
   Event? toEvent() {
     if (this is GroupExpenseDTO) {
+      final expenseDto = this as GroupExpenseDTO;
       return GroupExpense(
           id: this!.id,
           timestamp: this!.timestamp,
-          description: (this as GroupExpenseDTO).description,
+          description: expenseDto.description,
           createdBy: this!.createdBy.toPerson(),
-          receiptImageUrl: (this as GroupExpenseDTO).receiptImageUrl,
-          tempParticipants:
-              (this as GroupExpenseDTO).tempParticipants.toPeople(),
-          payer: (this as GroupExpenseDTO).payee.toPerson(),
-          sharedExpenses:
-              (this as GroupExpenseDTO).sharedExpenses.toSharedExpense(),
+          receiptImageUrl: expenseDto.receiptImageUrl,
+          date: DateTime.parse(expenseDto.date),
+          tempParticipants: expenseDto.tempParticipants.toPeople(),
+          payer: expenseDto.payee.toPerson(),
+          sharedExpenses: expenseDto.sharedExpenses.toSharedExpense(),
           syncState: SyncState.synced,
-          currency: (this as GroupExpenseDTO).currency.toCurrency());
+          currency: expenseDto.currency.toCurrency());
     }
     return null;
   }
@@ -42,6 +42,7 @@ extension EventExt on Event {
         id: realId,
         tempParticipants: expense.tempParticipants.map((e) => e.toDTO()),
         createdBy: createdBy.toDTO(),
+        date: expense.dateState.toIso8601String(),
         receiptImageUrl: expense.receiptImageUrlState,
         timestamp: timestamp,
         description: expense.descriptionState,
