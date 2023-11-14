@@ -220,6 +220,7 @@ extension PaymentExt on Payment {
       description: "",
       receiptImageUrl: "",
       tempParticipants: [],
+      date: DateTime.now(),
       payer: paidBy,
       sharedExpenses: [
         SharedExpense(expense: amount, participants: [paidTo], description: "")

@@ -14,7 +14,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:json_pretty/json_pretty.dart';
 
 class NetworkClient {
-  static const bool allowNetworkLogging = false;
+  static const bool allowNetworkLogging = true;
   static const bool debug = false;
   static const bool emulator = false;
   static const String apiVersion = "v7";

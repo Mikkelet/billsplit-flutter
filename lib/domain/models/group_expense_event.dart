@@ -18,6 +18,7 @@ class GroupExpense extends Event {
   final Currency _currency;
   final List<Person> _tempParticipants;
   final String _receiptImageUrl;
+  final DateTime _date;
 
   // modifiable values
   late Person payerState = _payer;
@@ -25,6 +26,7 @@ class GroupExpense extends Event {
   late String descriptionState = _description;
   late List<SharedExpense> sharedExpensesState = _sharedExpenses.toList();
   late Currency currencyState = _currency;
+  late DateTime dateState = _date;
 
   GroupExpense({
     required String id,
@@ -36,10 +38,12 @@ class GroupExpense extends Event {
     required Currency currency,
     required Iterable<Person> tempParticipants,
     required String receiptImageUrl,
+    required DateTime date,
     required this.syncState,
   })  : _payer = payer,
         _sharedExpenses = sharedExpenses,
         _description = description,
+        _date = date,
         _receiptImageUrl = receiptImageUrl,
         _tempParticipants = tempParticipants.toList(),
         _currency = currency,
@@ -75,6 +79,7 @@ class GroupExpense extends Event {
     payerState = _payer;
     sharedExpensesState = _sharedExpenses.toList();
     currencyState = _currency;
+    dateState = _date;
   }
 
   GroupExpense.newExpense(Person user, Group group)
@@ -87,6 +92,7 @@ class GroupExpense extends Event {
             payer: user,
             receiptImageUrl: "",
             tempParticipants: [],
+            date: DateTime.now(),
             currency: Currency(symbol: group.defaultCurrencyState, rate: 1),
             timestamp: DateTime.now().millisecondsSinceEpoch);
 
