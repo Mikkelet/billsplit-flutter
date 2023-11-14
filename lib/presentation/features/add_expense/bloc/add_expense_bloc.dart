@@ -33,10 +33,6 @@ class AddExpenseBloc extends BaseCubit {
     return [...group.people, ...groupExpense.tempParticipants];
 }
 
-  void onExpensesUpdated() {
-    emit(Main());
-  }
-
   void addExpense() {
     _addExpenseUseCase.launch(group, groupExpense);
     emit(AddExpenseSuccess());
@@ -70,7 +66,7 @@ class AddExpenseBloc extends BaseCubit {
 
   void updateCurrency(Currency currency) {
     groupExpense.currencyState = currency;
-    onExpensesUpdated();
+    update();
   }
 
   uploadReceipt(Iterable<ScannedReceiptItem> receiptItems) {
@@ -84,7 +80,7 @@ class AddExpenseBloc extends BaseCubit {
         description: e.description));
     groupExpense.sharedExpensesState.clear();
     groupExpense.sharedExpensesState.addAll(sharedExpenses);
-    onExpensesUpdated();
+    update();
   }
 
   void removeSharedExpense(SharedExpense sharedExpense) {
@@ -92,28 +88,38 @@ class AddExpenseBloc extends BaseCubit {
     if (groupExpense.sharedExpensesState.isEmpty) {
       groupExpense.addNewSharedExpense(withParticipants: group.people);
     }
-    onExpensesUpdated();
+    update();
   }
 
   void updateParticipantsForExpense(
       SharedExpense sharedExpense, List<Person> participants) {
     sharedExpense.participantsState = participants;
-    onExpensesUpdated();
+    update();
   }
 
   void updateSharedExpense(SharedExpense sharedExpense, num value) {
     sharedExpense.expenseState = value;
-    onExpensesUpdated();
+    update();
   }
 
   void switchToSingle() {
     groupExpense.sharedExpensesState =
         groupExpense.sharedExpensesState.sublist(0, 1);
-    onExpensesUpdated();
+    update();
+  }
+
+  void updateDate(DateTime dateTime){
+    groupExpense.dateState = dateTime;
+    update();
+  }
+
+  void updateDescription(String description){
+    groupExpense.descriptionState = description;
+    update();
   }
 
   void onAddTempParticipant(String name, SharedExpense sharedExpense) {
     groupExpense.addTempParticipant(name, sharedExpense);
-    onExpensesUpdated();
+    update();
   }
 }

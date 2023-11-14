@@ -71,7 +71,7 @@ class GroupExpense extends Event {
     return _payer.uid != payerState.uid ||
         _description != descriptionState ||
         _currency != currencyState ||
-        _date != dateState ||
+        _date.millisecondsSinceEpoch != dateState.millisecondsSinceEpoch ||
         !sharedExpensesState.equals(_sharedExpenses.toList()) ||
         sharedExpensesState.any((element) => element.isChanged);
   }

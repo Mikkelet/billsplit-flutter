@@ -4,14 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DatePickerView extends StatefulWidget {
-  const DatePickerView({super.key});
+class DatePickerView extends StatelessWidget {
+  DatePickerView({super.key});
 
-  @override
-  State<DatePickerView> createState() => _DatePickerViewState();
-}
-
-class _DatePickerViewState extends State<DatePickerView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
@@ -27,15 +22,16 @@ class _DatePickerViewState extends State<DatePickerView> {
           firstDate: now.copyWith(year: now.year - 5),
           lastDate: now,
         );
-        setState(() {
-          if (response is DateTime) {
-            cubit.groupExpense.dateState = response;
-          }
-        });
+        if (response is DateTime) {
+          cubit.updateDate(response);
+        }
       },
       child: Text(
         cubit.groupExpense.dateString,
-        style: Theme.of(context).textTheme.labelLarge,
+        style: Theme
+            .of(context)
+            .textTheme
+            .labelLarge,
       ),
     );
   }

@@ -9,8 +9,6 @@ import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 
-import '../models/currency.dart';
-
 extension GroupExpensesDtoExt on Iterable<GroupExpenseDTO> {
   Iterable<GroupExpenseDb> toDb(String groupId) =>
       map((e) => e.toDb(groupId, SyncState.synced)).toList();
@@ -32,7 +30,7 @@ extension GroupExpenseDtoExt on GroupExpenseDTO {
       date: DateTime.parse(date),
       description: description,
       payer: payee.toPerson(),
-      currency: Currency(symbol: "usd", rate: 1),
+      currency: currency.toCurrency(),
       syncState: SyncState.synced,
       sharedExpenses: sharedExpenses.toSharedExpense());
 }

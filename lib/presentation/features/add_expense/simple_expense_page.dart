@@ -45,7 +45,7 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                   initialText: cubit.groupExpense.descriptionState),
               //const LongPressTipView(),
               const SizedBox(height: _dividerPadding),
-              const DatePickerView(),
+              DatePickerView(),
               const SizedBox(height: _dividerPadding),
               SimpleExpenseParticipantsView(expense: expense),
               const SizedBox(height: _dividerPadding),

@@ -37,8 +37,7 @@ class _DescriptionTextFieldState extends SafeState<DescriptionTextField> {
         maxLength: 30,
         style: SplitsbyTextTheme.textFieldStyle(context),
         onChanged: (value) {
-          cubit.groupExpense.descriptionState = value;
-          cubit.onExpensesUpdated();
+          cubit.updateDescription(value);
         },
         decoration: InputDecoration(
             counterText: "",
