@@ -39,16 +39,19 @@ class GroupSettingsCubit extends BaseCubit {
   }
 
   void uploadGroupPicture() {
+    emit(GroupPictureUploading());
     _uploadGroupPicture.launch(group).then((_) {
       update();
     }).catchError((err, st) {
-      showError(err, st);
+      if (err is UserCancelled) {
+        showToast("User cancelled upload");
+      } else {
+        showError(err, st);
+      }
     });
   }
 
-  void deleteGroupPicture() {
-
-  }
+  void deleteGroupPicture() {}
 
   void invitePersonToGroup(Person person) {
     emit(AddingPersonToGroup());
@@ -58,5 +61,4 @@ class GroupSettingsCubit extends BaseCubit {
       showError(onError, st);
     });
   }
-
 }

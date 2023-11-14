@@ -69,10 +69,10 @@ class GroupPage extends StatelessWidget {
                     );
                   }
                   return Stack(
+                    fit: StackFit.expand,
                     children: [
                       CachedNetworkImage(
                         imageUrl: group.coverImageUrlState,
-                        width: double.infinity,
                         fit: BoxFit.cover,
                       ),
                       Container(
