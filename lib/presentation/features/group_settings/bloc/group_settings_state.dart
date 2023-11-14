@@ -9,3 +9,5 @@ enum EditGroupNameState {
   isEditing,
   isUpdating,
 }
+
+class GroupPictureUploading extends Main {}

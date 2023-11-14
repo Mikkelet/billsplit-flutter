@@ -23,11 +23,7 @@ class GroupSettingsCubit extends BaseCubit {
     _leaveGroupUseCase.launch(group.id).then((value) {
       emit(GroupLeft());
     }).catchError((err, st) {
-      if (err is UserCancelled) {
-        showToast("User cancelled upload");
-      } else {
-        showError(err, st);
-      }
+      showError(err, st);
     });
   }
 
@@ -43,10 +39,15 @@ class GroupSettingsCubit extends BaseCubit {
   }
 
   void uploadGroupPicture() {
+    emit(GroupPictureUploading());
     _uploadGroupPicture.launch(group).then((_) {
       update();
     }).catchError((err, st) {
-      showError(err, st);
+      if (err is UserCancelled) {
+        showToast("User cancelled upload");
+      } else {
+        showError(err, st);
+      }
     });
   }
 
