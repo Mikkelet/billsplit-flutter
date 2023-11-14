@@ -16,6 +16,11 @@ import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.d
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
+enum SortEvents {
+  added,
+  specified;
+}
+
 class GroupBloc extends BaseCubit {
   final _getGroupUseCase = GetGroupUseCase();
   final _observeEventsUseCase = ObserveEventsUseCase();
@@ -25,13 +30,23 @@ class GroupBloc extends BaseCubit {
   final _getExchangeRatesUseCase = GetExchangeRatesUseCase();
 
   final Group group;
+  SortEvents _eventSortBy = SortEvents.added;
   GroupPageNav navIndex = GroupPageNav.events;
 
   GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
 
   Stream<List<Event>> getEventsStream() =>
-      _observeEventsUseCase.observe(group.id).map((event) =>
-          event.toList().sortedBy((e) => e.timestamp).reversed.toList());
+      _observeEventsUseCase.observe(group.id).map((event) => event
+          .sortedBy((e) {
+            if (_eventSortBy == SortEvents.added) return e.timestamp;
+            if (e is GroupExpense) {
+              return e.dateState.millisecondsSinceEpoch;
+            } else {
+              return e.timestamp;
+            }
+          })
+          .reversed
+          .toList());
 
   Stream<List<SubscriptionService>> getServicesStream() =>
       _observeServicesUseCase.observe(group.id).map(
@@ -61,5 +76,10 @@ class GroupBloc extends BaseCubit {
 
   void retryAddExpense(GroupExpense expense) {
     _addExpenseUseCase.launch(group, expense);
+  }
+
+  void changeSort(SortEvents sortEvents){
+    _eventSortBy = sortEvents;
+    update();
   }
 }

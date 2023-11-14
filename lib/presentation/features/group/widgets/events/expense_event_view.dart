@@ -12,8 +12,7 @@ import '../../../../../extensions.dart';
 class ExpenseEventView extends StatelessWidget {
   final GroupExpense groupExpense;
 
-  const ExpenseEventView({Key? key, required this.groupExpense})
-      : super(key: key);
+  const ExpenseEventView({super.key, required this.groupExpense});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +76,7 @@ class ExpenseEventView extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "paid by ${groupExpense.payerState.displayName}",
+                "paid by ${groupExpense.payerState.displayName} on ${groupExpense.dateString}",
                 style: Theme.of(context).textTheme.bodySmall,
               )
             ],

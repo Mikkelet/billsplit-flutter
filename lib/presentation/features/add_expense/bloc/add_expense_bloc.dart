@@ -9,7 +9,6 @@ import 'package:billsplit_flutter/domain/use_cases/events/delete_expense_usecase
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:intl/intl.dart';
 
 class AddExpenseBloc extends BaseCubit {
   final Group group;
@@ -117,6 +116,4 @@ class AddExpenseBloc extends BaseCubit {
     groupExpense.addTempParticipant(name, sharedExpense);
     onExpensesUpdated();
   }
-
-  String get dateString => DateFormat("MMMM d, yyyy").format(groupExpense.dateState);
 }

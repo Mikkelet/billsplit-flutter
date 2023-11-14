@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import 'shared_expense.dart';
@@ -70,6 +71,7 @@ class GroupExpense extends Event {
     return _payer.uid != payerState.uid ||
         _description != descriptionState ||
         _currency != currencyState ||
+        _date != dateState ||
         !sharedExpensesState.equals(_sharedExpenses.toList()) ||
         sharedExpensesState.any((element) => element.isChanged);
   }
@@ -127,4 +129,6 @@ class GroupExpense extends Event {
   void removeTempParticipant(Person person) {
     _tempParticipants.remove(person);
   }
+
+  String get dateString => DateFormat("MMMM d, yyyy").format(dateState);
 }

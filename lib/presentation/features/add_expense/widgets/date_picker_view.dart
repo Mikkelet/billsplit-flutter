@@ -34,7 +34,7 @@ class _DatePickerViewState extends State<DatePickerView> {
         });
       },
       child: Text(
-        cubit.dateString,
+        cubit.groupExpense.dateString,
         style: Theme.of(context).textTheme.labelLarge,
       ),
     );
