@@ -44,6 +44,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   phone_number: ^2.0.1
   country_code_picker: ^3.0.0
+  image_cropper: ^5.0.0
 
 dev_dependencies:
   build_runner: ^2.3.3

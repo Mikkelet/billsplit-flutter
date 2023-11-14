@@ -23,7 +23,11 @@ class GroupSettingsCubit extends BaseCubit {
     _leaveGroupUseCase.launch(group.id).then((value) {
       emit(GroupLeft());
     }).catchError((err, st) {
-      showError(err, st);
+      if (err is UserCancelled) {
+        showToast("User cancelled upload");
+      } else {
+        showError(err, st);
+      }
     });
   }
 
@@ -46,9 +50,7 @@ class GroupSettingsCubit extends BaseCubit {
     });
   }
 
-  void deleteGroupPicture() {
-
-  }
+  void deleteGroupPicture() {}
 
   void invitePersonToGroup(Person person) {
     emit(AddingPersonToGroup());
@@ -58,5 +60,4 @@ class GroupSettingsCubit extends BaseCubit {
       showError(onError, st);
     });
   }
-
 }
