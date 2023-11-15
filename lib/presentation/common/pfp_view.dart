@@ -11,12 +11,13 @@ class ProfilePictureView extends StatelessWidget {
   final bool showBorder;
   final bool canInspect;
 
-  const ProfilePictureView(
-      {super.key,
-      required this.person,
-      this.size = 40.0,
-      this.canInspect = false,
-      this.showBorder = false});
+  const ProfilePictureView({
+    super.key,
+    required this.person,
+    this.size = 40.0,
+    this.canInspect = false,
+    this.showBorder = false,
+  });
 
   @override
   Widget build(BuildContext context) {

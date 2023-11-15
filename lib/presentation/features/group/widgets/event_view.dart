@@ -22,21 +22,20 @@ class EventView extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            isCreatedByUser
-                ? const SizedBox()
-                : Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ProfilePictureView(person: event.createdBy),
-                  ),
+            if (!isCreatedByUser)
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ProfilePictureView(
+                    person: event.createdBy, canInspect: true),
+              ),
             Flexible(
               child: ExpenseEventView(groupExpense: event as GroupExpense),
             ),
-            isCreatedByUser
-                ? Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ProfilePictureView(person: event.createdBy),
-                  )
-                : const SizedBox(),
+            if (isCreatedByUser)
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ProfilePictureView(person: event.createdBy),
+              )
           ],
         );
       }

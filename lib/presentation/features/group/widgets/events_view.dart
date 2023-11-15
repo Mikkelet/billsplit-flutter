@@ -77,7 +77,7 @@ class EventsView extends StatelessWidget {
 
   Widget _createdByProfilePicture(Person person, bool isLatestIndex) {
     if (isLatestIndex) {
-      return ProfilePictureView(person: person);
+      return ProfilePictureView(person: person, canInspect: true);
     } else {
       return const SizedBox(
         height: 40,

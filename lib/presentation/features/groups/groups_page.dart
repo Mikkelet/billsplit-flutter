@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
@@ -37,7 +40,7 @@ class GroupsPage extends StatelessWidget {
                 await cubit.loadProfile();
               },
               child: Center(
-                child: StreamBuilder(
+                child: StreamBuilder<List<Group>>(
                   stream: cubit.getGroupStream(),
                   initialData: const [],
                   builder: (_, snapshot) {
@@ -51,6 +54,8 @@ class GroupsPage extends StatelessWidget {
                           expandedHeight: 200.0,
                           forceMaterialTransparency: true,
                           flexibleSpace: FlexibleSpaceBar(
+                            titlePadding:
+                                Platform.isIOS ? const EdgeInsets.all(8) : null,
                             background: Container(
                               color: Theme.of(context).colorScheme.tertiary,
                             ),
