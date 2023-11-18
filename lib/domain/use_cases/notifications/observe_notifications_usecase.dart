@@ -9,12 +9,13 @@ class ObserveNotificationsUseCase {
   final _observeGroupInvitesUseCase = ObserveGroupInvitesUseCase();
 
   Stream<int> observe() {
-    Stream<int> friendRequests = _observeFriendsUseCase
+    final Stream<int> friendRequests = _observeFriendsUseCase
         .observe()
         .map((event) => event
             .where((element) => element.status == FriendStatus.requestReceived))
         .map((event) => event.length);
-    Stream<int> groupInvites =
+
+    final Stream<int> groupInvites =
         _observeGroupInvitesUseCase.observe().map((event) => event.length);
 
     return CombineLatestStream(

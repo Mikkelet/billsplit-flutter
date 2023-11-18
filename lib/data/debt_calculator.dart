@@ -81,9 +81,9 @@ class DebtCalculator {
   Iterable<Pair<Person, num>> calculateEffectiveDebt(Person person) {
     final allDebt = calculateDebtTo();
     final payerDebt =
-        allDebt.singleWhere((element) => element.first.uid == person.uid);
+        allDebt.singleWhere((debt) => debt.first.uid == person.uid);
     final otherPayers =
-        allDebt.where((element) => element.first.uid != person.uid);
+        allDebt.where((debt) => debt.first.uid != person.uid);
     return otherPayers.map((otherPayer) {
       // filter payee debts to otherPayee and accumulate
       final otherPayerDebtToPayer = otherPayer.second

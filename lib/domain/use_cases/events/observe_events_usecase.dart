@@ -3,8 +3,8 @@ import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/mappers/group_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/payment_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
-import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
+import 'package:billsplit_flutter/domain/presentation_data.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,14 +12,10 @@ class ObserveEventsUseCase {
   final _database = getIt<SplitsbyDatabase>();
 
   Stream<Iterable<Event>> observe(String groupId) {
-    final Stream<Iterable<Payment>> paymentsStream =
-        _database.paymentsDAO.watch(groupId).map((event) => event.toPayments());
-    final Stream<Iterable<GroupExpense>> expensesStream = _database
-        .groupExpenseDAO
-        .watch(groupId)
-        .map((event) => event.toGroupExpenses());
-
-    return CombineLatestStream(
-        [paymentsStream, expensesStream], (values) => values.flatMap());
+    if(groupId == "hiking") return Stream.value(hikingExpenses);
+    if(groupId == "home") return Stream.value(hikingExpenses);
+    if(groupId == "thailand") return Stream.value(thailandExpenses);
+    if(groupId == "bday") return Stream.value(hikingExpenses);
+    return Stream.value([]);
   }
 }

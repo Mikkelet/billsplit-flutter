@@ -30,13 +30,7 @@ class AuthRepository {
 
       final parsedPhoneNumber =
           await _parsePhoneNumberUseCase.launch(firebaseUser.phoneNumber);
-      _loggedInUser = Person(
-        firebaseUser.uid,
-        firebaseUser.displayName ?? "",
-        pfpUrl: firebaseUser.photoURL ?? "",
-        email: firebaseUser.email ?? "",
-        phoneNumber: parsedPhoneNumber ?? const PhoneNumber.none(),
-      );
+      _loggedInUser =   Person("0", "Michael F", pfpUrl: "");
       _subscribeToUserTopic(_loggedInUser!);
       return LoggedInState(_loggedInUser!);
     }).map((event) {

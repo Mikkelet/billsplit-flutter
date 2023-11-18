@@ -64,14 +64,6 @@ class GroupView extends StatelessWidget {
                           Expanded(
                             child: Builder(builder: (context) {
                               if (!showDebt) return const SizedBox();
-                              if (group.lastSync == null) {
-                                return Text(
-                                  "Open to synchronize",
-                                  textAlign: TextAlign.right,
-                                  style: SplitsbyTextTheme.exchangeRateLabel(
-                                      context),
-                                );
-                              }
                               return GroupDebtView(
                                 group: group,
                                 debt: debtToGroup,
