@@ -4,8 +4,8 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/camera/scan_receipt_cubit.dart';
 import 'package:billsplit_flutter/presentation/common/camera/text_block_painter.dart';
 import 'package:billsplit_flutter/presentation/common/camera/view_picture_screen.dart';
+import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +18,7 @@ enum BarrierDrag {
 }
 
 class SplitsbyCamera extends StatefulWidget {
-  const SplitsbyCamera({Key? key}) : super(key: key);
+  const SplitsbyCamera({super.key});
 
   @override
   State<SplitsbyCamera> createState() => _SplitsbyCameraState();
@@ -29,7 +29,6 @@ class SplitsbyCamera extends StatefulWidget {
 }
 
 class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
-  bool snappingPicture = false;
   Offset? focusCircleOffset;
   BarrierDrag barrierDrag = BarrierDrag.none;
   double upperBarrier = 100;
@@ -119,17 +118,32 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                   ),
                   if (receipt == null)
                     Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: _pickFromGallery(context),
-                        )),
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 32.0,
+                          horizontal: 16,
+                        ),
+                        child: _pickFromGallery(context),
+                      ),
+                    ),
+                  if (receipt == null)
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 32.0,
+                          horizontal: 16,
+                        ),
+                        child: _decimalDenominatorToggle(context),
+                      ),
+                    ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           if (receipt == null) _snapPicture(context),
                           if (receipt != null) _cancelPicture(context),
@@ -149,7 +163,7 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
 
   Widget _snapPicture(BuildContext context) {
     final cubit = context.read<ScanReceiptCubit>();
-    if (snappingPicture == true) {
+    if (cubit.isSnappingPhoto == true) {
       return const CircularProgressIndicator();
     }
     return CircleAvatar(
@@ -157,28 +171,35 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
       maxRadius: 32,
       child: IconButton(
         onPressed: () async {
-          setState(() {
-            snappingPicture = true;
-          });
-          try {
-            final response = await cubit.cameraController.takePicture();
-            if (response is XFile) {
-              setState(() {
-                snappingPicture = false;
-              });
-              if(!mounted) return;
-              final windowSize = MediaQuery.of(context).size;
-              cubit.uploadReceipt(windowSize, response);
-            }
-          } catch (e, st) {
-            print(e);
-            print(st);
-          }
+          final windowSize = MediaQuery.of(context).size;
+          cubit.snapPhoto(windowSize);
         },
         iconSize: 32,
         icon: const Icon(Icons.camera),
         color: Theme.of(context).colorScheme.onSurface,
       ),
+    );
+  }
+
+  Widget _decimalDenominatorToggle(BuildContext context) {
+    final cubit = context.read<ScanReceiptCubit>();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text("Decimal separator"),
+        SimpleButton(
+          color: Theme.of(context).colorScheme.surface.withAlpha(200),
+          textColor: Theme.of(context).colorScheme.onSurface,
+          height: 64,
+          onClick: () {
+            cubit.toggleDenominator();
+          },
+          child: Text(
+            "${cubit.decimalDenominator.displayName} ${cubit.decimalDenominator.symbol}",
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+        ),
+      ],
     );
   }
 

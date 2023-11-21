@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:billsplit_flutter/domain/models/decimal_denominator.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
 import 'package:billsplit_flutter/domain/use_cases/camera/scan_receipt_usecase.dart';
@@ -13,23 +14,48 @@ class ScanReceiptCubit extends BaseCubit {
   final _scanReceiptUseCase = ScanReceiptUseCase();
   late CameraController cameraController;
   ScannedReceipt? receipt;
+  bool isSnappingPhoto = false;
+  DecimalDenominator _decimalDenominator = DecimalDenominator.comma;
 
   void initialize() async {
     showLoading();
     cameraController = CameraController(cameras[0], ResolutionPreset.max);
     await cameraController.initialize();
-    emit(Main());
+    _getLastUsedDecimalDenominator();
+    update();
   }
 
-  void uploadReceipt(Size windowSize, XFile xFile) {
+  void _getLastUsedDecimalDenominator() {
+    final denomString = sharedPrefs.lastUsedDecimalDenominator;
+    _decimalDenominator = DecimalDenominator.fromString(denomString);
+  }
+
+  void snapPhoto(Size size) {
+    isSnappingPhoto = true;
+    update();
+    cameraController.takePicture().then((value) {
+      isSnappingPhoto = false;
+      update();
+      _uploadReceipt(size, value);
+    }).catchError((err, stackTrace) {
+      isSnappingPhoto = false;
+      showError(err, stackTrace);
+    });
+  }
+
+  void _uploadReceipt(Size windowSize, XFile xFile) {
     showLoading();
-    _scanReceiptUseCase.launch(windowSize, xFile).then((scannedReceipt) {
+    _scanReceiptUseCase.launch(
+      windowSize,
+      xFile,
+      _decimalDenominator,
+    ).then((scannedReceipt) {
       if (scannedReceipt.items.isEmpty) {
         showToast("No items found");
         return;
       }
       receipt = scannedReceipt;
-      emit(Main());
+      update();
     }).catchError((onError, st) {
       showError(onError, st);
     });
@@ -39,7 +65,7 @@ class ScanReceiptCubit extends BaseCubit {
     final picker = ImagePicker();
     final file = await picker.pickImage(source: ImageSource.gallery);
     if (file != null) {
-      uploadReceipt(windowSize, XFile(file.path));
+      _uploadReceipt(windowSize, XFile(file.path));
     }
   }
 
@@ -48,13 +74,13 @@ class ScanReceiptCubit extends BaseCubit {
     emit(Main());
   }
 
-  Iterable<ScannedReceiptItem> getReceiptItems(
-      double upperBarrier, double lowerBarrier) {
+  Iterable<ScannedReceiptItem> getReceiptItems(double upperBarrier,
+      double lowerBarrier) {
     if (receipt == null) return [];
 
     // check if *inside* barriers
     return receipt!.items.where((element) =>
-        element.boundaryBox.top > upperBarrier &&
+    element.boundaryBox.top > upperBarrier &&
         element.boundaryBox.bottom < lowerBarrier);
   }
 
@@ -63,4 +89,16 @@ class ScanReceiptCubit extends BaseCubit {
     cameraController.dispose();
     return super.close();
   }
+
+  void toggleDenominator() {
+    if (_decimalDenominator == DecimalDenominator.comma) {
+      _decimalDenominator = DecimalDenominator.period;
+    } else {
+      _decimalDenominator = DecimalDenominator.comma;
+    }
+    sharedPrefs.lastUsedDecimalDenominator = _decimalDenominator.displayName;
+    update();
+  }
+
+  DecimalDenominator get decimalDenominator => _decimalDenominator;
 }
