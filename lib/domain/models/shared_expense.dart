@@ -26,6 +26,10 @@ class SharedExpense {
     }
   }
 
+  void addParticipant(Person person) {
+    participantsState.add(person);
+  }
+
   num get sharedExpenseDivided {
     try {
       return expenseState / participantsState.length;

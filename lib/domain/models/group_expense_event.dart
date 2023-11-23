@@ -124,6 +124,7 @@ class GroupExpense extends Event {
     final uuid = const Uuid().v4();
     final person = Person("temp-$uuid", name);
     _tempParticipants.add(person);
+    sharedExpense.addParticipant(person);
   }
 
   void removeTempParticipant(Person person) {

@@ -38,8 +38,9 @@ class GroupBloc extends BaseCubit {
   Stream<List<Event>> getEventsStream() =>
       _observeEventsUseCase.observe(group.id).map((event) => event
           .sortedBy((e) {
-            if (_eventSortBy == SortEvents.added) return e.timestamp;
-            if (e is GroupExpense) {
+            if (_eventSortBy == SortEvents.added) {
+              return e.timestamp;
+            } else if (e is GroupExpense) {
               return e.dateState.millisecondsSinceEpoch;
             } else {
               return e.timestamp;
@@ -82,4 +83,6 @@ class GroupBloc extends BaseCubit {
     _eventSortBy = sortEvents;
     update();
   }
+
+  SortEvents get sortedBy => _eventSortBy;
 }

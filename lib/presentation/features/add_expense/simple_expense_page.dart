@@ -42,7 +42,8 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
               SingleExpenseField(expense: expense),
               const SizedBox(height: _dividerPadding),
               DescriptionTextField(
-                  initialText: cubit.groupExpense.descriptionState),
+                initialText: cubit.groupExpense.descriptionState,
+              ),
               //const LongPressTipView(),
               const SizedBox(height: _dividerPadding),
               DatePickerView(),
@@ -50,7 +51,9 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
               SimpleExpenseParticipantsView(expense: expense),
               const SizedBox(height: _dividerPadding),
               PaidByDropDownView(
-                  people: getParticipatingPeople(), showExpenses: false),
+                people: getParticipatingPeople(),
+                showExpenses: false,
+              ),
               const SizedBox(height: 120),
             ],
           ),

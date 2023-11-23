@@ -61,18 +61,17 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondaryContainer,
             onClick: () async {
               final response = await showModalBottomSheet(
+                enableDrag: true,
+                showDragHandle: true,
                 context: context,
                 builder: (context) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ParticipantsPickerDialog(
-                      participants: expense.participantsState,
-                      people: cubit.people,
-                      onAddTempParticipant: (name) {
-                        cubit.onAddTempParticipant(
-                            name, groupExpense.sharedExpensesState.first);
-                      },
-                    ),
+                  return ParticipantsPickerDialog(
+                    participants: expense.participantsState,
+                    people: cubit.people,
+                    onAddTempParticipant: (name) {
+                      cubit.onAddTempParticipant(
+                          name, groupExpense.sharedExpensesState.first);
+                    },
                   );
                 },
               );

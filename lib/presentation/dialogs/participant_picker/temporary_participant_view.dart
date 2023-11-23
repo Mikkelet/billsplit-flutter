@@ -25,15 +25,18 @@ class _TemporaryParticipantViewState extends State<TemporaryParticipantView> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flexible(
-              child: ClickableListItem(
-                height: 48,
-                  width: 48,
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  onClick: () {
-                    setState(() {
-                      isEditing = true;
-                    });
-                  }, child: const Icon(Icons.person_add_alt_1))),
+            child: ClickableListItem(
+              height: 48,
+              width: 48,
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              onClick: () {
+                setState(() {
+                  isEditing = true;
+                });
+              },
+              child: const Icon(Icons.person_add_alt_1),
+            ),
+          ),
         ],
       );
     }

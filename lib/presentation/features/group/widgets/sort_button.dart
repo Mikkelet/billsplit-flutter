@@ -15,13 +15,15 @@ class SortActionButton extends StatelessWidget {
             context: context,
             position: RelativeRect.fromSize(rect, Size.zero),
             items: <PopupMenuItem>[
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: SortEvents.added,
-                child: Text("Sort by date uploaded"),
+                enabled: cubit.sortedBy != SortEvents.added,
+                child: const Text("Sort chronologically"),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                   value: SortEvents.specified,
-                  child: Text("Sort by date specified")),
+                  enabled: cubit.sortedBy != SortEvents.specified,
+                  child: const Text("Sort by date submitted")),
             ]);
         if (response is SortEvents) {
           cubit.changeSort(response);

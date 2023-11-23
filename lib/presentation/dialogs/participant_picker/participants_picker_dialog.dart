@@ -12,13 +12,13 @@ class ParticipantsPickerDialog extends StatefulWidget {
   final Function(String)? onAddTempParticipant;
 
   const ParticipantsPickerDialog({
-    Key? key,
+    super.key,
     required this.participants,
     required this.people,
     this.onAddTempParticipant,
     this.extraAction,
     this.showSubmit = true,
-  }) : super(key: key);
+  });
 
   @override
   State<ParticipantsPickerDialog> createState() =>
@@ -43,82 +43,90 @@ class _ParticipantsPickerDialogState
   @override
   Widget build(BuildContext context) {
     final allowTempParticipants = widget.onAddTempParticipant != null;
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        actions: [
-          if (widget.showSubmit)
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pop(widget.participants);
-              },
-              disabledColor: Theme.of(context).disabledColor,
-              color: Theme.of(context).colorScheme.onBackground,
-              icon: const Icon(Icons.check),
-            )
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+        appBar: _appBar(),
+        body: SingleChildScrollView(
+          child: Column(
             children: [
-              Expanded(
-                child: Text(
-                  "tip: tap a friend's name to select only them!",
-                  style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      color: Theme.of(context).colorScheme.inversePrimary),
-                ),
+              const SizedBox(height: 4),
+              ...widget.people.map(
+                    (person) => _participantView(person),
               ),
-              Checkbox(
-                fillColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Theme.of(context).colorScheme.inversePrimary;
-                  }
-                  return Theme.of(context).colorScheme.secondaryContainer;
-                }),
-                tristate: true,
-                value: (_isEveryoneSelected()) ? true : null,
-                onChanged: _isEveryoneSelected()
-                    ? null
-                    : (value) {
-                        if (value == false) {
-                          widget.participants.clear();
-                          widget.participants.addAll(widget.people);
-                          updateState();
-                        }
-                      },
-              )
+              if (allowTempParticipants) const SizedBox(height: 8),
+              if (allowTempParticipants)
+                TemporaryParticipantView(
+                  onAddTempParticipant: widget.onAddTempParticipant,
+                ),
+              const SizedBox(height: 8),
+              if (_showMin1PersonError)
+                Text(
+                  "Must include at least one person",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: Theme.of(context).colorScheme.error),
+                ),
+              if (widget.extraAction != null) const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [if (widget.extraAction != null) widget.extraAction!],
+              ),
             ],
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      )
+    );
+  }
+
+  AppBar _appBar(){
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      scrolledUnderElevation: 0 ,
+      actions: [
+        if (widget.showSubmit)
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop(widget.participants);
+            },
+            disabledColor: Theme.of(context).disabledColor,
+            color: Theme.of(context).colorScheme.onBackground,
+            icon: const Icon(Icons.check),
+          )
+      ],
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(40),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const SizedBox(height: 4),
-            ...widget.people.map(
-              (person) => _participantView(person),
-            ),
-            if (allowTempParticipants) const SizedBox(height: 8),
-            if (allowTempParticipants)
-              TemporaryParticipantView(
-                  onAddTempParticipant: widget.onAddTempParticipant),
-            const SizedBox(height: 8),
-            if (_showMin1PersonError)
-              Text(
-                "Must include at least one person",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Theme.of(context).colorScheme.error),
+            Expanded(
+              child: Text(
+                "tip: tap a friend to select only them!",
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Theme.of(context).colorScheme.inversePrimary),
               ),
-            if (widget.extraAction != null) const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [if (widget.extraAction != null) widget.extraAction!],
+            ),
+            Checkbox(
+              fillColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return Theme.of(context).colorScheme.inversePrimary;
+                }
+                return Theme.of(context).colorScheme.secondaryContainer;
+              }),
+              tristate: true,
+              value: (_isEveryoneSelected()) ? true : null,
+              onChanged: _isEveryoneSelected()
+                  ? null
+                  : (value) {
+                if (value == false) {
+                  widget.participants.clear();
+                  widget.participants.addAll(widget.people);
+                  updateState();
+                }
+              },
             )
           ],
         ),
