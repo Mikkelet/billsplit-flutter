@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:billsplit_flutter/domain/models/decimal_denominator.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
 import 'package:billsplit_flutter/extensions.dart';
@@ -8,19 +9,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class ScanReceiptUseCase {
-  late Size windowSize;
-  late Size imageSize;
+  late Size _windowSize;
+  late Size _imageSize;
+  late DecimalDenominator _decimalDenominator;
+
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
-  Future<ScannedReceipt> launch(Size windowSize, XFile file) async {
-    this.windowSize = windowSize;
+  Future<ScannedReceipt> launch(
+    Size windowSize,
+    XFile file,
+    DecimalDenominator decimalDenominator,
+  ) async {
+    _windowSize = windowSize;
+    _decimalDenominator = decimalDenominator;
     final inputImage = InputImage.fromFilePath(file.path);
-    File image = File(file.path); // Or any other way to get a File instance.
+    final File image =
+        File(file.path); // Or any other way to get a File instance.
     final decodedImage = await decodeImageFromList(image.readAsBytesSync());
-    imageSize =
-        Size(decodedImage.width.toDouble(), decodedImage.height.toDouble());
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
+    _imageSize = Size(
+      decodedImage.width.toDouble(),
+      decodedImage.height.toDouble(),
+    );
+    final RecognizedText recognizedText = await textRecognizer.processImage(
+      inputImage,
+    );
     textRecognizer.close();
     final texts = recognizedText.blocks
         .map((e) => e.lines)
@@ -37,22 +49,26 @@ class ScanReceiptUseCase {
               recognizedLanguages: [],
               symbols: []),
         );
-    final expenses = _deriveExpenses(imageSize, texts);
-    return ScannedReceipt(imageSize, expenses, file);
+    final expenses = _deriveExpenses(_imageSize, texts);
+    return ScannedReceipt(_imageSize, expenses, file);
   }
 
   Iterable<ScannedReceiptItem> _deriveExpenses(
-      Size imageSize, Iterable<TextElement> texts) {
+    Size imageSize,
+    Iterable<TextElement> texts,
+  ) {
     // assume all prices are on the right side of the receipt
-    final double verticalCenter = windowSize.width / 2;
+    final double verticalCenter = _windowSize.width / 2;
     final rightSideTexts =
         texts.where((element) => element.boundingBox.left > verticalCenter);
     final textsWithNumbers = rightSideTexts
         .where((element) => element.text.contains(RegExp("[0-9]")))
         .where((element) => element.text.length < 10)
         .map((e) {
-      final cleanText =
-          e.text.replaceAll(RegExp("[^0-9.,-]"), "").replaceAll(",", ".");
+      final regex = "[^0-9${_decimalDenominator.thousandsSeparator}-]";
+      final cleanText = e.text
+          .replaceAll(RegExp(regex), "")
+          .replaceAll(_decimalDenominator.symbol, ".");
 
       return TextElement(
           text: cleanText,
@@ -91,7 +107,6 @@ class ScanReceiptUseCase {
           element.boundingBox.left < expense.boundingBox.left &&
           element.boundingBox.bottom > verticalCenter);
 
-      print(withinVertCenter.map((e) => e.text));
       // if empty, just return the prices
       if (withinVertCenter.isEmpty) {
         final receiptItem = ScannedReceiptItem(
@@ -134,14 +149,14 @@ class ScanReceiptUseCase {
     return receiptItems;
   }
 
-  double get scaleFactor => windowSize.width / imageSize.width;
+  double get scaleFactor => _windowSize.width / _imageSize.width;
 
   Rect translateRect(Rect rect) {
     if (Platform.isIOS) {
       // ios platform is both rotation -90 degrees and mirrored
       // so we need to flip H and W, and T and L, and mirror the L to the other side
       // Thanks Apple
-      final left = imageSize.width - rect.top - rect.height;
+      final left = _imageSize.width - rect.top - rect.height;
       return Rect.fromLTWH(left * scaleFactor, rect.left * scaleFactor,
           rect.height * scaleFactor, rect.width * scaleFactor);
     }
@@ -149,3 +164,5 @@ class ScanReceiptUseCase {
         rect.width * scaleFactor, rect.height * scaleFactor);
   }
 }
+
+void main() {}

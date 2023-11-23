@@ -115,11 +115,12 @@ class AddExpenseBloc extends BaseCubit {
 
   void updateDescription(String description){
     groupExpense.descriptionState = description;
-    update();
+  update();
   }
 
   void onAddTempParticipant(String name, SharedExpense sharedExpense) {
     groupExpense.addTempParticipant(name, sharedExpense);
     update();
   }
+
 }

@@ -111,7 +111,15 @@ class SharedPrefs {
   // isUserLoggedId
   bool get isUserLoggedIn => _sharedPrefs.getBool(isUserLoggedIdKey) ?? false;
 
-  set isUserLoggedIn(bool value) => _sharedPrefs.setBool(isUserLoggedIdKey, value);
+  set isUserLoggedIn(bool value) =>
+      _sharedPrefs.setBool(isUserLoggedIdKey, value);
+
+  // lastUsedDecimalDenominator
+  String get lastUsedDecimalDenominator =>
+      _sharedPrefs.getString(lastUsedDecimalDenominatorKey) ?? "";
+
+  set lastUsedDecimalDenominator(String denominator) =>
+      _sharedPrefs.setString(lastUsedDecimalDenominatorKey, denominator);
 
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
@@ -127,4 +135,5 @@ class SharedPrefs {
   static const hasSeenChoosePayerGuideKey = "hasSeenChoosePayerGuide";
   static const hasSeenSharedExpenseGuideKey = "hasSeenSharedExpenseGuide";
   static const isUserLoggedIdKey = "isUserLoggedId";
+  static const lastUsedDecimalDenominatorKey = "lastUsedDecimalDenominator";
 }

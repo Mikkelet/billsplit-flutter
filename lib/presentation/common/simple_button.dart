@@ -6,14 +6,22 @@ class SimpleButton extends StatelessWidget {
   final Color? color;
   final Color? textColor;
   final Widget child;
+  final double? height;
 
-  const SimpleButton(
-      {super.key, required this.onClick, required this.child, this.color, this.textColor});
+  const SimpleButton({
+    super.key,
+    required this.onClick,
+    required this.child,
+    this.height,
+    this.color,
+    this.textColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onClick,
+      height: height,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       color: color ?? Theme.of(context).colorScheme.secondaryContainer,
       textColor: textColor ?? Theme.of(context).colorScheme.onPrimary,
