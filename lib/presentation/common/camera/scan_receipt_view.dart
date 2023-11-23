@@ -116,42 +116,56 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                       ),
                     ),
                   ),
-                  if (receipt == null)
+                  if (cubit.menuState == MenuState.searching)
                     Align(
-                      alignment: Alignment.bottomLeft,
+                      alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 32.0,
-                          horizontal: 16,
+                        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _pickFromGallery(context),
+                            _snapPicture(context),
+                            _scanningSettingsButton(context),
+                          ],
                         ),
-                        child: _pickFromGallery(context),
                       ),
                     ),
-                  if (receipt == null)
+                  if (cubit.menuState == MenuState.settings)
                     Align(
-                      alignment: Alignment.bottomRight,
+                      alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 32.0,
-                          horizontal: 16,
+                        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _decimalDenominatorToggle(context),
+                            CircleAvatar(
+                              child: BackButton(
+                                onPressed: () {
+                                  cubit.exitSettings();
+                                },
+                              ),
+                            )
+                          ],
                         ),
-                        child: _decimalDenominatorToggle(context),
                       ),
                     ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if (receipt == null) _snapPicture(context),
-                          if (receipt != null) _cancelPicture(context),
-                          if (receipt != null) _confirmPicture(context),
-                        ],
+                  if (cubit.menuState == MenuState.receipt)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            if (receipt != null) _cancelPicture(context),
+                            if (receipt != null) _confirmPicture(context),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 ],
               ),
             );
@@ -163,7 +177,7 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
 
   Widget _snapPicture(BuildContext context) {
     final cubit = context.read<ScanReceiptCubit>();
-    if (cubit.isSnappingPhoto == true) {
+    if (cubit.isSnappingPhoto) {
       return const CircularProgressIndicator();
     }
     return CircleAvatar(
@@ -176,6 +190,22 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
         },
         iconSize: 32,
         icon: const Icon(Icons.camera),
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+    );
+  }
+
+  Widget _scanningSettingsButton(BuildContext context) {
+    final cubit = context.read<ScanReceiptCubit>();
+    return CircleAvatar(
+      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
+      maxRadius: 32,
+      child: IconButton(
+        onPressed: () async {
+          cubit.showScannerSettings();
+        },
+        iconSize: 32,
+        icon: const Icon(Icons.settings),
         color: Theme.of(context).colorScheme.onSurface,
       ),
     );

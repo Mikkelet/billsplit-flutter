@@ -10,12 +10,19 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 
+enum MenuState {
+  searching,
+  receipt,
+  settings;
+}
+
 class ScanReceiptCubit extends BaseCubit {
   final _scanReceiptUseCase = ScanReceiptUseCase();
   late CameraController cameraController;
   ScannedReceipt? receipt;
   bool isSnappingPhoto = false;
   DecimalDenominator _decimalDenominator = DecimalDenominator.comma;
+  MenuState menuState = MenuState.searching;
 
   void initialize() async {
     showLoading();
@@ -54,9 +61,11 @@ class ScanReceiptCubit extends BaseCubit {
         showToast("No items found");
         return;
       }
+      menuState = MenuState.receipt;
       receipt = scannedReceipt;
       update();
     }).catchError((onError, st) {
+      menuState = MenuState.receipt;
       showError(onError, st);
     });
   }
@@ -101,4 +110,14 @@ class ScanReceiptCubit extends BaseCubit {
   }
 
   DecimalDenominator get decimalDenominator => _decimalDenominator;
+
+  void showScannerSettings() {
+    menuState = MenuState.settings;
+    update();
+  }
+
+  void exitSettings() {
+    menuState = MenuState.searching;
+    update();
+  }
 }
