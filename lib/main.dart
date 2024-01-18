@@ -61,6 +61,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Splitsby',
+      debugShowCheckedModeBanner: false,
       supportedLocales: const [
         Locale.fromSubtags(languageCode: "en"),
         Locale.fromSubtags(languageCode: "th"),

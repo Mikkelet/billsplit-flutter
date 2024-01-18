@@ -87,7 +87,7 @@ class _SignInViewState extends SafeState<SignInView> {
                 PasswordTextField(
                   controller: passwordFieldController,
                   error: passwordError,
-                  hintText: "Repeat password",
+                  hintText: "Password",
                 ),
                 const SizedBox(height: 4),
                 if (signInState is Loading)
