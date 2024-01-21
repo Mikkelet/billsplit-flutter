@@ -18,13 +18,14 @@ class UpdatableTextField extends StatefulWidget {
   final Future Function(String) updateFuture;
   final BorderRadius? borderRadius;
 
-  const UpdatableTextField(
-      {super.key,
-      required this.initState,
-      required this.updateFuture,
-      this.borderRadius,
-      this.hintText = "",
-      this.charLimit = 40});
+  const UpdatableTextField({
+    super.key,
+    required this.initState,
+    required this.updateFuture,
+    this.borderRadius,
+    this.hintText = "",
+    this.charLimit = 40,
+  });
 
   @override
   State<UpdatableTextField> createState() => _UpdatableTextField();

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/decimal_denominator.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
@@ -8,20 +10,23 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+import '../../../data/local/preferences/shared_prefs.dart';
+
 class ScanReceiptUseCase {
   late Size _windowSize;
   late Size _imageSize;
   late DecimalDenominator _decimalDenominator;
 
+  final _prefs = getIt<SharedPrefs>();
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
   Future<ScannedReceipt> launch(
     Size windowSize,
     XFile file,
-    DecimalDenominator decimalDenominator,
   ) async {
     _windowSize = windowSize;
-    _decimalDenominator = decimalDenominator;
+    _decimalDenominator =
+        DecimalDenominator.fromString(_prefs.lastUsedDecimalDenominator);
     final inputImage = InputImage.fromFilePath(file.path);
     final File image =
         File(file.path); // Or any other way to get a File instance.
@@ -41,13 +46,14 @@ class ScanReceiptUseCase {
         .flatMap()
         .map(
           (e) => TextElement(
-              text: e.text,
-              boundingBox: translateRect(e.boundingBox),
-              cornerPoints: e.cornerPoints,
-              angle: null,
-              confidence: null,
-              recognizedLanguages: [],
-              symbols: []),
+            text: e.text,
+            boundingBox: translateRect(e.boundingBox),
+            cornerPoints: e.cornerPoints,
+            angle: null,
+            confidence: null,
+            recognizedLanguages: [],
+            symbols: [],
+          ),
         );
     final expenses = _deriveExpenses(_imageSize, texts);
     return ScannedReceipt(_imageSize, expenses, file);
@@ -65,10 +71,10 @@ class ScanReceiptUseCase {
         .where((element) => element.text.contains(RegExp("[0-9]")))
         .where((element) => element.text.length < 10)
         .map((e) {
-      final regex = "[^0-9${_decimalDenominator.thousandsSeparator}-]";
+      final removeRegex = "[^0-9${_decimalDenominator.decimal}-]";
       final cleanText = e.text
-          .replaceAll(RegExp(regex), "")
-          .replaceAll(_decimalDenominator.symbol, ".");
+          .replaceAll(RegExp(removeRegex), "")
+          .replaceAll(_decimalDenominator.decimal, ".");
 
       return TextElement(
           text: cleanText,

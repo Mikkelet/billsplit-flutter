@@ -1,16 +1,14 @@
 enum DecimalDenominator {
-  comma(",", ".", "comma"),
-  period(".", ",", "period");
+  comma(decimal: ",", displayName: "comma"),
+  period(decimal: ".", displayName: "period");
 
-  final String symbol;
+  final String decimal;
   final String displayName;
-  final String thousandsSeparator;
 
-  const DecimalDenominator(
-    this.symbol,
-    this.thousandsSeparator,
-    this.displayName,
-  );
+  const DecimalDenominator({
+    required this.decimal,
+    required this.displayName,
+  });
 
   static DecimalDenominator fromString(String value) {
     if (value == DecimalDenominator.comma.displayName) {

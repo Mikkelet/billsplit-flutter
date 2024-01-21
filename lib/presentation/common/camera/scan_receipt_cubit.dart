@@ -19,9 +19,9 @@ enum MenuState {
 class ScanReceiptCubit extends BaseCubit {
   final _scanReceiptUseCase = ScanReceiptUseCase();
   late CameraController cameraController;
+  late DecimalDenominator _decimalDenominator;
   ScannedReceipt? receipt;
   bool isSnappingPhoto = false;
-  DecimalDenominator _decimalDenominator = DecimalDenominator.comma;
   MenuState menuState = MenuState.searching;
 
   void initialize() async {
@@ -55,7 +55,6 @@ class ScanReceiptCubit extends BaseCubit {
     _scanReceiptUseCase.launch(
       windowSize,
       xFile,
-      _decimalDenominator,
     ).then((scannedReceipt) {
       if (scannedReceipt.items.isEmpty) {
         showToast("No items found");

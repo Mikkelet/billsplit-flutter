@@ -4,7 +4,6 @@ import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_
 import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_up_view.dart';
 import 'package:flutter/material.dart';
 
-
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
 
@@ -37,15 +36,16 @@ class _LandingPageState extends State<LandingPage> {
       body: Column(
         children: [
           PageViewTitle(
-              pageController: pageController,
-              titleOne: "Sign Up",
-              titleTwo: "Sign in"),
+            pageController: pageController,
+            titleOne: "Sign In",
+            titleTwo: "Sign Up",
+          ),
           Expanded(
             child: PageView(
               controller: pageController,
               children: const [
-                SignUpView(),
                 SignInView(),
+                SignUpView(),
               ],
             ),
           ),
