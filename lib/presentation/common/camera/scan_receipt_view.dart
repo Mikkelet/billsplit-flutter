@@ -225,7 +225,7 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
             cubit.toggleDenominator();
           },
           child: Text(
-            "${cubit.decimalDenominator.displayName} ${cubit.decimalDenominator.symbol}",
+            "${cubit.decimalDenominator.displayName} ${cubit.decimalDenominator.decimal}",
             style: Theme.of(context).textTheme.labelLarge,
           ),
         ),
