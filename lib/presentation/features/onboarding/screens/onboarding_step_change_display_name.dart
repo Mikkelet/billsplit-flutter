@@ -18,7 +18,13 @@ class OnboardingStepChangeDisplayName extends StatefulWidget {
 
 class _OnboardingStepChangeDisplayNameState
     extends State<OnboardingStepChangeDisplayName> {
-  final textController = TextEditingController();
+  final _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class _OnboardingStepChangeDisplayNameState
               ),
               maxLines: 1,
               maxLength: 40,
-              controller: textController..text = cubit.name,
+              controller: _textController..text = cubit.name,
               onChanged: (value) {
                 cubit.onNameChanged(value);
               },

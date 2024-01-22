@@ -81,7 +81,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   void _onNextStepEvent() {
     controller.nextPage(
-        duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
+      duration: 500.ms,
+      curve: Curves.fastEaseInToSlowEaseOut,
+    );
   }
 
   void _onPrevStepEvent(BuildContext context) {
