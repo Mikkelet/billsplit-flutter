@@ -146,4 +146,8 @@ class ApiService {
     final body = RespondToGroupInviteRequest(groupId, accept);
     await _client.post("group/invitation", body.toJson());
   }
+
+  Future deleteUser() async {
+    await _client.delete("user");
+  }
 }

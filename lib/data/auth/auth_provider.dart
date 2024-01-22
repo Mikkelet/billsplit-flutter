@@ -99,4 +99,8 @@ class AuthProvider {
         verificationId: verificationId, smsCode: smsCode);
     await _firebaseAuth.currentUser!.updatePhoneNumber(credential);
   }
+
+  deleteUser() {
+    _firebaseAuth.currentUser?.delete();
+  }
 }

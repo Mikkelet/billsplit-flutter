@@ -5,10 +5,13 @@ import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
+import 'package:billsplit_flutter/presentation/features/delete_user_flow/delete_user_page.dart';
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/delete_user_button.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
@@ -22,6 +25,11 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseBlocWidget<ProfileCubit>(
       create: (context) => ProfileCubit()..loadNotifications(),
+      listener: (context, cubit, state) {
+        if (state is ShowDeleteUser) {
+          Navigator.of(context).push(DeleteUserPage.route);
+        }
+      },
       child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
         return BaseScaffold(
           appBar: AppBar(
@@ -91,6 +99,8 @@ class ProfilePage extends StatelessWidget {
                           }),
                     if (kDebugMode) const SizedBox(height: 12),
                     const SignOutButton(),
+                    const SizedBox(height: 32),
+                    const DeleteUserButton(),
                     const SizedBox(height: 32),
                     FutureBuilder(
                       future: cubit.syncVersion(),

@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_u
 import 'package:billsplit_flutter/domain/use_cases/susi/sign_out_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class ProfileCubit extends BaseCubit {
@@ -67,5 +68,9 @@ class ProfileCubit extends BaseCubit {
     final phoneNumber =
         await _parseUsePhoneNumberUseCase.launch(user.phoneNumberState.dial);
     return phoneNumber;
+  }
+
+  void onDeleteUserPressed() {
+    emit(ShowDeleteUser());
   }
 }
