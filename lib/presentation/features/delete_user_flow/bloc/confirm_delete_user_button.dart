@@ -10,22 +10,23 @@ class ConfirmDeleteUserButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<DeleteUserCubit>();
     return StreamBuilder(
-      stream: Stream.periodic(
-          const Duration(milliseconds: 100), (x) => x * 100),
+      stream:
+          Stream.periodic(const Duration(milliseconds: 100), (x) => x * 100),
       builder: (context, snapshot) {
         final data = snapshot.data ?? 0;
         final time = 5.0 - data / 1000;
         if (time < 0.1) {
-          return TextButton(
+          return ElevatedButton(
             onPressed: () {
               cubit.confirmDelete();
             },
             child: const Text("DELETE"),
           );
         }
-        return Center(
+        return ElevatedButton(
+          onPressed: null,
           child: Text(
-            NumberFormat("#.#").format(time),
+            NumberFormat("#").format(time),
           ),
         );
       },

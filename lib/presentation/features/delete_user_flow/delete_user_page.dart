@@ -30,11 +30,13 @@ class DeleteUserPage extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 64),
-                    Text("You are about to delete your profile",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(color: Colors.red)),
+                    Text(
+                      "You are about to delete your profile",
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall
+                          ?.copyWith(color: Colors.red),
+                    ),
                     const SizedBox(height: 16),
                     Text(
                         "Deleting your profile will also delete all of your data, such as profile picture, email, name, phone number",
@@ -43,7 +45,7 @@ class DeleteUserPage extends StatelessWidget {
                     Text(
                         "Your groups will not be deleted, but you will be anonymized and any association to them will be removed",
                         style: Theme.of(context).textTheme.labelSmall),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 32),
                     const ConfirmDeleteUserButton()
                   ],
                 ),
