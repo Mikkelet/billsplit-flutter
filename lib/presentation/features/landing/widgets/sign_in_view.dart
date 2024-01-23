@@ -67,7 +67,7 @@ class _SignInViewState extends SafeState<SignInView> {
                 RoundedListItem(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(10),
-                    bottom: Radius.circular(10),
+                    bottom: Radius.circular(0),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   height: 64,
@@ -83,9 +83,12 @@ class _SignInViewState extends SafeState<SignInView> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
                 PasswordTextField(
                   controller: passwordFieldController,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.zero,
+                    bottom: Radius.circular(10),
+                  ),
                   error: passwordError,
                   hintText: "Password",
                 ),

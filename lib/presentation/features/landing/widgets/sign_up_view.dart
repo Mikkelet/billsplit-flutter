@@ -88,7 +88,7 @@ class _SignUpViewState extends SafeState<SignUpView> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(10),
-                      bottom: Radius.circular(10),
+                      bottom: Radius.circular(0),
                     ),
                     child: TextField(
                       controller: emailFieldController,
@@ -103,16 +103,19 @@ class _SignUpViewState extends SafeState<SignUpView> {
                         border: InputBorder.none,
                       ),
                     )),
-                const SizedBox(height: 4),
                 PasswordTextField(
                   controller: passwordFieldController,
                   error: passwordError,
+                  borderRadius: const BorderRadius.all(Radius.zero),
                   hintText: "Enter password (min. 6 characters)",
                 ),
-                const SizedBox(height: 4),
                 PasswordTextField(
                   controller: repeatPasswordFieldController,
                   error: repeatPasswordError,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(10)
+                  ),
                   hintText: "Repeat password",
                 ),
                 const SizedBox(height: 4),

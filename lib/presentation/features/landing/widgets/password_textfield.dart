@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 class PasswordTextField extends StatefulWidget {
   final TextEditingController controller;
   final String? error;
+  final BorderRadius borderRadius;
   final String hintText;
 
   const PasswordTextField(
       {Key? key,
+      this.borderRadius = BorderRadius.zero,
       required this.controller,
       required this.error,
       required this.hintText})
@@ -32,7 +34,12 @@ class _PasswordTextFieldState extends SafeState<PasswordTextField> {
           child: RoundedListItem(
             height: 64,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.zero,
+              bottomRight: Radius.zero,
+              topLeft: widget.borderRadius.topLeft,
+              bottomLeft: widget.borderRadius.bottomLeft,
+            ),
             child: TextField(
               controller: widget.controller,
               style: SplitsbyTextTheme.textFieldStyle(context),
@@ -49,12 +56,16 @@ class _PasswordTextFieldState extends SafeState<PasswordTextField> {
             ),
           ),
         ),
-        const SizedBox(width: 4),
         ClickableListItem(
             width: 64,
             height: 64,
             padding: EdgeInsets.zero,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.zero,
+              topLeft: Radius.zero,
+              bottomRight: widget.borderRadius.bottomRight,
+              topRight: widget.borderRadius.topRight,
+            ),
             color: builder(() {
               if (showPassword) {
                 return Theme.of(context).colorScheme.secondaryContainer;

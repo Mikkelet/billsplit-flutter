@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class RoundedListItem extends StatelessWidget {
   final Widget child;
   final Color? color;
-  final BorderRadius? borderRadius;
+    final BorderRadius? borderRadius;
   final EdgeInsets? padding;
   final double? width;
   final double? height;
