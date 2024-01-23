@@ -6,9 +6,7 @@ class DeleteUserCubit extends BaseCubit {
 
   void confirmDelete() {
     showLoading();
-    _deleteUserUseCase.launch().then((value) {
-      print("Success");
-    }).catchError((err, st) {
+    _deleteUserUseCase.launch().then((_) {}).catchError((err, st) {
       showError(err, st);
     });
   }

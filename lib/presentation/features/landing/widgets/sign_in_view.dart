@@ -66,7 +66,7 @@ class _SignInViewState extends SafeState<SignInView> {
               children: [
                 RoundedListItem(
                   borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(30),
+                    top: Radius.circular(10),
                     bottom: Radius.circular(10),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16),

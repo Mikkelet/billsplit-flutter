@@ -87,7 +87,7 @@ class _SignUpViewState extends SafeState<SignUpView> {
                     height: 64,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(30),
+                      top: Radius.circular(10),
                       bottom: Radius.circular(10),
                     ),
                     child: TextField(
