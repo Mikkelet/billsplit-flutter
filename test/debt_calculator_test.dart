@@ -13,9 +13,9 @@ import 'package:collection/collection.dart';
 import 'package:get_it/get_it.dart';
 
 final samplePeopleShera = [
-  Person("0", "Aang"),
-  Person("1", "Toph"),
-  Person("2", "Katara"),
+  Person(uid: "0", name: "Aang"),
+  Person(name: "1", uid: "Toph"),
+  Person(uid: "2", name: "Katara"),
 ];
 
 final sampleGroup = Group(

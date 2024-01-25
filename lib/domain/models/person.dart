@@ -6,15 +6,17 @@ class Person {
   final String _pfpUrl;
   final PhoneNumber _phoneNumber;
   final String email;
+  final bool isGuest;
 
   // modifiable values
   late String nameState = _name;
   late String pfpUrlState = _pfpUrl;
   late PhoneNumber phoneNumberState = _phoneNumber;
 
-  Person(
-    this.uid,
-    String name, {
+  Person({
+    required this.uid,
+    required String name,
+    this.isGuest = false,
     String pfpUrl = "",
     PhoneNumber phoneNumber = const PhoneNumber.none(),
     this.email = "",
@@ -22,21 +24,11 @@ class Person {
         _phoneNumber = phoneNumber,
         _pfpUrl = pfpUrl;
 
-  Person.temp()
-      : uid = "",
-        email = "",
-        _phoneNumber = const PhoneNumber.none(),
-        _name = "New person",
-        _pfpUrl = "";
+  Person.temp(): this(uid: "", name: "New Person");
+  Person.dummy(num seed) : this(uid: "P$seed", name: "Person $seed");
 
   String get displayName => nameState.isEmpty ? "Splitsby user" : nameState;
 
-  Person.dummy(num seed)
-      : uid = "P$seed",
-        _name = "Person $seed",
-        email = "dummy@test.dk",
-        _phoneNumber = const PhoneNumber.none(),
-        _pfpUrl = "";
 
   @override
   int get hashCode => uid.hashCode;

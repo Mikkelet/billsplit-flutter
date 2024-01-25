@@ -42,7 +42,7 @@ class _TemporaryParticipantViewState extends State<TemporaryParticipantView> {
     }
     return Row(
       children: [
-        ProfilePictureView(person: Person("", "")),
+        ProfilePictureView(person: Person(uid: "", name: "")),
         const SizedBox(width: 8),
         Flexible(
           child: TextField(

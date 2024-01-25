@@ -2,11 +2,11 @@ import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/friend.dart';
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
+import 'package:billsplit_flutter/domain/use_cases/auth/sign_out_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/observe_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/group_invites/observe_group_invites_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/susi/sign_out_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
@@ -21,6 +21,8 @@ class ProfileCubit extends BaseCubit {
 
   int friendsCounter = 0;
   int groupInvitesCounter = 0;
+
+  bool get showProfileInfo => !user.isGuest;
 
   void loadNotifications() async {
     await _updateFriendsCounter();

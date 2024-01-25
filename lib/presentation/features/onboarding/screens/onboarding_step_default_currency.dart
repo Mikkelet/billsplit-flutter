@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/widgets/next_step_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,12 +27,7 @@ class OnboardingStepDefaultCurrency extends StatelessWidget {
               const SizedBox(height: 64),
               UpdateUserDefaultCurrencyView<OnboardingBloc>(),
               const SizedBox(height: 64),
-              SimpleButton(
-                onClick: () {
-                  cubit.onNextClicked();
-                },
-                child: const Text("Next"),
-              )
+              NextStepButton(cubit.nextButtonText(this))
             ],
           ),
         ),

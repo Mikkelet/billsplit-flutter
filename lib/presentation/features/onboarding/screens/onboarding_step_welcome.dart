@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_bloc.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/widgets/next_step_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,12 +26,7 @@ class OnboardingStepWelcomeView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 64),
-          SimpleButton(
-            onClick: () {
-              cubit.onNextClicked();
-            },
-            child: const Text("Let's get started"),
-          )
+          NextStepButton(cubit.nextButtonText(this))
         ],
       ),
     );

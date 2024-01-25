@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/widgets/next_step_button.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,12 +31,7 @@ class OnboardingStepUploadProfilePicture extends StatelessWidget {
               const SizedBox(height: 64),
               const UploadProfilePictureView(),
               const SizedBox(height: 64),
-              SimpleButton(
-                onClick: () {
-                  cubit.onNextClicked();
-                },
-                child: const Text("Next"),
-              )
+              NextStepButton(cubit.nextButtonText(this))
             ],
           ),
         ),

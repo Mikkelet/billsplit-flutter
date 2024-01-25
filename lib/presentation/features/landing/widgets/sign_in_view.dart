@@ -13,6 +13,9 @@ import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
+import '../../onboarding/onboarding_flow.dart';
+import '../bloc/landing_state.dart';
+
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
 
@@ -58,7 +61,12 @@ class _SignInViewState extends SafeState<SignInView> {
   Widget build(BuildContext context) {
     return BaseBlocWidget(
       create: (context) => LandingCubit(),
-      child: BaseBlocBuilder<LandingCubit>(builder: (signInCubit, signInState) {
+      listener: (context, cubit, state) {
+        if (state is SignUpSuccessful || state is SignUpAnonymously) {
+          Navigator.of(context).push(OnboardingFlow.getRoute());
+        }
+      },
+      child: BaseBlocBuilder<LandingCubit>(builder: (cubit, signInState) {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -116,7 +124,7 @@ class _SignInViewState extends SafeState<SignInView> {
                                 emailFieldController.value.text;
                             final String password =
                                 passwordFieldController.value.text;
-                            signInCubit.signInWithEmail(email, password);
+                            cubit.signInWithEmail(email, password);
                           }
                           updateState();
                         },
@@ -135,7 +143,7 @@ class _SignInViewState extends SafeState<SignInView> {
                       const Icon(Icons.apple),
                       TextButton(
                         onPressed: () {
-                          signInCubit.signInWithApple();
+                          cubit.signInWithApple();
                         },
                         child: const Text("Sign in with Apple"),
                       ),
@@ -146,12 +154,20 @@ class _SignInViewState extends SafeState<SignInView> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        signInCubit.signInWithGoogle();
+                        cubit.signInWithGoogle();
                       },
                       child: const Text("Sign in with Google"),
                     ),
+
                   ],
                 ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    cubit.signInAsGuest();
+                  },
+                  child: const Text("Continue as Guest"),
+                )
               ],
             ),
           ),
