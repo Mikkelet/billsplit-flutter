@@ -1,13 +1,13 @@
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
-import 'package:billsplit_flutter/presentation/common/camera/scan_receipt_view.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
+import 'package:billsplit_flutter/presentation/features/scan_receipt/scan_receipt_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScanReceiptButton extends StatelessWidget {
-  const ScanReceiptButton({Key? key}) : super(key: key);
+  const ScanReceiptButton({super.key});
 
   @override
   Widget build(BuildContext context) {

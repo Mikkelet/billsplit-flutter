@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/camera/scan_receipt_cubit.dart';
-import 'package:billsplit_flutter/presentation/common/camera/text_block_painter.dart';
-import 'package:billsplit_flutter/presentation/common/camera/view_picture_screen.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
+import 'package:billsplit_flutter/presentation/features/scan_receipt/bloc/scan_receipt_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/scan_receipt/painter/text_block_painter.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +61,7 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                       },
                     )
                   else
-                    ViewPictureScreen(receipt.xFile),
+                    Image.file(File(receipt.xFile.path)),
                   if (focusCircleOffset != null)
                     Positioned(
                       top: focusCircleOffset!.dy - 32,

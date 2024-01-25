@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class ViewPictureScreen extends StatelessWidget {
   final XFile xFile;
 
-  const ViewPictureScreen(this.xFile, {Key? key}) : super(key: key);
+  const ViewPictureScreen(this.xFile, {super.key});
 
   @override
   Widget build(BuildContext context) {
