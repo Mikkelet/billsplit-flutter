@@ -24,14 +24,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     return BaseBlocWidget<OnboardingBloc>(
       create: (context) => OnboardingBloc(_controller),
       listener: (context, cubit, event) {
-        if (event is NextStepEvent) {
-          _onNextStepEvent(context);
-        } else if (event is PreviousStepEvent) {
-          _onPrevStepEvent(context);
-        } else if (event is ImReadyEvent) {
-          _onImReadyEvent(context);
-        } else if (event is SubmitUserSuccessEvent) {
-          _onSubmitSuccess(context);
+        if (event is FinishOnboardingEvent) {
+          Navigator.of(context).pop();
         }
       },
       child: BaseBlocBuilder<OnboardingBloc>(
@@ -68,17 +62,5 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         },
       ),
     );
-  }
-
-  void _onNextStepEvent(BuildContext context) {}
-
-  void _onPrevStepEvent(BuildContext context) {}
-
-  void _onImReadyEvent(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  void _onSubmitSuccess(BuildContext context) {
-    Navigator.of(context).pop();
   }
 }

@@ -84,7 +84,7 @@ class OnboardingBloc extends BaseCubit {
 
   void onNextClicked() {
     if (_currentStep == steps.length) {
-      emit(ImReadyEvent());
+      emit(FinishOnboardingEvent());
     } else {
       controller.nextPage(
         duration: 500.ms,
@@ -95,7 +95,7 @@ class OnboardingBloc extends BaseCubit {
 
   void onPreviousClicked() {
     if (_currentStep < 1) {
-      emit(ImReadyEvent());
+      emit(FinishOnboardingEvent());
     } else {
       controller.previousPage(
         duration: 500.ms,
