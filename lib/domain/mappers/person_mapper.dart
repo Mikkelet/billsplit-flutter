@@ -8,7 +8,7 @@ extension PeopleDTOExt on Iterable<PersonDTO> {
 }
 
 extension PersonDTOExt on PersonDTO {
-  Person toPerson() => Person(id, name, pfpUrl: pfpUrl);
+  Person toPerson() => Person(uid: id, name: name, pfpUrl: pfpUrl);
 }
 
 extension PeopleExt on Iterable<Person> {

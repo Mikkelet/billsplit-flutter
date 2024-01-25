@@ -122,7 +122,7 @@ class GroupExpense extends Event {
 
   void addTempParticipant(String name, SharedExpense sharedExpense) {
     final uuid = const Uuid().v4();
-    final person = Person("temp-$uuid", name);
+    final person = Person(uid: "temp-$uuid", name: name);
     _tempParticipants.add(person);
     sharedExpense.addParticipant(person);
   }

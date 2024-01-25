@@ -4,14 +4,8 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_state.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_change_display_name.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_default_currency.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_phone_number.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_upload_pfp_screen.dart';
-import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_welcome.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
@@ -23,21 +17,15 @@ class OnboardingFlow extends StatefulWidget {
 }
 
 class _OnboardingFlowState extends State<OnboardingFlow> {
-  final controller = PageController();
+  final _controller = PageController();
 
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<OnboardingBloc>(
-      create: (context) => OnboardingBloc(),
+      create: (context) => OnboardingBloc(_controller),
       listener: (context, cubit, event) {
-        if (event is NextStepEvent) {
-          _onNextStepEvent();
-        } else if (event is PreviousStepEvent) {
-          _onPrevStepEvent(context);
-        } else if (event is ImReadyEvent) {
-          _onImReadyEvent(context);
-        } else if (event is SubmitUserSuccessEvent) {
-          _onSubmitSuccess(context);
+        if (event is FinishOnboardingEvent) {
+          Navigator.of(context).pop();
         }
       },
       child: BaseBlocBuilder<OnboardingBloc>(
@@ -63,50 +51,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 return const Center(child: CircularProgressIndicator());
               }
               return PageView(
-                controller: controller,
-                children: [
-                  const OnboardingStepWelcomeView(),
-                  const OnboardingStepChangeDisplayName(),
-                  const OnboardingStepUploadProfilePicture(),
-                  OnboardingStepDefaultCurrency(),
-                  const OnboardingStepPhoneNumber(),
-                ],
+                controller: _controller,
+                onPageChanged: (page) {
+                  cubit.onPageChanged(page);
+                },
+                children: cubit.steps,
               );
             }),
           );
         },
       ),
     );
-  }
-
-  void _onNextStepEvent() {
-    controller.nextPage(
-      duration: 500.ms,
-      curve: Curves.fastEaseInToSlowEaseOut,
-    );
-  }
-
-  void _onPrevStepEvent(BuildContext context) {
-    final currentPage = controller.page?.round() ?? 0;
-    if (currentPage < 1) {
-      Navigator.of(context).pop();
-    } else {
-      controller.previousPage(
-          duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
-    }
-  }
-
-  void _onImReadyEvent(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void _onSubmitSuccess(BuildContext context) {
-    Navigator.of(context).pop();
   }
 }

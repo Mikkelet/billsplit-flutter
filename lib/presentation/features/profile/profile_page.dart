@@ -63,32 +63,39 @@ class ProfilePage extends StatelessWidget {
                             });
                       },
                     ),
-                    const SizedBox(height: 12),
-                    ProfileListItem(
-                      text: cubit.user.email,
-                      icon: null,
-                    ),
-                    const SizedBox(height: 12),
-                    PhoneNumberView<ProfileCubit>(),
+                    if (cubit.showProfileInfo)
+                      Column(
+                        children: [
+                          const SizedBox(height: 12),
+                          ProfileListItem(
+                            text: cubit.user.email,
+                            icon: null,
+                          ),
+                          const SizedBox(height: 12),
+                          PhoneNumberView<ProfileCubit>(),
+                          const SizedBox(height: 12),
+                          ProfileListItem(
+                            text: "Group invites",
+                            counter: cubit.groupInvitesCounter,
+                            onClick: () {
+                              Navigator.of(context)
+                                  .push(GroupInvitesPage.route);
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          ProfileListItem(
+                              text: "Friends",
+                              counter: cubit.friendsCounter,
+                              onClick: () async {
+                                await Navigator.of(context)
+                                    .push(FriendsPage.route);
+                                cubit.loadNotifications();
+                              }),
+                          const SizedBox(height: 12),
+                        ],
+                      ),
                     const SizedBox(height: 12),
                     UpdateUserDefaultCurrencyView<ProfileCubit>(),
-                    const SizedBox(height: 12),
-                    ProfileListItem(
-                      text: "Group invites",
-                      counter: cubit.groupInvitesCounter,
-                      onClick: () {
-                        Navigator.of(context).push(GroupInvitesPage.route);
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    ProfileListItem(
-                        text: "Friends",
-                        counter: cubit.friendsCounter,
-                        onClick: () async {
-                          await Navigator.of(context).push(FriendsPage.route);
-                          cubit.loadNotifications();
-                        }),
-                    const SizedBox(height: 12),
                     if (kDebugMode)
                       ProfileListItem(
                           text: "Developer settings",

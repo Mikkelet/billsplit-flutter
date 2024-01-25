@@ -47,6 +47,10 @@ class AuthProvider {
         email: email, password: password);
   }
 
+  Future signUpAsGuest() async {
+    await _firebaseAuth.signInAnonymously();
+  }
+
   Future<String> getToken(bool refresh) async {
     final user = _firebaseAuth.currentUser;
     if (user == null) return "";

@@ -72,16 +72,16 @@ class _SignUpViewState extends SafeState<SignUpView> {
     return BaseBlocWidget(
       create: (context) => LandingCubit(),
       listener: (context, cubit, state) {
-        if (state is SignUpSuccessful) {
+        if (state is SignUpSuccessful || state is SignUpAnonymously) {
           Navigator.of(context).push(OnboardingFlow.getRoute());
         }
       },
-      child: BaseBlocBuilder<LandingCubit>(builder: (signUpCubit, state) {
+      child: BaseBlocBuilder<LandingCubit>(builder: (cubit, state) {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 RoundedListItem(
                     height: 64,
@@ -122,28 +122,33 @@ class _SignUpViewState extends SafeState<SignUpView> {
                 if (state is Loading)
                   const Center(child: CircularProgressIndicator())
                 else
-                  ClickableListItem(
-                    borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(30)),
-                    height: 48,
-                    width: 128,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    onClick: () {
-                      if (validateFields()) {
-                        final String email = emailFieldController.value.text;
-                        final String password =
-                            passwordFieldController.value.text;
-                        signUpCubit.signUpWithEmail(email, password);
-                      }
-                      updateState();
-                    },
-                    child: Text(
-                      "Sign up",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      ClickableListItem(
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(30)),
+                        height: 48,
+                        width: 128,
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        onClick: () {
+                          if (validateFields()) {
+                            final String email = emailFieldController.value.text;
+                            final String password =
+                                passwordFieldController.value.text;
+                            cubit.signUpWithEmail(email, password);
+                          }
+                          updateState();
+                        },
+                        child: Text(
+                          "Sign up",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    ],
                   ),
                 const SizedBox(height: 32),
                 if (Platform.isIOS)
@@ -153,7 +158,7 @@ class _SignUpViewState extends SafeState<SignUpView> {
                       const Icon(Icons.apple),
                       TextButton(
                         onPressed: () {
-                          signUpCubit.signInWithApple();
+                          cubit.signInWithApple();
                         },
                         child: const Text("Sign in with Apple"),
                       ),
@@ -164,12 +169,19 @@ class _SignUpViewState extends SafeState<SignUpView> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        signUpCubit.signInWithGoogle();
+                        cubit.signInWithGoogle();
                       },
                       child: const Text("Sign in with Google"),
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    cubit.signInAsGuest();
+                  },
+                  child: const Text("Continue as Guest"),
+                )
               ],
             ),
           ),

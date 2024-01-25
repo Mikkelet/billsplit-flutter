@@ -1,5 +1,5 @@
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_bloc.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/widgets/next_step_button.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,12 +26,7 @@ class OnboardingStepPhoneNumber extends StatelessWidget {
           const SizedBox(height: 32),
           PhoneNumberView<OnboardingBloc>(),
           const SizedBox(height: 64),
-          SimpleButton(
-            onClick: () {
-              cubit.submitProfile();
-            },
-            child: const Text("I'm ready!"),
-          )
+          NextStepButton(cubit.nextButtonText(this))
         ],
       ),
     );
