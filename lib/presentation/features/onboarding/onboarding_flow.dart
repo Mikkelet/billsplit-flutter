@@ -50,7 +50,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 return const Center(child: CircularProgressIndicator());
               }
               return PageView(
-                controller: _controller,
+                controller: cubit.controller,
                 onPageChanged: (page) {
                   cubit.onPageChanged(page);
                 },
