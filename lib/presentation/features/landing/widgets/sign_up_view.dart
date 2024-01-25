@@ -7,7 +7,10 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/guest_signin_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_with_apple_button.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_with_google_button.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_flow.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
@@ -152,36 +155,11 @@ class _SignUpViewState extends SafeState<SignUpView> {
                   ),
                 const SizedBox(height: 32),
                 if (Platform.isIOS)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.apple),
-                      TextButton(
-                        onPressed: () {
-                          cubit.signInWithApple();
-                        },
-                        child: const Text("Sign in with Apple"),
-                      ),
-                    ],
-                  ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        cubit.signInWithGoogle();
-                      },
-                      child: const Text("Sign in with Google"),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    cubit.signInAsGuest();
-                  },
-                  child: const Text("Continue as Guest"),
-                )
+                  const AppleSignButton(),
+                const SizedBox(height: 8),
+                const SignInWithGoogleButton(),
+                const SizedBox(height: 8),
+                const GuestSignInButton()
               ],
             ),
           ),
