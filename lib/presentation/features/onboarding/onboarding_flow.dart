@@ -17,12 +17,11 @@ class OnboardingFlow extends StatefulWidget {
 }
 
 class _OnboardingFlowState extends State<OnboardingFlow> {
-  final _controller = PageController();
 
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget<OnboardingBloc>(
-      create: (context) => OnboardingBloc(_controller),
+      create: (context) => OnboardingBloc(),
       listener: (context, cubit, event) {
         if (event is FinishOnboardingEvent) {
           Navigator.of(context).pop();

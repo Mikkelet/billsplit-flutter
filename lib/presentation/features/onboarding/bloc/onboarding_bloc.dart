@@ -21,7 +21,7 @@ class OnboardingBloc extends BaseCubit {
   final _getCurrencies = GetExchangeRatesUseCase();
   final _parsePhoneNumberUseCase = ParsePhoneNumberUseCase();
 
-  final PageController controller;
+  final PageController controller = PageController();
   int _currentStep = 1;
   late final steps = [
     const OnboardingStepWelcomeView(),
@@ -36,7 +36,7 @@ class OnboardingBloc extends BaseCubit {
   File? displayPhoto;
   PhoneNumber? phoneNumber;
 
-  OnboardingBloc(this.controller) {
+  OnboardingBloc() {
     _name = user.nameState;
     _initCurrency();
     _initPhoneNumber();
