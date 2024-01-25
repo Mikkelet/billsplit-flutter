@@ -136,7 +136,6 @@ class OnboardingBloc extends BaseCubit {
   }
 
   void onPageChanged(int page) {
-    print("qqq pageChanged=$page");
     _currentStep = page + 1;
   }
 }
