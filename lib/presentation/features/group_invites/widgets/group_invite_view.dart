@@ -46,15 +46,10 @@ class GroupInviteView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ProfilePictureStack(
-                            people: group.people,
-                            size: 30,
-                            limit: 3,
-                          ),
-                        ],
+                      ProfilePictureStack(
+                        people: group.peopleState.value,
+                        size: 30,
+                        limit: 3,
                       ),
                       Center(
                         child: LoadingView(

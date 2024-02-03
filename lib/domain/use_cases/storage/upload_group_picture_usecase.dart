@@ -23,7 +23,7 @@ class UploadGroupPictureUseCase {
       if (croppedImage == null) throw UserCancelled();
       final downloadUrl = await _storageProvider.uploadGroupPicture(
           group.id, Uri(path: croppedImage.path));
-      group.coverImageUrlState = downloadUrl;
+      group.coverImageUrlState.value = downloadUrl;
       await _addGroupUseCase.launch(group);
     }
   }

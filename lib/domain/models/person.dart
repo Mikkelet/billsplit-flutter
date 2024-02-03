@@ -1,4 +1,5 @@
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 
 class Person {
   final String uid;
@@ -9,9 +10,9 @@ class Person {
   final bool isGuest;
 
   // modifiable values
-  late String nameState = _name;
-  late String pfpUrlState = _pfpUrl;
-  late PhoneNumber phoneNumberState = _phoneNumber;
+  late final MutableState<String> nameState = _name.obs();
+  late final MutableState<String> pfpUrlState = _pfpUrl.obs();
+  late final MutableState<PhoneNumber> phoneNumberState = _phoneNumber.obs();
 
   Person({
     required this.uid,
@@ -20,15 +21,19 @@ class Person {
     String pfpUrl = "",
     PhoneNumber phoneNumber = const PhoneNumber.none(),
     this.email = "",
-  })  : _name = name,
+  })  : _name = name.isEmpty ? "Splitsby user" : name,
         _phoneNumber = phoneNumber,
         _pfpUrl = pfpUrl;
 
-  Person.temp(): this(uid: "", name: "New Person");
+  Person.temp() : this(uid: "", name: "New Person");
+
   Person.dummy(num seed) : this(uid: "P$seed", name: "Person $seed");
 
-  String get displayName => nameState.isEmpty ? "Splitsby user" : nameState;
+  String get displayName =>
+      nameState.value.isEmpty ? "Splitsby user" : nameState.value;
 
+  Stream<String> get displayNameStream => nameState.stateStream
+      .map((name) => name.isEmpty ? "Splitsby user" : name);
 
   @override
   int get hashCode => uid.hashCode;
@@ -45,7 +50,7 @@ class Person {
   }
 
   void resetChanges() {
-    pfpUrlState = _pfpUrl;
-    nameState = _name;
+    pfpUrlState.value = _pfpUrl;
+    nameState.value = _name;
   }
 }

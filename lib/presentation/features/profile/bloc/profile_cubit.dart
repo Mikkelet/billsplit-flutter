@@ -8,9 +8,10 @@ import 'package:billsplit_flutter/domain/use_cases/group_invites/observe_group_i
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ProfileCubit extends BaseCubit {
   final _signOutUseCase = SignOutUseCase();
@@ -19,27 +20,27 @@ class ProfileCubit extends BaseCubit {
   final _observeFriendsUseCase = ObserveFriendsUseCase();
   final _observeGroupInvitesUseCase = ObserveGroupInvitesUseCase();
 
-  int friendsCounter = 0;
-  int groupInvitesCounter = 0;
+  final friendsCounter = 0.obs();
+  final groupInvitesCounter = 0.obs();
+  final appVersionState = "".obs();
 
   bool get showProfileInfo => !user.isGuest;
 
   void loadNotifications() async {
-    await _updateFriendsCounter();
-    await _updateGroupInvitesCounter();
-    update();
+    await _observeNotifications();
+    _syncVersion();
   }
 
-  Future _updateFriendsCounter() async {
-    final friends = await _observeFriendsUseCase.observe().first;
-    final requests = friends
-        .where((element) => element.status == FriendStatus.requestReceived);
-    friendsCounter = requests.length;
-  }
+  Future _observeNotifications() async {
+    _observeFriendsUseCase.observe().listen((event) {
+      friendsCounter.value = event
+          .where((element) => element.status == FriendStatus.requestReceived)
+          .length;
+    }).addTo(compositeSubscription);
 
-  Future _updateGroupInvitesCounter() async {
-    final invites = await _observeGroupInvitesUseCase.observe().first;
-    groupInvitesCounter = invites.length;
+    _observeGroupInvitesUseCase.observe().listen((event) {
+      groupInvitesCounter.value = event.length;
+    }).addTo(compositeSubscription);
   }
 
   void signOut() {
@@ -60,19 +61,21 @@ class ProfileCubit extends BaseCubit {
 
   void updateCurrency(Currency currency) {
     sharedPrefs.userPrefDefaultCurrency = currency.symbol;
-    emit(Main());
+    update();
   }
 
-  Future<String> syncVersion() async {
-    const apiVersion = NetworkClient.apiVersion;
-    final packageInfo = await PackageInfo.fromPlatform();
-    final appVersion = packageInfo.buildNumber;
-    return "Version ${packageInfo.version} ($appVersion), apiVersion $apiVersion";
+  void _syncVersion() async {
+    PackageInfo.fromPlatform().then((packageInfo) {
+      const apiVersion = NetworkClient.apiVersion;
+      final appVersion = packageInfo.buildNumber;
+      appVersionState.value =
+          "Version ${packageInfo.version} ($appVersion), apiVersion $apiVersion";
+    });
   }
 
   Future<PhoneNumber?> getPhoneNumber() async {
-    final phoneNumber =
-        await _parseUsePhoneNumberUseCase.launch(user.phoneNumberState.dial);
+    final phoneNumber = await _parseUsePhoneNumberUseCase
+        .launch(user.phoneNumberState.value.dial);
     return phoneNumber;
   }
 

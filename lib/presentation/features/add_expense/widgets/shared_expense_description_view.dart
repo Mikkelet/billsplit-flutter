@@ -12,12 +12,11 @@ class SharedExpenseDescriptionView extends StatefulWidget {
   final bool autoFocus;
 
   const SharedExpenseDescriptionView(
-      {Key? key,
+      {super.key,
       required this.sharedExpense,
       this.showIcon = false,
       this.alignRight = false,
-      this.autoFocus = false})
-      : super(key: key);
+      this.autoFocus = false});
 
   @override
   State<SharedExpenseDescriptionView> createState() =>
@@ -27,7 +26,7 @@ class SharedExpenseDescriptionView extends StatefulWidget {
 class _SharedExpenseDescriptionViewState
     extends SafeState<SharedExpenseDescriptionView> {
   late final textController =
-      TextEditingController(text: widget.sharedExpense.descriptionState);
+      TextEditingController(text: widget.sharedExpense.descriptionState.value);
 
   static const randomMenuItems = [
     "Burger",
@@ -50,7 +49,7 @@ class _SharedExpenseDescriptionViewState
     return TextField(
       controller: textController,
       onChanged: (value) {
-        widget.sharedExpense.descriptionState = value;
+        widget.sharedExpense.descriptionState.value = value;
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();

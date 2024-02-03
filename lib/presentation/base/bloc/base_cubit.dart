@@ -3,27 +3,35 @@ import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:rxdart/rxdart.dart';
 
 abstract class BaseCubit extends Cubit<UiState> {
   @protected
   final authRepository = getIt<AuthRepository>();
   final sharedPrefs = getIt<SharedPrefs>();
 
+  final compositeSubscription = CompositeSubscription();
+
+  final loading = false.obs();
+
   BaseCubit() : super(Main());
 
   BaseCubit.withState(super.initialState) : super();
 
   void update() {
+    loading.value = false;
     emit(Main());
   }
 
   void showLoading() {
+    loading.value = true;
     emit(Loading());
   }
 
@@ -70,5 +78,11 @@ abstract class BaseCubit extends Cubit<UiState> {
 
   void showToast(String message) {
     emit(ShowToast(message));
+  }
+
+  @override
+  Future<void> close() {
+    compositeSubscription.dispose();
+    return super.close();
   }
 }

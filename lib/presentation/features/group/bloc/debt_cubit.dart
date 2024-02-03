@@ -2,8 +2,8 @@ import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
@@ -18,7 +18,7 @@ class DebtCubit extends BaseCubit {
 
   final Group group;
   final Pair<Person, num> debt;
-  late String currency = group.defaultCurrencyState;
+  late String currency = group.defaultCurrencyState.value;
   late num amount = debt.second.abs();
 
   DebtCubit(this.group, this.debt);
@@ -31,10 +31,6 @@ class DebtCubit extends BaseCubit {
     }
     currency = newCurrency;
     emit(CurrencyChanged());
-  }
-
-  update(){
-    emit(Main());
   }
 
   payTempDebt(){
@@ -108,7 +104,7 @@ class DebtCubit extends BaseCubit {
 
   num get maxAmount {
     return _convertCurrencyUseCase.launch(
-        debt.second.abs(), group.defaultCurrencyState, currency);
+        debt.second.abs(), group.defaultCurrencyState.value, currency);
   }
 
   void updateAmount(num value) {

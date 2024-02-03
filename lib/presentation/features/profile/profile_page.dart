@@ -15,6 +15,7 @@ import 'package:billsplit_flutter/presentation/features/profile/widgets/edit_nam
 import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -47,55 +48,62 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     const UploadProfilePictureView(),
                     const SizedBox(height: 12),
-                    ProfileListItem(
-                      text: cubit.user.displayName,
-                      onClick: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: EditNameDialog(
-                                initState: cubit.user.displayName,
-                                onSubmit: (name) {
-                                  cubit.updateDisplayName(name);
+                    MutableValue(
+                        mutableValue: cubit.user.nameState,
+                        builder: (context, name) {
+                          return ProfileListItem(
+                            text: cubit.user.displayName,
+                            onClick: () async {
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    child: EditNameDialog(
+                                      initState: cubit.user.displayName,
+                                      onSubmit: (name) {
+                                        cubit.updateDisplayName(name);
+                                      },
+                                    ),
+                                  );
                                 },
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+                              );
+                            },
+                          );
+                        }),
                     if (cubit.showProfileInfo)
                       Column(
                         children: [
-                          const SizedBox(height: 12),
                           ProfileListItem(
                             text: cubit.user.email,
                             icon: null,
                           ),
-                          const SizedBox(height: 12),
-                          PhoneNumberView<ProfileCubit>(),
-                          const SizedBox(height: 12),
-                          ProfileListItem(
-                            text: "Group invites",
-                            counter: cubit.groupInvitesCounter,
-                            onClick: () {
-                              Navigator.of(context)
-                                  .push(GroupInvitesPage.route);
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          ProfileListItem(
-                              text: "Friends",
-                              counter: cubit.friendsCounter,
-                              onClick: () async {
-                                await Navigator.of(context)
-                                    .push(FriendsPage.route);
-                                cubit.loadNotifications();
+                          const PhoneNumberView<ProfileCubit>(),
+                          MutableValue(
+                              mutableValue: cubit.groupInvitesCounter,
+                              builder: (context, groupsCounter) {
+                                return ProfileListItem(
+                                  text: "Group invites",
+                                  counter: groupsCounter,
+                                  onClick: () {
+                                    Navigator.of(context)
+                                        .push(GroupInvitesPage.route);
+                                  },
+                                );
+                              }),
+                          MutableValue(
+                              mutableValue: cubit.friendsCounter,
+                              builder: (context, counter) {
+                                return ProfileListItem(
+                                    text: "Friends",
+                                    counter: counter,
+                                    onClick: () async {
+                                      await Navigator.of(context)
+                                          .push(FriendsPage.route);
+                                      cubit.loadNotifications();
+                                    });
                               }),
                         ],
                       ),
-                    const SizedBox(height: 12),
                     UpdateUserDefaultCurrencyView<ProfileCubit>(),
                     if (kDebugMode)
                       ProfileListItem(
@@ -105,20 +113,12 @@ class ProfilePage extends StatelessWidget {
                                 .push(DeveloperSettingsPage.getRoute());
                             cubit.update();
                           }),
-                    if (kDebugMode) const SizedBox(height: 12),
+                    const SizedBox(height: 32),
                     const SignOutButton(),
                     const SizedBox(height: 32),
                     const DeleteUserButton(),
                     const SizedBox(height: 32),
-                    FutureBuilder(
-                      future: cubit.syncVersion(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Text("");
-                        }
-                        return Text(snapshot.data!);
-                      },
-                    ),
+                    MutableText(mutString: cubit.appVersionState),
                   ],
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,7 +7,7 @@ import 'description_text_field.dart';
 import 'expense_currency.dart';
 
 class ExpenseDescriptionAndCurrencyView extends StatelessWidget {
-  const ExpenseDescriptionAndCurrencyView({Key? key}) : super(key: key);
+  const ExpenseDescriptionAndCurrencyView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +19,11 @@ class ExpenseDescriptionAndCurrencyView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: DescriptionTextField(
-                initialText: groupExpense.descriptionState),
+            child: MutableValue(
+                mutableValue: groupExpense.descriptionState,
+                builder: (context, description) {
+                  return DescriptionTextField(initialText: description);
+                }),
           ),
           const SizedBox(width: 4),
           const SizedBox(width: 64, height: 64, child: ExpenseCurrencyButton())

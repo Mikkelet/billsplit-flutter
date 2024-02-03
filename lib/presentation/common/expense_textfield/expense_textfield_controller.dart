@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class ExpenseTextFieldController extends TextEditingController {
-  ExpenseTextFieldController({String? text}) : super(text: text);
+  ExpenseTextFieldController({super.text});
 
   String? errorText;
 

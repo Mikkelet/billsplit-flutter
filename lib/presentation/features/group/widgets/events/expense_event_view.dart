@@ -1,13 +1,13 @@
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../../extensions.dart';
 
 class ExpenseEventView extends StatelessWidget {
   final GroupExpense groupExpense;
@@ -16,11 +16,6 @@ class ExpenseEventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final description = groupExpense.descriptionState.isNotEmpty
-        ? "\"${groupExpense.descriptionState}\""
-        : "${groupExpense.createdBy.displayName} added a new expense";
-    final fontStyle =
-        groupExpense.descriptionState.isNotEmpty ? FontStyle.italic : null;
     return Column(
       children: [
         if (groupExpense.syncState == SyncState.failed)
@@ -52,37 +47,68 @@ class ExpenseEventView extends StatelessWidget {
           },
           child: Column(
             children: [
-              Text(description,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontStyle: fontStyle)),
+              MutableValue(
+                  mutableValue: groupExpense.descriptionState,
+                  builder: (context, description) {
+                    final formatted = _formatDescription(description);
+                    final fontStyle = _descriptionFontStyle(description);
+                    return Text(formatted,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontStyle: fontStyle));
+                  }),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    groupExpense.total.fmt2dec(),
-                    style: Theme.of(context).textTheme.titleLarge,
+                  MutableValue.fromStream(
+                    stream: groupExpense.totalStream,
+                    builder: (context, total) {
+                      return Text(
+                        total.fmt2dec(),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      );
+                    },
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    groupExpense.currencyState.symbol.toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 15, color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
+                  MutableValue(
+                      mutableValue: groupExpense.currencyState,
+                      builder: (context, currency) {
+                        return Text(
+                          currency.symbol.toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 15,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
+                        );
+                      }),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                "paid by ${groupExpense.payerState.displayName} on ${groupExpense.dateString}",
-                style: Theme.of(context).textTheme.bodySmall,
-              )
+              MutableValue(
+                  mutableValue: groupExpense.payerState,
+                  builder: (context, payer) {
+                    return Text(
+                      "paid by ${payer.nameState} on ${groupExpense.dateString}",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    );
+                  })
             ],
           ),
         ),
       ],
     );
+  }
+
+  String _formatDescription(String description) {
+    return description.isNotEmpty
+        ? "\"${groupExpense.descriptionState}\""
+        : "${groupExpense.createdBy.displayName} added a new expense";
+  }
+
+  FontStyle? _descriptionFontStyle(String description) {
+    return description.isNotEmpty ? FontStyle.italic : null;
   }
 }

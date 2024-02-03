@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,24 +29,41 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ProfilePictureStack(
-                  size: 32,
-                  people: expense.participantsState,
-                  limit: 4,
-                ),
+                MutableValue(
+                    mutableValue: expense.participantsState,
+                    builder: (context, participants) {
+                      return ProfilePictureStack(
+                        size: 32,
+                        people: participants,
+                        limit: 4,
+                      );
+                    }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      _getExpensePerParticipant().fmt2dec(),
-                      style: Theme.of(context).textTheme.labelLarge,
-                      textAlign: TextAlign.end,
-                    ),
+                    MutableValue(
+                        mutableValue: expense.expenseState,
+                        builder: (context, expenseNum) {
+                          return MutableValue(
+                              mutableValue: expense.participantsState,
+                              builder: (context, participants) {
+                                final value = expenseNum / participants.length;
+                                return Text(
+                                  value.fmt2dec(),
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                  textAlign: TextAlign.end,
+                                );
+                              });
+                        }),
                     const SizedBox(width: 8),
-                    Text(
-                      cubit.groupExpense.currencyState.symbol.toUpperCase(),
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
+                    MutableValue(
+                        mutableValue: groupExpense.currencyState,
+                        builder: (context, currency) {
+                          return Text(
+                            currency.symbol.toUpperCase(),
+                            style: Theme.of(context).textTheme.labelSmall,
+                          );
+                        }),
                     const SizedBox(width: 8)
                   ],
                 ),
@@ -65,14 +83,23 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
                 showDragHandle: true,
                 context: context,
                 builder: (context) {
-                  return ParticipantsPickerDialog(
-                    participants: expense.participantsState,
-                    people: cubit.people,
-                    onAddTempParticipant: (name) {
-                      cubit.onAddTempParticipant(
-                          name, groupExpense.sharedExpensesState.first);
-                    },
-                  );
+                  return MutableValue(
+                      mutableValue: groupExpense.sharedExpensesState,
+                      builder: (context, sharedExpense) {
+                        return MutableValue.fromStream(
+                          stream: cubit.peopleStream,
+                          builder: (context, people) {
+                            return ParticipantsPickerDialog(
+                              participants: expense.participantsState ,
+                              people: people,
+                              onAddTempParticipant: (name) {
+                                cubit.onAddTempParticipant(
+                                    name, sharedExpense.first);
+                              },
+                            );
+                          }
+                        );
+                      });
                 },
               );
               if (response is List<Person>) {
@@ -87,9 +114,5 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  num _getExpensePerParticipant() {
-    return expense.expenseState / expense.participantsState.length;
   }
 }

@@ -32,10 +32,10 @@ class DebtCalculator {
     return people.map((person) {
       // get expenses payed for by person
       final payedForGroupExpenses = expensesAndPayments
-          .where((expense) => expense.payerState.uid == person.uid);
+          .where((expense) => expense.payerState.value.uid == person.uid);
       // person cannot have debt to themselves
       final payedForExpensesWithoutPayee = payedForGroupExpenses
-          .where((expense) => expense.payerState.uid == person.uid);
+          .where((expense) => expense.payerState.value.uid == person.uid);
       // Update individual expenses to include the shared expense
       final Iterable<IndividualExpense> payedForIndividualExpenses =
           payedForExpensesWithoutPayee
@@ -164,9 +164,9 @@ class DebtCalculator {
     });
     print("\n=== Effect Debt ===");
     expenses
-        .map((e) => e.sharedExpensesState)
+        .map((e) => e.sharedExpensesState.value)
         .flatMap()
-        .map((e) => e.participantsState)
+        .map((e) => e.participantsState.value)
         .flatMap()
         .toSet()
         .forEach((person) {
@@ -203,11 +203,11 @@ class DebtCalculator {
 extension GroupExpenseExt on GroupExpense {
   Iterable<IndividualExpense> getIndividualWithShared() {
     final people =
-        sharedExpensesState.map((e) => e.participantsState).flatMap().toSet();
+        sharedExpensesState.value.map((e) => e.participantsState.value).flatMap().toSet();
     return people.map((e) {
       final num expense = getSharedExpensesForPerson(e);
       return IndividualExpense(
-          person: e, expense: expense, currency: currencyState.symbol);
+          person: e, expense: expense, currency: currencyState.value.symbol);
     });
   }
 }

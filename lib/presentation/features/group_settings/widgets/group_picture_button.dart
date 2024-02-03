@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,14 +47,15 @@ class GroupPictureButton extends StatelessWidget {
       },
       child: LoadingView(
         isLoading: cubit.state is GroupPictureUploading,
-        child: Builder(
-          builder: (context) {
-            if (cubit.group.coverImageUrlState.isNotEmpty) {
+        child: MutableValue(
+          mutableValue: cubit.group.coverImageUrlState,
+          builder: (context, coverImageUrl) {
+            if (coverImageUrl.isNotEmpty) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
                   width: double.infinity,
-                  imageUrl: cubit.group.coverImageUrlState,
+                  imageUrl: coverImageUrl,
                   fit: BoxFit.cover,
                 ),
               );

@@ -1,18 +1,17 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
+import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/advanced_expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/simple_expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/delete_button.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/view_pager_title.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/submit_expense_button.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
@@ -53,7 +52,7 @@ class AddExpensePage extends StatefulWidget with WidgetsBindingObserver {
               group: group, groupExpense: GroupExpense.newExpense(user, group)),
           routeName: routeName);
     } else {
-      final numOfSharedExpenses = expense.sharedExpensesState.length;
+      final numOfSharedExpenses = expense.sharedExpensesState.value.length;
       final openOnPage = numOfSharedExpenses > 1 ? Page.advanced : Page.simple;
       return slideUpRoute(
           AddExpensePage(
@@ -159,7 +158,7 @@ class _AddExpensePageState extends SafeState<AddExpensePage> {
 
   void onChangeToSimple(BuildContext context) async {
     final cubit = context.read<AddExpenseBloc>();
-    if (cubit.groupExpense.sharedExpensesState.length > 1) {
+    if (cubit.groupExpense.sharedExpensesState.value.length > 1) {
       final response = await showDialog(
           context: context,
           builder: (context) => const CustomDialog(
@@ -176,14 +175,5 @@ class _AddExpensePageState extends SafeState<AddExpensePage> {
             duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
       }
     }
-  }
-
-  Iterable<Person> getParticipatingPeople() {
-    final Iterable<Person> pastMembers = [
-      ...widget.groupExpense.sharedExpensesState
-          .map((e) => e.participantsState)
-          .toList()
-    ].flatMap().toSet();
-    return <Person>{...pastMembers, ...widget.group.people};
   }
 }

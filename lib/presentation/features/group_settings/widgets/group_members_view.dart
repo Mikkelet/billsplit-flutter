@@ -5,13 +5,14 @@ import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupMembersView extends StatefulWidget {
-  const GroupMembersView({Key? key}) : super(key: key);
+  const GroupMembersView({super.key});
 
   @override
   State<GroupMembersView> createState() => _GroupMembersViewState();
@@ -48,9 +49,14 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ProfilePictureStack(
-                            people: cubit.group.people,
-                            size: 32,
+                          child: MutableValue(
+                            mutableValue: cubit.group.peopleState,
+                            builder: (context, people) {
+                              return ProfilePictureStack(
+                                people: people,
+                                size: 32,
+                              );
+                            }
                           ),
                         ),
                         Container(
@@ -97,45 +103,55 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                 RoundedListItem(
                   borderRadius:
                       const BorderRadius.vertical(bottom: Radius.circular(15)),
-                  child: Column(
-                    children: [
-                      ...cubit.group.people.mapIndexed(
-                        (i, person) => Padding(
-                          padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
-                          child: Row(
+                  child: MutableValue(
+                    mutableValue: cubit.group.invitesState,
+                    builder: (context, invites) {
+                      return MutableValue(
+                        mutableValue: cubit.group.peopleState,
+                        builder: (context, people) {
+                          return Column(
                             children: [
-                              ProfilePictureView(
-                                  person: person, canInspect: true),
-                              const SizedBox(width: 8),
-                              Text(
-                                person.displayName,
-                                style: Theme.of(context).textTheme.labelSmall,
+                              ...people.mapIndexed(
+                                (i, person) => Padding(
+                                  padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
+                                  child: Row(
+                                    children: [
+                                      ProfilePictureView(
+                                          person: person, canInspect: true),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        person.displayName,
+                                        style: Theme.of(context).textTheme.labelSmall,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              ...invites.mapIndexed(
+                                (index, person) => Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Row(
+                                    children: [
+                                      ProfilePictureView(person: person),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        person.displayName,
+                                        style: Theme.of(context).textTheme.labelSmall,
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        "invited",
+                                        style: Theme.of(context).textTheme.labelSmall,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               )
                             ],
-                          ),
-                        ),
-                      ),
-                      ...cubit.group.invites.mapIndexed(
-                        (index, person) => Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            children: [
-                              ProfilePictureView(person: person),
-                              const SizedBox(width: 8),
-                              Text(
-                                person.displayName,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                              const Spacer(),
-                              Text(
-                                "invited",
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                          );
+                        }
+                      );
+                    }
                   ),
                 ),
                 if (cubit.state is AddingPersonToGroup)
@@ -162,7 +178,7 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                               cubit.invitePersonToGroup(friend);
                               Navigator.of(context).pop();
                             },
-                            currentPickedFriends: cubit.group.people,
+                            currentPickedFriends: cubit.group.peopleState.value,
                           ),
                         );
                       },

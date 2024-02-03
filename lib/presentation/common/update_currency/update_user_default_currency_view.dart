@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class UpdateUserDefaultCurrencyView<T extends BaseCubit>
     extends StatelessWidget {
   // Should not be const because BLOC cannot always update const widgets
-  UpdateUserDefaultCurrencyView({super.key});
+  const UpdateUserDefaultCurrencyView({super.key});
 
   void onClick(BuildContext context, T cubit) async {
     final response =
@@ -24,7 +24,7 @@ class UpdateUserDefaultCurrencyView<T extends BaseCubit>
     final cubit = context.read<T>();
     final currency = cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
     return ProfileListItem(
-      text: "Currency: $currency",
+      text: "Currency $currency",
       onClick: () async => onClick(context, cubit),
     );
   }

@@ -16,5 +16,5 @@ extension PeopleExt on Iterable<Person> {
 }
 
 extension PersonExt on Person {
-  PersonDTO toDTO() => PersonDTO(uid, nameState, pfpUrlState);
+  PersonDTO toDTO() => PersonDTO(uid, nameState.value, pfpUrlState.value);
 }

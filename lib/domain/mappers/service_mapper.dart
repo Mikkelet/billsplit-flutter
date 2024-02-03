@@ -41,12 +41,12 @@ extension ServiceDbExt on ServiceDb {
 extension ServiceExt on SubscriptionService {
   ServiceDTO toDTO() => ServiceDTO(
         id: id,
-        name: nameState,
-        currency: currencyState,
+        name: nameState.value,
+        currency: currencyState.value,
         imageUrl: imageUrl,
-        monthlyExpense: monthlyExpenseState,
+        monthlyExpense: monthlyExpenseState.value,
         createdBy: createdBy.toDTO(),
-        participants: participantsState.toDTO(),
-        payer: payerState.toDTO(),
+        participants: participantsState.value.toDTO(),
+        payer: payerState.value.toDTO(),
       );
 }

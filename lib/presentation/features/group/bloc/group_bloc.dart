@@ -5,11 +5,11 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/groups/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_events_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/groups/get_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/services/observe_services_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
@@ -41,7 +41,7 @@ class GroupBloc extends BaseCubit {
             if (_eventSortBy == SortEvents.added) {
               return e.timestamp;
             } else if (e is GroupExpense) {
-              return e.dateState.millisecondsSinceEpoch;
+              return e.dateState.value.millisecondsSinceEpoch;
             } else {
               return e.timestamp;
             }
@@ -50,8 +50,8 @@ class GroupBloc extends BaseCubit {
           .toList());
 
   Stream<List<SubscriptionService>> getServicesStream() =>
-      _observeServicesUseCase.observe(group.id).map(
-          (event) => event.toList().sortedBy((element) => element.nameState));
+      _observeServicesUseCase.observe(group.id).map((event) =>
+          event.toList().sortedBy((element) => element.nameState.value));
 
   Stream<Iterable<Pair<Person, num>>> getDebtsStream() =>
       _observeDebtsUseCase.observe(group);
@@ -79,7 +79,7 @@ class GroupBloc extends BaseCubit {
     _addExpenseUseCase.launch(group, expense);
   }
 
-  void changeSort(SortEvents sortEvents){
+  void changeSort(SortEvents sortEvents) {
     _eventSortBy = sortEvents;
     update();
   }

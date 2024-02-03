@@ -11,7 +11,7 @@ class ProfileListItem extends StatelessWidget {
       required this.text,
       this.counter = 0,
       this.onClick,
-      this.icon = Icons.chevron_right});
+      this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +49,7 @@ class ProfileListItem extends StatelessWidget {
             ),
           ),
         ),
-        if (true)
-          Divider(color: Theme.of(context).colorScheme.inversePrimary)
+        if (true) Divider(color: Theme.of(context).colorScheme.inversePrimary)
       ],
     );
   }

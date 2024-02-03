@@ -9,10 +9,11 @@ class DeleteProfilePictureUseCase {
   final _storageProvider = getIt<FirebaseStorageProvider>();
 
   Future launch() async {
-    if (_authRepository.loggedInUser.pfpUrlState.isNotEmpty) {
+    if (_authRepository.loggedInUser.pfpUrlState.value.isNotEmpty) {
       await _storageProvider
           .deleteProfilePicture(_authRepository.loggedInUser.uid);
     }
     await _authProvider.updateProfilePicture(null);
+    _authRepository.loggedInUser.pfpUrlState.value = "";
   }
 }

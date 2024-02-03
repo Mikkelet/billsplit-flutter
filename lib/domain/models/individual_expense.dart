@@ -5,8 +5,11 @@ class IndividualExpense {
   final num expense;
   final String currency;
 
-  IndividualExpense(
-      {required this.currency, required this.person, this.expense = 0});
+  IndividualExpense({
+    required this.currency,
+    required this.person,
+    this.expense = 0,
+  });
 
   @override
   String toString() {

@@ -4,33 +4,24 @@ import 'package:flutter/material.dart';
 
 class PayerView extends StatelessWidget {
   final Person person;
-  final bool isPayer;
   final double size;
   final Function() onClick;
 
-  const PayerView(
-      {Key? key,
-      required this.person,
-      required this.isPayer,
-      required this.onClick,
-      this.size = 64})
-      : super(key: key);
+  const PayerView({
+    super.key,
+    required this.person,
+    required this.onClick,
+    this.size = 64,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          IconButton(
-            iconSize: size,
-            visualDensity: VisualDensity.compact,
-            onPressed: onClick,
-            padding: EdgeInsets.zero,
-            icon: ProfilePictureView(person: person, size: size),
-          ),
-        ],
-      ),
+    return IconButton(
+      iconSize: size,
+      visualDensity: VisualDensity.compact,
+      onPressed: onClick,
+      padding: EdgeInsets.zero,
+      icon: ProfilePictureView(person: person, size: size),
     );
   }
 }

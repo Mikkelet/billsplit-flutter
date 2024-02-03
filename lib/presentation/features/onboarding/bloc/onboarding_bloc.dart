@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
@@ -37,13 +37,13 @@ class OnboardingBloc extends BaseCubit {
   PhoneNumber? phoneNumber;
 
   OnboardingBloc() {
-    _name = user.nameState;
+    _name = user.nameState.value;
     _initCurrency();
     _initPhoneNumber();
   }
 
   _initPhoneNumber() {
-    _parsePhoneNumberUseCase.launch(user.phoneNumberState.dial).then((value) {
+    _parsePhoneNumberUseCase.launch(user.phoneNumberState.value.dial).then((value) {
       phoneNumber = value;
     });
   }
@@ -65,7 +65,7 @@ class OnboardingBloc extends BaseCubit {
 
   Future updateName(String name) async {
     await _updateNameUseCase.launch(name);
-    user.nameState = name;
+    user.nameState.value = name;
   }
 
   void submitProfile() {

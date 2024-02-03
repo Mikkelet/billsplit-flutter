@@ -8,9 +8,9 @@ extension SharedExpensesExt on Iterable<SharedExpense> {
 
 extension SharedExpenseExt on SharedExpense {
   SharedExpenseDTO toDTO() => SharedExpenseDTO(
-      descriptionState,
-      participantsState.toDTO(),
-      expenseState);
+      descriptionState.value,
+      participantsState.value.toDTO(),
+      expenseState.value);
 }
 
 extension SharedExpenseDtos on Iterable<SharedExpenseDTO> {
