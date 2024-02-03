@@ -24,7 +24,7 @@ class UpdateUserDefaultCurrencyView<T extends BaseCubit>
     final cubit = context.read<T>();
     final currency = cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
     return ProfileListItem(
-      text: "Currency: $currency",
+      text: "Currency $currency",
       onClick: () async => onClick(context, cubit),
     );
   }

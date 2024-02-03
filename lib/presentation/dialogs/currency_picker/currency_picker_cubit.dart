@@ -1,12 +1,14 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/convert_currency_use_case.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_currencies_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/convert_currency_use_case.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/get_currencies_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:collection/collection.dart';
 
 class CurrencyPickerCubit extends BaseCubit {
   final _getCurrenciesUseCase = GetCurrenciesUseCase();
+  final _getExchangeRatesUsecase = GetExchangeRatesUseCase();
   final _convertCurrencyUseCase = ConvertCurrencyUseCase();
   final String? convertToCurrency;
   late List<Currency> currencies;
@@ -15,12 +17,19 @@ class CurrencyPickerCubit extends BaseCubit {
 
   loadCurrencies() {
     showLoading();
-    Future.value(
-            _getCurrenciesUseCase.launch().toList().sortedBy((e) => e.symbol))
-        .then((value) {
-      currencies = value;
-      emit(Main());
-    });
+    currencies =
+        _getCurrenciesUseCase.launch().toList().sortedBy((e) => e.symbol);
+    update();
+  }
+
+  Future loadCurrenciesAsync() async {
+    showLoading();
+    try {
+      await _getExchangeRatesUsecase.launch();
+      loadCurrencies();
+    } catch (e, st) {
+      showError(e, st);
+    }
   }
 
   num getRateForCurrency(String currency) {

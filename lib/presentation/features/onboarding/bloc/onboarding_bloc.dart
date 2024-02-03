@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
-import 'package:billsplit_flutter/domain/use_cases/currency_usecases/get_exchange_rates_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/currency/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';

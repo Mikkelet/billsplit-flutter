@@ -68,14 +68,11 @@ class ProfilePage extends StatelessWidget {
                     if (cubit.showProfileInfo)
                       Column(
                         children: [
-                          const SizedBox(height: 12),
                           ProfileListItem(
                             text: cubit.user.email,
                             icon: null,
                           ),
-                          const SizedBox(height: 12),
                           PhoneNumberView<ProfileCubit>(),
-                          const SizedBox(height: 12),
                           ProfileListItem(
                             text: "Group invites",
                             counter: cubit.groupInvitesCounter,
@@ -84,7 +81,6 @@ class ProfilePage extends StatelessWidget {
                                   .push(GroupInvitesPage.route);
                             },
                           ),
-                          const SizedBox(height: 12),
                           ProfileListItem(
                               text: "Friends",
                               counter: cubit.friendsCounter,
@@ -95,7 +91,6 @@ class ProfilePage extends StatelessWidget {
                               }),
                         ],
                       ),
-                    const SizedBox(height: 12),
                     UpdateUserDefaultCurrencyView<ProfileCubit>(),
                     if (kDebugMode)
                       ProfileListItem(
@@ -105,7 +100,7 @@ class ProfilePage extends StatelessWidget {
                                 .push(DeveloperSettingsPage.getRoute());
                             cubit.update();
                           }),
-                    if (kDebugMode) const SizedBox(height: 12),
+                    const SizedBox(height: 32),
                     const SignOutButton(),
                     const SizedBox(height: 32),
                     const DeleteUserButton(),
