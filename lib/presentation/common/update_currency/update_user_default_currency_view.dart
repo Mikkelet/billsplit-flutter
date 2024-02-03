@@ -25,7 +25,6 @@ class UpdateUserDefaultCurrencyView<T extends BaseCubit>
     final currency = cubit.sharedPrefs.userPrefDefaultCurrency.toUpperCase();
     return ProfileListItem(
       text: "Currency: $currency",
-      icon: Icons.edit_outlined,
       onClick: () async => onClick(context, cubit),
     );
   }

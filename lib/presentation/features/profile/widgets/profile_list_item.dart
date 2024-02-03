@@ -49,7 +49,8 @@ class ProfileListItem extends StatelessWidget {
             ),
           ),
         ),
-        if (true) const Divider(color: Colors.white30)
+        if (true)
+          Divider(color: Theme.of(context).colorScheme.inversePrimary)
       ],
     );
   }

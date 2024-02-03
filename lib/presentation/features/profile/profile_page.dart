@@ -3,7 +3,6 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
-import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/delete_user_flow/delete_user_page.dart';
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
@@ -12,6 +11,7 @@ import 'package:billsplit_flutter/presentation/features/group_invites/group_invi
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/delete_user_button.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/edit_name_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
@@ -46,21 +46,23 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   children: [
                     const UploadProfilePictureView(),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     ProfileListItem(
                       text: cubit.user.displayName,
-                      icon: Icons.edit_outlined,
                       onClick: () async {
                         await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                child: UpdatableTextField(
-                                  initState: cubit.user.nameState,
-                                  updateFuture: cubit.updateDisplayName,
-                                ),
-                              );
-                            });
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: EditNameDialog(
+                                initState: cubit.user.displayName,
+                                onSubmit: (name) {
+                                  cubit.updateDisplayName(name);
+                                },
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                     if (cubit.showProfileInfo)
@@ -91,7 +93,6 @@ class ProfilePage extends StatelessWidget {
                                     .push(FriendsPage.route);
                                 cubit.loadNotifications();
                               }),
-                          const SizedBox(height: 12),
                         ],
                       ),
                     const SizedBox(height: 12),

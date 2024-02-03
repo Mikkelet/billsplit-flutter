@@ -17,7 +17,7 @@ class PhoneNumberView<T extends BaseCubit> extends StatelessWidget {
         if (phoneNumber.phoneNumber.isEmpty) {
           return ProfileListItem(
             text: "Click here to add phone number",
-            icon: Icons.mode_edit_outlined,
+            icon: null,
             onClick: () async {
               await Navigator.of(context)
                   .push(UpdatePhoneNumberFlow.getRoute());
@@ -27,7 +27,7 @@ class PhoneNumberView<T extends BaseCubit> extends StatelessWidget {
         }
         return ProfileListItem(
           text: phoneNumber.display,
-          icon: Icons.mode_edit_outlined,
+          icon: null,
           onClick: () async {
             await Navigator.of(context)
                 .push(UpdatePhoneNumberFlow.getRoute(phoneNumber: phoneNumber));

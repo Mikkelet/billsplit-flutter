@@ -82,21 +82,21 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
               children: [
                 Expanded(
                   child: TextField(
-                    autofocus: true,
-                    style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.labelLarge?.fontSize),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: widget.hintText,
-                      counterText: "",
-                    ),
-                    maxLines: 1,
-                    maxLength: widget.charLimit,
-                    controller: controller,
-                    onChanged: (val) {
-                      currentState = val;
-                    },
+                      autofocus: true,
+                      style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.labelLarge?.fontSize),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: widget.hintText,
+                        counterText: "",
+                      ),
+                      maxLines: 1,
+                      maxLength: widget.charLimit,
+                      controller: controller,
+                      onChanged: (val) {
+                        currentState = val;
+                      },
                   ),
                 ),
                 const SizedBox(width: 4),

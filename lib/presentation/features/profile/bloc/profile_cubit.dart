@@ -49,9 +49,13 @@ class ProfileCubit extends BaseCubit {
     });
   }
 
-  Future updateDisplayName(String newName) async {
-    await _updateDisplayNameUseCase.launch(newName);
-    update();
+  void updateDisplayName(String newName) async {
+    emit(SubmittingEditName());
+    _updateDisplayNameUseCase.launch(newName).then((value) {
+      update();
+    }).catchError((err, stackTrace) {
+      showError(err, stackTrace);
+    });
   }
 
   void updateCurrency(Currency currency) {
