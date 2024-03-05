@@ -1,16 +1,15 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participant_picker/temporary_participant_view.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
-class ParticipantsPickerDialog extends StatelessWidget {
-  final MutableListState<Person> participants;
+class ParticipantsPickerDialog extends StatefulWidget {
+  final List<Person> participants;
   final Iterable<Person> people;
   final Widget? extraAction;
   final bool showSubmit;
   final Function(String)? onAddTempParticipant;
-  final _showMin1PersonError = false;
 
   const ParticipantsPickerDialog({
     super.key,
@@ -21,61 +20,66 @@ class ParticipantsPickerDialog extends StatelessWidget {
     this.extraAction,
   });
 
+  @override
+  State<ParticipantsPickerDialog> createState() =>
+      _ParticipantsPickerDialogState();
+}
+
+class _ParticipantsPickerDialogState
+    extends SafeState<ParticipantsPickerDialog> {
+  final _showMin1PersonError = false;
+
   void changeParticipantStatus(Person person, bool isParticipant) {
     if (isParticipant) {
-      participants.add(person);
+      widget.participants.add(person);
     } else {
-      participants.remove(person);
+      widget.participants.remove(person);
     }
+    updateState();
   }
 
   bool _isEveryoneSelected() =>
-      people.length == participants.value.length;
-
+      widget.people.length == widget.participants.length;
 
   @override
   Widget build(BuildContext context) {
-    final allowTempParticipants = onAddTempParticipant != null;
-    return MutableValue(
-        mutableValue: participants,
-        builder: (context, participants) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: _appBar(context),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 4),
-                    ...people.map(
-                      (person) => _participantView(context, person),
-                    ),
-                    if (allowTempParticipants) const SizedBox(height: 8),
-                    if (allowTempParticipants)
-                      TemporaryParticipantView(
-                        onAddTempParticipant: onAddTempParticipant,
-                      ),
-                    const SizedBox(height: 8),
-                    if (_showMin1PersonError)
-                      Text(
-                        "Must include at least one person",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.error),
-                      ),
-                    if (extraAction != null) const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (extraAction != null) extraAction!
-                      ],
-                    ),
-                  ],
-                ),
+    final allowTempParticipants = widget.onAddTempParticipant != null;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: _appBar(context),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 4),
+              ...widget.people.map(
+                (person) => _participantView(context, person),
               ),
-            ),
-          );
-        });
+              if (allowTempParticipants) const SizedBox(height: 8),
+              if (allowTempParticipants)
+                TemporaryParticipantView(
+                  onAddTempParticipant: widget.onAddTempParticipant,
+                ),
+              const SizedBox(height: 8),
+              if (_showMin1PersonError)
+                Text(
+                  "Must include at least one person",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: Theme.of(context).colorScheme.error),
+                ),
+              if (widget.extraAction != null) const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [if (widget.extraAction != null) widget.extraAction!],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   AppBar _appBar(BuildContext context) {
@@ -83,10 +87,10 @@ class ParticipantsPickerDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       scrolledUnderElevation: 0,
       actions: [
-        if (showSubmit)
+        if (widget.showSubmit)
           IconButton(
             onPressed: () {
-              Navigator.of(context).pop(participants);
+              Navigator.of(context).pop(widget.participants);
             },
             disabledColor: Theme.of(context).disabledColor,
             color: Theme.of(context).colorScheme.onBackground,
@@ -119,8 +123,9 @@ class ParticipantsPickerDialog extends StatelessWidget {
                   ? null
                   : (value) {
                       if (value == false) {
-                        participants.clear();
-                        participants.addAll(people);
+                        widget.participants.clear();
+                        widget.participants.addAll(widget.people);
+                        updateState();
                       }
                     },
             ),
@@ -136,8 +141,9 @@ class ParticipantsPickerDialog extends StatelessWidget {
         Expanded(
           child: InkWell(
             onTap: () {
-              participants.clear();
-              participants.add(person);
+              widget.participants.clear();
+              widget.participants.add(person);
+              updateState();
             },
             child: Row(
               children: [
@@ -163,10 +169,9 @@ class ParticipantsPickerDialog extends StatelessWidget {
           fillColor: MaterialStateProperty.resolveWith((states) {
             return Theme.of(context).colorScheme.secondaryContainer;
           }),
-          value: participants.value.contains(person),
+          value: widget.participants.contains(person),
           onChanged: (isParticipant) {
-            if (isParticipant == false &&
-                participants.value.length == 1) {
+            if (isParticipant == false && widget.participants.length == 1) {
               // cannot have 0 participants
             } else {
               changeParticipantStatus(person, isParticipant ?? false);

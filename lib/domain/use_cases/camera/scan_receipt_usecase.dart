@@ -170,5 +170,3 @@ class ScanReceiptUseCase {
         rect.width * scaleFactor, rect.height * scaleFactor);
   }
 }
-
-void main() {}

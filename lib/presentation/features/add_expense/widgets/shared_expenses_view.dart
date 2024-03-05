@@ -13,7 +13,7 @@ import 'shared_expense_view.dart';
 class SharedExpensesView extends StatefulWidget {
   final bool showAll;
 
-  const SharedExpensesView({Key? key, required this.showAll}) : super(key: key);
+  const SharedExpensesView({super.key, required this.showAll});
 
   @override
   State<SharedExpensesView> createState() => _SharedExpensesViewState();
@@ -21,6 +21,7 @@ class SharedExpensesView extends StatefulWidget {
 
 class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
   late bool showAll = widget.showAll;
+  static const int _showAllLimit = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +30,10 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
         mutableValue: cubit.groupExpense.sharedExpensesState,
         builder: (context, sharedExpensesState) {
           Iterable<SharedExpense> sharedExpenses;
-          if (showAll) {
+          if (showAll && sharedExpensesState.length > _showAllLimit) {
             sharedExpenses = sharedExpensesState;
           } else {
-            sharedExpenses = sharedExpensesState.take(3);
+            sharedExpenses = sharedExpensesState.take(_showAllLimit);
           }
           return Column(
             children: [
@@ -42,7 +43,7 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
                       i, sharedExpensesState);
                   final autoFocus = (listPos == ListPosition.last ||
                           listPos == ListPosition.single) &&
-                      e.expenseState == 0;
+                      e.expenseState.value == 0;
                   return SharedExpenseView(
                     key: Key("${e.hashCode}"),
                     sharedExpense: e,

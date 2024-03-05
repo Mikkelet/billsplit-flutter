@@ -325,18 +325,13 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                           Theme.of(context).colorScheme.surface,
                                       builder: (context) => Padding(
                                         padding: const EdgeInsets.all(16.0),
-                                        child: MutableValue(
-                                            mutableValue:
-                                                cubit.group.peopleState,
-                                            builder: (context, people) {
-                                              return ParticipantsPickerDialog(
-                                                participants: service.participantsState,
-                                                people: people,
-                                              );
-                                            }),
+                                        child: ParticipantsPickerDialog(
+                                          participants: service.participantsState.value.toList(),
+                                          people: cubit.group.peopleState.value,
+                                        ),
                                       ),
                                     );
-                                    if (response is List<Person>) {
+                                    if (response is Iterable<Person>) {
                                       cubit.updateParticipants(response);
                                     }
                                   },

@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
 
 class GroupTitleView extends StatelessWidget {
@@ -18,17 +17,13 @@ class GroupTitleView extends StatelessWidget {
       decoration: deco,
       alignment: Alignment.centerLeft,
       padding: padding,
-      child: MutableValue(
-          mutableValue: group.nameState,
-          builder: (context, value) {
-            return Text(value,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(color: textColor),
-                softWrap: false,
-                overflow: TextOverflow.ellipsis);
-          }),
+      child: Text(group.nameState.value,
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: textColor),
+          softWrap: false,
+          overflow: TextOverflow.ellipsis),
     );
   }
 }

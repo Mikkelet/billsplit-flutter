@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
@@ -11,6 +10,7 @@ import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.
 import 'package:billsplit_flutter/presentation/features/groups/widgets/drawer_action_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
 
 class GroupsPage extends StatelessWidget {
@@ -43,11 +43,9 @@ class GroupsPage extends StatelessWidget {
                 await cubit.loadProfile();
               },
               child: Center(
-                child: StreamBuilder<List<Group>>(
+                child: MutableValue.fromStream(
                     stream: cubit.getGroupStream(),
-                    initialData: const [],
-                    builder: (_, snapshot) {
-                      final groups = snapshot.data!;
+                    builder: (_, groups) {
                       return CustomScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
                           controller: _scrollingController,

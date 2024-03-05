@@ -90,7 +90,7 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
                           stream: cubit.peopleStream,
                           builder: (context, people) {
                             return ParticipantsPickerDialog(
-                              participants: expense.participantsState ,
+                              participants: expense.participantsState.value.toList(),
                               people: people,
                               onAddTempParticipant: (name) {
                                 cubit.onAddTempParticipant(
@@ -102,7 +102,7 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
                       });
                 },
               );
-              if (response is List<Person>) {
+              if (response is Iterable<Person>) {
                 cubit.updateParticipantsForExpense(expense, response);
               }
             },

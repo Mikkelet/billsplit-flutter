@@ -161,21 +161,17 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: MutableValue.fromStream(
-              stream: cubit.peopleStream,
-              builder: (context, people) {
-                return ParticipantsPickerDialog(
-                  participants: widget.sharedExpense.participantsState,
-                  people: people,
-                  onAddTempParticipant: (name) {
-                    cubit.onAddTempParticipant(name, widget.sharedExpense);
-                  },
-                );
-              }),
+          child: ParticipantsPickerDialog(
+            participants: widget.sharedExpense.participantsState.value.toList(),
+            people: cubit.people,
+            onAddTempParticipant: (name) {
+              cubit.onAddTempParticipant(name, widget.sharedExpense);
+            },
+          ),
         );
       },
     );
-    if (response is List<Person>) {
+    if (response is Iterable<Person>) {
       cubit.updateParticipantsForExpense(widget.sharedExpense, response);
     }
   }

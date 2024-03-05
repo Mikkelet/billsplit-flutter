@@ -19,8 +19,11 @@ class AddExpenseBloc extends BaseCubit {
 
   Stream<Iterable<Person>> get peopleStream {
     return group.peopleState.combine(groupExpense.tempParticipantsState,
-            (people, temps) => [...people, ...temps]);
+        (people, temps) => [...people, ...temps]);
   }
+
+  Iterable<Person> get people =>
+      [...group.peopleState.value, ...groupExpense.tempParticipantsState.value];
 
   Stream<bool> get individualExpenseStream {
     final participantsStream = groupExpense.sharedExpensesState.value
@@ -48,7 +51,6 @@ class AddExpenseBloc extends BaseCubit {
     }
   }
 
-
   void addExpense() {
     _addExpenseUseCase.launch(group, groupExpense);
     emit(AddExpenseSuccess());
@@ -66,7 +68,7 @@ class AddExpenseBloc extends BaseCubit {
 
   void addExpenseForUser(Person person) {
     final sharedExpense =
-    groupExpense.addNewSharedExpense(withParticipants: [person]);
+        groupExpense.addNewSharedExpense(withParticipants: [person]);
     emit(QuickAddSharedExpense(sharedExpense));
   }
 
@@ -88,11 +90,10 @@ class AddExpenseBloc extends BaseCubit {
       showToast("No items found");
       return;
     }
-    final sharedExpenses = receiptItems.map((e) =>
-        SharedExpense(
-            expense: e.expense,
-            participants: group.peopleState.value,
-            description: e.description));
+    final sharedExpenses = receiptItems.map((e) => SharedExpense(
+        expense: e.expense,
+        participants: group.peopleState.value,
+        description: e.description));
     groupExpense.sharedExpensesState.clear();
     groupExpense.sharedExpensesState.addAll(sharedExpenses);
   }
@@ -103,13 +104,11 @@ class AddExpenseBloc extends BaseCubit {
       groupExpense.addNewSharedExpense(
           withParticipants: group.peopleState.value);
     }
-    update();
   }
 
-  void updateParticipantsForExpense(SharedExpense sharedExpense,
-      List<Person> participants) {
+  void updateParticipantsForExpense(
+      SharedExpense sharedExpense, Iterable<Person> participants) {
     sharedExpense.participantsState.value = participants;
-    update();
   }
 
   void updateSharedExpense(SharedExpense sharedExpense, num value) {

@@ -16,11 +16,12 @@ class GroupView extends StatelessWidget {
   final num debtToGroup;
   final bool showDebt;
 
-  const GroupView(
-      {super.key,
-      required this.group,
-      required this.debtToGroup,
-      this.showDebt = true});
+  const GroupView({
+    super.key,
+    required this.group,
+    required this.debtToGroup,
+    this.showDebt = true,
+  });
 
   @override
   Widget build(BuildContext context) {
