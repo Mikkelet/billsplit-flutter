@@ -13,15 +13,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'event_view.dart';
 
 class EventsView extends StatelessWidget {
-  const EventsView({Key? key}) : super(key: key);
+  const EventsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
     return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
       return DefaultStreamBuilder(
+          loaderWidget: const SizedBox(),
           stream: cubit.getEventsStream(),
           builder: (_, events) {
+            print("qqq rebuild state=${state.runtimeType}");
             if (events.isEmpty) {
               return Center(
                   child: Text(

@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
@@ -33,119 +32,125 @@ class GroupPage extends StatelessWidget {
       child: BaseBlocBuilder<GroupBloc>(
         builder: (cubit, state) {
           return MutableValue(
-              mutableValue: group.coverImageUrlState,
-              builder: (context, coverImage) {
-                return BaseScaffold(
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endFloat,
-                  floatingActionButton: Builder(
-                    builder: (context) {
-                      if (state is GroupState) {
-                        if (state.nav == GroupPageNav.debt) {
-                          return const SizedBox();
-                        }
-                        final text = state.nav == GroupPageNav.events
-                            ? "Add expense"
-                            : "Add subscription";
-                        return ExtendedFloatingActionButton(
-                          scrollController: ScrollController(),
-                          onPressed: () {
-                            _onFabClicked(context);
-                          },
-                          label: text,
-                          icon: Icons.add,
+            mutableValue: group.coverImageUrlState,
+            builder: (context, coverImage) {
+              return BaseScaffold(
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.endFloat,
+                floatingActionButton: Builder(
+                  builder: (context) {
+                    if (state is GroupState) {
+                      if (state.nav == GroupPageNav.debt) {
+                        return const SizedBox();
+                      }
+                      final text = state.nav == GroupPageNav.events
+                          ? "Add expense"
+                          : "Add subscription";
+                      return ExtendedFloatingActionButton(
+                        scrollController: ScrollController(),
+                        onPressed: () {
+                          _onFabClicked(context);
+                        },
+                        label: text,
+                        icon: Icons.add,
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+                appBar: AppBar(
+                    elevation: 0,
+                    foregroundColor: coverImage.isEmpty ? null : Colors.white,
+                    title: MutableValue(
+                      mutableValue: group.nameState,
+                      builder: (context, value) => Text(value),
+                    ),
+                    systemOverlayStyle: group.coverImageUrlState.value.isEmpty
+                        ? null
+                        : const SystemUiOverlayStyle(
+                            statusBarIconBrightness: Brightness.light,
+                            statusBarBrightness: Brightness.light,
+                          ),
+                    flexibleSpace: Builder(builder: (context) {
+                      if (coverImage.isEmpty) {
+                        return Container(
+                          color: Theme.of(context).colorScheme.tertiary,
                         );
                       }
-                      return const SizedBox();
-                    },
-                  ),
-                  appBar: AppBar(
-                      elevation: 0,
-                      foregroundColor: coverImage.isEmpty ? null : Colors.white,
-                      title: MutableValue(
-                        mutableValue: group.nameState,
-                        builder: (context, value) => Text(value),
-                      ),
-                      systemOverlayStyle: group.coverImageUrlState.value.isEmpty
-                          ? null
-                          : const SystemUiOverlayStyle(
-                              statusBarIconBrightness: Brightness.light,
-                              statusBarBrightness: Brightness.light,
-                            ),
-                      flexibleSpace: Builder(builder: (context) {
-                        if (coverImage.isEmpty) {
-                          return Container(
-                            color: Theme.of(context).colorScheme.tertiary,
-                          );
-                        }
-                        return Stack(
-                          fit: StackFit.expand,
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: coverImage,
+                            fit: BoxFit.cover,
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            color: Colors.black38,
+                          )
+                        ],
+                      );
+                    }),
+                    surfaceTintColor: Theme.of(context).colorScheme.surface,
+                    actions: [
+                      const SortActionButton(),
+                      IconButton(
+                          onPressed: () async {
+                            await Navigator.of(context)
+                                .push(GroupSettings.getRoute(group));
+                          },
+                          icon: const Icon(Icons.settings)),
+                    ],
+                    leading: const BackButton()),
+                bottomNavigationBar: const GroupBottomNav(),
+                body: Builder(
+                  builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: PopScope(
+                        canPop: _tryPop(cubit),
+                        onPopInvoked: (didPop) {
+                          _onPopInvoked(context, didPop, cubit);
+                        },
+                        child: Stack(
                           children: [
-                            CachedNetworkImage(
-                              imageUrl: coverImage,
-                              fit: BoxFit.cover,
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              color: Colors.black38,
+                            Builder(builder: (context) {
+                              print("qqq show nav=${cubit.navPage.index}");
+                              switch (cubit.navPage) {
+                                case GroupPageNav.services:
+                                  return const ServicesView();
+                                case GroupPageNav.debt:
+                                  return const DebtsView();
+                                default:
+                                  return const EventsView();
+                              }
+                            }),
+                            MutableValue(
+                              mutableValue: cubit.isSyncing,
+                              builder: (context, isSyncing) {
+                                if (isSyncing) {
+                                  return const Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(32.0),
+                                        child: SizedBox(
+                                            height: 16,
+                                            width: 16,
+                                            child: CircularProgressIndicator()),
+                                      ));
+                                }
+                                return const SizedBox();
+                              },
                             )
                           ],
-                        );
-                      }),
-                      surfaceTintColor: Theme.of(context).colorScheme.surface,
-                      actions: [
-                        const SortActionButton(),
-                        IconButton(
-                            onPressed: () async {
-                              await Navigator.of(context)
-                                  .push(GroupSettings.getRoute(group));
-                              cubit.update();
-                            },
-                            icon: const Icon(Icons.settings)),
-                      ],
-                      leading: const BackButton()),
-                  bottomNavigationBar: const GroupBottomNav(),
-                  body: Builder(
-                    builder: (context) {
-                      if (state is Loading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: WillPopScope(
-                          child: Stack(
-                            children: [
-                              Builder(builder: (context) {
-                                switch (cubit.navIndex) {
-                                  case GroupPageNav.services:
-                                    return const ServicesView();
-                                  case GroupPageNav.debt:
-                                    return const DebtsView();
-                                  default:
-                                    return const EventsView();
-                                }
-                              }),
-                              if (cubit.state is SyncingGroup)
-                                const Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(32.0),
-                                      child: SizedBox(
-                                          height: 16,
-                                          width: 16,
-                                          child: CircularProgressIndicator()),
-                                    ))
-                            ],
-                          ),
-                          onWillPop: () async {
-                            return _tryPop(cubit);
-                          },
                         ),
-                      );
-                    },
-                  ),
-                );
-              });
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          );
         },
       ),
     );
@@ -167,12 +172,14 @@ class GroupPage extends StatelessWidget {
     }
   }
 
-  bool _tryPop(GroupBloc cubit) {
-    if (cubit.navIndex != GroupPageNav.events) {
+  void _onPopInvoked(BuildContext context, bool didPop, GroupBloc cubit) {
+    if (!didPop) {
       cubit.showEvents();
-      return false;
     }
-    return true;
+  }
+
+  bool _tryPop(GroupBloc cubit) {
+    return cubit.navPage == GroupPageNav.events;
   }
 
   static Route getRoute(Group group) => MaterialPageRoute(

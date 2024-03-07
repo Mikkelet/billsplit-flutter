@@ -13,6 +13,7 @@ import 'package:billsplit_flutter/domain/use_cases/groups/get_group_usecase.dart
 import 'package:billsplit_flutter/domain/use_cases/services/observe_services_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
@@ -31,9 +32,10 @@ class GroupBloc extends BaseCubit {
 
   final Group group;
   SortEvents _eventSortBy = SortEvents.added;
-  GroupPageNav navIndex = GroupPageNav.events;
+  GroupPageNav navPage = GroupPageNav.events;
+  final isSyncing = false.obs();
 
-  GroupBloc(this.group) : super.withState(SyncingGroup(GroupPageNav.events));
+  GroupBloc(this.group) : super.withState(GroupState(GroupPageNav.events));
 
   Stream<List<Event>> getEventsStream() =>
       _observeEventsUseCase.observe(group.id).map((event) => event
@@ -57,12 +59,11 @@ class GroupBloc extends BaseCubit {
       _observeDebtsUseCase.observe(group);
 
   void loadGroup() async {
+    isSyncing.value = true;
     _getExchangeRatesUseCase.launch();
-    emit(SyncingGroup(navIndex));
-    _getGroupUseCase
-        .launch(group.id)
-        .then((value) => emit(GroupLoaded(navIndex)))
-        .catchError((err, st) {
+    _getGroupUseCase.launch(group.id).then((_) {
+      isSyncing.value = false;
+    }).catchError((err, st) {
       showError(err, st);
     });
   }
@@ -70,9 +71,8 @@ class GroupBloc extends BaseCubit {
   void showEvents() => showPage(GroupPageNav.events);
 
   void showPage(GroupPageNav nav) {
-    navIndex = nav;
-    final newState = GroupLoaded(navIndex);
-    emit(newState);
+    navPage = nav;
+    update();
   }
 
   void retryAddExpense(GroupExpense expense) {
@@ -82,6 +82,11 @@ class GroupBloc extends BaseCubit {
   void changeSort(SortEvents sortEvents) {
     _eventSortBy = sortEvents;
     update();
+  }
+
+  @override
+  void update() {
+    emit(GroupState(navPage));
   }
 
   SortEvents get sortedBy => _eventSortBy;

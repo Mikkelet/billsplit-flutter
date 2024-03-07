@@ -17,16 +17,8 @@ enum GroupPageNav {
   }
 }
 
-abstract class GroupState extends Main {
+class GroupState extends Main {
   final GroupPageNav nav;
 
   GroupState(this.nav);
-}
-
-class SyncingGroup extends GroupState {
-  SyncingGroup(super.nav);
-}
-
-class GroupLoaded extends GroupState {
-  GroupLoaded(super.nav);
 }
