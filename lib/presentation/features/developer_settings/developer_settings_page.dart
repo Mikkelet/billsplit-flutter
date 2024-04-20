@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_flow.dart';
+import 'package:billsplit_flutter/presentation/features/permissions/notifications_rationale.dart';
 import 'package:flutter/material.dart';
 
 class DeveloperSettingsPage extends StatelessWidget {
@@ -25,11 +26,16 @@ class DeveloperSettingsPage extends StatelessWidget {
                       cubit.showToast("Guides reset");
                     },
                     child: const Text("Reset guides")),
+                const SizedBox(height: 32),
                 ClickableListItem(
                     onClick: () {
                       Navigator.of(context).push(OnboardingFlow.getRoute());
                     },
-                    child: const Text("Start onboarding"))
+                    child: const Text("Start onboarding")),
+                const SizedBox(height: 32),
+                ClickableListItem(onClick: (){
+                  Navigator.of(context).push(NotificationsRationale.getRoute());
+                }, child: const Text("Start Rationale"))
               ],
             ),
           );
