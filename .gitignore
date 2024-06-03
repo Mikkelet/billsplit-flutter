@@ -134,4 +134,6 @@ app.*.symbols
 !.vscode/settings.json
 
 # FVM
-.fvm/flutter_sdk
+
+# FVM Version Cache
+.fvm/
