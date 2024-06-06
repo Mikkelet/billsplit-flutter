@@ -48,16 +48,13 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
           return Column(
             children: [
               Dismissible(
-                key: Key(widget.sharedExpense.hashCode.toString()),
-                behavior: HitTestBehavior.translucent,
+                key: UniqueKey(),
+                direction: DismissDirection.endToStart,
                 onUpdate: (details) {
                   if (details.direction == DismissDirection.endToStart) {
                     cubit.sharedPrefs.hasDeletedSharedExpense = true;
                   }
                 },
-                direction: showAnimation
-                    ? DismissDirection.endToStart
-                    : DismissDirection.none,
                 onDismissed: (direction) {
                   cubit.removeSharedExpense(widget.sharedExpense);
                 },
@@ -80,6 +77,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                           Expanded(
                             flex: 8,
                             child: SharedExpenseDescriptionView(
+                              key: UniqueKey(),
                               showIcon: false,
                               sharedExpense: widget.sharedExpense,
                             ),
@@ -135,18 +133,22 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                       ),
                     ],
                   ),
-                ).animate(autoPlay: showAnimation, delay: 1000.ms, effects: [
-                  SlideEffect(
-                      begin: Offset.zero,
-                      end: const Offset(-0.1, 0),
-                      duration: 100.ms,
-                      curve: Curves.fastLinearToSlowEaseIn),
-                  SlideEffect(
-                      delay: 1000.ms,
-                      end: const Offset(0.1, 0),
-                      duration: 100.ms,
-                      curve: Curves.fastLinearToSlowEaseIn)
-                ]),
+                ).animate(
+                  autoPlay: showAnimation,
+                  delay: 1000.ms,
+                  effects: [
+                    SlideEffect(
+                        begin: Offset.zero,
+                        end: const Offset(-0.1, 0),
+                        duration: 100.ms,
+                        curve: Curves.fastLinearToSlowEaseIn),
+                    SlideEffect(
+                        delay: 1000.ms,
+                        end: const Offset(0.1, 0),
+                        duration: 100.ms,
+                        curve: Curves.fastLinearToSlowEaseIn)
+                  ],
+                ),
               ),
               const SizedBox(height: 4),
             ],

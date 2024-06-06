@@ -11,12 +11,13 @@ class SharedExpenseDescriptionView extends StatefulWidget {
   final bool alignRight;
   final bool autoFocus;
 
-  const SharedExpenseDescriptionView(
-      {super.key,
-      required this.sharedExpense,
-      this.showIcon = false,
-      this.alignRight = false,
-      this.autoFocus = false});
+  const SharedExpenseDescriptionView({
+    super.key,
+    required this.sharedExpense,
+    this.showIcon = false,
+    this.alignRight = false,
+    this.autoFocus = false,
+  });
 
   @override
   State<SharedExpenseDescriptionView> createState() =>
@@ -61,9 +62,8 @@ class _SharedExpenseDescriptionViewState
       maxLength: 20,
       style: style,
       decoration: InputDecoration(
-        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context).copyWith(
-          fontSize: style?.fontSize
-        ),
+        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context)
+            .copyWith(fontSize: style?.fontSize),
         counterText: "",
         prefixIcon: widget.showIcon
             ? const Padding(

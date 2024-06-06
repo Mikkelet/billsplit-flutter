@@ -38,14 +38,14 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
           return Column(
             children: [
               ...sharedExpenses.mapIndexed(
-                (i, e) {
+                (i, SharedExpense e) {
                   final listPos = ListPosition.calculatePosition(
                       i, sharedExpensesState);
                   final autoFocus = (listPos == ListPosition.last ||
                           listPos == ListPosition.single) &&
                       e.expenseState.value == 0;
                   return SharedExpenseView(
-                    key: Key("${e.hashCode}"),
+                    key: UniqueKey(),
                     sharedExpense: e,
                     listPosition: listPos,
                     autoFocus: autoFocus,

@@ -5,8 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 class ExpenseViewPagerTitle extends StatefulWidget {
   final PageController pageController;
 
-  const ExpenseViewPagerTitle({Key? key, required this.pageController})
-      : super(key: key);
+  const ExpenseViewPagerTitle({super.key, required this.pageController});
 
   @override
   State<ExpenseViewPagerTitle> createState() => _ExpenseViewPagerTitleState();

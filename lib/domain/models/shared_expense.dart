@@ -63,9 +63,7 @@ class SharedExpense {
   @override
   bool operator ==(Object other) {
     if (other is! SharedExpense) return false;
-    return descriptionState.value == other.descriptionState.value &&
-        participantsState.value.equals(other.participantsState.value) &&
-        expenseState.value == other.expenseState.value;
+    return hashCode == other.hashCode;
   }
 
   @override
@@ -74,8 +72,7 @@ class SharedExpense {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(_description, _participants, _expense);
+  int get hashCode => Object.hash(expenseState.value, participantsState.value, expenseState.value);
 
   void resetChanges() {
     expenseState.value = _expense;
