@@ -83,9 +83,8 @@ class GroupExpense extends Event {
     return _payer.uid != payerState.value.uid ||
         _description != descriptionState.value ||
         _currency != currencyState.value ||
-        _date.millisecondsSinceEpoch !=
-            dateState.value.millisecondsSinceEpoch ||
-        !_sharedExpenses.equals(sharedExpensesState.value) ||
+        _date.millisecondsSinceEpoch != dateState.value.millisecondsSinceEpoch ||
+        !_sharedExpenses.toList().equals(sharedExpensesState.value.toList()) || // TODO
         sharedExpensesState.value.any((element) => element.isChanged);
   }
 
@@ -103,7 +102,7 @@ class GroupExpense extends Event {
       dateState.stateStream.map((event) =>
           event.millisecondsSinceEpoch != _date.millisecondsSinceEpoch),
       sharedExpensesState.stateStream
-          .map((event) => !event.equals(_sharedExpenses)),
+          .map((event) => !event.toList().equals(_sharedExpenses.toList())),
       ...sharedExpensesStreams,
     ];
     return CombineLatestStream(

@@ -39,121 +39,121 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-
-    return MutableValue(
-        mutableValue: cubit.groupExpense.sharedExpensesState,
-        builder: (context, sharedExpenses) {
-          final showAnimation = sharedExpenses.length > 1 &&
+    return Builder(builder: (context) {
+      final showAnimation =
+          cubit.groupExpense.sharedExpensesState.value.length > 1 &&
               !cubit.sharedPrefs.hasDeletedSharedExpense;
-          return Column(
-            children: [
-              Dismissible(
-                key: UniqueKey(),
-                direction: DismissDirection.endToStart,
-                onUpdate: (details) {
-                  if (details.direction == DismissDirection.endToStart) {
-                    cubit.sharedPrefs.hasDeletedSharedExpense = true;
-                  }
-                },
-                onDismissed: (direction) {
-                  cubit.removeSharedExpense(widget.sharedExpense);
-                },
-                background: RoundedListItem(
-                  color: Theme.of(context).colorScheme.background,
-                  child: Row(
+      return Column(
+        children: [
+          Dismissible(
+            key: UniqueKey(),
+            direction: DismissDirection.endToStart,
+            onUpdate: (details) {
+              if (details.direction == DismissDirection.endToStart) {
+                cubit.sharedPrefs.hasDeletedSharedExpense = true;
+              }
+            },
+            onDismissed: (direction) {
+              cubit.removeSharedExpense(widget.sharedExpense);
+            },
+            background: RoundedListItem(
+              color: Theme.of(context).colorScheme.background,
+              child: Row(
+                children: [
+                  const Expanded(child: SizedBox()),
+                  Icon(Icons.delete,
+                      color: Theme.of(context).colorScheme.error),
+                ],
+              ),
+            ),
+            child: RoundedListItem(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(child: SizedBox()),
-                      Icon(Icons.delete,
-                          color: Theme.of(context).colorScheme.error),
-                    ],
-                  ),
-                ),
-                child: RoundedListItem(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 8,
-                            child: SharedExpenseDescriptionView(
-                              key: UniqueKey(),
-                              showIcon: false,
-                              sharedExpense: widget.sharedExpense,
-                            ),
-                          ),
-                          MutableValue(
-                              mutableValue: cubit.groupExpense.currencyState,
-                              builder: (context, currency) {
-                                return Expanded(
-                                  flex: 5,
-                                  child: ExpenseTextField(
-                                    showErrorText: false,
-                                    canBeZero: true,
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.fontSize,
-                                    prefix: currency.symbol.toUpperCase(),
-                                    onChange: (value) {
-                                      cubit.updateSharedExpense(
-                                          widget.sharedExpense, value);
-                                    },
-                                    autoFocus: widget.autoFocus,
-                                    textEditingController: textController,
-                                  ),
-                                );
-                              }),
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          _editParticipants(context);
-                        },
-                        style: ButtonStyle(
-                            visualDensity: VisualDensity.compact,
-                            padding: MaterialStateProperty.resolveWith(
-                                (states) => EdgeInsets.zero)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MutableValue(
-                                mutableValue:
-                                    widget.sharedExpense.participantsState,
-                                builder: (context, participants) {
-                                  return ProfilePictureStack(
-                                    people: participants,
-                                    size: participantsIconSize,
-                                    limit: 4,
-                                  );
-                                }),
-                            const Expanded(child: SizedBox())
-                          ],
+                      Expanded(
+                        flex: 8,
+                        child: SharedExpenseDescriptionView(
+                          key: UniqueKey(),
+                          showIcon: false,
+                          sharedExpense: widget.sharedExpense,
                         ),
                       ),
+                      MutableValue(
+                          mutableValue: cubit.groupExpense.currencyState,
+                          builder: (context, currency) {
+                            return Expanded(
+                              flex: 5,
+                              child: ExpenseTextField(
+                                showErrorText: false,
+                                canBeZero: true,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.fontSize,
+                                prefix: currency.symbol.toUpperCase(),
+                                onChange: (value) {
+                                  cubit.updateSharedExpense(
+                                      widget.sharedExpense, value);
+                                },
+                                autoFocus: widget.autoFocus,
+                                textEditingController: textController,
+                              ),
+                            );
+                          }),
                     ],
                   ),
-                ).animate(
-                  autoPlay: showAnimation,
-                  delay: 1000.ms,
-                  effects: [
-                    SlideEffect(
-                        begin: Offset.zero,
-                        end: const Offset(-0.1, 0),
-                        duration: 100.ms,
-                        curve: Curves.fastLinearToSlowEaseIn),
-                    SlideEffect(
-                        delay: 1000.ms,
-                        end: const Offset(0.1, 0),
-                        duration: 100.ms,
-                        curve: Curves.fastLinearToSlowEaseIn)
-                  ],
-                ),
+                  TextButton(
+                    onPressed: () {
+                      _editParticipants(context);
+                    },
+                    style: ButtonStyle(
+                        visualDensity: VisualDensity.compact,
+                        padding: MaterialStateProperty.resolveWith(
+                            (states) => EdgeInsets.zero)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MutableValue(
+                            mutableValue:
+                                widget.sharedExpense.participantsState,
+                            builder: (context, participants) {
+                              return ProfilePictureStack(
+                                people: participants,
+                                size: participantsIconSize,
+                                limit: 4,
+                              );
+                            }),
+                        const Expanded(
+                          child: SizedBox(),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-            ],
-          );
-        });
+            ).animate(
+              autoPlay: showAnimation,
+              delay: 1000.ms,
+              effects: [
+                SlideEffect(
+                    begin: Offset.zero,
+                    end: const Offset(-0.1, 0),
+                    duration: 100.ms,
+                    curve: Curves.fastLinearToSlowEaseIn),
+                SlideEffect(
+                    delay: 1000.ms,
+                    end: const Offset(0.1, 0),
+                    duration: 100.ms,
+                    curve: Curves.fastLinearToSlowEaseIn)
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+        ],
+      );
+    });
   }
 
   void _editParticipants(BuildContext context) async {

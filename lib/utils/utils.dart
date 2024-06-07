@@ -46,9 +46,14 @@ extension ListPersonExt on Iterable<Person> {
   }
 }
 
-extension ListSharedExpenseExt on Iterable<SharedExpense> {
-  bool equals(Iterable<SharedExpense> other) {
-    if(length != other.length) return false;
-    return listEquals(toList(), other.toList());
+extension ListSharedExpenseExt on List<SharedExpense> {
+  bool equals(List<SharedExpense> otherExpenses) {
+    if (length != otherExpenses.length) return false;
+    for (int i = 0; i < length; i++) {
+      final self = this[i];
+      final other = otherExpenses[i];
+      if (!self.compareData(other)) return false;
+    }
+    return true;
   }
 }

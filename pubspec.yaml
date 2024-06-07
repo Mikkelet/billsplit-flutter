@@ -23,7 +23,7 @@ dependencies:
   json_serializable: ^6.7.1
   json_annotation: ^4.8.1
   drift: ^2.6.0
-  sqlite3_flutter_libs: ^0.5.0
+  sqlite3_flutter_libs: ^0.5.23
   path_provider: ^2.0.0
   path: ^1.8.2
   storage_inspector: ^0.4.0
@@ -35,27 +35,27 @@ dependencies:
   cached_network_image: ^3.2.3
   image_picker: ^1.0.4
   cupertino_will_pop_scope: ^1.2.1
-  flutter_local_notifications: ^16.1.0
+  flutter_local_notifications: ^17.1.2
   shared_preferences: ^2.1.0
   eraser: ^2.0.1
-  camera: ^0.10.5+9
+  camera: ^0.11.0+1
   flutter_animate: ^4.1.1+1
-  package_info_plus: ^7.0.0
+  package_info_plus: ^8.0.0
   uuid: ^4.1.0
   json_pretty: ^1.0.4
   google_sign_in: ^6.2.1
-  sign_in_with_apple: ^5.0.0
+  sign_in_with_apple: ^6.1.0
   phone_number: ^2.0.1
   country_code_picker: ^3.0.0
-  image_cropper: ^5.0.0
-  google_mlkit_text_recognition: ^0.12.1
+  image_cropper: ^7.0.1
+  google_mlkit_text_recognition: ^0.13.0
 
 dev_dependencies:
   build_runner: ^2.3.3
   drift_dev: ^2.6.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true

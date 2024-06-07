@@ -72,11 +72,18 @@ class SharedExpense {
   }
 
   @override
-  int get hashCode => Object.hash(expenseState.value, participantsState.value, expenseState.value);
+  int get hashCode => Object.hash(
+      expenseState.value, participantsState.value, expenseState.value);
 
   void resetChanges() {
     expenseState.value = _expense;
     participantsState.value = _participants;
     descriptionState.value = _description;
+  }
+
+  bool compareData(SharedExpense other) {
+    return participantsState.value.equals(other.participantsState.value) &&
+        expenseState.value == other.expenseState.value &&
+        descriptionState.value == other.descriptionState.value;
   }
 }
