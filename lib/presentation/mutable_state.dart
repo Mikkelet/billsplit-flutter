@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MutableValue<T> extends StatelessWidget {
+  final MutableState<T> _mutableValue;
   final Stream<T> _stream;
   final Widget Function(BuildContext, T) builder;
 
@@ -11,20 +12,15 @@ class MutableValue<T> extends StatelessWidget {
     super.key,
     required MutableState<T> mutableValue,
     required this.builder,
-  }) : _stream = mutableValue.stateStream;
-
-  const MutableValue.fromStream({
-    required Stream<T> stream,
-    required this.builder,
-    super.key,
-  }) : _stream = stream;
+  }): _stream = mutableValue.stateStream,
+        _mutableValue = mutableValue;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<T>(
       stream: _stream,
+      initialData: _mutableValue.value,
       builder: (context, AsyncSnapshot<T> snapshot) {
-        if (!snapshot.hasData) return const SizedBox();
         return builder(context, snapshot.requireData);
       },
     );
@@ -52,11 +48,12 @@ class MutableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MutableValue.fromStream(
+    return StreamBuilder(
       stream: _mutString,
-      builder: (context, value) {
+      initialData: "",
+      builder: (context, snapshot) {
         return Text(
-          value,
+          snapshot.requireData,
           style: style,
           textAlign: textAlign,
         );
@@ -119,8 +116,8 @@ class MutableState<T> {
     });
   }
 
-  Stream<T> combine<V extends MutableState>(
-      V other, T Function(T, T) transform) {
+  Stream<T> combine<V extends MutableState>(V other,
+      T Function(T, T) transform) {
     return this
         .stateStream
         .zipWith(other.stateStream, (t, s) => transform(t, s));
@@ -142,6 +139,6 @@ extension MutableListExt<T> on Iterable<T> {
 
 extension MutableValueExt<T> on MutableState<T> {
   Widget builder(
-          {Key? key, required Widget Function(BuildContext, T) builder}) =>
-      MutableValue<T>(mutableValue: this, builder: builder);
+      {Key? key, required Widget Function(BuildContext, T) builder,}) =>
+      MutableValue<T>(mutableValue: this, builder: builder,);
 }

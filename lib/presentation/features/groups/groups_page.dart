@@ -43,9 +43,11 @@ class GroupsPage extends StatelessWidget {
                 await cubit.loadProfile();
               },
               child: Center(
-                child: MutableValue.fromStream(
+                child: StreamBuilder(
                     stream: cubit.getGroupStream(),
-                    builder: (_, groups) {
+                    initialData: const [],
+                    builder: (_, snapshot) {
+                      final groups = snapshot.requireData;
                       return CustomScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
                           controller: _scrollingController,

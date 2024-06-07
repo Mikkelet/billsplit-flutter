@@ -20,7 +20,7 @@ class IndividualExpenseView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return MutableValue.fromStream(
+    return StreamBuilder(
         stream: cubit.individualExpenseStream,
         builder: (context, _) {
           final isPayer = cubit.groupExpense.payerState.value.uid == person.uid;

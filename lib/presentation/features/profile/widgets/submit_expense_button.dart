@@ -9,10 +9,11 @@ class SubmitExpenseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocBuilder<AddExpenseBloc>(builder: (cubit, state) {
-      return MutableValue.fromStream(
+      return StreamBuilder(
           stream: cubit.groupExpense.isChangeStream,
-          builder: (context, isChanged) {
-            final canSubmit = isChanged && cubit.groupExpense.total > 0;
+          initialData: false,
+          builder: (context, snapshot) {
+            final canSubmit = snapshot.requireData && cubit.groupExpense.total > 0;
             return IconButton(
               onPressed: canSubmit
                   ? () {

@@ -63,9 +63,11 @@ class ExpenseEventView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MutableValue.fromStream(
+                  StreamBuilder(
                     stream: groupExpense.totalStream,
-                    builder: (context, total) {
+                    initialData: 0,
+                    builder: (context, snapshot) {
+                      final total = snapshot.requireData;
                       return Text(
                         total.fmt2dec(),
                         style: Theme.of(context).textTheme.titleLarge,

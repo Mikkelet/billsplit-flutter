@@ -86,9 +86,10 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
                   return MutableValue(
                       mutableValue: groupExpense.sharedExpensesState,
                       builder: (context, sharedExpense) {
-                        return MutableValue.fromStream(
+                        return StreamBuilder(
                           stream: cubit.peopleStream,
-                          builder: (context, people) {
+                          builder: (context, snapshot) {
+                            final people = snapshot.requireData;
                             return ParticipantsPickerDialog(
                               participants: expense.participantsState.value.toList(),
                               people: people,

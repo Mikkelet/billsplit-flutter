@@ -73,9 +73,11 @@ class _SimpleExpensePageState extends SafeState<SimpleExpensePage> {
                     const SizedBox(height: _dividerPadding),
                     SimpleExpenseParticipantsView(expense: expense),
                     const SizedBox(height: _dividerPadding),
-                    MutableValue.fromStream(
+                    StreamBuilder(
                       stream: getParticipatingPeople(firstExpense),
-                      builder: (context, people) {
+                      initialData: const <Person>{},
+                      builder: (context, snapshot) {
+                        final people = snapshot.requireData;
                         return PaidByDropDownView(
                           people: people,
                           showExpenses: false,

@@ -22,9 +22,11 @@ class ExpenseTotalView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Total", style: Theme.of(context).textTheme.labelLarge),
-                  MutableValue.fromStream(
+                  StreamBuilder(
                       stream: cubit.groupExpense.totalStream,
-                      builder: (context, total) {
+                      initialData: 0,
+                      builder: (context, snapshot) {
+                        final total = snapshot.requireData;
                         return Text(
                           total.fmt2dec(),
                           textAlign: TextAlign.end,

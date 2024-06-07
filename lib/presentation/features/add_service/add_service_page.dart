@@ -116,9 +116,11 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                         icon: const Icon(Icons.delete),
                         color: Theme.of(context).colorScheme.error,
                       ),
-                    MutableValue.fromStream(
+                    StreamBuilder(
                         stream: service.isChangedStream,
-                        builder: (context, isChanged) {
+                        initialData: false,
+                        builder: (context, snapshot) {
+                          final isChanged = snapshot.requireData;
                           return MutableValue(
                               mutableValue: service.monthlyExpenseState,
                               builder: (context, monthlyExpense) {

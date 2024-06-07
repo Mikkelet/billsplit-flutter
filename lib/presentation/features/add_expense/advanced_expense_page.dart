@@ -18,10 +18,11 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final Group group;
   final PageController pageController;
 
-  const AdvancedExpensePage({required this.groupExpense,
-    required this.group,
-    super.key,
-    required this.pageController});
+  const AdvancedExpensePage(
+      {required this.groupExpense,
+      required this.group,
+      super.key,
+      required this.pageController});
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +54,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                             "Add as many as you need!\nSwipe to delete",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Theme
-                                    .of(context)
+                                color: Theme.of(context)
                                     .colorScheme
                                     .inversePrimary),
                           ),
@@ -78,10 +78,14 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             const SizedBox(height: 8),
             const ExpenseTotalView(),
             const SizedBox(height: 8),
-            MutableValue.fromStream(
-                stream: getParticipatingPeople(), builder: (context, people) {
-              return PaidByDropDownView(people: people);
-            }),
+            StreamBuilder(
+              stream: getParticipatingPeople(),
+              initialData: const <Person>[],
+              builder: (context, snapshot) {
+                final people = snapshot.requireData;
+                return PaidByDropDownView(people: people);
+              },
+            ),
             const SizedBox(height: 120),
           ],
         ),
@@ -93,6 +97,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
     final pastMembers = groupExpense.sharedExpensesState.stateStream
         .map((event) => event.map((e) => e.participantsState.value))
         .map((event) => event.flatMap());
-    return pastMembers.zipWith(group.peopleState.stateStream, (t, s) => {...t, ...s});
+    return pastMembers.zipWith(
+        group.peopleState.stateStream, (t, s) => {...t, ...s});
   }
 }
