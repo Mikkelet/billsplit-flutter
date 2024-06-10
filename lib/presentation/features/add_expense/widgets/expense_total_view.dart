@@ -24,7 +24,7 @@ class ExpenseTotalView extends StatelessWidget {
                   Text("Total", style: Theme.of(context).textTheme.labelLarge),
                   StreamBuilder(
                       stream: cubit.groupExpense.totalStream,
-                      initialData: 0,
+                      initialData: cubit.groupExpense.total,
                       builder: (context, snapshot) {
                         final total = snapshot.requireData;
                         return Text(

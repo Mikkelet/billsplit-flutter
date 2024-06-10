@@ -10,7 +10,6 @@ import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.
 import 'package:billsplit_flutter/presentation/features/groups/widgets/drawer_action_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
 
 class GroupsPage extends StatelessWidget {
@@ -45,8 +44,12 @@ class GroupsPage extends StatelessWidget {
               child: Center(
                 child: StreamBuilder(
                     stream: cubit.getGroupStream(),
-                    initialData: const [],
                     builder: (_, snapshot) {
+                      if(!snapshot.hasData){
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
                       final groups = snapshot.requireData;
                       return CustomScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),

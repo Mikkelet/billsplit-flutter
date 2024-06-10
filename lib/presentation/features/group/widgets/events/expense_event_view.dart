@@ -65,7 +65,7 @@ class ExpenseEventView extends StatelessWidget {
                 children: [
                   StreamBuilder(
                     stream: groupExpense.totalStream,
-                    initialData: 0,
+                    initialData: groupExpense.total,
                     builder: (context, snapshot) {
                       final total = snapshot.requireData;
                       return Text(

@@ -10,10 +10,12 @@ class SharedExpenseDescriptionView extends StatefulWidget {
   final bool showIcon;
   final bool alignRight;
   final bool autoFocus;
+  final String hintText;
 
   const SharedExpenseDescriptionView({
     super.key,
     required this.sharedExpense,
+    required this.hintText,
     this.showIcon = false,
     this.alignRight = false,
     this.autoFocus = false,
@@ -28,15 +30,6 @@ class _SharedExpenseDescriptionViewState
     extends SafeState<SharedExpenseDescriptionView> {
   late final textController =
       TextEditingController(text: widget.sharedExpense.descriptionState.value);
-
-  static const randomMenuItems = [
-    "Burger",
-    "Fries",
-    "Wine",
-    "Soda",
-    "Chicken nuggets"
-  ];
-  final randomNumber = Random().nextInt(randomMenuItems.length);
 
   @override
   void dispose() {
@@ -72,7 +65,7 @@ class _SharedExpenseDescriptionViewState
         isDense: true,
         prefixIconConstraints: const BoxConstraints(),
         border: InputBorder.none,
-        hintText: "ex. ${randomMenuItems[randomNumber]}",
+        hintText: widget.hintText,
       ),
     );
   }

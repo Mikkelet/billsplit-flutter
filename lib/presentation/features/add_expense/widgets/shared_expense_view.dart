@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
@@ -19,10 +21,13 @@ class SharedExpenseView extends StatefulWidget {
   final SharedExpense sharedExpense;
   final bool autoFocus;
   final ListPosition listPosition;
+  final String hintText;
+
 
   const SharedExpenseView({
     super.key,
     required this.sharedExpense,
+    required this.hintText,
     this.autoFocus = false,
     required this.listPosition,
   });
@@ -76,6 +81,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
                         flex: 8,
                         child: SharedExpenseDescriptionView(
                           key: UniqueKey(),
+                          hintText: "ex. ${widget.hintText}",
                           showIcon: false,
                           sharedExpense: widget.sharedExpense,
                         ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
@@ -23,6 +25,21 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
   late bool showAll = widget.showAll;
   static const int _showAllLimit = 3;
 
+  static const _randomMenuItems = [
+    "Burger",
+    "Fries",
+    "Wine",
+    "Soda",
+    "Chicken nuggets"
+  ];
+  
+  static String _getHintTextIndex(int index) {
+    if (index >= _randomMenuItems.length) {
+      return _getHintTextIndex(index - _randomMenuItems.length);
+    }
+    return _randomMenuItems[index];
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
@@ -44,9 +61,11 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
                   final autoFocus = (listPos == ListPosition.last ||
                           listPos == ListPosition.single) &&
                       e.expenseState.value == 0;
+                  
                   return SharedExpenseView(
                     key: UniqueKey(),
                     sharedExpense: e,
+                    hintText: _getHintTextIndex(i),
                     listPosition: listPos,
                     autoFocus: autoFocus,
                   );

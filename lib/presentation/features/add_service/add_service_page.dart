@@ -118,7 +118,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                       ),
                     StreamBuilder(
                         stream: service.isChangedStream,
-                        initialData: false,
+                        initialData: service.isChanged,
                         builder: (context, snapshot) {
                           final isChanged = snapshot.requireData;
                           return MutableValue(
