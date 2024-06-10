@@ -64,7 +64,7 @@ class ScanReceiptUseCase {
     Iterable<TextElement> texts,
   ) {
     // assume all prices are on the right side of the receipt
-    final double verticalCenter = _windowSize.width / 2;
+    final double verticalCenter = (_windowSize.width / 3) * 2;
     final rightSideTexts =
         texts.where((element) => element.boundingBox.left > verticalCenter);
     final textsWithNumbers = rightSideTexts

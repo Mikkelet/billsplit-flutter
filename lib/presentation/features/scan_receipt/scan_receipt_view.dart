@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
 import 'package:billsplit_flutter/presentation/features/scan_receipt/bloc/scan_receipt_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/scan_receipt/painter/scan_guide_painter.dart';
 import 'package:billsplit_flutter/presentation/features/scan_receipt/painter/text_block_painter.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +102,11 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                           });
                         }
                       },
+                    )
+                  else
+                    CustomPaint(
+                      painter: ScanGuidePainter(cubit.decimalDenominator),
+                      size: MediaQuery.of(context).size,
                     ),
                   Align(
                     alignment: Alignment.topRight,
@@ -121,7 +127,8 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 32.0, horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -136,7 +143,8 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 32.0, horizontal: 16),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +165,8 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 32.0, horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -186,7 +195,7 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
       maxRadius: 32,
       child: IconButton(
         onPressed: () async {
-          final windowSize = MediaQuery.of(context).size;
+          final windowSize = MediaQuery.of(contex144t).size;
           cubit.snapPhoto(windowSize);
         },
         iconSize: 32,
