@@ -195,7 +195,7 @@ class _SplitsbyCameraState extends SafeState<SplitsbyCamera> {
       maxRadius: 32,
       child: IconButton(
         onPressed: () async {
-          final windowSize = MediaQuery.of(contex144t).size;
+          final windowSize = MediaQuery.of(context).size;
           cubit.snapPhoto(windowSize);
         },
         iconSize: 32,
