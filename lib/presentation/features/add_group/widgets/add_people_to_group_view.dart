@@ -30,7 +30,7 @@ class AddPeopleToGroupView extends StatelessWidget {
                       cubit.onAddPerson(friend);
                       Navigator.of(context).pop();
                     },
-                    currentPickedFriends: cubit.people,
+                    currentPickedFriends: cubit.people.value,
                   ));
         });
   }

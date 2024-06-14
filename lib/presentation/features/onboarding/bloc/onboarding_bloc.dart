@@ -37,13 +37,13 @@ class OnboardingBloc extends BaseCubit {
   PhoneNumber? phoneNumber;
 
   OnboardingBloc() {
-    _name = user.nameState;
+    _name = user.nameState.value;
     _initCurrency();
     _initPhoneNumber();
   }
 
   _initPhoneNumber() {
-    _parsePhoneNumberUseCase.launch(user.phoneNumberState.dial).then((value) {
+    _parsePhoneNumberUseCase.launch(user.phoneNumberState.value.dial).then((value) {
       phoneNumber = value;
     });
   }
@@ -65,7 +65,7 @@ class OnboardingBloc extends BaseCubit {
 
   Future updateName(String name) async {
     await _updateNameUseCase.launch(name);
-    user.nameState = name;
+    user.nameState.value = name;
   }
 
   void submitProfile() {

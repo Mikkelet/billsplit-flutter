@@ -12,7 +12,7 @@ class InviteToGroupUseCase {
 
   Future<void> launch(Group group, Person person) async {
     await _apiService.invitePersonToGroup(group.id, person.uid);
-    group.invites.add(person);
+    group.invitesState.add(person);
     await _database.groupsDAO.insertGroup(group.toDb());
   }
 }

@@ -18,7 +18,7 @@ class DebtCubit extends BaseCubit {
 
   final Group group;
   final Pair<Person, num> debt;
-  late String currency = group.defaultCurrencyState;
+  late String currency = group.defaultCurrencyState.value;
   late num amount = debt.second.abs();
 
   DebtCubit(this.group, this.debt);
@@ -31,10 +31,6 @@ class DebtCubit extends BaseCubit {
     }
     currency = newCurrency;
     emit(CurrencyChanged());
-  }
-
-  update(){
-    emit(Main());
   }
 
   payTempDebt(){
@@ -108,7 +104,7 @@ class DebtCubit extends BaseCubit {
 
   num get maxAmount {
     return _convertCurrencyUseCase.launch(
-        debt.second.abs(), group.defaultCurrencyState, currency);
+        debt.second.abs(), group.defaultCurrencyState.value, currency);
   }
 
   void updateAmount(num value) {

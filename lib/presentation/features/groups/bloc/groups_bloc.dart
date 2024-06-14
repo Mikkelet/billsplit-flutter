@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/get_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/group_invites/sync_group_invites.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/get_groups_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/observe_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/notifications/observe_notifications_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
@@ -23,7 +24,7 @@ class GroupsBloc extends BaseCubit {
 
   Stream<List<Group>> getGroupStream() =>
       _observeGroupsUseCase.observe().map((event) => event
-              .sortedBy<num>((group) => group.lastUpdatedState)
+              .sortedBy<num>((group) => group.lastUpdatedState.value)
               .reversed
               .map((e) {
             _getDebts(e);
@@ -70,5 +71,12 @@ class GroupsBloc extends BaseCubit {
     } else {
       return "Good evening, $name";
     }
+  }
+
+  Iterable<Person> peopleInGroup(Group group) {
+    // peopleState only contains a copy of the logged in user,
+    // but we need the user instance from AuthProvider
+    final peopleWithoutUser = group.peopleState.value.where((element) => element != user);
+    return [user, ...peopleWithoutUser];
   }
 }

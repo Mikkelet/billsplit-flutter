@@ -28,14 +28,12 @@ class GroupSettingsCubit extends BaseCubit {
   }
 
   Future updateGroupName(String newName) async {
-    group.nameState = newName;
+    group.nameState.value = newName;
     await _addGroupUseCase.launch(group);
-    update();
   }
 
   void updateCurrency(Currency currency) {
-    group.defaultCurrencyState = currency.symbol;
-    update();
+    group.defaultCurrencyState.value = currency.symbol;
   }
 
   void uploadGroupPicture() {

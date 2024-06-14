@@ -1,3 +1,7 @@
+import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 var formatter2dec = NumberFormat('#,###.##');
@@ -32,3 +36,24 @@ const List<String> monthNames = [
   'November',
   'December'
 ];
+
+extension ListPersonExt on Iterable<Person> {
+  bool equals(Iterable<Person> other) {
+    if (other.length != length) return false;
+    final otherSorted = other.map((e) => e.uid).sortedBy((element) => element);
+    final thisSorted = map((e) => e.uid).sortedBy((element) => element);
+    return listEquals(thisSorted, otherSorted);
+  }
+}
+
+extension ListSharedExpenseExt on List<SharedExpense> {
+  bool equals(List<SharedExpense> otherExpenses) {
+    if (length != otherExpenses.length) return false;
+    for (int i = 0; i < length; i++) {
+      final self = this[i];
+      final other = otherExpenses[i];
+      if (!self.compareData(other)) return false;
+    }
+    return true;
+  }
+}

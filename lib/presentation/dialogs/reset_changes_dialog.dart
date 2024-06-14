@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ResetChangesDialog extends Dialog {
   final Function() resetChanges;
 
-  const ResetChangesDialog(this.resetChanges, {Key? key}) : super(key: key);
+  const ResetChangesDialog(this.resetChanges, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -23,14 +23,15 @@ class GroupPictureView extends StatelessWidget {
           top: Radius.circular(10),
         ),
         child: Builder(builder: (context) {
-          if (group.coverImageUrlState.isEmpty) {
+          final coverImageUrl = group.coverImageUrlState.value;
+          if (coverImageUrl.isEmpty) {
             return const Image(
               fit: BoxFit.fitWidth,
               image: AssetImage('assets/splitsby_logo.jpg'),
             );
           }
           return CachedNetworkImage(
-            imageUrl: group.coverImageUrlState,
+            imageUrl: coverImageUrl,
             fadeInDuration: Duration.zero,
             fit: BoxFit.cover,
           );

@@ -5,20 +5,24 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePictureStack extends StatelessWidget {
-  final List<Person> people;
+  final Iterable<Person> people;
   final double size;
   final int limit;
 
-  const ProfilePictureStack(
-      {Key? key, required this.people, this.size = 40, this.limit = 4})
-      : super(key: key);
+  const ProfilePictureStack({
+    super.key,
+    required this.people,
+    this.size = 40,
+    this.limit = 4,
+  });
 
   @override
   Widget build(BuildContext context) {
     final paddingSize = size / 1.5;
     if (people.length <= limit) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0), // to offset missing padding from stack's border
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        // to offset missing padding from stack's border
         child: Row(
           children: [
             ...people.map(
@@ -64,7 +68,8 @@ class ProfilePictureStack extends StatelessWidget {
                   "+$remaining",
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontSize: (size / 2.5),
-                      color: Theme.of(context).colorScheme.onSecondaryContainer),
+                      color:
+                          Theme.of(context).colorScheme.onSecondaryContainer),
                 ),
               ),
             ),

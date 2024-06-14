@@ -15,9 +15,9 @@ class ParticipantsPickerDialog extends StatefulWidget {
     super.key,
     required this.participants,
     required this.people,
+    this.showSubmit = true,
     this.onAddTempParticipant,
     this.extraAction,
-    this.showSubmit = true,
   });
 
   @override
@@ -27,18 +27,19 @@ class ParticipantsPickerDialog extends StatefulWidget {
 
 class _ParticipantsPickerDialogState
     extends SafeState<ParticipantsPickerDialog> {
+  final _showMin1PersonError = false;
+
   void changeParticipantStatus(Person person, bool isParticipant) {
     if (isParticipant) {
       widget.participants.add(person);
     } else {
       widget.participants.remove(person);
     }
+    updateState();
   }
 
   bool _isEveryoneSelected() =>
       widget.people.length == widget.participants.length;
-
-  bool _showMin1PersonError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +48,13 @@ class _ParticipantsPickerDialogState
       padding: const EdgeInsets.all(8.0),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: _appBar(),
+        appBar: _appBar(context),
         body: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 4),
               ...widget.people.map(
-                    (person) => _participantView(person),
+                (person) => _participantView(context, person),
               ),
               if (allowTempParticipants) const SizedBox(height: 8),
               if (allowTempParticipants)
@@ -77,14 +78,14 @@ class _ParticipantsPickerDialogState
             ],
           ),
         ),
-      )
+      ),
     );
   }
 
-  AppBar _appBar(){
+  AppBar _appBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
-      scrolledUnderElevation: 0 ,
+      scrolledUnderElevation: 0,
       actions: [
         if (widget.showSubmit)
           IconButton(
@@ -121,20 +122,20 @@ class _ParticipantsPickerDialogState
               onChanged: _isEveryoneSelected()
                   ? null
                   : (value) {
-                if (value == false) {
-                  widget.participants.clear();
-                  widget.participants.addAll(widget.people);
-                  updateState();
-                }
-              },
-            )
+                      if (value == false) {
+                        widget.participants.clear();
+                        widget.participants.addAll(widget.people);
+                        updateState();
+                      }
+                    },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _participantView(Person person) {
+  Widget _participantView(BuildContext context, Person person) {
     return Row(
       children: [
         Expanded(
@@ -172,12 +173,9 @@ class _ParticipantsPickerDialogState
           onChanged: (isParticipant) {
             if (isParticipant == false && widget.participants.length == 1) {
               // cannot have 0 participants
-              _showMin1PersonError = true;
             } else {
-              _showMin1PersonError = false;
               changeParticipantStatus(person, isParticipant ?? false);
             }
-            updateState();
           },
         )
       ],

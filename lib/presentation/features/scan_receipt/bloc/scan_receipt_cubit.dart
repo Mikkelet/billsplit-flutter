@@ -79,6 +79,8 @@ class ScanReceiptCubit extends BaseCubit {
 
   void cancelPicture() {
     receipt = null;
+    isSnappingPhoto = false;
+    menuState = MenuState.searching;
     emit(Main());
   }
 

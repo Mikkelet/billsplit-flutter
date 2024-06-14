@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/domain/use_cases/profile/delete_profile_picture_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_profile_picture_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadProfilePictureCubit extends BaseCubit {
@@ -18,20 +17,21 @@ class UploadProfilePictureCubit extends BaseCubit {
 
   void _updateProfilePicture(String path) {
     showLoading();
-    _updateProfilePictureUseCase.launch(Uri(path: path)).then((value) {
-      user.pfpUrlState = value;
-      emit(Main());
+    final uri = Uri(path: path);
+    _updateProfilePictureUseCase.launch(uri).then((value) {
+      update();
     }).catchError((err, st) {
+      update();
       showError(err, st);
     });
   }
 
   void deleteProfilePicture() {
     showLoading();
-    _deleteProfilePicture.launch().then((_) {
-      user.pfpUrlState = "";
-      emit(Main());
+    _deleteProfilePicture.launch().then((value) {
+      update();
     }).catchError((err, stackTrace) {
+      update();
       showError(err, stackTrace);
     });
   }

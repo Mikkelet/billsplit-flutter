@@ -1,14 +1,15 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/widgets/add_people_to_group_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/widgets/added_person_view.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ import 'bloc/add_group_cubit.dart';
 import 'bloc/add_group_state.dart';
 
 class AddGroupPage extends StatelessWidget {
-  AddGroupPage({Key? key}) : super(key: key);
+  AddGroupPage({super.key});
 
   final nameTextController = TextEditingController();
 
@@ -57,32 +58,39 @@ class AddGroupPage extends StatelessWidget {
                       const SizedBox(height: 32),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          cubit.groupName.isEmpty
-                              ? "New group"
-                              : cubit.groupName,
-                          style: Theme.of(context).textTheme.displaySmall,
-                        ),
+                        child: MutableValue(
+                            mutableValue: cubit.groupName,
+                            builder: (context, groupName) {
+                              return Text(
+                                groupName.isEmpty ? "New group" : groupName,
+                                style: Theme.of(context).textTheme.displaySmall,
+                              );
+                            }),
                       ),
                       const SizedBox(height: 16),
-                      RoundedListItem(
-                          child: TextField(
-                        autofocus: cubit.groupName.isEmpty,
-                        maxLines: 1,
-                        maxLength: 40,
-                        controller: nameTextController,
-                        onChanged: (value) {
-                          cubit.onUpdateGroupName(value);
-                        },
-                        textInputAction: TextInputAction.done,
-                        style: SplitsbyTextTheme.textFieldStyle(context),
-                        decoration: InputDecoration(
-                            hintStyle:
-                                SplitsbyTextTheme.textFieldHintStyle(context),
-                            counterText: "",
-                            border: InputBorder.none,
-                            hintText: "Enter group name"),
-                      )),
+                      MutableValue(
+                          mutableValue: cubit.groupName,
+                          builder: (context, groupName) {
+                            return RoundedListItem(
+                                child: TextField(
+                              autofocus: groupName.isEmpty,
+                              maxLines: 1,
+                              maxLength: 40,
+                              controller: nameTextController,
+                              onChanged: (value) {
+                                cubit.onUpdateGroupName(value);
+                              },
+                              textInputAction: TextInputAction.done,
+                              style: SplitsbyTextTheme.textFieldStyle(context),
+                              decoration: InputDecoration(
+                                  hintStyle:
+                                      SplitsbyTextTheme.textFieldHintStyle(
+                                          context),
+                                  counterText: "",
+                                  border: InputBorder.none,
+                                  hintText: "Enter group name"),
+                            ));
+                          }),
                       const SizedBox(height: 16),
                       ClickableListItem(
                         padding: const EdgeInsets.all(16),
@@ -96,10 +104,15 @@ class AddGroupPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              cubit.currency.toUpperCase(),
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
+                            MutableValue(
+                                mutableValue: cubit.currency,
+                                builder: (context, currency) {
+                                  return Text(
+                                    currency.toUpperCase(),
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  );
+                                }),
                             const Icon(Icons.arrow_drop_down)
                           ],
                         ),
@@ -108,20 +121,25 @@ class AddGroupPage extends StatelessWidget {
                       Column(
                         children: [
                           RoundedListItem(
-                            child: Column(
-                              children: [
-                                AddedPersonView(person: cubit.user),
-                                if (cubit.people.isEmpty)
-                                  const Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: Text("Invite people to the group"),
-                                  )
-                                else
-                                  ...cubit.people.map(
-                                    (e) => AddedPersonView(person: e),
-                                  ),
-                              ],
-                            ),
+                            child: MutableValue(
+                                mutableValue: cubit.people,
+                                builder: (context, people) {
+                                  return Column(
+                                    children: [
+                                      AddedPersonView(person: cubit.user),
+                                      if (cubit.people.isEmpty)
+                                        const Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: Text(
+                                              "Invite people to the group"),
+                                        )
+                                      else
+                                        ...people.map(
+                                          (e) => AddedPersonView(person: e),
+                                        ),
+                                    ],
+                                  );
+                                }),
                           ),
                           const SizedBox(height: 8),
                           const Align(

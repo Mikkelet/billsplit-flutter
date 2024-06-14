@@ -1,20 +1,23 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:collection/collection.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SharedExpense {
   final num _expense;
   final Iterable<Person> _participants;
   final String _description;
 
-  late num expenseState = _expense;
-  late List<Person> participantsState = _participants.toList();
-  late String descriptionState = _description;
+  late final MutableState<num> expenseState = _expense.obs();
+  late final MutableListState<Person> participantsState =
+      _participants.obsList();
+  late final MutableState<String> descriptionState = _description.obs();
 
-  SharedExpense(
-      {required num expense,
-      required Iterable<Person> participants,
-      required String description})
-      : _description = description,
+  SharedExpense({
+    required num expense,
+    required Iterable<Person> participants,
+    required String description,
+  })  : _description = description,
         _expense = expense,
         _participants = participants;
 
@@ -32,7 +35,7 @@ class SharedExpense {
 
   num get sharedExpenseDivided {
     try {
-      return expenseState / participantsState.length;
+      return expenseState.value / participantsState.value.length;
     } catch (e) {
       return 0;
     }
@@ -41,22 +44,46 @@ class SharedExpense {
   SharedExpense.newInstance(Iterable<Person> participants)
       : this(participants: participants, description: "", expense: 0);
 
+  Stream<bool> get isChangedStream {
+    final Iterable<Stream<bool>> streams = [
+      expenseState.stateStream.map((event) => event != _expense),
+      descriptionState.stateStream.map((event) => event != _description),
+      participantsState.stateStream.map((event) => !event.equals(_participants))
+    ];
+    return CombineLatestStream(
+        streams, (values) => values.any((element) => element));
+  }
+
   bool get isChanged {
-    return _expense != expenseState ||
-        _description != descriptionState ||
-        !_participants.toList().equals(participantsState);
+    return _expense != expenseState.value ||
+        _description != descriptionState.value ||
+        !_participants.equals(participantsState.value);
   }
 
   @override
   bool operator ==(Object other) {
     if (other is! SharedExpense) return false;
-    return descriptionState == other.descriptionState &&
-        participantsState.equals(other.participantsState) &&
-        expenseState == other.expenseState;
+    return hashCode == other.hashCode;
   }
 
   @override
   String toString() {
     return "SharedExpense(expense=$expenseState, participants=$participantsState, description=$descriptionState)";
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      expenseState.value, participantsState.value, expenseState.value);
+
+  void resetChanges() {
+    expenseState.value = _expense;
+    participantsState.value = _participants;
+    descriptionState.value = _description;
+  }
+
+  bool compareData(SharedExpense other) {
+    return participantsState.value.equals(other.participantsState.value) &&
+        expenseState.value == other.expenseState.value &&
+        descriptionState.value == other.descriptionState.value;
   }
 }

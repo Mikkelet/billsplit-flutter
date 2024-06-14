@@ -40,15 +40,15 @@ extension EventExt on Event {
       final expense = this as GroupExpense;
       return GroupExpenseDTO(
         id: realId,
-        tempParticipants: expense.tempParticipants.map((e) => e.toDTO()),
+        tempParticipants: expense.tempParticipantsState.value.map((e) => e.toDTO()),
         createdBy: createdBy.toDTO(),
-        date: expense.dateState.toIso8601String(),
-        receiptImageUrl: expense.receiptImageUrlState,
+        date: expense.dateState.value.toIso8601String(),
+        receiptImageUrl: expense.receiptImageUrlState.value,
         timestamp: timestamp,
-        description: expense.descriptionState,
-        payee: expense.payerState.toDTO(),
-        sharedExpenses: expense.sharedExpensesState.toDTO(),
-        currency: expense.currencyState.toDTO(),
+        description: expense.descriptionState.value,
+        payee: expense.payerState.value.toDTO(),
+        sharedExpenses: expense.sharedExpensesState.value.toDTO(),
+        currency: expense.currencyState.value.toDTO(),
       );
     }
     return PaymentDTO(

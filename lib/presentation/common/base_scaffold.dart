@@ -8,6 +8,7 @@ class BaseScaffold extends StatelessWidget {
   final FloatingActionButtonAnimator? floatingActionButtonAnimator;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
+  final Function(bool changed)? onEndDrawerStateChanged;
 
   const BaseScaffold({
     super.key,
@@ -18,6 +19,7 @@ class BaseScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.bottomNavigationBar,
     this.floatingActionButtonLocation,
+    this.onEndDrawerStateChanged,
   });
 
   @override

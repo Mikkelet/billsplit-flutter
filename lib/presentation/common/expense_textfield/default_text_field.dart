@@ -21,8 +21,8 @@ class ExpenseTextField extends StatefulWidget {
   /// Toggle to show input validation error. Will override [showErrorText].
   final bool showError;
 
-  ExpenseTextField({
-    Key? key,
+  const ExpenseTextField({
+    super.key,
     required this.textEditingController,
     required this.onChange,
     this.canBeZero = true,
@@ -33,7 +33,7 @@ class ExpenseTextField extends StatefulWidget {
     this.textAlign = TextAlign.right,
     this.maxValue,
     this.prefix = "",
-  }) : super(key: key);
+  });
 
   @override
   State<ExpenseTextField> createState() => _ExpenseTextFieldState();

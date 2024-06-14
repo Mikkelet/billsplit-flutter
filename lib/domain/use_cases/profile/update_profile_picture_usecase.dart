@@ -8,10 +8,10 @@ class UpdateProfilePictureUseCase {
   final _authRepository = getIt<AuthRepository>();
   final _storageProvider = getIt<FirebaseStorageProvider>();
 
-  Future<String> launch(Uri uri) async {
+  Future launch(Uri uri) async {
     final downloadUrl = await _storageProvider.uploadProfilePicture(
         _authRepository.loggedInUser.uid, uri);
     _authProvider.updateProfilePicture(downloadUrl);
-    return downloadUrl;
+    _authRepository.loggedInUser.pfpUrlState.value = downloadUrl;
   }
 }

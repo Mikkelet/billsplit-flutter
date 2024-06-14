@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupBottomNav extends StatefulWidget {
-  const GroupBottomNav({Key? key}) : super(key: key);
+  const GroupBottomNav({super.key});
 
   @override
   State<GroupBottomNav> createState() => _GroupBottomNavState();
@@ -15,29 +15,30 @@ class GroupBottomNav extends StatefulWidget {
 class _GroupBottomNavState extends SafeState<GroupBottomNav> {
   int navIndex = 0;
 
+  static const _destinations = [
+    NavigationDestination(icon: Icon(Icons.receipt_outlined), label: "Expenses"),
+    NavigationDestination(icon: Icon(Icons.update_outlined), label: "Subscriptions"),
+    NavigationDestination(icon: Icon(Icons.monetization_on_outlined), label: "Debts")
+  ];
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
-      if (state is GroupLoaded) {
+      if (state is GroupState) {
         if (state.nav.index != navIndex) {
           navIndex = state.nav.index;
         }
       }
-      const destinations = [
-        NavigationDestination(icon: Icon(Icons.receipt_outlined), label: "Expenses"),
-        NavigationDestination(icon: Icon(Icons.update_outlined), label: "Subscriptions"),
-        NavigationDestination(icon: Icon(Icons.monetization_on_outlined), label: "Debts")
-      ];
+
       return NavigationBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         indicatorColor: Theme.of(context).colorScheme.tertiary,
-        selectedIndex: navIndex > destinations.length - 1 ? 0 : navIndex,
-        destinations: destinations,
+        selectedIndex: navIndex > _destinations.length - 1 ? 0 : navIndex,
+        destinations: _destinations,
         onDestinationSelected: (index) {
           _onItemSelected(context, index);
         },
-
       );
     });
   }

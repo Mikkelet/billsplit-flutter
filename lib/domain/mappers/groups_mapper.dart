@@ -50,13 +50,13 @@ extension GroupDtoExt on GroupDTO {
 extension GroupExt on Group {
   GroupDTO toDTO() => GroupDTO(
         id: id,
-        name: nameState,
-        coverImageUrl: coverImageUrlState,
-        people: people.toDTO(),
-        invites: invites.toDTO(),
-        lastUpdated: lastUpdatedState,
-        defaultCurrency: defaultCurrencyState,
-        pastMembers: pastMembers.toDTO(),
+        name: nameState.value,
+        coverImageUrl: coverImageUrlState.value,
+        people: peopleState.value.toDTO(),
+        invites: invitesState.value.toDTO(),
+        lastUpdated: lastUpdatedState.value,
+        defaultCurrency: defaultCurrencyState.value,
+        pastMembers: pastMembersState.value.toDTO(),
         createdBy: createdBy.toDTO(),
         timestamp: timestamp,
       );

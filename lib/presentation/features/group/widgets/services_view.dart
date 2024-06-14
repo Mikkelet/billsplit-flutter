@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServicesView extends StatelessWidget {
-  const ServicesView({Key? key}) : super(key: key);
+  const ServicesView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
     return DefaultStreamBuilder(
       stream: cubit.getServicesStream(),
+      loaderWidget: const SizedBox(),
       builder: (_, services) {
         if (services.isEmpty) {
           return Center(
@@ -26,12 +27,13 @@ class ServicesView extends StatelessWidget {
           );
         }
         return ListView.builder(
-            itemCount: services.length,
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: ServiceView(services[index]),
-                ));
+          itemCount: services.length,
+          padding: const EdgeInsets.symmetric(vertical: 40),
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: ServiceView(services[index]),
+          ),
+        );
       },
     );
   }

@@ -21,7 +21,7 @@ class SingleExpenseField extends StatefulWidget {
 
 class _SingleExpenseFieldState extends State<SingleExpenseField> {
   late final textEditingController =
-      ExpenseTextFieldController(text: widget.expense.expenseState.fmtTextField());
+      ExpenseTextFieldController(text: widget.expense.expenseState.value.fmtTextField());
 
   @override
   Widget build(BuildContext context) {

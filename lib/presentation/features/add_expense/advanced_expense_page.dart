@@ -9,8 +9,9 @@ import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expe
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/scan_receipt_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expenses_view.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
-
+import 'package:rxdart/rxdart.dart';
 
 class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
@@ -33,8 +34,12 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             // Shared Expenses
             Column(
               children: [
-                SharedExpensesView(
-                    showAll: groupExpense.sharedExpensesState.length <= 3),
+                MutableValue(
+                    mutableValue: groupExpense.sharedExpensesState,
+                    builder: (context, sharedExpenses) {
+                      return SharedExpensesView(
+                          showAll: sharedExpenses.length <= 3);
+                    }),
                 const SizedBox(height: 4),
                 Align(
                   alignment: Alignment.centerRight,
@@ -62,14 +67,25 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             const SizedBox(height: 8),
-            DescriptionTextField(initialText: groupExpense.descriptionState),
+            MutableValue(
+                mutableValue: groupExpense.descriptionState,
+                builder: (context, description) {
+                  return DescriptionTextField(initialText: description);
+                }),
             const SizedBox(height: 8),
             DatePickerView(),
             //const LongPressTipView(),
             const SizedBox(height: 8),
             const ExpenseTotalView(),
             const SizedBox(height: 8),
-            PaidByDropDownView(people: getParticipatingPeople()),
+            StreamBuilder(
+              stream: getParticipatingPeople(),
+              initialData: const <Person>[],
+              builder: (context, snapshot) {
+                final people = snapshot.requireData;
+                return PaidByDropDownView(people: people);
+              },
+            ),
             const SizedBox(height: 120),
           ],
         ),
@@ -77,11 +93,11 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
     );
   }
 
-  Iterable<Person> getParticipatingPeople() {
-    final Iterable<Person> pastMembers = [
-      ...groupExpense.sharedExpensesState
-          .map((e) => e.participantsState),
-    ].flatMap().toSet();
-    return <Person>{...pastMembers, ...group.people};
+  Stream<Iterable<Person>> getParticipatingPeople() {
+    final pastMembers = groupExpense.sharedExpensesState.stateStream
+        .map((event) => event.map((e) => e.participantsState.value))
+        .map((event) => event.flatMap());
+    return pastMembers.zipWith(
+        group.peopleState.stateStream, (t, s) => {...t, ...s});
   }
 }

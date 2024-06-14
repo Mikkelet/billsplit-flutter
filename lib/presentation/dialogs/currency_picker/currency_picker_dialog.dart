@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
@@ -46,8 +47,7 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
         actions: const [CloseButton()],
       ),
       body: BaseBlocWidget(
-        create: (context) =>
-            CurrencyPickerCubit(widget.convertToCurrency)..loadCurrencies(),
+        create: (context) => CurrencyPickerCubit(widget.convertToCurrency),
         child: BaseBlocBuilder<CurrencyPickerCubit>(builder: (cubit, state) {
           if (state is Loading) {
             return const Center(child: CircularProgressIndicator());
@@ -73,8 +73,9 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
                             hintText: "USD, EUR",
                             suffixIcon: const Icon(Icons.search),
                             hintStyle: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.inversePrimary),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary),
                             counterText: ""),
                         maxLength: 10,
                         maxLines: 1,
@@ -85,27 +86,31 @@ class _CurrencyPickerDialogState extends SafeState<CurrencyPickerDialog> {
                       const Text("Recent currencies"),
                     if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
                       ...cubit.recentCurrencies.map((currency) =>
-                          _currencyButton(Key(currency.symbol), cubit, currency)),
+                          _currencyButton(
+                              Key(currency.symbol), cubit, currency)),
                     if (cubit.recentCurrencies.isNotEmpty && filter.isEmpty)
                       const Text("All currencies"),
-                    Builder(builder: (context) {
-                      final filtered = cubit.currencies
-                          .where((element) => filter.isNotEmpty
-                              ? element.symbol.toLowerCase().startsWith(filter)
-                              : true)
-                          .toList();
-                      return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: filtered.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final currency = filtered[index];
-                          if(currency.symbol == "THB") print("qqq thb=$currency");
-                          return _currencyButton(
-                              Key(currency.symbol), cubit, currency);
-                        },
-                      );
-                    })
+                    MutableValue(
+                        mutableValue: cubit.currencies,
+                        builder: (context, currencies) {
+                          final filtered = currencies
+                              .where((element) => filter.isNotEmpty
+                                  ? element.symbol
+                                      .toLowerCase()
+                                      .startsWith(filter)
+                                  : true)
+                              .toList();
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: filtered.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final currency = filtered[index];
+                              return _currencyButton(
+                                  Key(currency.symbol), cubit, currency);
+                            },
+                          );
+                        })
                   ],
                 ),
               ),

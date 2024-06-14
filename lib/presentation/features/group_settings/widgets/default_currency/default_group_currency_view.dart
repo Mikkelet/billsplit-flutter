@@ -6,13 +6,13 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/widgets/default_currency/default_group_currency_cubit.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
 
 class DefaultGroupCurrencyView extends StatelessWidget {
   final Group group;
 
-  const DefaultGroupCurrencyView({Key? key, required this.group})
-      : super(key: key);
+  const DefaultGroupCurrencyView({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,8 @@ class DefaultGroupCurrencyView extends StatelessWidget {
             onClick: () async {
               final response = await Navigator.of(context).push(
                   CurrencyPickerDialog.getRoute(
-                      convertToCurrency: cubit.group.defaultCurrencyState));
+                      convertToCurrency:
+                          cubit.group.defaultCurrencyState.value));
               if (response is Currency) {
                 cubit.updateCurrency(response);
               }
@@ -34,9 +35,14 @@ class DefaultGroupCurrencyView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  cubit.group.defaultCurrencyState.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelSmall,
+                MutableValue(
+                  mutableValue: cubit.group.defaultCurrencyState,
+                  builder: (context, currency) {
+                    return Text(
+                      currency.toUpperCase(),
+                      style: Theme.of(context).textTheme.labelSmall,
+                    );
+                  },
                 ),
                 if (state is Loading)
                   const CircularProgressIndicator()
