@@ -1,7 +1,6 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/payer_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

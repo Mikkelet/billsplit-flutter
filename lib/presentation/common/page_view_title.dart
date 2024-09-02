@@ -7,12 +7,12 @@ class PageViewTitle extends StatefulWidget {
   final String titleOne;
   final String titleTwo;
 
-  const PageViewTitle(
-      {Key? key,
-      required this.pageController,
-      required this.titleOne,
-      required this.titleTwo})
-      : super(key: key);
+  const PageViewTitle({
+    super.key,
+    required this.pageController,
+    required this.titleOne,
+    required this.titleTwo,
+  });
 
   @override
   State<PageViewTitle> createState() => _PageViewTitleState();

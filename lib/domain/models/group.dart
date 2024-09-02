@@ -24,19 +24,19 @@ class Group {
   late final MutableListState<Person> pastMembersState = _pastMembers.obsList();
   late final MutableListState<Person> invitesState = _invites.obsList();
 
-  Group(
-      {required this.id,
-      required String name,
-      required String coverImageUrl,
-      required Iterable<Person> people,
-      required Iterable<Person> pastMembers,
-      required Iterable<Person> invites,
-      required this.createdBy,
-      required this.timestamp,
-      this.lastSync,
-      required int lastUpdated,
-      required String defaultCurrency})
-      : _name = name,
+  Group({
+    required this.id,
+    required String name,
+    required String coverImageUrl,
+    required Iterable<Person> people,
+    required Iterable<Person> pastMembers,
+    required Iterable<Person> invites,
+    required this.createdBy,
+    required this.timestamp,
+    this.lastSync,
+    required int lastUpdated,
+    required String defaultCurrency,
+  })  : _name = name,
         _invites = invites,
         _pastMembers = pastMembers,
         _people = people,
@@ -44,7 +44,8 @@ class Group {
         _coverImageUrl = coverImageUrl,
         _defaultCurrency = defaultCurrency;
 
-  Iterable<Person> get allPeople => [...peopleState.value, ...pastMembersState.value];
+  Iterable<Person> get allPeople =>
+      [...peopleState.value, ...pastMembersState.value];
 
   void respondToInvite(Person user, bool accept) {
     invitesState.remove(user);
@@ -58,8 +59,11 @@ class Group {
   }
 
   Group.newGroup(
-      Person createdBy, String name, Iterable<Person> people, String currency)
-      : this(
+    Person createdBy,
+    String name,
+    Iterable<Person> people,
+    String currency,
+  ) : this(
           id: "",
           createdBy: createdBy,
           coverImageUrl: "",

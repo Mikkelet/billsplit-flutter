@@ -80,6 +80,13 @@ class GroupExpense extends Event {
   }
 
   bool get isChanged {
+    print("qqq ${_payer.uid != payerState.value.uid}");
+    print("qqq ${_description != descriptionState.value}");
+    print("qqq $_currency == ${currencyState.value}");
+    print("qqq ${_date.millisecondsSinceEpoch != dateState.value.millisecondsSinceEpoch}");
+    print("qqq ${!_sharedExpenses.toList().equals(sharedExpensesState.value.toList())}");
+    print("qqq ${sharedExpensesState.value.any((element) => element.isChanged)}");
+
     return _payer.uid != payerState.value.uid ||
         _description != descriptionState.value ||
         _currency != currencyState.value ||

@@ -18,11 +18,12 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
   final Group group;
   final PageController pageController;
 
-  const AdvancedExpensePage(
-      {required this.groupExpense,
-      required this.group,
-      super.key,
-      required this.pageController});
+  const AdvancedExpensePage({
+    required this.groupExpense,
+    required this.group,
+    super.key,
+    required this.pageController,
+  });
 
   @override
   Widget build(BuildContext context) {
