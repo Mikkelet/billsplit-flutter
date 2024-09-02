@@ -37,7 +37,7 @@ class AddExpenseBloc extends BaseCubit {
   AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main()) {
     if (groupExpense.id.isEmpty) {
       final groupDefCurrencyRate =
-          sharedPrefs.latestExchangeRates[group.defaultCurrencyState.value];
+          sharedPrefs.getExchangeRate(group.defaultCurrencyState.value);
       if (groupDefCurrencyRate == null) {
         updateCurrency(Currency.usd());
       } else {
@@ -84,6 +84,7 @@ class AddExpenseBloc extends BaseCubit {
   }
 
   void updateCurrency(Currency currency) {
+    print("qqq change currency ${currency.symbol}");
     groupExpense.currencyState.value = currency;
   }
 

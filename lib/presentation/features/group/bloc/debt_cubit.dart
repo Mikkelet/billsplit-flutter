@@ -34,7 +34,7 @@ class DebtCubit extends BaseCubit {
   }
 
   payTempDebt(){
-    final num? rate = sharedPrefs.latestExchangeRates[currency.toUpperCase()];
+    final num? rate = sharedPrefs.getExchangeRate(currency);
     if (rate == null) {
       showError(
           UiException(3000,
@@ -62,7 +62,7 @@ class DebtCubit extends BaseCubit {
   }
 
   payDebt() {
-    final num? rate = sharedPrefs.latestExchangeRates[currency.toUpperCase()];
+    final num? rate = sharedPrefs.getExchangeRate(currency);
     if (rate == null) {
       showError(
           UiException(3000,

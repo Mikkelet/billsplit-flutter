@@ -8,7 +8,7 @@ class GetCurrenciesUseCase {
   Iterable<Currency> launch() {
     final rates = _prefs.latestExchangeRates;
     return rates.keys.map((symbol) {
-      final rate = _prefs.latestExchangeRates[symbol]!;
+      final rate = _prefs.getExchangeRate(symbol)!;
       return Currency(symbol: symbol, rate: rate);
     });
   }

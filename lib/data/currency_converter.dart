@@ -10,9 +10,8 @@ class CurrencyConverter {
       return amount;
     }
     if(_sharedPrefs.latestExchangeRates.isEmpty) return -1;
-    final latestRates = _sharedPrefs.latestExchangeRates;
-    final oldCurrencyRate = latestRates[currencySymbol.toUpperCase()]!;
-    final newCurrencyRate = latestRates[convertToCurrency.toUpperCase()]!;
+    final oldCurrencyRate = _sharedPrefs.getExchangeRate(currencySymbol)!;
+    final newCurrencyRate = _sharedPrefs.getExchangeRate(convertToCurrency)!;
     // convert amount to USD
     final amountUSD = amount / oldCurrencyRate;
     // multiply amount by new conversion rate

@@ -51,7 +51,7 @@ class OnboardingBloc extends BaseCubit {
   _initCurrency() {
     _getCurrencies.launch().then((_) {
       final currencyRate =
-          sharedPrefs.latestExchangeRates[sharedPrefs.userPrefDefaultCurrency];
+          sharedPrefs.getExchangeRate(sharedPrefs.userPrefDefaultCurrency);
       if (currencyRate != null) {
         currency = Currency(
           symbol: sharedPrefs.userPrefDefaultCurrency,

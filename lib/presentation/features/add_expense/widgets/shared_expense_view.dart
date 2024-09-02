@@ -176,7 +176,7 @@ class _SharedExpenseViewState extends SafeState<SharedExpenseView> {
         participantsState: widget.sharedExpense.participantsState,
         peopleState: cubit.peopleStream,
         currencySymbol: cubit.groupExpense.currencyState.value.symbol,
-        totalExpense: cubit.groupExpense.total,
+        totalExpense: widget.sharedExpense.expenseState.value,
         description: widget.sharedExpense.descriptionState.value,
         onAddTempParticipant: (name) {
           cubit.onAddTempParticipant(name, widget.sharedExpense);
