@@ -1,4 +1,3 @@
-import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
@@ -79,16 +78,15 @@ class SimpleExpenseParticipantsView extends StatelessWidget {
           child: ClickableListItem(
             color: Theme.of(context).colorScheme.secondaryContainer,
             onClick: () async {
-              final sharedExpense =
-                  cubit.groupExpense.sharedExpensesState.value;
+              final sharedExpense = cubit.groupExpense.sharedExpensesState.value.first;
               final route = ParticipantsPickerDialog(
                 participantsState: expense.participantsState,
                 peopleState: cubit.peopleStream,
                 currencySymbol: cubit.groupExpense.currencyState.value.symbol,
-                totalExpense: cubit.groupExpense.total,
+                totalExpense: sharedExpense.expenseState.value,
                 description: cubit.groupExpense.descriptionState.value,
                 onAddTempParticipant: (name) {
-                  cubit.onAddTempParticipant(name, sharedExpense.first);
+                  cubit.onAddTempParticipant(name, sharedExpense);
                 },
               );
               await Navigator.of(context)

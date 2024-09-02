@@ -73,7 +73,7 @@ class SharedPrefs {
     final recentSorted =
         lsJson.map((e) => RecentCurrency.fromJson(jsonDecode(e))).toList();
     return recentSorted.map((e) {
-      final rate = latestExchangeRates[e.symbol.toUpperCase()];
+      final rate = getExchangeRate(e.symbol);
       return Currency(symbol: e.symbol, rate: rate!);
     });
   }
