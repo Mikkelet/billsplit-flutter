@@ -16,7 +16,6 @@ import 'package:rxdart/rxdart.dart';
 abstract class BaseCubit extends Cubit<UiState> {
   @protected
   final authRepository = getIt<AuthRepository>();
-  @protected
   final sharedPrefs = getIt<SharedPrefs>();
 
   final compositeSubscription = CompositeSubscription();
