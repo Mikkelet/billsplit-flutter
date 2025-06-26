@@ -17,7 +17,7 @@ dependencies:
   firebase_messaging: ^15.1.5
   firebase_crashlytics: ^4.1.5
 
-  flutter_bloc: ^8.1.2
+  flutter_bloc: ^9.1.1
   cupertino_icons: ^1.0.2
   http: ^1.1.0
   json_serializable: ^6.7.1
@@ -27,35 +27,35 @@ dependencies:
   path_provider: ^2.0.0
   path: ^1.8.2
   storage_inspector: ^0.4.0
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0
   collection:
-  get_it: ^7.2.0
-  intl: ^0.19.0
+  get_it: ^8.0.3
+  intl: ^0.20.2
   email_validator:
   cached_network_image: ^3.2.3
   image_picker: ^1.0.4
   cupertino_will_pop_scope: ^1.2.1
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^19.3.0
   shared_preferences: ^2.1.0
-  eraser: ^2.0.1
+  eraser: ^3.0.0
   camera: ^0.11.0+1
   flutter_animate: ^4.1.1+1
   package_info_plus: ^8.0.0
   uuid: ^4.1.0
   json_pretty: ^1.0.4
   google_sign_in: ^6.2.1
-  sign_in_with_apple: ^6.1.0
+  sign_in_with_apple: ^7.0.1
   phone_number: ^2.0.1
   country_code_picker: ^3.0.0
-  image_cropper: ^8.0.2
-  google_mlkit_text_recognition: ^0.14.0
+  image_cropper: ^9.1.0
+  google_mlkit_text_recognition: ^0.15.0
 
 dev_dependencies:
   build_runner: ^2.3.3
   drift_dev: ^2.6.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
