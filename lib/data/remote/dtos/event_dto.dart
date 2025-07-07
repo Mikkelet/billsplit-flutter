@@ -1,6 +1,7 @@
 import 'package:billsplit_flutter/data/remote/dtos/currency_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/shared_expense_dto.dart';
+import 'package:billsplit_flutter/data/remote/dtos/surcharge_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_pretty/json_pretty.dart';
@@ -59,6 +60,7 @@ class GroupExpenseDTO extends EventDTO {
   final Iterable<SharedExpenseDTO> sharedExpenses;
   final Iterable<PersonDTO> tempParticipants;
   final String receiptImageUrl;
+  final Iterable<SurchargeDTO> surcharges;
 
   GroupExpenseDTO({
     required super.id,
@@ -72,6 +74,7 @@ class GroupExpenseDTO extends EventDTO {
     required this.tempParticipants,
     required this.payee,
     required this.sharedExpenses,
+    required this.surcharges,
   });
 
   factory GroupExpenseDTO.fromJson(Json json) =>

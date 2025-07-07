@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/domain/models/surcharge.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/delete_expense_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
@@ -133,5 +134,13 @@ class AddExpenseBloc extends BaseCubit {
 
   void onAddTempParticipant(String name, SharedExpense sharedExpense) {
     groupExpense.addTempParticipant(name, sharedExpense);
+    update();
+  }
+
+  void onUpdateSurcharge(num value) {
+    groupExpense.surchargesState.clear();
+    groupExpense.surchargesState.add(Surcharge(
+        name: "Surcharge", type: SurchargeType.percentage, value: value));
+    update();
   }
 }

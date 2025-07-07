@@ -9,7 +9,7 @@ part of '../../../../data/local/preferences/models/recent_currency.dart';
 RecentCurrency _$RecentCurrencyFromJson(Map<String, dynamic> json) =>
     RecentCurrency(
       json['symbol'] as String,
-      json['timestamp'] as int,
+      (json['timestamp'] as num).toInt(),
     );
 
 Map<String, dynamic> _$RecentCurrencyToJson(RecentCurrency instance) =>

@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/surcharge.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
@@ -23,6 +24,7 @@ class GroupExpense extends Event {
   final Iterable<Person> _tempParticipants;
   final String _receiptImageUrl;
   final DateTime _date;
+  final Iterable<Surcharge> _surcharges;
 
   // modifiable values
   late final MutableState<Person> payerState = _payer.obs();
@@ -34,6 +36,8 @@ class GroupExpense extends Event {
   late final MutableState<DateTime> dateState = _date.obs();
   late final MutableListState<Person> tempParticipantsState =
       _tempParticipants.obsList();
+  late final MutableListState<Surcharge> surchargesState =
+      _surcharges.obsList();
 
   GroupExpense({
     required String id,
@@ -46,6 +50,7 @@ class GroupExpense extends Event {
     required Iterable<Person> tempParticipants,
     required String receiptImageUrl,
     required DateTime date,
+    required Iterable<Surcharge> surcharges,
     required this.syncState,
   })  : _payer = payer,
         _sharedExpenses = sharedExpenses,
@@ -53,12 +58,19 @@ class GroupExpense extends Event {
         _date = date,
         _receiptImageUrl = receiptImageUrl,
         _tempParticipants = tempParticipants.toList(),
+        _surcharges = surcharges,
         _currency = currency,
         super(id, createdBy, timestamp);
 
+  num addSurcharge(num expense) {
+    if (surcharge == 0) return expense;
+    final surchargePct = (surcharge + 100) / 100;
+    return expense * surchargePct;
+  }
+
   Stream<num> get totalStream {
-    final streams = sharedExpensesState.value
-        .map((event) => event.expenseState.stateStream);
+    final streams = sharedExpensesState.value.map((event) =>
+        event.expenseState.stateStream.map((expense) => addSurcharge(expense)));
     return CombineLatestStream(streams, (values) => values.sum);
   }
 
@@ -68,30 +80,42 @@ class GroupExpense extends Event {
 
   num getSharedExpensesForPerson(Person person) {
     return sharedExpensesState.value
-        .map((sharedExpense) => sharedExpense.participantsState.value
-        .where((participant) => participant.uid == person.uid)
-        .map((person) => IndividualExpense(
-        currency: currencyState.value.symbol,
-        person: person,
-        expense: sharedExpense.sharedExpenseDivided)))
+        .map(
+          (sharedExpense) => sharedExpense.participantsState.value
+              .where((participant) => participant.uid == person.uid)
+              .map(
+                (person) => IndividualExpense(
+                  currency: currencyState.value.symbol,
+                  person: person,
+                  expense: addSurcharge(sharedExpense.sharedExpenseDivided),
+                ),
+              ),
+        )
         .flatMap()
         .map((e) => e.expense)
         .sum;
   }
 
   bool get isChanged {
+    return true;
     print("qqq ${_payer.uid != payerState.value.uid}");
     print("qqq ${_description != descriptionState.value}");
     print("qqq $_currency == ${currencyState.value}");
-    print("qqq ${_date.millisecondsSinceEpoch != dateState.value.millisecondsSinceEpoch}");
-    print("qqq ${!_sharedExpenses.toList().equals(sharedExpensesState.value.toList())}");
-    print("qqq ${sharedExpensesState.value.any((element) => element.isChanged)}");
+    print(
+        "qqq ${_date.millisecondsSinceEpoch != dateState.value.millisecondsSinceEpoch}");
+    print(
+        "qqq ${!_sharedExpenses.toList().compareLists(sharedExpensesState.value.toList())}");
+    print(
+        "qqq ${sharedExpensesState.value.any((element) => element.isChanged)}");
 
     return _payer.uid != payerState.value.uid ||
         _description != descriptionState.value ||
         _currency != currencyState.value ||
-        _date.millisecondsSinceEpoch != dateState.value.millisecondsSinceEpoch ||
-        !_sharedExpenses.toList().equals(sharedExpensesState.value.toList()) || // TODO
+        _date.millisecondsSinceEpoch !=
+            dateState.value.millisecondsSinceEpoch ||
+        !_sharedExpenses
+            .toList()
+            .compareLists(sharedExpensesState.value.toList()) || // TODO
         sharedExpensesState.value.any((element) => element.isChanged);
   }
 
@@ -108,8 +132,8 @@ class GroupExpense extends Event {
           .map((event) => !event.equals(_tempParticipants)),
       dateState.stateStream.map((event) =>
           event.millisecondsSinceEpoch != _date.millisecondsSinceEpoch),
-      sharedExpensesState.stateStream
-          .map((event) => !event.toList().equals(_sharedExpenses.toList())),
+      sharedExpensesState.stateStream.map(
+          (event) => !event.toList().compareLists(_sharedExpenses.toList())),
       ...sharedExpensesStreams,
     ];
     return CombineLatestStream(
@@ -119,6 +143,20 @@ class GroupExpense extends Event {
             }));
   }
 
+  num get surcharge {
+    if (surchargesState.isEmpty) {
+      surchargesState.add(Surcharge(
+          name: "Surcharge", type: SurchargeType.percentage, value: 0));
+    }
+    return surchargesState.value.first.value;
+  }
+
+  set surcharge(num value) {
+    surchargesState.clear();
+    surchargesState.add(Surcharge(
+        name: "Surcharge", type: SurchargeType.percentage, value: value));
+  }
+
   void resetChanges() {
     descriptionState.value = _description;
     payerState.value = _payer;
@@ -126,6 +164,7 @@ class GroupExpense extends Event {
     currencyState.value = _currency;
     dateState.value = _date;
     tempParticipantsState.value = _tempParticipants;
+    surchargesState.value = _surcharges;
     for (var element in sharedExpensesState.value) {
       element.resetChanges();
     }
@@ -133,18 +172,21 @@ class GroupExpense extends Event {
 
   GroupExpense.newExpense(Person user, Group group)
       : this(
-          id: "",
-          createdBy: user,
-          description: "",
-          sharedExpenses: [SharedExpense.newInstance(group.peopleState.value)],
-          syncState: SyncState.synced,
-          payer: user,
-          receiptImageUrl: "",
-          tempParticipants: [],
-          date: DateTime.now(),
-          currency: Currency(symbol: group.defaultCurrencyState.value, rate: 1),
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-        );
+            id: "",
+            createdBy: user,
+            description: "",
+            sharedExpenses: [
+              SharedExpense.newInstance(group.peopleState.value)
+            ],
+            syncState: SyncState.synced,
+            payer: user,
+            receiptImageUrl: "",
+            tempParticipants: [],
+            date: DateTime.now(),
+            currency:
+                Currency(symbol: group.defaultCurrencyState.value, rate: 1),
+            timestamp: DateTime.now().millisecondsSinceEpoch,
+            surcharges: []);
 
   @override
   String toString() {

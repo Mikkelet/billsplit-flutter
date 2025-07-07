@@ -134,6 +134,15 @@ class GroupDb extends DataClass implements Insertable<GroupDb> {
         lastUpdated: lastUpdated.present ? lastUpdated.value : this.lastUpdated,
         group: group ?? this.group,
       );
+  GroupDb copyWithCompanion(GroupsTableCompanion data) {
+    return GroupDb(
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      lastUpdated:
+          data.lastUpdated.present ? data.lastUpdated.value : this.lastUpdated,
+      group: data.group.present ? data.group.value : this.group,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('GroupDb(')
@@ -385,6 +394,17 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
         groupExpense: groupExpense ?? this.groupExpense,
         syncState: syncState ?? this.syncState,
       );
+  GroupExpenseDb copyWithCompanion(GroupExpenseTableCompanion data) {
+    return GroupExpenseDb(
+      id: data.id.present ? data.id.value : this.id,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      groupExpense: data.groupExpense.present
+          ? data.groupExpense.value
+          : this.groupExpense,
+      syncState: data.syncState.present ? data.syncState.value : this.syncState,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('GroupExpenseDb(')
@@ -645,6 +665,15 @@ class FriendDb extends DataClass implements Insertable<FriendDb> {
         createdBy: createdBy ?? this.createdBy,
         friend: friend ?? this.friend,
       );
+  FriendDb copyWithCompanion(FriendsTableCompanion data) {
+    return FriendDb(
+      uid: data.uid.present ? data.uid.value : this.uid,
+      status: data.status.present ? data.status.value : this.status,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      friend: data.friend.present ? data.friend.value : this.friend,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FriendDb(')
@@ -882,6 +911,14 @@ class ServiceDb extends DataClass implements Insertable<ServiceDb> {
         groupId: groupId ?? this.groupId,
         service: service ?? this.service,
       );
+  ServiceDb copyWithCompanion(ServicesTableCompanion data) {
+    return ServiceDb(
+      id: data.id.present ? data.id.value : this.id,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      service: data.service.present ? data.service.value : this.service,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ServiceDb(')
@@ -1105,6 +1142,14 @@ class PaymentDb extends DataClass implements Insertable<PaymentDb> {
         groupId: groupId ?? this.groupId,
         payment: payment ?? this.payment,
       );
+  PaymentDb copyWithCompanion(PaymentsTableCompanion data) {
+    return PaymentDb(
+      id: data.id.present ? data.id.value : this.id,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      payment: data.payment.present ? data.payment.value : this.payment,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('PaymentDb(')
@@ -1327,6 +1372,14 @@ class GroupInviteDb extends DataClass implements Insertable<GroupInviteDb> {
         syncState: syncState ?? this.syncState,
         group: group ?? this.group,
       );
+  GroupInviteDb copyWithCompanion(GroupInvitesTableCompanion data) {
+    return GroupInviteDb(
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      syncState: data.syncState.present ? data.syncState.value : this.syncState,
+      group: data.group.present ? data.group.value : this.group,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('GroupInviteDb(')
@@ -1426,6 +1479,7 @@ class GroupInvitesTableCompanion extends UpdateCompanion<GroupInviteDb> {
 
 abstract class _$SplitsbyDatabase extends GeneratedDatabase {
   _$SplitsbyDatabase(QueryExecutor e) : super(e);
+  $SplitsbyDatabaseManager get managers => $SplitsbyDatabaseManager(this);
   late final $GroupsTableTable groupsTable = $GroupsTableTable(this);
   late final $GroupExpenseTableTable groupExpenseTable =
       $GroupExpenseTableTable(this);
@@ -1454,4 +1508,914 @@ abstract class _$SplitsbyDatabase extends GeneratedDatabase {
         paymentsTable,
         groupInvitesTable
       ];
+}
+
+typedef $$GroupsTableTableCreateCompanionBuilder = GroupsTableCompanion
+    Function({
+  required String groupId,
+  Value<int?> lastUpdated,
+  required String group,
+  Value<int> rowid,
+});
+typedef $$GroupsTableTableUpdateCompanionBuilder = GroupsTableCompanion
+    Function({
+  Value<String> groupId,
+  Value<int?> lastUpdated,
+  Value<String> group,
+  Value<int> rowid,
+});
+
+class $$GroupsTableTableFilterComposer
+    extends Composer<_$SplitsbyDatabase, $GroupsTableTable> {
+  $$GroupsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get lastUpdated => $composableBuilder(
+      column: $table.lastUpdated, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get group => $composableBuilder(
+      column: $table.group, builder: (column) => ColumnFilters(column));
+}
+
+class $$GroupsTableTableOrderingComposer
+    extends Composer<_$SplitsbyDatabase, $GroupsTableTable> {
+  $$GroupsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get lastUpdated => $composableBuilder(
+      column: $table.lastUpdated, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get group => $composableBuilder(
+      column: $table.group, builder: (column) => ColumnOrderings(column));
+}
+
+class $$GroupsTableTableAnnotationComposer
+    extends Composer<_$SplitsbyDatabase, $GroupsTableTable> {
+  $$GroupsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get groupId =>
+      $composableBuilder(column: $table.groupId, builder: (column) => column);
+
+  GeneratedColumn<int> get lastUpdated => $composableBuilder(
+      column: $table.lastUpdated, builder: (column) => column);
+
+  GeneratedColumn<String> get group =>
+      $composableBuilder(column: $table.group, builder: (column) => column);
+}
+
+class $$GroupsTableTableTableManager extends RootTableManager<
+    _$SplitsbyDatabase,
+    $GroupsTableTable,
+    GroupDb,
+    $$GroupsTableTableFilterComposer,
+    $$GroupsTableTableOrderingComposer,
+    $$GroupsTableTableAnnotationComposer,
+    $$GroupsTableTableCreateCompanionBuilder,
+    $$GroupsTableTableUpdateCompanionBuilder,
+    (GroupDb, BaseReferences<_$SplitsbyDatabase, $GroupsTableTable, GroupDb>),
+    GroupDb,
+    PrefetchHooks Function()> {
+  $$GroupsTableTableTableManager(_$SplitsbyDatabase db, $GroupsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GroupsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GroupsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GroupsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> groupId = const Value.absent(),
+            Value<int?> lastUpdated = const Value.absent(),
+            Value<String> group = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GroupsTableCompanion(
+            groupId: groupId,
+            lastUpdated: lastUpdated,
+            group: group,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String groupId,
+            Value<int?> lastUpdated = const Value.absent(),
+            required String group,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GroupsTableCompanion.insert(
+            groupId: groupId,
+            lastUpdated: lastUpdated,
+            group: group,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$GroupsTableTableProcessedTableManager = ProcessedTableManager<
+    _$SplitsbyDatabase,
+    $GroupsTableTable,
+    GroupDb,
+    $$GroupsTableTableFilterComposer,
+    $$GroupsTableTableOrderingComposer,
+    $$GroupsTableTableAnnotationComposer,
+    $$GroupsTableTableCreateCompanionBuilder,
+    $$GroupsTableTableUpdateCompanionBuilder,
+    (GroupDb, BaseReferences<_$SplitsbyDatabase, $GroupsTableTable, GroupDb>),
+    GroupDb,
+    PrefetchHooks Function()>;
+typedef $$GroupExpenseTableTableCreateCompanionBuilder
+    = GroupExpenseTableCompanion Function({
+  required String id,
+  required String groupId,
+  required String groupExpense,
+  required int syncState,
+  Value<int> rowid,
+});
+typedef $$GroupExpenseTableTableUpdateCompanionBuilder
+    = GroupExpenseTableCompanion Function({
+  Value<String> id,
+  Value<String> groupId,
+  Value<String> groupExpense,
+  Value<int> syncState,
+  Value<int> rowid,
+});
+
+class $$GroupExpenseTableTableFilterComposer
+    extends Composer<_$SplitsbyDatabase, $GroupExpenseTableTable> {
+  $$GroupExpenseTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get groupExpense => $composableBuilder(
+      column: $table.groupExpense, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get syncState => $composableBuilder(
+      column: $table.syncState, builder: (column) => ColumnFilters(column));
+}
+
+class $$GroupExpenseTableTableOrderingComposer
+    extends Composer<_$SplitsbyDatabase, $GroupExpenseTableTable> {
+  $$GroupExpenseTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get groupExpense => $composableBuilder(
+      column: $table.groupExpense,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get syncState => $composableBuilder(
+      column: $table.syncState, builder: (column) => ColumnOrderings(column));
+}
+
+class $$GroupExpenseTableTableAnnotationComposer
+    extends Composer<_$SplitsbyDatabase, $GroupExpenseTableTable> {
+  $$GroupExpenseTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get groupId =>
+      $composableBuilder(column: $table.groupId, builder: (column) => column);
+
+  GeneratedColumn<String> get groupExpense => $composableBuilder(
+      column: $table.groupExpense, builder: (column) => column);
+
+  GeneratedColumn<int> get syncState =>
+      $composableBuilder(column: $table.syncState, builder: (column) => column);
+}
+
+class $$GroupExpenseTableTableTableManager extends RootTableManager<
+    _$SplitsbyDatabase,
+    $GroupExpenseTableTable,
+    GroupExpenseDb,
+    $$GroupExpenseTableTableFilterComposer,
+    $$GroupExpenseTableTableOrderingComposer,
+    $$GroupExpenseTableTableAnnotationComposer,
+    $$GroupExpenseTableTableCreateCompanionBuilder,
+    $$GroupExpenseTableTableUpdateCompanionBuilder,
+    (
+      GroupExpenseDb,
+      BaseReferences<_$SplitsbyDatabase, $GroupExpenseTableTable,
+          GroupExpenseDb>
+    ),
+    GroupExpenseDb,
+    PrefetchHooks Function()> {
+  $$GroupExpenseTableTableTableManager(
+      _$SplitsbyDatabase db, $GroupExpenseTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GroupExpenseTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GroupExpenseTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GroupExpenseTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> groupId = const Value.absent(),
+            Value<String> groupExpense = const Value.absent(),
+            Value<int> syncState = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GroupExpenseTableCompanion(
+            id: id,
+            groupId: groupId,
+            groupExpense: groupExpense,
+            syncState: syncState,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String groupId,
+            required String groupExpense,
+            required int syncState,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GroupExpenseTableCompanion.insert(
+            id: id,
+            groupId: groupId,
+            groupExpense: groupExpense,
+            syncState: syncState,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$GroupExpenseTableTableProcessedTableManager = ProcessedTableManager<
+    _$SplitsbyDatabase,
+    $GroupExpenseTableTable,
+    GroupExpenseDb,
+    $$GroupExpenseTableTableFilterComposer,
+    $$GroupExpenseTableTableOrderingComposer,
+    $$GroupExpenseTableTableAnnotationComposer,
+    $$GroupExpenseTableTableCreateCompanionBuilder,
+    $$GroupExpenseTableTableUpdateCompanionBuilder,
+    (
+      GroupExpenseDb,
+      BaseReferences<_$SplitsbyDatabase, $GroupExpenseTableTable,
+          GroupExpenseDb>
+    ),
+    GroupExpenseDb,
+    PrefetchHooks Function()>;
+typedef $$FriendsTableTableCreateCompanionBuilder = FriendsTableCompanion
+    Function({
+  required String uid,
+  required String status,
+  required String createdBy,
+  required String friend,
+  Value<int> rowid,
+});
+typedef $$FriendsTableTableUpdateCompanionBuilder = FriendsTableCompanion
+    Function({
+  Value<String> uid,
+  Value<String> status,
+  Value<String> createdBy,
+  Value<String> friend,
+  Value<int> rowid,
+});
+
+class $$FriendsTableTableFilterComposer
+    extends Composer<_$SplitsbyDatabase, $FriendsTableTable> {
+  $$FriendsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get uid => $composableBuilder(
+      column: $table.uid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get friend => $composableBuilder(
+      column: $table.friend, builder: (column) => ColumnFilters(column));
+}
+
+class $$FriendsTableTableOrderingComposer
+    extends Composer<_$SplitsbyDatabase, $FriendsTableTable> {
+  $$FriendsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get uid => $composableBuilder(
+      column: $table.uid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get friend => $composableBuilder(
+      column: $table.friend, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FriendsTableTableAnnotationComposer
+    extends Composer<_$SplitsbyDatabase, $FriendsTableTable> {
+  $$FriendsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get uid =>
+      $composableBuilder(column: $table.uid, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<String> get friend =>
+      $composableBuilder(column: $table.friend, builder: (column) => column);
+}
+
+class $$FriendsTableTableTableManager extends RootTableManager<
+    _$SplitsbyDatabase,
+    $FriendsTableTable,
+    FriendDb,
+    $$FriendsTableTableFilterComposer,
+    $$FriendsTableTableOrderingComposer,
+    $$FriendsTableTableAnnotationComposer,
+    $$FriendsTableTableCreateCompanionBuilder,
+    $$FriendsTableTableUpdateCompanionBuilder,
+    (
+      FriendDb,
+      BaseReferences<_$SplitsbyDatabase, $FriendsTableTable, FriendDb>
+    ),
+    FriendDb,
+    PrefetchHooks Function()> {
+  $$FriendsTableTableTableManager(
+      _$SplitsbyDatabase db, $FriendsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FriendsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FriendsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FriendsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> uid = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<String> createdBy = const Value.absent(),
+            Value<String> friend = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FriendsTableCompanion(
+            uid: uid,
+            status: status,
+            createdBy: createdBy,
+            friend: friend,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String uid,
+            required String status,
+            required String createdBy,
+            required String friend,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FriendsTableCompanion.insert(
+            uid: uid,
+            status: status,
+            createdBy: createdBy,
+            friend: friend,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$FriendsTableTableProcessedTableManager = ProcessedTableManager<
+    _$SplitsbyDatabase,
+    $FriendsTableTable,
+    FriendDb,
+    $$FriendsTableTableFilterComposer,
+    $$FriendsTableTableOrderingComposer,
+    $$FriendsTableTableAnnotationComposer,
+    $$FriendsTableTableCreateCompanionBuilder,
+    $$FriendsTableTableUpdateCompanionBuilder,
+    (
+      FriendDb,
+      BaseReferences<_$SplitsbyDatabase, $FriendsTableTable, FriendDb>
+    ),
+    FriendDb,
+    PrefetchHooks Function()>;
+typedef $$ServicesTableTableCreateCompanionBuilder = ServicesTableCompanion
+    Function({
+  required String id,
+  required String groupId,
+  required String service,
+  Value<int> rowid,
+});
+typedef $$ServicesTableTableUpdateCompanionBuilder = ServicesTableCompanion
+    Function({
+  Value<String> id,
+  Value<String> groupId,
+  Value<String> service,
+  Value<int> rowid,
+});
+
+class $$ServicesTableTableFilterComposer
+    extends Composer<_$SplitsbyDatabase, $ServicesTableTable> {
+  $$ServicesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get service => $composableBuilder(
+      column: $table.service, builder: (column) => ColumnFilters(column));
+}
+
+class $$ServicesTableTableOrderingComposer
+    extends Composer<_$SplitsbyDatabase, $ServicesTableTable> {
+  $$ServicesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get service => $composableBuilder(
+      column: $table.service, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ServicesTableTableAnnotationComposer
+    extends Composer<_$SplitsbyDatabase, $ServicesTableTable> {
+  $$ServicesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get groupId =>
+      $composableBuilder(column: $table.groupId, builder: (column) => column);
+
+  GeneratedColumn<String> get service =>
+      $composableBuilder(column: $table.service, builder: (column) => column);
+}
+
+class $$ServicesTableTableTableManager extends RootTableManager<
+    _$SplitsbyDatabase,
+    $ServicesTableTable,
+    ServiceDb,
+    $$ServicesTableTableFilterComposer,
+    $$ServicesTableTableOrderingComposer,
+    $$ServicesTableTableAnnotationComposer,
+    $$ServicesTableTableCreateCompanionBuilder,
+    $$ServicesTableTableUpdateCompanionBuilder,
+    (
+      ServiceDb,
+      BaseReferences<_$SplitsbyDatabase, $ServicesTableTable, ServiceDb>
+    ),
+    ServiceDb,
+    PrefetchHooks Function()> {
+  $$ServicesTableTableTableManager(
+      _$SplitsbyDatabase db, $ServicesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ServicesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ServicesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ServicesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> groupId = const Value.absent(),
+            Value<String> service = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ServicesTableCompanion(
+            id: id,
+            groupId: groupId,
+            service: service,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String groupId,
+            required String service,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ServicesTableCompanion.insert(
+            id: id,
+            groupId: groupId,
+            service: service,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ServicesTableTableProcessedTableManager = ProcessedTableManager<
+    _$SplitsbyDatabase,
+    $ServicesTableTable,
+    ServiceDb,
+    $$ServicesTableTableFilterComposer,
+    $$ServicesTableTableOrderingComposer,
+    $$ServicesTableTableAnnotationComposer,
+    $$ServicesTableTableCreateCompanionBuilder,
+    $$ServicesTableTableUpdateCompanionBuilder,
+    (
+      ServiceDb,
+      BaseReferences<_$SplitsbyDatabase, $ServicesTableTable, ServiceDb>
+    ),
+    ServiceDb,
+    PrefetchHooks Function()>;
+typedef $$PaymentsTableTableCreateCompanionBuilder = PaymentsTableCompanion
+    Function({
+  required String id,
+  required String groupId,
+  required String payment,
+  Value<int> rowid,
+});
+typedef $$PaymentsTableTableUpdateCompanionBuilder = PaymentsTableCompanion
+    Function({
+  Value<String> id,
+  Value<String> groupId,
+  Value<String> payment,
+  Value<int> rowid,
+});
+
+class $$PaymentsTableTableFilterComposer
+    extends Composer<_$SplitsbyDatabase, $PaymentsTableTable> {
+  $$PaymentsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get payment => $composableBuilder(
+      column: $table.payment, builder: (column) => ColumnFilters(column));
+}
+
+class $$PaymentsTableTableOrderingComposer
+    extends Composer<_$SplitsbyDatabase, $PaymentsTableTable> {
+  $$PaymentsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get payment => $composableBuilder(
+      column: $table.payment, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PaymentsTableTableAnnotationComposer
+    extends Composer<_$SplitsbyDatabase, $PaymentsTableTable> {
+  $$PaymentsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get groupId =>
+      $composableBuilder(column: $table.groupId, builder: (column) => column);
+
+  GeneratedColumn<String> get payment =>
+      $composableBuilder(column: $table.payment, builder: (column) => column);
+}
+
+class $$PaymentsTableTableTableManager extends RootTableManager<
+    _$SplitsbyDatabase,
+    $PaymentsTableTable,
+    PaymentDb,
+    $$PaymentsTableTableFilterComposer,
+    $$PaymentsTableTableOrderingComposer,
+    $$PaymentsTableTableAnnotationComposer,
+    $$PaymentsTableTableCreateCompanionBuilder,
+    $$PaymentsTableTableUpdateCompanionBuilder,
+    (
+      PaymentDb,
+      BaseReferences<_$SplitsbyDatabase, $PaymentsTableTable, PaymentDb>
+    ),
+    PaymentDb,
+    PrefetchHooks Function()> {
+  $$PaymentsTableTableTableManager(
+      _$SplitsbyDatabase db, $PaymentsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PaymentsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PaymentsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PaymentsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> groupId = const Value.absent(),
+            Value<String> payment = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PaymentsTableCompanion(
+            id: id,
+            groupId: groupId,
+            payment: payment,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String groupId,
+            required String payment,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              PaymentsTableCompanion.insert(
+            id: id,
+            groupId: groupId,
+            payment: payment,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PaymentsTableTableProcessedTableManager = ProcessedTableManager<
+    _$SplitsbyDatabase,
+    $PaymentsTableTable,
+    PaymentDb,
+    $$PaymentsTableTableFilterComposer,
+    $$PaymentsTableTableOrderingComposer,
+    $$PaymentsTableTableAnnotationComposer,
+    $$PaymentsTableTableCreateCompanionBuilder,
+    $$PaymentsTableTableUpdateCompanionBuilder,
+    (
+      PaymentDb,
+      BaseReferences<_$SplitsbyDatabase, $PaymentsTableTable, PaymentDb>
+    ),
+    PaymentDb,
+    PrefetchHooks Function()>;
+typedef $$GroupInvitesTableTableCreateCompanionBuilder
+    = GroupInvitesTableCompanion Function({
+  required String groupId,
+  required int syncState,
+  required String group,
+  Value<int> rowid,
+});
+typedef $$GroupInvitesTableTableUpdateCompanionBuilder
+    = GroupInvitesTableCompanion Function({
+  Value<String> groupId,
+  Value<int> syncState,
+  Value<String> group,
+  Value<int> rowid,
+});
+
+class $$GroupInvitesTableTableFilterComposer
+    extends Composer<_$SplitsbyDatabase, $GroupInvitesTableTable> {
+  $$GroupInvitesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get syncState => $composableBuilder(
+      column: $table.syncState, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get group => $composableBuilder(
+      column: $table.group, builder: (column) => ColumnFilters(column));
+}
+
+class $$GroupInvitesTableTableOrderingComposer
+    extends Composer<_$SplitsbyDatabase, $GroupInvitesTableTable> {
+  $$GroupInvitesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get groupId => $composableBuilder(
+      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get syncState => $composableBuilder(
+      column: $table.syncState, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get group => $composableBuilder(
+      column: $table.group, builder: (column) => ColumnOrderings(column));
+}
+
+class $$GroupInvitesTableTableAnnotationComposer
+    extends Composer<_$SplitsbyDatabase, $GroupInvitesTableTable> {
+  $$GroupInvitesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get groupId =>
+      $composableBuilder(column: $table.groupId, builder: (column) => column);
+
+  GeneratedColumn<int> get syncState =>
+      $composableBuilder(column: $table.syncState, builder: (column) => column);
+
+  GeneratedColumn<String> get group =>
+      $composableBuilder(column: $table.group, builder: (column) => column);
+}
+
+class $$GroupInvitesTableTableTableManager extends RootTableManager<
+    _$SplitsbyDatabase,
+    $GroupInvitesTableTable,
+    GroupInviteDb,
+    $$GroupInvitesTableTableFilterComposer,
+    $$GroupInvitesTableTableOrderingComposer,
+    $$GroupInvitesTableTableAnnotationComposer,
+    $$GroupInvitesTableTableCreateCompanionBuilder,
+    $$GroupInvitesTableTableUpdateCompanionBuilder,
+    (
+      GroupInviteDb,
+      BaseReferences<_$SplitsbyDatabase, $GroupInvitesTableTable, GroupInviteDb>
+    ),
+    GroupInviteDb,
+    PrefetchHooks Function()> {
+  $$GroupInvitesTableTableTableManager(
+      _$SplitsbyDatabase db, $GroupInvitesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GroupInvitesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GroupInvitesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GroupInvitesTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> groupId = const Value.absent(),
+            Value<int> syncState = const Value.absent(),
+            Value<String> group = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GroupInvitesTableCompanion(
+            groupId: groupId,
+            syncState: syncState,
+            group: group,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String groupId,
+            required int syncState,
+            required String group,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              GroupInvitesTableCompanion.insert(
+            groupId: groupId,
+            syncState: syncState,
+            group: group,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$GroupInvitesTableTableProcessedTableManager = ProcessedTableManager<
+    _$SplitsbyDatabase,
+    $GroupInvitesTableTable,
+    GroupInviteDb,
+    $$GroupInvitesTableTableFilterComposer,
+    $$GroupInvitesTableTableOrderingComposer,
+    $$GroupInvitesTableTableAnnotationComposer,
+    $$GroupInvitesTableTableCreateCompanionBuilder,
+    $$GroupInvitesTableTableUpdateCompanionBuilder,
+    (
+      GroupInviteDb,
+      BaseReferences<_$SplitsbyDatabase, $GroupInvitesTableTable, GroupInviteDb>
+    ),
+    GroupInviteDb,
+    PrefetchHooks Function()>;
+
+class $SplitsbyDatabaseManager {
+  final _$SplitsbyDatabase _db;
+  $SplitsbyDatabaseManager(this._db);
+  $$GroupsTableTableTableManager get groupsTable =>
+      $$GroupsTableTableTableManager(_db, _db.groupsTable);
+  $$GroupExpenseTableTableTableManager get groupExpenseTable =>
+      $$GroupExpenseTableTableTableManager(_db, _db.groupExpenseTable);
+  $$FriendsTableTableTableManager get friendsTable =>
+      $$FriendsTableTableTableManager(_db, _db.friendsTable);
+  $$ServicesTableTableTableManager get servicesTable =>
+      $$ServicesTableTableTableManager(_db, _db.servicesTable);
+  $$PaymentsTableTableTableManager get paymentsTable =>
+      $$PaymentsTableTableTableManager(_db, _db.paymentsTable);
+  $$GroupInvitesTableTableTableManager get groupInvitesTable =>
+      $$GroupInvitesTableTableTableManager(_db, _db.groupInvitesTable);
 }

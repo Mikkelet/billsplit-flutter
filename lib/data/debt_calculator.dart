@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/domain/models/surcharge.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
@@ -202,10 +203,12 @@ class DebtCalculator {
 
 extension GroupExpenseExt on GroupExpense {
   Iterable<IndividualExpense> getIndividualWithShared() {
-    final people =
-        sharedExpensesState.value.map((e) => e.participantsState.value).flatMap().toSet();
+    final people = sharedExpensesState.value
+        .map((e) => e.participantsState.value)
+        .flatMap()
+        .toSet();
     return people.map((e) {
-      final num expense = getSharedExpensesForPerson(e);
+      final expense = getSharedExpensesForPerson(e);
       return IndividualExpense(
           person: e, expense: expense, currency: currencyState.value.symbol);
     });
@@ -217,6 +220,7 @@ extension PaymentExt on Payment {
       id: id,
       createdBy: createdBy,
       timestamp: timestamp,
+      surcharges: [],
       description: "",
       receiptImageUrl: "",
       tempParticipants: [],

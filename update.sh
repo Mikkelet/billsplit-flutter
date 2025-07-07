@@ -1,4 +1,4 @@
-flutter pub get --no-example
+fvm flutter pub get --no-example
 
 cd ios/
 

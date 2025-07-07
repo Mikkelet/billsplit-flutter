@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/domain/mappers/currency_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/event_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
+import 'package:billsplit_flutter/domain/mappers/surcharge_mapper.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 
@@ -32,6 +33,7 @@ extension GroupExpenseDtoExt on GroupExpenseDTO {
       payer: payee.toPerson(),
       currency: currency.toCurrency(),
       syncState: SyncState.synced,
+      surcharges: surcharges?.toSurcharges() ?? [],
       sharedExpenses: sharedExpenses.toSharedExpense());
 }
 
@@ -53,6 +55,7 @@ extension GroupExpenseDbExt on GroupExpenseDb {
         description: dto.description,
         date: DateTime.parse(dto.date),
         receiptImageUrl: dto.receiptImageUrl,
+        surcharges: dto.surcharges?.toSurcharges() ?? [],
         sharedExpenses: dto.sharedExpenses.toSharedExpense(),
         payer: dto.payee.toPerson(),
         syncState: SyncState.fromId(syncState),

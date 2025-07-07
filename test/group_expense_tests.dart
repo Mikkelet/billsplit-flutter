@@ -9,6 +9,7 @@ void main() {
       id: "id",
       createdBy: Person.dummy(2),
       timestamp: 2,
+      surcharges: [],
       description: "description",
       sharedExpenses: [
         SharedExpense(expense: 5, participants: [Person.dummy(2)], description: ""),

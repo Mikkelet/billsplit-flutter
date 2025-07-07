@@ -1,7 +1,9 @@
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/currency_mapper.dart';
+import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
+import 'package:billsplit_flutter/domain/mappers/surcharge_mapper.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
@@ -27,6 +29,7 @@ extension EventDTOExt on EventDTO? {
           payer: expenseDto.payee.toPerson(),
           sharedExpenses: expenseDto.sharedExpenses.toSharedExpense(),
           syncState: SyncState.synced,
+          surcharges: expenseDto.surcharges?.toSurcharges() ?? [],
           currency: expenseDto.currency.toCurrency());
     }
     return null;
@@ -40,7 +43,8 @@ extension EventExt on Event {
       final expense = this as GroupExpense;
       return GroupExpenseDTO(
         id: realId,
-        tempParticipants: expense.tempParticipantsState.value.map((e) => e.toDTO()),
+        tempParticipants:
+            expense.tempParticipantsState.value.map((e) => e.toDTO()),
         createdBy: createdBy.toDTO(),
         date: expense.dateState.value.toIso8601String(),
         receiptImageUrl: expense.receiptImageUrlState.value,
@@ -49,6 +53,7 @@ extension EventExt on Event {
         payee: expense.payerState.value.toDTO(),
         sharedExpenses: expense.sharedExpensesState.value.toDTO(),
         currency: expense.currencyState.value.toDTO(),
+        surcharges: expense.surchargesState.value.toSurcharges(),
       );
     }
     return PaymentDTO(

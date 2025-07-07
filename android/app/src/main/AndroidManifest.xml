@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mikkelthygesen.splitsby"
-    android:usesCleartextTraffic="true">
+    package="com.mikkelthygesen.splitsby">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <application

@@ -18,7 +18,7 @@ class NetworkClient {
   static const bool debug = false;
   static const bool emulator = false;
   static const bool useDevApi = false;
-  static const String apiVersion = useDevApi ? "dev" : "v7";
+  static const String apiVersion = useDevApi ? "dev" : "v8";
   static final String debugBaseUrl = Platform.isAndroid
       ? "http://10.0.2.2:5000/billsplittapp/us-central1/$apiVersion/"
       : "http://localhost:5000/billsplittapp/us-central1/$apiVersion/";

@@ -24,6 +24,9 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+
+def ndkVersionLocalProperty = localProperties.getProperty('flutter.ndkVersion')
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('./../../../key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -35,7 +38,7 @@ def storeFilePath = "./../../../../${keystoreProperties["storeFile"]}"
 android {
     namespace = "com.mikkelthygesen.splitsby"
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion ndkVersionLocalProperty
 
     compileOptions {
         coreLibraryDesugaringEnabled true

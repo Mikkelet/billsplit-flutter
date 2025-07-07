@@ -19,7 +19,7 @@ GroupDTO _$GroupDTOFromJson(Map<String, dynamic> json) => GroupDTO(
           .map((e) => PersonDTO.fromJson(e as Map<String, dynamic>)),
       createdBy: PersonDTO.fromJson(json['createdBy'] as Map<String, dynamic>),
       timestamp: json['timestamp'] as num,
-      lastUpdated: json['lastUpdated'] as int,
+      lastUpdated: (json['lastUpdated'] as num).toInt(),
     );
 
 Map<String, dynamic> _$GroupDTOToJson(GroupDTO instance) => <String, dynamic>{

@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_button.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_surcharge.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/date_picker_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expense_total_view.dart';
@@ -74,6 +75,8 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                 builder: (context, description) {
                   return DescriptionTextField(initialText: description);
                 }),
+            const SizedBox(height: 8),
+            AddSurcharge(initialValue: groupExpense.surcharge),
             const SizedBox(height: 8),
             DatePickerView(),
             //const LongPressTipView(),
