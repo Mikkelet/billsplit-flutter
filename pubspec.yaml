@@ -15,7 +15,7 @@ dependencies:
   firebase_auth: ^5.3.3
   firebase_storage: ^12.3.6
   firebase_messaging: ^15.1.5
-  firebase_crashlytics: ^4.1.5
+  firebase_crashlytics: ^4.3.9
 
   flutter_bloc: ^9.1.1
   cupertino_icons: ^1.0.2
@@ -38,7 +38,7 @@ dependencies:
   flutter_local_notifications: ^19.3.0
   shared_preferences: ^2.1.0
   eraser: ^3.0.0
-  camera: ^0.11.0+1
+  camera: ^0.11.1 
   flutter_animate: ^4.1.1+1
   package_info_plus: ^8.0.0
   uuid: ^4.1.0
