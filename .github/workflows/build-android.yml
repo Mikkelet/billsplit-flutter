@@ -31,8 +31,8 @@ jobs:
         run: |
           pwd
           echo $RUNNER_TEMP
-          KEYSTORE_PATH=$RUNNER_TEMP/android/key.jks
-          PROPERTIES_PATH=$RUNNER_TEMP/android/key.properties
+          KEYSTORE_PATH=./android/key.jks
+          PROPERTIES_PATH=./android/key.properties
           echo "$KEYSTORE_FILE" | base64 -d > $KEYSTORE_PATH
           echo "$KEYSTORE_PROPS" | base64 -d > $PROPERTIES_PATH
 
