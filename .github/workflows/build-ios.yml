@@ -58,4 +58,4 @@ jobs:
 
       - name: Sign application
         run: |
-          xcodebuild archive -scheme 'Runner' -workspace '../projectx.xcworkspace' -configuration Release -archivePath ../build/BuildTarget.xcarchive DEVELOPMENT_TEAM='88JMYVVGNH'
+          xcodebuild archive -scheme 'Runner' -workspace '../Runner.xcworkspace' -configuration Release -archivePath ../build/Runner.xcarchive DEVELOPMENT_TEAM='88JMYVVGNH'
