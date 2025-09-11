@@ -75,6 +75,7 @@ jobs:
           APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
           WORKSPACE_PATH: ${{ github.workspace }}
         run: |
+          mkdir ~/.private_keys
           API_KEY_FILE_NAME=AuthKey_$APP_STORE_KEY_ID.p8
           API_KEY_PATH=~/.private_keys/$API_KEY_FILE_NAME
           echo -n "$API_KEY" | base64 --decode -o $API_KEY_PATH
