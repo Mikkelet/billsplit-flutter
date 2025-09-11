@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/simolus3/CSQLite.git",
       "state" : {
-        "revision" : "18517bdeb5ae69cb3d864d4fd0f4ab4d4809f18b"
+        "revision" : "7381ec26064b49105594dc13508d8de303607c2f"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/flutterfire",
       "state" : {
-        "revision" : "1a4f03a42bf4301502442eade6dfee982872ff8e",
-        "version" : "3.15.1-firebase-core-swift"
+        "revision" : "dadb0fd27bc9afe4dee4f23326a4a9ba238258ac",
+        "version" : "3.15.2-firebase-core-swift"
       }
     },
     {

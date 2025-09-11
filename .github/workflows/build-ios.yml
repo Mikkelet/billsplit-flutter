@@ -55,3 +55,7 @@ jobs:
       - name: flutter build ios
         run: |
           flutter build ios --release --no-codesign
+
+      - name: Sign application
+        run: |
+          sh "xcodebuild archive -scheme 'Runner' -workspace '../projectx.xcworkspace' -configuration Release -archivePath ../build/BuildTarget.xcarchive DEVELOPMENT_TEAM='88JMYVVGNH'"
