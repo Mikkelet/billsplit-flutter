@@ -54,8 +54,28 @@ jobs:
 
       - name: flutter build ios
         run: |
-          flutter build ios --release --no-codesign
+          flutter build ipa --release --no-codesign
 
-      - name: Sign application
+      - name: Archive and Sign app
+        env:
+          CONFIGURATION: Release
+          WORKSPACE: Runner.xcworkspace
+          SCHEME: Runner
+          CERTIFICATE_ID: "Apple Distribution: Mikkel Thygesen (88JMYVVGNH)"
+          PP_UUID: d0225455-39f7-423d-9707-a95b61a3baf6
+          TEAM_ID: 88JMYVVGNH
         run: |
-          xcodebuild archive -configuration Release -workspace 'ios/Runner.xcworkspace' -scheme 'Runner' -allowProvisioningUpdates build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution: Mikkel Thygesen (88JMYVVGNH)" CODE_SIGNIN_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE=d0225455-39f7-423d-9707-a95b61a3baf6 -archivePath ios/build/Runner.xcarchive DEVELOPMENT_TEAM='88JMYVVGNH'
+          xcodebuild archive -configuration $CONFIGURATION -workspace 'ios/$WORKSPACE' -scheme $SCHEME -allowProvisioningUpdates build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=$CERTIFICATE_ID CODE_SIGNIN_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE=$PP_UUID -archivePath ios/build/Runner.xcarchive DEVELOPMENT_TEAM='$TEAM_ID'
+
+      - name: Validate & upload
+        env:
+          APP_STORE_USERNAME: ""
+          IPA_PATH: "ios/build/ios/iphoneos/Runner.api"
+          API_KEY: ${{ secrets.APP_STORE_API_KEY }}
+          ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+        run: |
+          API_KEY_PATH=$RUNNER_TEMP/private_keys/AuthKey.p8
+          echo -n "$API_KEY" | base64 --decode -o $CERTIFICATE_PATH
+          xcrun altool --validate-app -f $IPA_PATH -t ios --apiKey $API_KEY --apiIssuer $ISSUER_ID
+          xcrun altool --upload-app -f $IPA_PATH -t ios --apiKey $API_KEY --apiIssuer $ISSUER_ID
+
