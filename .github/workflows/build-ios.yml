@@ -58,12 +58,12 @@ jobs:
 
       - name: Archive and Sign app
         env:
-          CONFIGURATION: Release
-          WORKSPACE: Runner.xcworkspace
-          SCHEME: Runner
+          CONFIGURATION: "Release"
+          WORKSPACE: "Runner.xcworkspace"
+          SCHEME: "Runner"
           CERTIFICATE_ID: "Apple Distribution: Mikkel Thygesen (88JMYVVGNH)"
-          PP_UUID: d0225455-39f7-423d-9707-a95b61a3baf6
-          TEAM_ID: 88JMYVVGNH
+          PP_UUID: "d0225455-39f7-423d-9707-a95b61a3baf6"
+          TEAM_ID: "88JMYVVGNH"
         run: |
           xcodebuild archive -configuration $CONFIGURATION -workspace 'ios/$WORKSPACE' -scheme $SCHEME -allowProvisioningUpdates build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY='$CERTIFICATE_ID' CODE_SIGNIN_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE=$PP_UUID -archivePath ios/build/Runner.xcarchive DEVELOPMENT_TEAM='$TEAM_ID'
 
