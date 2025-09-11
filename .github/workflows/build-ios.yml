@@ -50,7 +50,9 @@ jobs:
           flutter-version: 3.32.5
 
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          ref: v7/main
 
       - name: flutter build ios
         run: |
