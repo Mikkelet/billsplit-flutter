@@ -40,7 +40,7 @@ println ndkVersionLocalProperty
 android {
     namespace = "com.mikkelthygesen.splitsby"
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion ndkVersionLocalProperty
+    ndkVersion flutter.ndkVersion != null ? flutter.ndkVersion : 27.0.12077973
 
     compileOptions {
         coreLibraryDesugaringEnabled true
