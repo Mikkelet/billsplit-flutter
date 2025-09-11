@@ -51,8 +51,6 @@ jobs:
 
       - name: Clone repository
         uses: actions/checkout@v5
-        with:
-          ref: develop
 
       - name: flutter build ios
         run: |
