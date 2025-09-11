@@ -22,8 +22,8 @@ jobs:
         run: |
           KEYSTORE_PATH=$RUNNER_TEMP/android/key.jks
           PROPERTIES_PATH=$RUNNER_TEMP/android/key.properties
-          echo -n "$KEYSTORE_FILE" | base64 --decode -o $KEYSTORE_PATH
-          echo -n "$KEYSTORE_PROPS" | base64 --decode -o $PROPERTIES_PATH
+          cat "$KEYSTORE_FILE" | base64 -d > $KEYSTORE_PATH
+          cat "$KEYSTORE_PROPS" | base64 -d > $PROPERTIES_PATH
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
