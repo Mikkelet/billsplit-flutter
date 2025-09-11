@@ -35,7 +35,7 @@ dependencies:
   cached_network_image: ^3.2.3
   image_picker: ^1.0.4
   cupertino_will_pop_scope: ^1.2.1
-  flutter_local_notifications: ^19.3.0
+  flutter_local_notifications: ^19.4.1
   shared_preferences: ^2.1.0
   eraser: ^3.0.0
   camera: ^0.11.1 
