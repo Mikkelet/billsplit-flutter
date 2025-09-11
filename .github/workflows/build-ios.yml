@@ -74,7 +74,7 @@ jobs:
           ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
           APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
         run: |
-          API_KEY_PATH=$RUNNER_TEMP/private_keys/AuthKey.p8
+          API_KEY_PATH=./private_keys/AuthKey.p8
           echo -n "$API_KEY" | base64 --decode -o $API_KEY_PATH
           xcrun altool --validate-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
           xcrun altool --upload-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
