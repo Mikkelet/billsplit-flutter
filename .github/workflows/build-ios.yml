@@ -54,5 +54,4 @@ jobs:
 
       - name: flutter build ios
         run: |
-          pwd
-          flutter build ios
+          flutter build ios --release --no-codesign
