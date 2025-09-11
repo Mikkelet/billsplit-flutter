@@ -58,4 +58,4 @@ jobs:
 
       - name: Sign application
         run: |
-          xcodebuild -sdk iphoneos -configuration Release -workspace 'ios/Runner.xcworkspace' -scheme 'Runner' build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution: Mikkel Thygesen (88JMYVVGNH)" PROVISIONING_PROFILE=d0225455-39f7-423d-9707-a95b61a3baf6 -archivePath ios/build/Runner.xcarchive DEVELOPMENT_TEAM='88JMYVVGNH'
+          xcodebuild archive -configuration Release -workspace 'ios/Runner.xcworkspace' -scheme 'Runner' -allowProvisioningUpdates build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution: Mikkel Thygesen (88JMYVVGNH)" CODE_SIGNIN_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE=d0225455-39f7-423d-9707-a95b61a3baf6 -archivePath ios/build/Runner.xcarchive DEVELOPMENT_TEAM='88JMYVVGNH'
