@@ -2,7 +2,7 @@ name: Build-Android
 
 on:
   push:
-    branches: [ "feature/cicd" ]
+    branches: [ "Mikkelet-patch-1" ]
 
 jobs:
   build:
