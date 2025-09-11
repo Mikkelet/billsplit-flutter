@@ -1,0 +1,48 @@
+name: Build-iOS
+
+on:
+  push:
+    branches: [ "feature/github-actions" ]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: xcode version
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app
+          /usr/bin/xcodebuild -version
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Create env file
+        run: |
+          touch .env
+          echo ${{ secrets.KEYS_DEV_ENV }} >> .env
+          cat .env
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.29.3
+      - run: flutter --version
+      - name: Install dependencies
+        run: | 
+          flutter pub get
+          flutter precache --ios
+          dart pub global activate flutterfire_cli
+      - name: Flutter enable SPM
+        run: flutter config --enable-swift-package-manager
+      - name: flutter build ios
+        run: |
+          pwd
+          flutter build ios -t lib/main_development.dart --flavor development --dart-define-from-file=.env --no-codesign --release
+      - name: Prepare signing
+        uses: ngeri/prepare-signing@v1.0.2
+        with:
+          appStoreConnectPrivateKey: ${{ secrets.API_KEY }}
+          keyID: ${{ env.KEY_ID }}
+          issuerID: ${{ env.ISSUER_ID }}
+          base64P12File: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE }}
+          p12Password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          bundleIdentifier: ${{ env.BUNDLE_IDENTIFIER_DEV }}
+          signType: ${{ env.IOS_SIGNING_TYPE }}
