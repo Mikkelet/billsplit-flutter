@@ -52,7 +52,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v5
         with:
-          ref: v7/main
+          ref: develop
 
       - name: flutter build ios
         run: |
