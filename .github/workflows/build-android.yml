@@ -46,15 +46,10 @@ jobs:
 
       - id: upload-google
         name: Upload Google Play Console
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.3
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           packageName: com.mikkelthygesen.splitsby
           releaseFiles: ./android/build/outputs/bundle/release/app-release.aab
-          track: internal
-          status: inProgress
-          inAppUpdatePriority: 2
-          userFraction: 0.33
-          whatsNewDirectory: distribution/whatsnew
-          mappingFile: app/build/outputs/mapping/release/mapping.txt
-          debugSymbols: app/intermediates/merged_native_libs/release/out/lib
+          track: qa
+          status: draft
