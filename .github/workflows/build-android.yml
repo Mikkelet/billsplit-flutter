@@ -50,6 +50,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           packageName: com.mikkelthygesen.splitsby
-          releaseFiles: ./android/build/outputs/bundle/release/app-release.aab
+          releaseFiles: ./build/outputs/bundle/release/app-release.aab
           track: qa
           status: draft
