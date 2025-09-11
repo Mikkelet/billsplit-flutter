@@ -24,7 +24,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-
 def ndkVersionLocalProperty = localProperties.getProperty('flutter.ndkVersion')
 
 def keystoreProperties = new Properties()
@@ -35,6 +34,7 @@ if (keystorePropertiesFile.exists()) {
 def storeFilePath = rootProject.file('./key.jks')
 println keystorePropertiesFile
 println storeFilePath
+println ndkVersionLocalProperty
 
 
 android {
