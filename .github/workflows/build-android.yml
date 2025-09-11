@@ -40,6 +40,14 @@ jobs:
         run: |
           flutter pub get
 
-      - name: build apk
+      - name: build appbundle
         run: |
           flutter build appbundle --release
+
+      - id: upload-google
+        name: Upload Google Play Console
+        uses: TianchenWei/upload-aab-google-play@main
+        with:
+          package-name: com.mikkelthygesen.splitsby
+          aab-file-path: ./android/build/app/outputs/bundle/release/app-release.aab
+          service-account-credential-base64: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
