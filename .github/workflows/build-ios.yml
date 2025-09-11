@@ -13,6 +13,10 @@ jobs:
           sudo xcode-select -s /Applications/Xcode_16.4.app
           /usr/bin/xcodebuild -version
 
+      - name: pwd
+        run: |
+          pwd
+
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
