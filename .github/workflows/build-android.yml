@@ -15,16 +15,6 @@ jobs:
           distribution: "corretto"
           java-version: '21'
 
-      - name: Download key files
-        env:
-          KEYSTORE_FILE: ${{ secrets.ANDROID_KEYSTORE_FILE }}
-          KEYSTORE_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
-        run: |
-          KEYSTORE_PATH=$RUNNER_TEMP/android/key.jks
-          PROPERTIES_PATH=$RUNNER_TEMP/android/key.properties
-          echo "$KEYSTORE_FILE" | base64 -d > $KEYSTORE_PATH
-          echo "$KEYSTORE_PROPS" | base64 -d > $PROPERTIES_PATH
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -33,6 +23,18 @@ jobs:
 
       - name: Clone repository
         uses: actions/checkout@v5
+
+      - name: Download key files
+        env:
+          KEYSTORE_FILE: ${{ secrets.ANDROID_KEYSTORE_FILE }}
+          KEYSTORE_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          pwd
+          echo $RUNNER_TEMP
+          KEYSTORE_PATH=$RUNNER_TEMP/android/key.jks
+          PROPERTIES_PATH=$RUNNER_TEMP/android/key.properties
+          echo "$KEYSTORE_FILE" | base64 -d > $KEYSTORE_PATH
+          echo "$KEYSTORE_PROPS" | base64 -d > $PROPERTIES_PATH
 
       - name: Install dependencies
         run: |
