@@ -54,7 +54,7 @@ jobs:
 
       - name: flutter build ios
         run: |
-          flutter build ios --release --no-codesign
+          flutter build ipa --release --no-codesign
 
       - name: Archive and Sign app
         env:
