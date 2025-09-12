@@ -69,7 +69,7 @@ jobs:
 
       - name: Validate & upload
         env:
-          IPA_PATH: "ios/build/ios/archive/Runner.xcarchive"
+
           API_KEY: ${{ secrets.APP_STORE_API_KEY }}
           ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
           APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
@@ -79,6 +79,8 @@ jobs:
           API_KEY_FILE_NAME=AuthKey_$APP_STORE_KEY_ID.p8
           API_KEY_PATH=~/.private_keys/$API_KEY_FILE_NAME
           echo -n "$API_KEY" | base64 --decode -o $API_KEY_PATH
-          xcrun altool --validate-app -f "./$IPA_PATH" -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
-          xcrun altool --upload-app -f "./$IPA_PATH" -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
+          IPA_PATH=$WORKSPACE_PATH/ios/build/ios/archive/Runner.xcarchive
+          echo "$IPA_PATH"
+          xcrun altool --validate-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
+          xcrun altool --upload-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
 
