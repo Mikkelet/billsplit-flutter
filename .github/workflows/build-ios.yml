@@ -69,7 +69,7 @@ jobs:
 
       - name: Validate & upload
         env:
-          IPA_PATH: "/Users/runner/deploy/Runner.ipa"
+          IPA_PATH: "ios/build/Runner.app"
           API_KEY: ${{ secrets.APP_STORE_API_KEY }}
           ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
           APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
