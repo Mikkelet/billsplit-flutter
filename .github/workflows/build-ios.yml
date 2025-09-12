@@ -69,7 +69,7 @@ jobs:
 
       - name: export
         run: |
-          xcodebuild -exportArchive -archivePath ios/build/Runner.xcarchive -exportPath output -exportOptionsPlist ExportOptions.plist
+          xcodebuild -exportArchive -archivePath build/ios/archive/Runner.xcarchive -exportPath output -exportOptionsPlist ios/ExportOptions.plist
 
       - name: Validate & upload
         env:
