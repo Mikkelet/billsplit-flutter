@@ -56,7 +56,7 @@ jobs:
         run: |
           flutter build ipa --release --no-codesign
 
-      - name: Archive and Sign app
+      - name: Archive
         env:
           CONFIGURATION: "Release"
           WORKSPACE: "Runner.xcworkspace"
@@ -65,7 +65,10 @@ jobs:
           PP_UUID: "d0225455-39f7-423d-9707-a95b61a3baf6"
           TEAM_ID: "88JMYVVGNH"
         run: |
-          xcodebuild -sdk iphoneos -configuration Release -workspace ios/Runner.xcworkspace -archivePath ios/build/Runner.xcarchive -scheme Runner build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution: Mikkel Thygesen (88JMYVVGNH)" PROVISIONING_PROFILE=d0225455-39f7-423d-9707-a95b61a3baf6 PROVISIONING_PROFILE_SPECIFIER=
+          xcodebuild -sdk iphoneos -configuration Release -workspace ios/Runner.xcworkspace -archivePath ios/build/Runner.xcarchive -scheme Runner build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution: Mikkel Thygesen (88JMYVVGNH)" PROVISIONING_PROFILE=d0225455-39f7-423d-9707-a95b61a3baf6 CODE_SIGNING_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE_SPECIFIER=
+
+      - name: export
+        run: |
           xcodebuild -exportArchive -archivePath ios/build/Runner.xcarchive -exportPath output -exportOptionsPlist ExportOptions.plist
 
       - name: Validate & upload
