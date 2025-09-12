@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "fdc352fabaf5916e7faa1f96ad02b1957e93e5a5",
-        "version" : "11.15.0"
+        "revision" : "e2a3c3fbcaa1df3fd549b5b3f1175bc8a11912fd",
+        "version" : "12.2.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/flutterfire",
       "state" : {
-        "revision" : "dadb0fd27bc9afe4dee4f23326a4a9ba238258ac",
-        "version" : "3.15.2-firebase-core-swift"
+        "revision" : "f269819f310b935cf585571d1f3c9089f2f00186",
+        "version" : "4.1.0-firebase-core-swift"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "45ce435e9406d3c674dd249a042b932bee006f60",
-        "version" : "11.15.0"
+        "revision" : "1c7edd5cc6e4ad22d2b81166bb9b208b9e63058a",
+        "version" : "12.2.0"
       }
     },
     {
