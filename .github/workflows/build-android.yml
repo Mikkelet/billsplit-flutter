@@ -51,5 +51,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
           packageName: com.mikkelthygesen.splitsby
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: qa
+          track: internal
           status: draft
