@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: My composite action
-        uses: ./.github/actions/setup-repo.yaml
+        uses: ./.github/actions/setup-repo.yml
 
       - name: xcode version
         run: |
