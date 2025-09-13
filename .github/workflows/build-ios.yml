@@ -52,9 +52,9 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v5
 
-      - name: flutter build ios
+      - name: flutter build ipa
         run: |
-          flutter build ios --release --no-codesign
+          flutter build ipa --release --no-codesign
 
       - name: Archive
         env:
@@ -72,8 +72,9 @@ jobs:
         env:
           ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
+          EXPORT_PATH: output/app.ipa
         run: |
-          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath output -exportOptionsPlist $EXPORT_OPTIONS_PATH
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
 
       - name: Validate & upload
         env:
@@ -81,7 +82,7 @@ jobs:
           ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
           APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
           WORKSPACE_PATH: ${{ github.workspace }}
-          IPA_PATH: output/splitsby.ipa
+          IPA_PATH: output/app.ipa
         run: |
           mkdir ~/.private_keys
           API_KEY_FILE_NAME=AuthKey_$APP_STORE_KEY_ID.p8
