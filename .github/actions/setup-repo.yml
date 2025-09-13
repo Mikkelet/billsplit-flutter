@@ -4,8 +4,3 @@ steps:
     with:
       channel: stable
       flutter-version: 3.32.5
-
-  - name: Clone repository
-    uses: actions/checkout@v5
-    with:
-      fetch-depth: 0

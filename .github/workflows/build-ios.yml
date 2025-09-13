@@ -8,7 +8,10 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v5
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: My composite action
         uses: ./.github/actions/setup-repo.yml
