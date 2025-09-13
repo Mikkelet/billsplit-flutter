@@ -33,6 +33,13 @@ if (keystorePropertiesFile.exists()) {
 }
 def storeFilePath = rootProject.file('./key.jks')
 
+def getVersionCode = { ->
+    "git rev-list --count HEAD"
+            .execute()
+            .text.trim()
+            .toInteger()
+}
+
 android {
     namespace = "com.mikkelthygesen.splitsby"
     compileSdkVersion flutter.compileSdkVersion
@@ -87,11 +94,4 @@ android {
 
 flutter {
     source '../..'
-}
-
-def getVersionCode = { ->
-    "git rev-list --count HEAD"
-            .execute()
-            .text.trim()
-            .toInteger()
 }
