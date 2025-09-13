@@ -8,6 +8,9 @@ jobs:
   build:
     runs-on: macos-15
     steps:
+      - name: My composite action
+        uses: ./.github/actions/setup-repo.yaml
+
       - name: xcode version
         run: |
           sudo xcode-select -s /Applications/Xcode_16.4.app
@@ -51,13 +54,14 @@ jobs:
 
       - name: Clone repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
-      - name: Update build number
+      - name: Update xcode build number
         run: bash scripts/ci-cd/ios-set-build-number.sh
 
       - name: flutter build ipa
         run: flutter build ipa --release --no-codesign
-
 
       - name: Archive
         env:
@@ -69,11 +73,11 @@ jobs:
           TEAM_ID: 88JMYVVGNH
           ARCHIVE_PATH: ios/build/Runner.xcarchive
         run: >-
-          xcodebuild -sdk iphoneos  
+          xcodebuild build -sdk iphoneos  
           -configuration $CONFIGURATION 
           -workspace $WORKSPACE  
           -archivePath $ARCHIVE_PATH  
-          -scheme $SCHEME build  
+          -scheme $SCHEME
           CODE_SIGN_STYLE=Manual  
           CDE_SIGN_IDENTITY="$CERTIFICATE_ID"  
           PROVISIONING_PROFILE=$PROFILE_ID  
