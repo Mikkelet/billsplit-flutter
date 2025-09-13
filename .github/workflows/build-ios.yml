@@ -78,7 +78,7 @@ jobs:
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
           EXPORT_PATH: output
         run: |
-          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
 
       - name: Validate & upload
         env:
