@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: macos-15
     steps:
+      - uses: actions/checkout@v5
+
       - name: My composite action
         uses: ./.github/actions/setup-repo.yaml
 
