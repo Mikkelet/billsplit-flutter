@@ -5,7 +5,10 @@ on:
     branches: [ "Mikkelet-patch-1" ]
 
 jobs:
+  setup:
+    uses: ./.github/actions/setup-repo.yml
   build:
+    needs: setup
     runs-on: macos-15
     steps:
       - name: Clone repository
@@ -13,8 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: My composite action
-        uses: ./.github/actions/setup-repo.yml
 
       - name: xcode version
         run: |
