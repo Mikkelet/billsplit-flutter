@@ -6,7 +6,6 @@ on:
 
 jobs:
   build:
-    needs: setup
     runs-on: macos-15
     steps:
       - name: Clone repository
