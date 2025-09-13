@@ -66,7 +66,7 @@ jobs:
           TEAM_ID: "88JMYVVGNH"
           ARCHIVE_PATH: ios/build/Runner.xcarchive
         run: |
-          xcodebuild -sdk iphoneos -configuration $CONFIGURATION -workspace $WORKSPACE -archivePath $ARCHIVE_PATH -scheme $SCHEME build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=$CERTIFICATE_ID PROVISIONING_PROFILE=$PROFILE_ID CODE_SIGNING_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE_SPECIFIER=
+          xcodebuild -sdk iphoneos -configuration $CONFIGURATION -workspace $WORKSPACE -archivePath $ARCHIVE_PATH -scheme $SCHEME build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$CERTIFICATE_ID" PROVISIONING_PROFILE=$PROFILE_ID CODE_SIGNING_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE_SPECIFIER=
 
       - name: export
         env:
