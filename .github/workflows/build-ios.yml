@@ -56,6 +56,10 @@ jobs:
         run: |
           flutter build ipa --release --no-codesign
 
+      - name: Update build number
+        run: |
+          sh scripts/ci-cd/ios-set-build-number.sh
+
       - name: Archive
         env:
           CONFIGURATION: Release
@@ -72,9 +76,9 @@ jobs:
         env:
           ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
-          EXPORT_PATH: output/app.ipa
+          EXPORT_PATH: output
         run: |
-          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
 
       - name: Validate & upload
         env:
@@ -82,7 +86,7 @@ jobs:
           ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
           APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
           WORKSPACE_PATH: ${{ github.workspace }}
-          IPA_PATH: output/app.ipa
+          IPA_PATH: output/splitsby.ipa
         run: |
           mkdir ~/.private_keys
           API_KEY_FILE_NAME=AuthKey_$APP_STORE_KEY_ID.p8
@@ -91,4 +95,3 @@ jobs:
           
           xcrun altool --validate-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
           xcrun altool --upload-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
-

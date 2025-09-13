@@ -32,10 +32,6 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 def storeFilePath = rootProject.file('./key.jks')
-println keystorePropertiesFile
-println storeFilePath
-println ndkVersionLocalProperty
-
 
 android {
     namespace = "com.mikkelthygesen.splitsby"
@@ -71,7 +67,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode getVersionCode()
         versionName flutterVersionName
     }
 
@@ -91,4 +87,11 @@ android {
 
 flutter {
     source '../..'
+}
+
+def getVersionCode = { ->
+    "git rev-list --count HEAD"
+            .execute()
+            .text.trim()
+            .toInteger()
 }
