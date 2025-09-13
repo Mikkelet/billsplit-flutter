@@ -58,7 +58,7 @@ jobs:
 
       - name: Update build number
         run: |
-          sh scripts/ci-cd/ios-set-build-number.sh
+          bash scripts/ci-cd/ios-set-build-number.sh 
 
       - name: Archive
         env:
