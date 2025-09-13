@@ -37,12 +37,10 @@ jobs:
           echo "$KEYSTORE_PROPS" | base64 -d > $PROPERTIES_PATH
 
       - name: Install dependencies
-        run: |
-          flutter pub get
+        run: flutter pub get
 
       - name: build appbundle
-        run: |
-          flutter build appbundle --release
+        run: flutter build appbundle --release
 
       - id: upload-google
         name: Upload Google Play Console

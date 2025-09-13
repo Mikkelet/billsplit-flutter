@@ -40,8 +40,8 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
           
           # apply provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          mkdir -p ~/Library/MobileDevice/Provisioning Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning Profiles
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -52,13 +52,11 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v5
 
-      - name: flutter build ipa
-        run: |
-          flutter build ipa --release --no-codesign
-
       - name: Update build number
-        run: |
-          bash scripts/ci-cd/ios-set-build-number.sh 
+        run: bash scripts/ci-cd/ios-set-build-number.sh
+
+      - name: flutter build ipa
+        run: flutter build ipa --release --no-codesign
 
       - name: Archive
         env:
@@ -69,16 +67,29 @@ jobs:
           PROFILE_ID: d0225455-39f7-423d-9707-a95b61a3baf6
           TEAM_ID: 88JMYVVGNH
           ARCHIVE_PATH: ios/build/Runner.xcarchive
-        run: |
-          xcodebuild -sdk iphoneos -configuration $CONFIGURATION -workspace $WORKSPACE -archivePath $ARCHIVE_PATH -scheme $SCHEME build CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$CERTIFICATE_ID" PROVISIONING_PROFILE=$PROFILE_ID CODE_SIGNING_REQUIRED=Yes CODE_SIGNING_ALLOWED=No PROVISIONING_PROFILE_SPECIFIER=
+        run: >-
+          xcodebuild -sdk iphoneos  
+          -configuration $CONFIGURATION 
+          -workspace $WORKSPACE  
+          -archivePath $ARCHIVE_PATH  
+          -scheme $SCHEME build  
+          CODE_SIGN_STYLE=Manual  
+          CDE_SIGN_IDENTITY="$CERTIFICATE_ID"  
+          PROVISIONING_PROFILE=$PROFILE_ID  
+          CODE_SIGNING_REQUIRED=Yes  
+          CODE_SIGNING_ALLOWED=No  
+          PROVISIONING_PROFILE_SPECIFIER=
 
       - name: export
         env:
           ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
           EXPORT_PATH: output
-        run: |
-          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
+        run: >- 
+          xcodebuild -exportArchive 
+          -archivePath $ARCHIVE_PATH 
+          -exportPath $EXPORT_PATH 
+          -exportOptionsPlist $EXPORT_OPTIONS_PATH
 
       - name: Validate & upload
         env:
