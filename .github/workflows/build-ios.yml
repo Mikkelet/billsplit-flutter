@@ -9,7 +9,7 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/setup-repo.yml
+      - uses: ./.github/setup-repo/action.yml
   build:
     needs: setup
     runs-on: macos-15
