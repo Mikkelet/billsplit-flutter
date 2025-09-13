@@ -6,7 +6,9 @@ on:
 
 jobs:
   setup:
-    uses: ./.github/actions/setup-repo.yml
+    runs-on: macos-15
+    steps:
+      - uses: ./.github/actions/setup-repo.yml
   build:
     needs: setup
     runs-on: macos-15
