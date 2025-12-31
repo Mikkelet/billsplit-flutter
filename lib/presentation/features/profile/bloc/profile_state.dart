@@ -1,7 +1,20 @@
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ProfilePictureUploading extends Main {}
-class UpdateDisplayNameLoading extends Main {}
-class DisplayNameUpdated extends Main {}
-class ShowDeleteUser extends Main {}
-class SubmittingEditName extends Main {}
+part '../../../../_generated/presentation/features/profile/bloc/profile_state.freezed.dart';
+
+enum ProfileStateEvents {
+  profilePictureUploading,
+  updateDisplayNameLoading,
+  displayNameUpdated,
+  showDeleteUser,
+  submittingEditName,
+  none
+}
+
+@freezed
+abstract class ProfileState with _$ProfileState {
+  const factory ProfileState({
+    @Default(false) bool isLoading,
+    @Default(ProfileStateEvents.none) ProfileStateEvents event,
+  }) = _ProfileState;
+}

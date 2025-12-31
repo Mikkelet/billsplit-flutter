@@ -5,12 +5,14 @@ import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PhoneNumberView<T extends BaseCubit> extends StatelessWidget {
+import '../../../main_cubit.dart';
+
+class PhoneNumberView extends StatelessWidget {
   const PhoneNumberView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<T>();
+    final cubit = context.read<MainCubit>();
 
     return MutableValue(
       mutableValue: cubit.user.phoneNumberState,

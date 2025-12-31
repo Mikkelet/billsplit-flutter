@@ -25,7 +25,7 @@ class OnboardingStepDefaultCurrency extends StatelessWidget {
                 style: TextStyle(fontSize: 25),
               ),
               const SizedBox(height: 64),
-              UpdateUserDefaultCurrencyView<OnboardingBloc>(),
+              const UpdateUserDefaultCurrencyView(),
               const SizedBox(height: 64),
               NextStepButton(cubit.nextButtonText(this))
             ],
