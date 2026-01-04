@@ -1,5 +1,4 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
 import 'package:billsplit_flutter/presentation/main_cubit.dart';
