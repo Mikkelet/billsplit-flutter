@@ -26,7 +26,9 @@ class GroupsBloc extends BaseCubit {
   }
 
   Future<void> _getAPN() async {
+    print("qqq getAPN");
     if (!Platform.isIOS) return;
+    print("qqq await APN");
     final token = await FirebaseMessaging.instance.getToken();
     print("qqq token=$token");
   }

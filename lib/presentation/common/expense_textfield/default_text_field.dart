@@ -111,7 +111,7 @@ class _ExpenseTextFieldState extends SafeState<ExpenseTextField> {
       }
     }
     try {
-      final number = num.parse(text);
+      final number = num.tryParse(text) ?? 0;
       if (!widget.canBeZero && number <= 0) return "Must be positive";
       return null;
     } catch (e) {

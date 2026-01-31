@@ -9,7 +9,7 @@ class GetAppVersion {
   Future<AppVersion> launch() async {
     final packageInfo = await PackageInfo.fromPlatform();
     final appData = await _apiService.getAppVersion();
-    final appVersion = num.parse(packageInfo.buildNumber);
+    final appVersion = num.tryParse(packageInfo.buildNumber) ?? 99999;
     return AppVersion(
         minimumVersion: appData.minVersion,
         latestVersion: appData.latestVersion,
