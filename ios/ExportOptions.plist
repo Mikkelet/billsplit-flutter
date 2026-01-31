@@ -13,7 +13,7 @@
   <key>provisioningProfiles</key>
   <dict>
     <key>com.mikkelthygesen.splitsby</key>
-    <string>Splitsby Profile</string>
+    <string>Distribution Release</string>
   </dict>
   <key>signingCertificate</key>
   <string>Apple Distribution</string>
