@@ -23,12 +23,12 @@ class AuthProvider {
   }
 
   Future signInWithGoogle() async {
-    final googleSignIn = GoogleSignIn(scopes: _googleSignInScopes);
-    final googleSignInAccount = await googleSignIn.signIn();
+    final googleSignIn = GoogleSignIn.instance;
+    final googleSignInAccount = await googleSignIn.authenticate(scopeHint: _googleSignInScopes);
 
-    final auth = await googleSignInAccount!.authentication;
+    final auth = googleSignInAccount.authentication;
     final credential = GoogleAuthProvider.credential(
-        accessToken: auth.accessToken, idToken: auth.idToken);
+        accessToken: auth.idToken, idToken: auth.idToken);
     await _firebaseAuth.signInWithCredential(credential);
   }
 

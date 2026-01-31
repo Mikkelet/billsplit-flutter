@@ -54,23 +54,4 @@ Future<void> setupFlutterNotifications() async {
 void showFlutterNotification(RemoteMessage message) {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
-  if (notification != null && android != null && !kIsWeb) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          // TODO add a proper drawable resource to android, for now using
-          //      one that already exists in example app.
-          icon: 'launch_background',
-        ),
-      ),
-    );
-  } else {
-    print("qqq cannot send notication");
-  }
 }
