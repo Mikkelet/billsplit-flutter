@@ -35,13 +35,17 @@ Future main() async {
   cameras = await availableCameras();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  runApp(const BillSplitApp());
+  final mainCubit = MainCubit();
+  await mainCubit.initialize();
+  runApp(BillSplitApp(mainCubit));
 }
 
 enum NavRoute { groups, group, loading }
 
 class BillSplitApp extends StatefulWidget {
-  const BillSplitApp({super.key});
+  const BillSplitApp(this._mainCubit, {super.key});
+
+  final MainCubit _mainCubit;
 
   @override
   State<BillSplitApp> createState() => _BillSplitAppState();
@@ -78,7 +82,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
         useMaterial3: true,
       ),
       home: BaseBlocWidget(
-        create: (context) => MainCubit()..initialize(),
+        create: (context) => widget._mainCubit,
         listener: (context, cubit, state) async {
           if (state is NotificationActionEvent) {
             final action = state.notificationAction;
@@ -131,8 +135,8 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
   // delay popUntil to reduce false nulls
   void _onUserLoggedOut(BuildContext context) {
     Navigator.of(context).popUntil(
-      (route) =>
-          route.settings.name == "/${MandatoryUpdatePage.routeName}" ||
+          (route) =>
+      route.settings.name == "/${MandatoryUpdatePage.routeName}" ||
           route.isFirst,
     );
   }

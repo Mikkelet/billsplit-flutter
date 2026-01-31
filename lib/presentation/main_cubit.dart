@@ -21,19 +21,22 @@ class MainCubit extends BaseCubit {
   MainCubit() : super.withState(Loading());
 
   Stream<AuthState> observeAuthState() {
-    return authRepository.observeAuthState().map((authState) {
-      if (authState is LoggedInState) {
-        _initializePushNotification();
-      }
-      return authState;
-    }).handleError((err) {
-      showToast("$err");
-    });
+    return authRepository
+        .observeAuthState()
+        .map((authState) {
+          if (authState is LoggedInState) {
+            _initializePushNotification();
+          }
+          return authState;
+        })
+        .handleError((err) {
+          showToast("$err");
+        });
   }
 
-  void initialize() {
+  Future<void> initialize() async {
     showLoading();
-    _initialiseAuth();
+    await _initialiseAuth();
     _initialiseOnMessageOpened();
     checkAppVersion();
   }
@@ -42,7 +45,8 @@ class MainCubit extends BaseCubit {
     _getFCMTokenPermission.launch().then((permissionState) {
       final hasSeenRationale =
           sharedPrefs.hasSeenPushNotificationPermissionRationale;
-      final showRationale = !hasSeenRationale &&
+      final showRationale =
+          !hasSeenRationale &&
           (permissionState == AuthorizationStatus.notDetermined ||
               permissionState == AuthorizationStatus.denied);
       if (showRationale) emit(ShowNotificationPermissionRationale());
@@ -50,26 +54,31 @@ class MainCubit extends BaseCubit {
   }
 
   void _initialiseOnMessageOpened() {
-    FirebaseMessaging.onMessageOpenedApp.listen((event) async {
-      final action = await _handleOnMessageOpenUseCase.launch(event.data);
-      if (action != null) {
-        emit(NotificationActionEvent(notificationAction: action));
-      }
-    }, onError: (error, st) {
-      showError(error, st);
-    }).addTo(compositeSubscription);
+    FirebaseMessaging.onMessageOpenedApp
+        .listen(
+          (event) async {
+            final action = await _handleOnMessageOpenUseCase.launch(event.data);
+            if (action != null) {
+              emit(NotificationActionEvent(notificationAction: action));
+            }
+          },
+          onError: (error, st) {
+            showError(error, st);
+          },
+        )
+        .addTo(compositeSubscription);
   }
 
-  void checkAppVersion() {
-    _getAppVersion.launch().then((appVersion) {
-      if (appVersion.mandatoryUpdateAvailable) {
-        Future.delayed(const Duration(seconds: 1)).whenComplete(() {
-          emit(MandatoryUpdateState(appVersion));
-        });
+  void checkAppVersion() async {
+    try {
+      final version = await _getAppVersion.launch();
+      if (version.mandatoryUpdateAvailable) {
+        await Future.delayed(const Duration(seconds: 1));
+        emit(MandatoryUpdateState(version));
       }
-    }).catchError((err, stackTrace) {
-      showError(err, stackTrace);
-    });
+    } catch (e, st) {
+      showError(e, st);
+    }
   }
 
   @override
@@ -78,12 +87,13 @@ class MainCubit extends BaseCubit {
     super.emit(state);
   }
 
-  void _initialiseAuth() {
-    _initializeAuthUseCase.initialize().then((value) {
+  Future<void> _initialiseAuth() async {
+    try {
+      await _initializeAuthUseCase.initialize();
       update();
       emit(Main());
-    }).catchError((err, st) {
-      showError(err, st);
-    });
+    } catch (e, st) {
+      showError(e, st);
+    }
   }
 }

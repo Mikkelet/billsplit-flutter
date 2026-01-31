@@ -7,17 +7,21 @@ class FirebaseProvider {
   late final FirebaseApp firebaseApp;
 
   Future init() async {
-    if (Firebase.apps.isEmpty) {
+    try {
       firebaseApp = await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform);
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+      FlutterError.onError = (errorDetails) {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      };
+      PlatformDispatcher.instance.onError = (error, stack) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        return true;
+      };
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    } catch (e, st) {
+      print("qqq FirebaseError=$e");
     }
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
 }
