@@ -24,7 +24,7 @@ class OnboardingStepPhoneNumber extends StatelessWidget {
             style: Theme.of(context).textTheme.labelSmall,
           ),
           const SizedBox(height: 32),
-          PhoneNumberView<OnboardingBloc>(),
+          PhoneNumberView(),
           const SizedBox(height: 64),
           NextStepButton(cubit.nextButtonText(this))
         ],

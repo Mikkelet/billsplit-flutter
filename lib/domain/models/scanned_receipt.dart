@@ -7,7 +7,7 @@ class ScannedReceipt {
   final Size imageSize;
   final Iterable<ScannedReceiptItem> items;
 
-  ScannedReceipt(this.imageSize, this.items, this.xFile);
+  const ScannedReceipt(this.imageSize, this.items, this.xFile);
 
   double getScaleFactor(BuildContext context) {
     final windowSize = MediaQuery.of(context).size;

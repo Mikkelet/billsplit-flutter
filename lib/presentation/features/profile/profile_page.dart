@@ -1,6 +1,4 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
@@ -16,22 +14,25 @@ import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_nu
 import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/presentation/utils/di_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget<ProfileCubit>(
-      create: (context) => ProfileCubit()..loadNotifications(),
-      listener: (context, cubit, state) {
-        if (state is ShowDeleteUser) {
+    final cubit = context.read<ProfileCubit>();
+    return BlocListener<ProfileCubit, ProfileState>(
+      listenWhen: (prev, curr) => prev.event != curr.event,
+      listener: (context, state) {
+        if (state.event == ProfileStateEvents.showDeleteUser) {
           Navigator.of(context).push(DeleteUserPage.route);
         }
       },
-      child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
+      child: BlocBuilder(builder: (context, state) {
         return BaseScaffold(
           appBar: AppBar(
             forceMaterialTransparency: true,
@@ -49,17 +50,17 @@ class ProfilePage extends StatelessWidget {
                     const UploadProfilePictureView(),
                     const SizedBox(height: 12),
                     MutableValue(
-                        mutableValue: cubit.user.nameState,
+                        mutableValue: context.user.nameState,
                         builder: (context, name) {
                           return ProfileListItem(
-                            text: cubit.user.displayName,
+                            text: context.user.displayName,
                             onClick: () async {
                               await showDialog(
                                 context: context,
                                 builder: (context) {
                                   return Dialog(
                                     child: EditNameDialog(
-                                      initState: cubit.user.displayName,
+                                      initState: context.user.displayName,
                                       onSubmit: (name) {
                                         cubit.updateDisplayName(name);
                                       },
@@ -74,10 +75,10 @@ class ProfilePage extends StatelessWidget {
                       Column(
                         children: [
                           ProfileListItem(
-                            text: cubit.user.email,
+                            text: context.user.email,
                             icon: null,
                           ),
-                          const PhoneNumberView<ProfileCubit>(),
+                          const PhoneNumberView(),
                           MutableValue(
                               mutableValue: cubit.groupInvitesCounter,
                               builder: (context, groupsCounter) {
@@ -104,14 +105,13 @@ class ProfilePage extends StatelessWidget {
                               }),
                         ],
                       ),
-                    UpdateUserDefaultCurrencyView<ProfileCubit>(),
+                    UpdateUserDefaultCurrencyView(),
                     if (kDebugMode)
                       ProfileListItem(
                           text: "Developer settings",
                           onClick: () async {
                             await Navigator.of(context)
                                 .push(DeveloperSettingsPage.getRoute());
-                            cubit.update();
                           }),
                     const SizedBox(height: 32),
                     const SignOutButton(),

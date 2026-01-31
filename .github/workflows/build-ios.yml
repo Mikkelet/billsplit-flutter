@@ -2,7 +2,7 @@ name: Build-iOS
 
 on:
   push:
-    branches: [ "Mikkelet-patch-1" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
