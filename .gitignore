@@ -101,6 +101,9 @@ unlinked_spec.ds
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+android/app/.cxx/
+output/
+.fvm/
 
 # macOS
 **/Flutter/ephemeral/
