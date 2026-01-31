@@ -31,7 +31,6 @@ dependencies:
   intl: ^0.20.2
   email_validator:
   cached_network_image: ^3.2.3
-  image_picker: ^1.0.4
   cupertino_will_pop_scope: ^1.2.1
   flutter_local_notifications: ^20.0.0
   shared_preferences: ^2.1.0
@@ -51,6 +50,7 @@ dependencies:
   freezed_annotation: ^3.1.0
   retrofit: ^4.9.2
   dio: ^5.9.0
+  image_picker: ^1.2.1
 
 dev_dependencies:
   build_runner: ^2.3.3
