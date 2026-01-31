@@ -26,11 +26,16 @@ class GroupsBloc extends BaseCubit {
   }
 
   Future<void> _getAPN() async {
-    print("qqq getAPN");
-    if (!Platform.isIOS) return;
-    print("qqq await APN");
-    final token = await FirebaseMessaging.instance.getToken();
-    print("qqq token=$token");
+    try {
+      if (!Platform.isIOS) return;
+      print("qqq await APN");
+      final apn = await FirebaseMessaging.instance.getAPNSToken();
+      print("qqq APN=$apn");
+      final token = await FirebaseMessaging.instance.getToken();
+      print("qqq token=$token");
+    } catch (e) {
+      print("qqq token error $e");
+    }
   }
 
   Stream<int> get notificationStream => _observeNotificationsUseCase.observe();
