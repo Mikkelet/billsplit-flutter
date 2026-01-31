@@ -1,30 +1,63 @@
+import 'package:billsplit_flutter/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ClickableListItem extends StatelessWidget {
-  final Function() onClick;
+  final VoidCallback onClick;
   final Widget child;
   final Color? color;
-  final EdgeInsets? padding;
+  final EdgeInsets padding;
+  final Alignment alignment;
+  final BorderRadius? borderRadius;
+  final double cornerRadius;
+  final double elevation;
+  final double? height;
+  final double? width;
+
+  final bool enabled;
 
   const ClickableListItem(
       {super.key,
       required this.onClick,
       required this.child,
+      this.enabled = true,
       this.color,
-      this.padding});
+      this.height,
+      this.width,
+      this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      this.alignment = Alignment.center,
+      this.cornerRadius = 15,
+      this.borderRadius,
+      this.elevation = 0});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: onClick,
-      minWidth: double.infinity,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      color: color ?? Theme.of(context).colorScheme.primaryContainer,
-      elevation: 0,
-      highlightElevation: 0,
-      child: Padding(
-        padding: padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-        child: child,
+    return SizedBox(
+      height: height,
+      width: width,
+      child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius ?? BorderRadius.circular(cornerRadius),
+        ),
+        elevation: elevation,
+        color: builder(
+          () {
+            if (!enabled) return Colors.grey.withOpacity(0.2);
+            return color ?? Theme.of(context).colorScheme.primaryContainer;
+          },
+        ),
+        child: InkWell(
+          borderRadius: borderRadius,
+          onTap: enabled ? onClick : null,
+          child: Padding(
+            padding: padding,
+            child: Align(
+              alignment: alignment,
+              child: child,
+            ),
+          ),
+        ),
       ),
     );
   }

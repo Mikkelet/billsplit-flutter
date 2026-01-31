@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'add_friend_request.g.dart';
+part '../../../generated/remote/requests/add_friend_request.g.dart';
 
 @JsonSerializable(createFactory: false)
 class AddFriendRequest {
@@ -32,9 +32,10 @@ class FriendRequestType {
   Json toJson() {
     if (this is RequestTypeEmail) {
       return (this as RequestTypeEmail).toJson();
-    }
-    if (this is RequestTypeUserId) {
+    } else if (this is RequestTypeUserId) {
       return (this as RequestTypeUserId).toJson();
+    } else if (this is RequestTypePhone) {
+      return (this as RequestTypePhone).toJson();
     } else {
       throw Error();
     }
@@ -59,4 +60,14 @@ class RequestTypeUserId extends FriendRequestType {
 
   @override
   Json toJson() => _$RequestTypeUserIdToJson(this);
+}
+
+@JsonSerializable(createFactory: false)
+class RequestTypePhone extends FriendRequestType {
+  final String phoneNumber;
+
+  RequestTypePhone(this.phoneNumber) : super("phone");
+
+  @override
+  Json toJson() => _$RequestTypePhoneToJson(this);
 }

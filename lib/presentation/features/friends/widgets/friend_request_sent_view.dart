@@ -14,7 +14,7 @@ class FriendRequestSentView extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(person.nameState),
+        Text(person.displayName),
         const Text("Request sent"),
       ],
     ));

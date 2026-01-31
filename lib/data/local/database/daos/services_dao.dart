@@ -2,17 +2,17 @@ import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/local/database/tables/services_table.dart';
 import 'package:drift/drift.dart';
 
-part 'services_dao.g.dart';
+part '../../../../generated/local/database/daos/services_dao.g.dart';
 
 @DriftAccessor(tables: [ServicesTable])
 class ServicesDao extends DatabaseAccessor<SplitsbyDatabase>
     with _$ServicesDaoMixin {
-  ServicesDao(SplitsbyDatabase db) : super(db);
+  ServicesDao(super.db);
 
   Future insert(ServiceDb service) =>
       into(servicesTable).insert(service, mode: InsertMode.insertOrReplace);
 
-  Future insertAll(List<ServiceDb> expenses) => batch((batch) => batch
+  Future insertAll(Iterable<ServiceDb> expenses) => batch((batch) => batch
       .insertAll(servicesTable, expenses, mode: InsertMode.insertOrReplace));
 
   Future deleteService(String id) =>

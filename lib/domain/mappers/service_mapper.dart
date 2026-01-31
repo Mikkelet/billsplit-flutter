@@ -5,10 +5,10 @@ import 'package:billsplit_flutter/data/remote/dtos/service_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 
-extension ServicesDtoExt on List<ServiceDTO> {
-  List<SubscriptionService> toServices() => map((e) => e.toService()).toList();
+extension ServicesDtoExt on Iterable<ServiceDTO> {
+  Iterable<SubscriptionService> toServices() => map((e) => e.toService());
 
-  List<ServiceDb> toDb(String groupId) => map((e) => e.toDb(groupId)).toList();
+  Iterable<ServiceDb> toDb(String groupId) => map((e) => e.toDb(groupId));
 }
 
 extension ServiceDtoExt on ServiceDTO {
@@ -20,6 +20,7 @@ extension ServiceDtoExt on ServiceDTO {
         id: id,
         name: name,
         createdBy: createdBy.toPerson(),
+        currency: currency,
         imageUrl: imageUrl,
         monthlyExpense: monthlyExpense,
         payer: payer.toPerson(),
@@ -38,6 +39,14 @@ extension ServiceDbExt on ServiceDb {
 }
 
 extension ServiceExt on SubscriptionService {
-  ServiceDTO toDTO() => ServiceDTO(id, nameState, imageUrl, monthlyExpenseState,
-      createdBy.toDTO(), participantsState.toDTO(), payerState.toDTO());
+  ServiceDTO toDTO() => ServiceDTO(
+        id: id,
+        name: nameState.value,
+        currency: currencyState.value,
+        imageUrl: imageUrl,
+        monthlyExpense: monthlyExpenseState.value,
+        createdBy: createdBy.toDTO(),
+        participants: participantsState.value.toDTO(),
+        payer: payerState.value.toDTO(),
+      );
 }

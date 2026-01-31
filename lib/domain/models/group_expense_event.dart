@@ -1,94 +1,192 @@
+import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/surcharge.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
 
 import 'shared_expense.dart';
 
 class GroupExpense extends Event {
   final Person _payer;
-  final Iterable<IndividualExpense> individualExpenses;
   final String _description;
   final Iterable<SharedExpense> _sharedExpenses;
   final SyncState syncState;
+  final Currency _currency;
+  final Iterable<Person> _tempParticipants;
+  final String _receiptImageUrl;
+  final DateTime _date;
+  final Iterable<Surcharge> _surcharges;
 
   // modifiable values
-  late Person payerState = _payer;
-  late String descriptionState = _description;
-  late List<SharedExpense> sharedExpensesState = _sharedExpenses.toList();
+  late final MutableState<Person> payerState = _payer.obs();
+  late final MutableState<String> receiptImageUrlState = _receiptImageUrl.obs();
+  late final MutableState<String> descriptionState = _description.obs();
+  late final MutableListState<SharedExpense> sharedExpensesState =
+      _sharedExpenses.obsList();
+  late final MutableState<Currency> currencyState = _currency.obs();
+  late final MutableState<DateTime> dateState = _date.obs();
+  late final MutableListState<Person> tempParticipantsState =
+      _tempParticipants.obsList();
+  late final MutableListState<Surcharge> surchargesState =
+      _surcharges.obsList();
 
-  GroupExpense(
-      {required String id,
-      required Person createdBy,
-      required num timestamp,
-      required String description,
-      required Iterable<SharedExpense> sharedExpenses,
-      required Person payer,
-      required this.syncState,
-      required this.individualExpenses})
-      : _payer = payer,
+  GroupExpense({
+    required String id,
+    required Person createdBy,
+    required num timestamp,
+    required String description,
+    required Iterable<SharedExpense> sharedExpenses,
+    required Person payer,
+    required Currency currency,
+    required Iterable<Person> tempParticipants,
+    required String receiptImageUrl,
+    required DateTime date,
+    required Iterable<Surcharge> surcharges,
+    required this.syncState,
+  })  : _payer = payer,
         _sharedExpenses = sharedExpenses,
         _description = description,
+        _date = date,
+        _receiptImageUrl = receiptImageUrl,
+        _tempParticipants = tempParticipants.toList(),
+        _surcharges = surcharges,
+        _currency = currency,
         super(id, createdBy, timestamp);
 
+  num addSurcharge(num expense) {
+    if (surcharge == 0) return expense;
+    final surchargePct = (surcharge + 100) / 100;
+    return expense * surchargePct;
+  }
+
+  Stream<num> get totalStream {
+    final streams = sharedExpensesState.value.map((event) =>
+        event.expenseState.stateStream.map((expense) => addSurcharge(expense)));
+    return CombineLatestStream(streams, (values) => values.sum);
+  }
+
   num get total {
-    return individualExpenses.map((e) => e.expenseState).sum +
-        sharedExpensesState.map((e) => e.expenseState).sum;
+    return sharedExpensesState.value.map((e) => e.expenseState.value).sum;
   }
 
   num getSharedExpensesForPerson(Person person) {
-    return sharedExpensesState
-        .map((sharedExpense) => sharedExpense.participantsState
-            .where((participant) => participant.uid == person.uid)
-            .map((person) => IndividualExpense(
-                person: person, expense: sharedExpense.sharedExpenseDivided)))
+    return sharedExpensesState.value
+        .map(
+          (sharedExpense) => sharedExpense.participantsState.value
+              .where((participant) => participant.uid == person.uid)
+              .map(
+                (person) => IndividualExpense(
+                  currency: currencyState.value.symbol,
+                  person: person,
+                  expense: addSurcharge(sharedExpense.sharedExpenseDivided),
+                ),
+              ),
+        )
         .flatMap()
-        .map((e) => e.expenseState)
+        .map((e) => e.expense)
         .sum;
   }
 
   bool get isChanged {
-    return _payer.uid != payerState.uid ||
-        _description != descriptionState ||
-        !sharedExpensesState.equals(_sharedExpenses.toList()) ||
-        individualExpenses.any((element) => element.isChanged) ||
-        sharedExpensesState.any((element) => element.isChanged);
+    return true;
+    print("qqq ${_payer.uid != payerState.value.uid}");
+    print("qqq ${_description != descriptionState.value}");
+    print("qqq $_currency == ${currencyState.value}");
+    print(
+        "qqq ${_date.millisecondsSinceEpoch != dateState.value.millisecondsSinceEpoch}");
+    print(
+        "qqq ${!_sharedExpenses.toList().compareLists(sharedExpensesState.value.toList())}");
+    print(
+        "qqq ${sharedExpensesState.value.any((element) => element.isChanged)}");
+
+    return _payer.uid != payerState.value.uid ||
+        _description != descriptionState.value ||
+        _currency != currencyState.value ||
+        _date.millisecondsSinceEpoch !=
+            dateState.value.millisecondsSinceEpoch ||
+        !_sharedExpenses
+            .toList()
+            .compareLists(sharedExpensesState.value.toList()) || // TODO
+        sharedExpensesState.value.any((element) => element.isChanged);
+  }
+
+  Stream<bool> get isChangeStream {
+    final sharedExpensesStreams =
+        sharedExpensesState.value.map((element) => element.isChangedStream);
+
+    final streams = [
+      payerState.stateStream.map((payer) => payer.uid != _payer.uid),
+      descriptionState.stateStream
+          .map((description) => description != _description),
+      currencyState.stateStream.map((event) => event != _currency),
+      tempParticipantsState.stateStream
+          .map((event) => !event.equals(_tempParticipants)),
+      dateState.stateStream.map((event) =>
+          event.millisecondsSinceEpoch != _date.millisecondsSinceEpoch),
+      sharedExpensesState.stateStream.map(
+          (event) => !event.toList().compareLists(_sharedExpenses.toList())),
+      ...sharedExpensesStreams,
+    ];
+    return CombineLatestStream(
+        streams,
+        (values) => values.any((element) {
+              return element;
+            }));
+  }
+
+  num get surcharge {
+    if (surchargesState.isEmpty) {
+      surchargesState.add(Surcharge(
+          name: "Surcharge", type: SurchargeType.percentage, value: 0));
+    }
+    return surchargesState.value.first.value;
+  }
+
+  set surcharge(num value) {
+    surchargesState.clear();
+    surchargesState.add(Surcharge(
+        name: "Surcharge", type: SurchargeType.percentage, value: value));
   }
 
   void resetChanges() {
-    descriptionState = _description;
-    payerState = _payer;
-    sharedExpensesState = _sharedExpenses.toList();
-    for (var element in individualExpenses) {
+    descriptionState.value = _description;
+    payerState.value = _payer;
+    sharedExpensesState.value = _sharedExpenses;
+    currencyState.value = _currency;
+    dateState.value = _date;
+    tempParticipantsState.value = _tempParticipants;
+    surchargesState.value = _surcharges;
+    for (var element in sharedExpensesState.value) {
       element.resetChanges();
     }
   }
-
-  GroupExpense.dummy(num seed)
-      : this(
-            id: "GE$seed",
-            createdBy: Person.dummy(seed),
-            description: "",
-            individualExpenses: [],
-            sharedExpenses: [],
-            syncState: SyncState.synced,
-            payer: Person.dummy(seed),
-            timestamp: 0);
 
   GroupExpense.newExpense(Person user, Group group)
       : this(
             id: "",
             createdBy: user,
             description: "",
-            individualExpenses:
-                group.people.map((e) => IndividualExpense(person: e)).toList(),
-            sharedExpenses: [SharedExpense.newInstance(group.people)],
+            sharedExpenses: [
+              SharedExpense.newInstance(group.peopleState.value)
+            ],
             syncState: SyncState.synced,
             payer: user,
-            timestamp: DateTime.now().millisecondsSinceEpoch);
+            receiptImageUrl: "",
+            tempParticipants: [],
+            date: DateTime.now(),
+            currency:
+                Currency(symbol: group.defaultCurrencyState.value, rate: 1),
+            timestamp: DateTime.now().millisecondsSinceEpoch,
+            surcharges: []);
 
   @override
   String toString() {
@@ -97,9 +195,11 @@ class GroupExpense extends Event {
 
   SharedExpense addNewSharedExpense(
       {required Iterable<Person> withParticipants}) {
-    final se = SharedExpense.newInstance(
-        [...individualExpenses.map((e) => e.person).toList()]);
-    se.participantsState = withParticipants.toList();
+    final Iterable<Person> currentParticipants = [
+      ...sharedExpensesState.value.map((e) => e.participantsState.value)
+    ].flatMap().toSet();
+    final se = SharedExpense.newInstance(currentParticipants);
+    se.participantsState.value = withParticipants.toList();
     sharedExpensesState.add(se);
     return se;
   }
@@ -107,4 +207,17 @@ class GroupExpense extends Event {
   void removeSharedExpense(SharedExpense sharedExpense) {
     sharedExpensesState.remove(sharedExpense);
   }
+
+  void addTempParticipant(String name, SharedExpense sharedExpense) {
+    final uuid = const Uuid().v4();
+    final person = Person(uid: "temp-$uuid", name: name);
+    tempParticipantsState.add(person);
+    sharedExpense.addParticipant(person);
+  }
+
+  void removeTempParticipant(Person person) {
+    tempParticipantsState.remove(person);
+  }
+
+  String get dateString => DateFormat("MMMM d, yyyy").format(dateState.value);
 }

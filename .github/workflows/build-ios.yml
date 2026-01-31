@@ -1,0 +1,121 @@
+name: Build-iOS
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # we need the git history for the build number
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.5
+
+      - name: xcode version
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app
+          /usr/bin/xcodebuild -version
+
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+          
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.5
+
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Update xcode build number
+        run: bash scripts/ci-cd/ios-set-build-number.sh
+
+      - name: flutter build ipa
+        run: flutter build ipa --release --no-codesign
+
+      - name: Archive
+        env:
+          CONFIGURATION: Release
+          WORKSPACE: ios/Runner.xcworkspace
+          SCHEME: Runner
+          CERTIFICATE_ID: "Apple Distribution: Mikkel Thygesen (88JMYVVGNH)"
+          PROFILE_ID: d0225455-39f7-423d-9707-a95b61a3baf6
+          TEAM_ID: 88JMYVVGNH
+          ARCHIVE_PATH: ios/build/Runner.xcarchive
+        run: >-
+          xcodebuild build -sdk iphoneos  
+          -configuration $CONFIGURATION 
+          -workspace $WORKSPACE  
+          -archivePath $ARCHIVE_PATH  
+          -scheme $SCHEME
+          CODE_SIGN_STYLE=Manual  
+          CDE_SIGN_IDENTITY="$CERTIFICATE_ID"  
+          PROVISIONING_PROFILE=$PROFILE_ID  
+          CODE_SIGNING_REQUIRED=Yes  
+          CODE_SIGNING_ALLOWED=No  
+          PROVISIONING_PROFILE_SPECIFIER=
+
+      - name: export
+        env:
+          ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
+          EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
+          EXPORT_PATH: output
+        run: >-
+          xcodebuild -exportArchive 
+          -archivePath $ARCHIVE_PATH 
+          -exportPath $EXPORT_PATH 
+          -exportOptionsPlist $EXPORT_OPTIONS_PATH
+
+      - name: Validate & upload
+        env:
+          API_KEY: ${{ secrets.APP_STORE_API_KEY }}
+          ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+          WORKSPACE_PATH: ${{ github.workspace }}
+          IPA_PATH: output/splitsby.ipa
+        run: |
+          mkdir ~/.private_keys
+          API_KEY_FILE_NAME=AuthKey_$APP_STORE_KEY_ID.p8
+          API_KEY_PATH=~/.private_keys/$API_KEY_FILE_NAME
+          echo -n "$API_KEY" | base64 --decode -o $API_KEY_PATH
+          
+          xcrun altool --validate-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID
+          xcrun altool --upload-app -f $IPA_PATH -t ios --apiKey $APP_STORE_KEY_ID --apiIssuer $ISSUER_ID

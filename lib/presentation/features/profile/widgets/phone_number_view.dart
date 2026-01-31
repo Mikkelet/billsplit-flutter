@@ -1,0 +1,42 @@
+import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/update_phone_number/update_phone_number_route.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../main_cubit.dart';
+
+class PhoneNumberView extends StatelessWidget {
+  const PhoneNumberView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<MainCubit>();
+
+    return MutableValue(
+      mutableValue: cubit.user.phoneNumberState,
+      builder: (context, phoneNumber) {
+        if (phoneNumber.phoneNumber.isEmpty) {
+          return ProfileListItem(
+            text: "Click here to add phone number",
+            icon: null,
+            onClick: () async {
+              await Navigator.of(context)
+                  .push(UpdatePhoneNumberRoute.getRoute());
+              cubit.update();
+            },
+          );
+        }
+        return ProfileListItem(
+          text: phoneNumber.display,
+          icon: null,
+          onClick: () async {
+            await Navigator.of(context).push(
+                UpdatePhoneNumberRoute.getRoute(phoneNumber: phoneNumber));
+            cubit.update();
+          },
+        );
+      },
+    );
+  }
+}

@@ -1,91 +1,119 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
-import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/domain/models/shared_expense.dart';
-import 'package:billsplit_flutter/extensions.dart';
-import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_view.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/description_text_field.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/individual_expense_view.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expense_view.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/closable_tips_view.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
+import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
-import 'package:billsplit_flutter/utils/utils.dart';
-import 'package:collection/collection.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/advanced_expense_page.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/simple_expense_page.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/delete_button.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/widgets/view_pager_title.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/submit_expense_button.dart';
+import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddExpensePage extends StatelessWidget {
+enum Page {
+  simple(0),
+  advanced(1);
+
+  final int pageIndex;
+
+  const Page(this.pageIndex);
+}
+
+class AddExpensePage extends StatefulWidget with WidgetsBindingObserver {
   final GroupExpense groupExpense;
   final Group group;
+  final Page openOnPage;
 
-  const AddExpensePage(
-      {required this.groupExpense, required this.group, super.key});
+  const AddExpensePage({
+    required this.groupExpense,
+    required this.group,
+    this.openOnPage = Page.simple,
+    super.key,
+  });
+
+  @override
+  State<AddExpensePage> createState() => _AddExpensePageState();
+
+  static const String routeName = "add_expense";
+
+  static Route getRoute(Person user, Group group, GroupExpense? expense) {
+    if (expense == null) {
+      return slideUpRoute(
+          AddExpensePage(
+            group: group,
+            groupExpense: GroupExpense.newExpense(user, group),
+          ),
+          routeName: routeName);
+    } else {
+      final numOfSharedExpenses = expense.sharedExpensesState.value.length;
+      final openOnPage = numOfSharedExpenses > 1 ? Page.advanced : Page.simple;
+      return slideUpRoute(
+          AddExpensePage(
+              group: group, openOnPage: openOnPage, groupExpense: expense),
+          routeName: routeName);
+    }
+  }
+}
+
+class _AddExpensePageState extends SafeState<AddExpensePage> {
+  late final PageController pageController =
+      PageController(initialPage: widget.openOnPage.pageIndex);
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => AddExpenseBloc(group, groupExpense),
+      create: (context) => AddExpenseBloc(widget.group, widget.groupExpense),
       child: BlocListener<AddExpenseBloc, UiState>(
         listener: (context, state) {
           if (state is AddExpenseSuccess) {
             Navigator.of(context).pop();
           }
-          if(state is ExpenseDeleted){
+          if (state is ExpenseDeleted) {
             Navigator.of(context).pop();
           }
         },
         child: BaseBlocBuilder<AddExpenseBloc>(
           builder: (cubit, state) {
-            return Scaffold(
+            return BaseScaffold(
               appBar: AppBar(
+                forceMaterialTransparency: true,
+                surfaceTintColor: Theme.of(context).colorScheme.surface,
+                title: Builder(builder: (context) {
+                  if (cubit.groupExpense.id.isEmpty) {
+                    return const Text("New Expense");
+                  }
+                  return const Text("Edit expense");
+                }),
                 actions: [
-                  IconButton(
-                    onPressed: () {
-                      showDialog(context: context, builder: (context){
-                        return CustomDialog(
-                          title: "Are you sure you want to delete",
-                          primaryText: "Delete",
-                          secondaryText: "Cancel",
-                          onPrimaryClick: (){
-                            Navigator.of(context).pop();
-                            cubit.deleteExpense();
-                          },
-                          onSecondaryClick: (){
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      });
-                    },
-                    icon: const Icon(Icons.delete),
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                  IconButton(
-                    onPressed:
-                        cubit.groupExpense.isChanged && groupExpense.total > 0
-                            ? () {
-                                cubit.addExpense();
-                              }
-                            : null,
-                    icon: const Icon(Icons.check),
-                  )
+                  if (cubit.groupExpense.id.isNotEmpty)
+                    const DeleteExpenseButton(),
+                  const SubmitExpenseButton()
                 ],
               ),
               body: WillPopScope(
                 onWillPop: () async {
-                  if (groupExpense.isChanged) {
+                  if (widget.groupExpense.isChanged) {
                     final response = await showDialog(
                       context: context,
                       builder: (context) => ResetChangesDialog(
                         () {
-                          groupExpense.resetChanges();
+                          widget.groupExpense.resetChanges();
                         },
                       ),
                     );
@@ -93,156 +121,36 @@ class AddExpensePage extends StatelessWidget {
                   }
                   return true;
                 },
-                child: SingleChildScrollView(
-                  child: Builder(builder: (context) {
-                    if (state is Loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 24),
-                      child: Center(
-                        child: Column(
+                child: Builder(builder: (context) {
+                  if (state is Loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return Column(
+                    children: [
+                      ExpenseViewPagerTitle(pageController: pageController),
+                      Expanded(
+                        flex: 1,
+                        child: PageView(
+                          onPageChanged: (index) async {
+                            if (index == Page.simple.index) {
+                              onChangeToSimple(context);
+                            }
+                          },
+                          controller: pageController,
                           children: [
-                            // Description
-                            RoundedListItem(
-                              child: DescriptionTextField(
-                                initialText: groupExpense.descriptionState,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-
-                            // Shared Expenses
-                            RoundedListItem(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(30),
-                                bottom: Radius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  ...groupExpense.sharedExpensesState.map(
-                                    (e) => SharedExpenseView(
-                                        key: Key("${e.hashCode}"),
-                                        sharedExpense: e,
-                                        autoFocus: builder(() {
-                                          if (state is QuickAddSharedExpense) {
-                                            return state.sharedExpense == e;
-                                          }
-                                          return false;
-                                        })),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        // Quick add expense
-                                        IconButton(
-                                          onPressed: () {
-                                            cubit.onQuickAddSharedExpense();
-                                          },
-                                          icon: const Icon(Icons.bolt),
-                                        ),
-
-                                        // Add expense
-                                        IconButton(
-                                          onPressed: () async {
-                                            final sharedExpense =
-                                                SharedExpense.newInstance(
-                                                    [...cubit.group.people]);
-                                            showModalBottomSheet(
-                                              enableDrag: true,
-                                              isScrollControlled: true,
-                                              useSafeArea: true,
-                                              context: context,
-                                              builder: (context) =>
-                                                  AddSharedExpenseView(
-                                                onSubmit: () {
-                                                  cubit.groupExpense
-                                                      .sharedExpensesState
-                                                      .add(sharedExpense);
-                                                  Navigator.of(context).pop();
-                                                  cubit.onExpensesUpdated();
-                                                },
-                                                group: cubit.group,
-                                                sharedExpense: sharedExpense,
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(Icons.add),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            // Tips and tricks
-                            ClosableTipView(
-                              padding: const EdgeInsets.only(
-                                  left: 16, right: 16, top: 8),
-                              tip:
-                                  "Tip: long press a user to quick-add an expense for them",
-                              hasSeen: cubit.sharedPrefs
-                                  .hasSeenHoldToAddIndividualExpenseTip,
-                              onClose: () {
-                                cubit.sharedPrefs
-                                        .hasSeenHoldToAddIndividualExpenseTip =
-                                    true;
-                              },
-                            ),
-                            const SizedBox(height: 8),
-
-                            // Individual expenses
-                            RoundedListItem(
-                              borderRadius: const BorderRadius.vertical(
-                                  bottom: Radius.circular(30),
-                                  top: Radius.circular(10)),
-                              child: Column(
-                                children: [
-                                  ...getParticipatingPeople().mapIndexed(
-                                    (i, e) {
-                                      final isMiddleElement = i > 0;
-                                      if (isMiddleElement) {
-                                        return Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 16),
-                                            child: IndividualExpenseView(e));
-                                      }
-                                      return IndividualExpenseView(e);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            RoundedListItem(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Total"),
-                                  Expanded(
-                                    child: Text(
-                                      "\$${groupExpense.total.fmt2dec()}",
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.end,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 120),
+                            SimpleExpensePage(
+                                groupExpense: widget.groupExpense,
+                                group: widget.group),
+                            AdvancedExpensePage(
+                                pageController: pageController,
+                                groupExpense: widget.groupExpense,
+                                group: widget.group),
                           ],
                         ),
                       ),
-                    );
-                  }),
-                ),
+                    ],
+                  );
+                }),
               ),
             );
           },
@@ -251,24 +159,24 @@ class AddExpensePage extends StatelessWidget {
     );
   }
 
-  Iterable<IndividualExpense> getParticipatingPeople() {
-    final pastMembers = groupExpense.individualExpenses;
-    final currentMembers =
-        group.people.map((e) => IndividualExpense(person: e));
-    print("${<IndividualExpense>{...pastMembers, ...currentMembers}}");
-    return <IndividualExpense>{...pastMembers, ...currentMembers};
-  }
-
-  static Route getRoute(Person user, Group group, GroupExpense? expense) {
-    if (expense == null) {
-      return MaterialPageRoute(
-          builder: (context) => AddExpensePage(
-              group: group,
-              groupExpense: GroupExpense.newExpense(user, group)));
-    } else {
-      return MaterialPageRoute(
-          builder: (context) =>
-              AddExpensePage(group: group, groupExpense: expense));
+  void onChangeToSimple(BuildContext context) async {
+    final cubit = context.read<AddExpenseBloc>();
+    if (cubit.groupExpense.sharedExpensesState.value.length > 1) {
+      final response = await showDialog(
+          context: context,
+          builder: (context) => const CustomDialog(
+                title: "You're about to switch to single-mode",
+                text:
+                    "You have added sub-expenses. Switching to single-mode would discard them. Are you sure?",
+                primaryText: "Yes, discard",
+                secondaryText: "No, stay with multiple",
+              ));
+      if (response is bool && response == true) {
+        cubit.switchToSingle();
+      } else {
+        pageController.animateToPage(1,
+            duration: 500.ms, curve: Curves.fastEaseInToSlowEaseOut);
+      }
     }
   }
 }

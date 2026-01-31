@@ -1,91 +1,139 @@
+import 'dart:io';
 
-import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/features/add_group/add_group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/drawer_action_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupsPage extends StatelessWidget {
-  GroupsPage({Key? key}) : super(key: key);
+  GroupsPage({super.key});
 
-  final scrollingController = ScrollController();
+  final _scrollingController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
       create: (context) => GroupsBloc()..loadProfile(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Splitsby"),
-          actions: [
-            Builder(builder: (context) {
-              final cubit = context.read<GroupsBloc>();
-              return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(ProfilePage.getRoute());
-                  },
-                  child: ProfilePictureView(person: cubit.user));
-            }),
-            const SizedBox(width: 16)
-          ],
-        ),
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-          child: ExtendedFloatingActionButton(
-            scrollController: scrollingController,
-            label: "Add group",
-            icon: Icons.group_add_rounded,
-            onPressed: () {
-              Navigator.of(context).push(AddGroupPage.getRoute());
+      child: BaseBlocBuilder<GroupsBloc>(
+        builder: (cubit, state) {
+          return BaseScaffold(
+            endDrawer: const Drawer(child: ProfilePage()),
+            onEndDrawerStateChanged: (changed) {
+              cubit.update();
             },
-          ),
-        ),
-        body: BaseBlocBuilder<GroupsBloc>(
-          builder: (cubit, state) {
-            return Center(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await cubit.refreshGroups();
-                },
-                child: DefaultStreamBuilder(
-                  stream: cubit.getGroupStream(),
-                  body: (groups) {
-                    if (state is Loading && groups.isEmpty) {
-                      return const Center(
-                          child: CircularProgressIndicator());
-                    }
-                    if (groups.isEmpty) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(64.0),
-                          child: Text(
-                            "Here you can see your groups! Click below to add one!",
-                          ),
-                        ),
-                      );
-                    }
-                    return ListView.builder(
-                        controller: scrollingController,
-                        itemCount: groups.length,
-                        padding: const EdgeInsets.symmetric(vertical: 40),
-                        itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: GroupView(group: groups[index]),
-                            ));
-                  },
-                ),
+            floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+            floatingActionButton: ExtendedFloatingActionButton(
+              scrollController: _scrollingController,
+              label: "Add group",
+              icon: Icons.group_add_rounded,
+              onPressed: () {
+                Navigator.of(context).push(AddGroupPage.getRoute());
+              },
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await cubit.loadProfile();
+              },
+              child: Center(
+                child: StreamBuilder(
+                    stream: cubit.getGroupStream(),
+                    builder: (_, snapshot) {
+                      if(!snapshot.hasData){
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final groups = snapshot.requireData;
+                      return CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                          controller: _scrollingController,
+                          slivers: [
+                            SliverAppBar(
+                              pinned: true,
+                              actions: const [DrawerActionView()],
+                              expandedHeight: 200.0,
+                              forceMaterialTransparency: true,
+                              flexibleSpace: FlexibleSpaceBar(
+                                titlePadding: Platform.isIOS
+                                    ? const EdgeInsets.all(8)
+                                    : null,
+                                background: Container(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                                title: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        cubit.getGreeting(),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SliverLayoutBuilder(builder: (context, _) {
+                              if (state is Loading && groups.isEmpty) {
+                                return SliverFillViewport(
+                                  viewportFraction: 0.5,
+                                  delegate: SliverChildListDelegate([
+                                    const Center(
+                                        child: CircularProgressIndicator())
+                                  ]),
+                                );
+                              }
+                              if (groups.isEmpty) {
+                                return SliverFillViewport(
+                                  delegate: SliverChildListDelegate([
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(64.0),
+                                        child: Text(
+                                          "Here you can see your groups! Click below to add one!",
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                );
+                              }
+                              return SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  childCount: groups.length,
+                                  (context, index) {
+                                    final group = groups[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16.0, horizontal: 8),
+                                      child: GroupView(
+                                        group: group,
+                                        debtToGroup:
+                                            cubit.getDebtForGroup(group),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            })
+                          ]);
+                    }),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

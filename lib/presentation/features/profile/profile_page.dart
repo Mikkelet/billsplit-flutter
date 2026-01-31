@@ -1,95 +1,124 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
-import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
-import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
-import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
+import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
+import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
+import 'package:billsplit_flutter/presentation/features/delete_user_flow/delete_user_page.dart';
+import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
+import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
-import 'package:billsplit_flutter/presentation/features/profile/widgets/display_name_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/delete_user_button.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/edit_name_dialog.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
+import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/presentation/utils/di_utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget<ProfileCubit>(
-      create: (context) => ProfileCubit(),
-      child: BaseBlocBuilder<ProfileCubit>(builder: (cubit, state) {
-        return Scaffold(
-          appBar: AppBar(leading: const BackButton()),
+    final cubit = context.read<ProfileCubit>();
+    return BlocListener<ProfileCubit, ProfileState>(
+      listenWhen: (prev, curr) => prev.event != curr.event,
+      listener: (context, state) {
+        if (state.event == ProfileStateEvents.showDeleteUser) {
+          Navigator.of(context).push(DeleteUserPage.route);
+        }
+      },
+      child: BlocBuilder(builder: (context, state) {
+        return BaseScaffold(
+          appBar: AppBar(
+            forceMaterialTransparency: true,
+            leading: const BackButton(),
+          ),
           body: Builder(builder: (context) {
             if (state is Loading) {
               return const Center(child: CircularProgressIndicator());
             }
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        _updateProfilePicture(cubit);
-                      },
-                      child: Builder(
-                        builder: (context) {
-                          if (state is ProfilePictureUploading) {
-                            return const SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: CircularProgressIndicator());
-                          }
-                          return ProfilePictureView(
-                              person: cubit.user, size: 120);
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    RoundedListItem(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    const UploadProfilePictureView(),
+                    const SizedBox(height: 12),
+                    MutableValue(
+                        mutableValue: context.user.nameState,
+                        builder: (context, name) {
+                          return ProfileListItem(
+                            text: context.user.displayName,
+                            onClick: () async {
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    child: EditNameDialog(
+                                      initState: context.user.displayName,
+                                      onSubmit: (name) {
+                                        cubit.updateDisplayName(name);
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        }),
+                    if (cubit.showProfileInfo)
+                      Column(
                         children: [
-                          const DisplayNameTextField(),
-                          const SizedBox(height: 16),
-                          Text(cubit.user.email,
-                              style: const TextStyle(fontSize: 16)),
-                          const SizedBox(height: 16),
+                          ProfileListItem(
+                            text: context.user.email,
+                            icon: null,
+                          ),
+                          const PhoneNumberView(),
+                          MutableValue(
+                              mutableValue: cubit.groupInvitesCounter,
+                              builder: (context, groupsCounter) {
+                                return ProfileListItem(
+                                  text: "Group invites",
+                                  counter: groupsCounter,
+                                  onClick: () {
+                                    Navigator.of(context)
+                                        .push(GroupInvitesPage.route);
+                                  },
+                                );
+                              }),
+                          MutableValue(
+                              mutableValue: cubit.friendsCounter,
+                              builder: (context, counter) {
+                                return ProfileListItem(
+                                    text: "Friends",
+                                    counter: counter,
+                                    onClick: () async {
+                                      await Navigator.of(context)
+                                          .push(FriendsPage.route);
+                                      cubit.loadNotifications();
+                                    });
+                              }),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    ClickableListItem(
-                      onClick: () {
-                        Navigator.of(context).push(FriendsPage.getRoute());
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text("Friends"),
-                          Icon(Icons.arrow_forward_ios)
-                        ],
-                      ),
-                    ),
+                    UpdateUserDefaultCurrencyView(),
+                    if (kDebugMode)
+                      ProfileListItem(
+                          text: "Developer settings",
+                          onClick: () async {
+                            await Navigator.of(context)
+                                .push(DeveloperSettingsPage.getRoute());
+                          }),
                     const SizedBox(height: 32),
-                    const Divider(endIndent: 16, indent: 16),
+                    const SignOutButton(),
                     const SizedBox(height: 32),
-                    ClickableListItem(
-                      onClick: () {
-                        cubit.signOut();
-                      },
-                      color: Theme.of(context).colorScheme.error,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Sign out",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onError),
-                        ),
-                      ),
-                    ),
+                    const DeleteUserButton(),
+                    const SizedBox(height: 32),
+                    MutableText(mutString: cubit.appVersionState),
                   ],
                 ),
               ),
@@ -99,15 +128,4 @@ class ProfilePage extends StatelessWidget {
       }),
     );
   }
-
-  Future _updateProfilePicture(ProfileCubit cubit) async {
-    final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      cubit.updateProfilePicture(file.path);
-    }
-  }
-
-  static Route<ProfilePage> getRoute() =>
-      MaterialPageRoute(builder: (context) => const ProfilePage());
 }

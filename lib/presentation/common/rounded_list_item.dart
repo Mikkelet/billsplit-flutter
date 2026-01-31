@@ -3,21 +3,34 @@ import 'package:flutter/material.dart';
 class RoundedListItem extends StatelessWidget {
   final Widget child;
   final Color? color;
-  final BorderRadius? borderRadius;
+    final BorderRadius? borderRadius;
+  final EdgeInsets? padding;
+  final double? width;
+  final double? height;
+  final Alignment? align;
 
   const RoundedListItem(
-      {Key? key, required this.child, this.color, this.borderRadius})
-      : super(key: key);
+      {super.key,
+      required this.child,
+      this.color,
+      this.width,
+      this.height,
+      this.align,
+      this.borderRadius,
+      this.padding});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
+      width: width,
+      height: height,
+      clipBehavior: Clip.antiAlias,
+      alignment: align ?? Alignment.center,
       decoration: BoxDecoration(
           color: color ?? Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: borderRadius ?? BorderRadius.circular(30)),
+          borderRadius: borderRadius ?? BorderRadius.circular(15)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: padding ?? const EdgeInsets.all(16),
         child: child,
       ),
     );

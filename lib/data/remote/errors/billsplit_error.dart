@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'billsplit_error.g.dart';
+part '../../../generated/remote/errors/billsplit_error.g.dart';
 
 @JsonSerializable(createToJson: false)
 class BillSplitError extends Error {

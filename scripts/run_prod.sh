@@ -1,0 +1,1 @@
+fvm flutter run --target lib/main_production.dart --flavor production --dart-define-from-file keys.prod.env

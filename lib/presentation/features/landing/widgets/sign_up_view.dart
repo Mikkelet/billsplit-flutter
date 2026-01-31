@@ -1,24 +1,30 @@
+import 'dart:io';
+
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
+import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/common/simple_button.dart';
-import 'package:billsplit_flutter/presentation/features/landing/bloc/sign_up_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_state.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/guest_signin_button.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/password_textfield.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_with_apple_button.dart';
+import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_with_google_button.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_flow.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../bloc/landing_bloc.dart';
 
 class SignUpView extends StatefulWidget {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignUpViewState extends State<SignUpView> {
+class _SignUpViewState extends SafeState<SignUpView> {
   final emailFieldController = TextEditingController();
   final passwordFieldController = TextEditingController();
   final repeatPasswordFieldController = TextEditingController();
@@ -66,73 +72,94 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    final landingCubit = context.read<LandingBloc>();
     return BaseBlocWidget(
-      create: (context) => SignUpCubit(),
-      child: BaseBlocBuilder<SignUpCubit>(builder: (signUpCubit, state) {
+      create: (context) => LandingCubit(),
+      listener: (context, cubit, state) {
+        if (state is SignUpSuccessful || state is SignUpAnonymously) {
+          Navigator.of(context).push(OnboardingFlow.getRoute());
+        }
+      },
+      child: BaseBlocBuilder<LandingCubit>(builder: (cubit, state) {
         return SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(height: 120),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("Sign up",
-                      style: Theme.of(context).textTheme.displayMedium),
-                ),
-                Container(height: 32),
                 RoundedListItem(
+                    height: 64,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(10),
+                      bottom: Radius.circular(0),
+                    ),
                     child: TextField(
-                  controller: emailFieldController,
-                  decoration: InputDecoration(
-                    errorText: emailError,
-                    hintText: "Email",
-                    border: InputBorder.none,
-                  ),
-                )),
-                const SizedBox(height: 16),
-                RoundedListItem(
-                  child: PasswordTextField(
-                    controller: passwordFieldController,
-                    error: passwordError,
-                    hintText: "Enter password (min. 6 characters)",
-                  ),
+                      controller: emailFieldController,
+                      style: SplitsbyTextTheme.textFieldStyle(context),
+                      decoration: InputDecoration(
+                        hintStyle:
+                            SplitsbyTextTheme.textFieldHintStyle(context),
+                        errorStyle:
+                            SplitsbyTextTheme.textFieldErrorText(context),
+                        errorText: emailError,
+                        hintText: "Email",
+                        border: InputBorder.none,
+                      ),
+                    )),
+                PasswordTextField(
+                  controller: passwordFieldController,
+                  error: passwordError,
+                  borderRadius: const BorderRadius.all(Radius.zero),
+                  hintText: "Enter password (min. 6 characters)",
                 ),
-                const SizedBox(height: 16),
-                RoundedListItem(
-                  child: PasswordTextField(
-                    controller: repeatPasswordFieldController,
-                    error: repeatPasswordError,
-                    hintText: "Repeat password",
+                PasswordTextField(
+                  controller: repeatPasswordFieldController,
+                  error: repeatPasswordError,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(10)
                   ),
+                  hintText: "Repeat password",
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 4),
                 if (state is Loading)
-                  const CircularProgressIndicator()
+                  const Center(child: CircularProgressIndicator())
                 else
-                  SimpleButton(
-                    onClick: () {
-                      if (validateFields()) {
-                        final String email = emailFieldController.value.text;
-                        final String password =
-                            passwordFieldController.value.text;
-                        signUpCubit.signUp(email, password);
-                      }
-                      setState(() {});
-                    },
-                    child: const Text("Sign up"),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      ClickableListItem(
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(30)),
+                        height: 48,
+                        width: 128,
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        onClick: () {
+                          if (validateFields()) {
+                            final String email = emailFieldController.value.text;
+                            final String password =
+                                passwordFieldController.value.text;
+                            cubit.signUpWithEmail(email, password);
+                          }
+                          updateState();
+                        },
+                        child: Text(
+                          "Sign up",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    ],
                   ),
-                const SizedBox(height: 16),
-                MaterialButton(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30))),
-                  onPressed: () {
-                    landingCubit.showSignIn();
-                  },
-                  child: const Text("Sign in"),
-                ),
-                const SizedBox(height: 32)
+                const SizedBox(height: 32),
+                if (Platform.isIOS)
+                  const AppleSignButton(),
+                const SizedBox(height: 8),
+                const SignInWithGoogleButton(),
+                const SizedBox(height: 8),
+                const GuestSignInButton()
               ],
             ),
           ),

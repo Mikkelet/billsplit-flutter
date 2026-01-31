@@ -8,7 +8,7 @@ import '../bloc/add_group_cubit.dart';
 class AddedPersonView extends StatelessWidget {
   final Person person;
 
-  const AddedPersonView({Key? key, required this.person}) : super(key: key);
+  const AddedPersonView({super.key, required this.person});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,10 @@ class AddedPersonView extends StatelessWidget {
       children: [
         ProfilePictureView(person: person),
         const SizedBox(width: 8),
-        Text(person.nameState),
+        Text(
+          person.displayName,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const Flexible(
             child: SizedBox(
           width: double.infinity,

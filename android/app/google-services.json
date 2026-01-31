@@ -37,6 +37,13 @@
             {
               "client_id": "469876198103-chuqqqvfvmo6bvmvskds9f2h7s5v7bfn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "469876198103-0ctg6l333jsm7onagvpllqrt8ercjs91.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.billsplitFlutter"
+              }
             }
           ]
         }
@@ -50,6 +57,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "469876198103-ouu1pev4f95crj5mpn62vtv8bfjs52l5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mikkelthygesen.splitsby",
+            "certificate_hash": "83fb523b9a1354f7a0259fbd83d1178229d61da0"
+          }
+        },
         {
           "client_id": "469876198103-chuqqqvfvmo6bvmvskds9f2h7s5v7bfn.apps.googleusercontent.com",
           "client_type": 3
@@ -66,6 +81,13 @@
             {
               "client_id": "469876198103-chuqqqvfvmo6bvmvskds9f2h7s5v7bfn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "469876198103-0ctg6l333jsm7onagvpllqrt8ercjs91.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.billsplitFlutter"
+              }
             }
           ]
         }

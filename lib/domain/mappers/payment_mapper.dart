@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:billsplit_flutter/data/local/database/splitsby_db.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
+import 'package:billsplit_flutter/domain/mappers/currency_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 
@@ -17,8 +18,10 @@ extension PaymentDtoExt on PaymentDTO {
 
   Payment toPayment() => Payment(
       id: id,
+      currency: currency.toCurrency(),
       createdBy: createdBy.toPerson(),
-      timestamp: timeStamp,
+      timestamp: timestamp,
+      paidBy: paidBy.toPerson(),
       paidTo: paidTo.toPerson(),
       amount: amount);
 }

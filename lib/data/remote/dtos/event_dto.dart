@@ -1,11 +1,12 @@
+import 'package:billsplit_flutter/data/remote/dtos/currency_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/shared_expense_dto.dart';
+import 'package:billsplit_flutter/data/remote/dtos/surcharge_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:json_pretty/json_pretty.dart';
 
-import 'individual_expense_dto.dart';
-
-part 'event_dto.g.dart';
+part '../../../generated/remote/dtos/event_dto.g.dart';
 
 @JsonSerializable()
 class EventDTO {
@@ -13,9 +14,14 @@ class EventDTO {
   final String type;
   final String id;
   final PersonDTO createdBy;
-  final num timeStamp;
+  final num timestamp;
 
-  EventDTO(this.id, this.createdBy, this.timeStamp, this.type);
+  EventDTO({
+    required this.id,
+    required this.createdBy,
+    required this.timestamp,
+    required this.type,
+  });
 
   static EventDTO? fromJson(Json json) {
     try {
@@ -49,18 +55,27 @@ class EventDTO {
 class GroupExpenseDTO extends EventDTO {
   final String description;
   final PersonDTO payee;
-  final Iterable<IndividualExpenseDTO> individualExpenses;
+  final CurrencyDTO currency;
+  final String date;
   final Iterable<SharedExpenseDTO> sharedExpenses;
+  final Iterable<PersonDTO> tempParticipants;
+  final String receiptImageUrl;
+  final Iterable<SurchargeDTO> surcharges;
 
-  GroupExpenseDTO(
-      super.id,
-      super.createdBy,
-      super.timeStamp,
-      super.type,
-      this.description,
-      this.payee,
-      this.individualExpenses,
-      this.sharedExpenses);
+  GroupExpenseDTO({
+    required super.id,
+    required super.createdBy,
+    required super.timestamp,
+    super.type = "expense",
+    required this.date,
+    required this.receiptImageUrl,
+    required this.description,
+    required this.currency,
+    required this.tempParticipants,
+    required this.payee,
+    required this.sharedExpenses,
+    required this.surcharges,
+  });
 
   factory GroupExpenseDTO.fromJson(Json json) =>
       _$GroupExpenseDTOFromJson(json);
@@ -73,12 +88,27 @@ class GroupExpenseDTO extends EventDTO {
 class PaymentDTO extends EventDTO {
   final PersonDTO paidTo;
   final num amount;
+  final CurrencyDTO currency;
+  final PersonDTO paidBy;
 
-  PaymentDTO(super.id, super.createdBy, super.timeStamp, super.type,
-      this.paidTo, this.amount);
+  PaymentDTO({
+    required super.id,
+    required super.createdBy,
+    required super.timestamp,
+    super.type = "payment",
+    required this.currency,
+    required this.paidBy,
+    required this.paidTo,
+    required this.amount,
+  });
 
   factory PaymentDTO.fromJson(Json json) => _$PaymentDTOFromJson(json);
 
   @override
   Json toJson() => _$PaymentDTOToJson(this);
+
+  @override
+  String toString() {
+    return prettyPrintJson(toJson().toString());
+  }
 }

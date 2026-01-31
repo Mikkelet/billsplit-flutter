@@ -7,15 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FriendRequestReceivedView extends StatelessWidget {
   final Person person;
 
-  const FriendRequestReceivedView({Key? key, required this.person})
-      : super(key: key);
+  const FriendRequestReceivedView({super.key, required this.person});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(person.nameState),
+        Text(person.displayName),
         BlocBuilder<AddFriendCubit, UiState>(builder: (context, state) {
           if (state is Loading) {
             return const CircularProgressIndicator(color: Colors.white,);

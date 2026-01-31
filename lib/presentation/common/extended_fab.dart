@@ -1,5 +1,6 @@
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class ExtendedFloatingActionButton extends StatefulWidget {
   final ScrollController scrollController;
@@ -21,7 +22,7 @@ class ExtendedFloatingActionButton extends StatefulWidget {
 }
 
 class _ExtendedFloatingActionButtonState
-    extends State<ExtendedFloatingActionButton> {
+    extends SafeState<ExtendedFloatingActionButton> {
   bool isExtended = true;
 
   @override
@@ -48,8 +49,9 @@ class _ExtendedFloatingActionButtonState
     return FloatingActionButton.extended(
       isExtended: isExtended,
       key: UniqueKey(),
+      extendedTextStyle: SplitsbyTextTheme.fabText(context),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       onPressed: widget.onPressed,
-      backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
       icon: Icon(widget.icon),
       label: Text(widget.label),
     );

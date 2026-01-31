@@ -6,7 +6,6 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/default_stream_builder.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/events/expense_event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,19 +13,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'event_view.dart';
 
 class EventsView extends StatelessWidget {
-  const EventsView({Key? key}) : super(key: key);
+  const EventsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
     return BlocBuilder<GroupBloc, UiState>(builder: (context, state) {
       return DefaultStreamBuilder(
+          loaderWidget: const SizedBox(),
           stream: cubit.getEventsStream(),
-          body: (events) {
-            if (state is SyncingGroup && events.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+          builder: (_, events) {
+            if (events.isEmpty) {
+              return Center(
+                  child: Text(
+                "Click below to add a new expense!",
+                style: Theme.of(context).textTheme.labelLarge,
+              ));
             }
-            if (events.isEmpty) return const Center(child: Text("no events"));
             return ListView.builder(
                 itemCount: events.length,
                 padding: const EdgeInsets.symmetric(vertical: 40),
@@ -54,8 +57,8 @@ class EventsView extends StatelessWidget {
                                 child: _createdByProfilePicture(
                                     event.createdBy, isLatestIndex),
                               ),
-                              Flexible(
-                                  child: ExpenseEventView(groupExpense: event)),
+                            Flexible(
+                                child: ExpenseEventView(groupExpense: event)),
                             if (shouldShowProfilePictureRight)
                               Padding(
                                 padding: const EdgeInsets.only(left: 4),
@@ -75,7 +78,7 @@ class EventsView extends StatelessWidget {
 
   Widget _createdByProfilePicture(Person person, bool isLatestIndex) {
     if (isLatestIndex) {
-      return ProfilePictureView(person: person);
+      return ProfilePictureView(person: person, canInspect: true);
     } else {
       return const SizedBox(
         height: 40,

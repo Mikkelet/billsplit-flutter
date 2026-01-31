@@ -30,6 +30,10 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app may access your camera to scan receipts</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app may access your microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app may access your photo gallery when you want to change your profile picture</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -56,5 +60,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.469876198103-db9i89patfeg6jkbu128dhejtjkk5v8u</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

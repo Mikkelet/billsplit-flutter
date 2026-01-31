@@ -1,44 +1,77 @@
 name: billsplit_flutter
-description: A new Flutter project
+description: A new expense sharing experience
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.0+17
+version: 1.0.3
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: ^3.7.0
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.2
-  cupertino_icons: ^1.0.2
-  http: ^0.13.5
-  json_annotation: ^4.8.0
-  firebase_auth: ^4.4.0
-  firebase_core: ^2.9.0
+
+  # firebase
+  firebase_core: ^4.1.0
+  firebase_auth: ^6.1.4
+  firebase_storage: ^13.0.1
+  firebase_messaging: ^16.0.1
+  firebase_crashlytics: ^5.0.7
+
+  flutter_bloc: ^9.1.1
+  http: ^1.1.0
+  json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
   drift: ^2.6.0
-  sqlite3_flutter_libs: ^0.5.0
+  sqlite3_flutter_libs: ^0.5.23
   path_provider: ^2.0.0
   path: ^1.8.2
-  storage_inspector: ^0.3.0
-  rxdart: ^0.27.7
+  storage_inspector: ^0.4.0
+  rxdart: ^0.28.0
   collection:
-  get_it: ^7.2.0
-  intl: ^0.17.0
+  get_it: ^9.2.0
+  intl: ^0.20.2
   email_validator:
   cached_network_image: ^3.2.3
-  firebase_storage: ^11.1.1
-  image_picker: ^0.8.7+4
+  image_picker: ^1.0.4
   cupertino_will_pop_scope: ^1.2.1
-  firebase_messaging: ^14.5.0
-  flutter_local_notifications: ^14.0.0+1
+  flutter_local_notifications: ^20.0.0
   shared_preferences: ^2.1.0
-  eraser: ^2.0.1
+  eraser: ^3.0.0
+  camera: ^0.11.1 
+  flutter_animate: ^4.1.1+1
+  package_info_plus: ^9.0.0
+  uuid: ^4.1.0
+  json_pretty: ^1.0.4
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
+  country_code_picker: ^3.0.0
+  image_cropper: ^11.0.0
+  google_mlkit_text_recognition: ^0.15.0
+  phone_numbers_parser: ^9.0.11
+  freezed: ^3.2.3
+  freezed_annotation: ^3.1.0
+  retrofit: ^4.9.2
+  dio: ^5.9.0
 
 dev_dependencies:
-  json_serializable: ^6.6.1
   build_runner: ^2.3.3
   drift_dev: ^2.6.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  retrofit_generator: ^10.2.1
+  flutter_lints: ^6.0.0
+
 flutter:
   uses-material-design: true
+  assets:
+    - assets/splitsby_logo.jpg
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat-Regular.ttf
+          style: normal
+        - asset: fonts/Montserrat-Light.ttf
+          weight: 200
+        - asset: fonts/Montserrat-Bold.ttf
+          weight: 700
+        - asset: fonts/Montserrat-Italic.ttf
+          style: italic

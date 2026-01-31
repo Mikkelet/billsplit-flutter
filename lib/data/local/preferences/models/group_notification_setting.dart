@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'group_notification_setting.g.dart';
+part '../../../../generated/local/preferences/models/group_notification_setting.g.dart';
 
 @JsonSerializable()
 class GroupNotificationSetting {

@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 class DefaultStreamBuilder<T> extends StatelessWidget {
   final Stream<T> stream;
-  final Widget Function(T) body;
+  final Widget? loaderWidget;
 
-  const DefaultStreamBuilder(
-      {Key? key,
-      required this.stream,
-      required this.body})
-      : super(key: key);
+  final Widget Function(BuildContext, T) builder;
+
+  const DefaultStreamBuilder({
+    super.key,
+    required this.stream,
+    this.loaderWidget,
+    required this.builder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +19,16 @@ class DefaultStreamBuilder<T> extends StatelessWidget {
         stream: stream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return loaderWidget ?? const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            print("snapshot error=${snapshot.error}");
           }
           if (!snapshot.hasData) {
             return const Center(child: Text("No data"));
           }
           final data = snapshot.data!;
-          return body(data);
+          return builder(context, data);
         });
   }
 }

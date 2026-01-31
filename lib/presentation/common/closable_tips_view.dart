@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 
 class ClosableTipView extends StatefulWidget {
@@ -18,7 +19,7 @@ class ClosableTipView extends StatefulWidget {
   State<ClosableTipView> createState() => _ClosableTipViewState();
 }
 
-class _ClosableTipViewState extends State<ClosableTipView> {
+class _ClosableTipViewState extends SafeState<ClosableTipView> {
   late bool hasSeen = widget.hasSeen;
 
   @override

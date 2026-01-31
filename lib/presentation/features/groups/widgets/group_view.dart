@@ -3,84 +3,96 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
-import 'package:billsplit_flutter/utils/utils.dart';
-import 'package:collection/collection.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/group_debt_view.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
+import 'package:billsplit_flutter/presentation/features/groups/widgets/group_title.dart';
+import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupView extends StatelessWidget {
   final Group group;
+  final num debtToGroup;
+  final bool showDebt;
 
-  const GroupView({Key? key, required this.group}) : super(key: key);
+  const GroupView({
+    super.key,
+    required this.group,
+    required this.debtToGroup,
+    this.showDebt = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
-    final yourDebts = group.debtState
-            .where((element) => element.userId == cubit.user.uid)
-            .firstOrNull
-            ?.owes ??
-        0;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+    return Container(
+      decoration: const BoxDecoration(boxShadow: [
+        BoxShadow(
+            blurRadius: 10,
+            spreadRadius: 1,
+            color: Colors.black12,
+            offset: Offset(0, 8))
+      ]),
       child: Center(
         child: ClickableListItem(
+          color: Theme.of(context).colorScheme.primaryContainer,
           onClick: () {
             _onClick(context);
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          padding: EdgeInsets.zero,
+          cornerRadius: 10,
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.bottomLeft,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Text(group.nameState,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                      Flexible(flex: 1, child: _debtView(context, yourDebts))
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  ProfilePictureStack(
-                    people: group.people,
-                    size: 30,
-                    limit: 6,
-                  ),
+                  GroupPictureView(group: group),
+                  GroupTitleView(group: group)
                 ],
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ProfilePictureStack(
+                            people: cubit.peopleInGroup(group),
+                            size: 30,
+                            limit: 3,
+                          ),
+                          const Spacer(),
+                          Expanded(
+                            child: Builder(builder: (context) {
+                              if (!showDebt) return const SizedBox();
+                              if (group.lastSync == null) {
+                                return Text(
+                                  "Open to synchronize",
+                                  textAlign: TextAlign.right,
+                                  style: SplitsbyTextTheme.exchangeRateLabel(
+                                      context),
+                                );
+                              }
+                              return GroupDebtView(
+                                group: group,
+                                debt: debtToGroup,
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _debtView(BuildContext context, num debt) {
-    if (debt > 0) {
-      return Text("\$${debt.fmt2dec()}",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style:
-              Theme.of(context).textTheme.bodyLarge?.apply(color: Colors.red));
-    }
-    if (debt < 0) {
-      return Text("\$${debt.abs().fmt2dec()}",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.apply(color: Colors.green));
-    }
-    return const SizedBox();
   }
 
   void _onClick(BuildContext context) {

@@ -1,21 +1,24 @@
+import 'package:billsplit_flutter/data/remote/dtos/app_version_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/friend_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
-import 'package:billsplit_flutter/data/remote/dtos/person_dto.dart';
 import 'package:billsplit_flutter/data/remote/dtos/service_dto.dart';
 import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_event_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_friend_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/add_service_request.dart';
-import 'package:billsplit_flutter/data/remote/requests/delete_expense_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_events_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_exchange_rates_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_friends_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_group_invites_response.dart';
 import 'package:billsplit_flutter/data/remote/requests/get_group_request.dart';
-import 'package:billsplit_flutter/data/remote/requests/get_groups_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/get_groups_response.dart';
+import 'package:billsplit_flutter/data/remote/requests/invite_to_group_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/leave_group_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/respond_to_friend_request_request.dart';
+import 'package:billsplit_flutter/data/remote/requests/respond_to_group_invite_request.dart';
 import 'package:billsplit_flutter/data/remote/requests/update_user_request.dart';
-
-import 'dtos/debts_dto.dart';
 
 class ApiService {
   final NetworkClient _client;
@@ -32,23 +35,27 @@ class ApiService {
     return GetGroupResponse.fromJson(body);
   }
 
+  Future<GetEventsResponse> getEvents(String groupId) async {
+    final body = await _client.get("group/$groupId/events");
+    return GetEventsResponse.fromJson(body);
+  }
+
   Future<GetFriendsResponse> getFriends() async {
     final response = await _client.get("friends");
     return GetFriendsResponse.fromJson(response);
   }
 
-  Future<AddEventResponse> addEvent(
-      String groupId, EventDTO eventDTO, List<DebtDTO> debts) async {
-    final request = AddEventRequest(groupId, eventDTO, debts);
+  Future<AddEventResponse> addEvent(String groupId, EventDTO eventDTO) async {
+    final request = AddEventRequest(groupId, eventDTO);
     final response = await _client.post("event", request.toJson());
-    return AddEventResponse.fromJson(response);
+    return AddEventResponse.fromJson(response!);
   }
 
   Future<ServiceDTO> addService(String groupId, ServiceDTO service) async {
     final data = AddServiceRequest(service);
     final response =
         await _client.post("group/$groupId/service", data.toJson());
-    return AddServiceResponse.fromJson(response).service;
+    return AddServiceResponse.fromJson(response!).service;
   }
 
   Future updateService(String groupId, ServiceDTO service) async {
@@ -67,29 +74,41 @@ class ApiService {
 
   Future<FriendDTO> addFriendEmail(String email) => _addFriend("email", email);
 
+  Future<FriendDTO> addFriendPhone(String phoneNumber) =>
+      _addFriend("phone", phoneNumber);
+
   Future<FriendDTO> addFriendUserId(String userId) =>
       _addFriend("userId", userId);
 
   Future<FriendDTO> _addFriend(String type, String value) async {
     final FriendRequestType requestType;
-    if (type == "email") {
-      requestType = RequestTypeEmail(value);
-    } else {
-      requestType = RequestTypeUserId(value);
+    switch (type) {
+      case "email":
+        requestType = RequestTypeEmail(value);
+        break;
+      case "phone":
+        requestType = RequestTypePhone(value);
+        break;
+      default:
+        requestType = RequestTypeUserId(value);
     }
     final response = await _client.post("friends", requestType.toJson());
-    return AddFriendResponse.fromJson(response).friend;
+    return AddFriendResponse.fromJson(response!).friend;
+  }
+
+  Future respondToFriendRequest({
+    required String friendUid,
+    required bool accept,
+  }) async {
+    final body = RespondToFriendRequestRequest(
+        accept: accept, friendUid: friendUid, requestId: "");
+    await _client.post("/friendRequest", body.toJson());
   }
 
   Future<GroupDTO> addGroup(GroupDTO group) async {
     final body = AddGroupRequest(group);
     final response = await _client.post("group", body.toJson());
-    return AddGroupResponse.fromJson(response).group;
-  }
-
-  Future addPersonToGroup(String groupId, PersonDTO person) async {
-    final body = {"userId": person.id};
-    await _client.post("group/$groupId/user", body);
+    return AddGroupResponse.fromJson(response!).group;
   }
 
   Future updateFCMToken(String? fcmToken) async {
@@ -97,13 +116,40 @@ class ApiService {
     await _client.put("user", updateData);
   }
 
-  Future deleteExpense(GroupDTO group, String expenseId, Iterable<DebtDTO> debts) async {
-    final body = DeleteExpenseRequest(debts).toJson();
-    await _client.delete("group/${group.id}/events/$expenseId", body: body);
+  Future deleteExpense(String groupId, String expenseId) async {
+    await _client.delete("group/$groupId/events/$expenseId");
   }
 
   void onDestroy() {
     _client.onDestroy();
   }
 
+  Future<Map<String, num>> getExchangeRates() async {
+    final response = await _client.get("rates");
+    return GetExchangeRatesRequest.fromJson(response).rates;
+  }
+
+  Future<AppVersionDTO> getAppVersion() async {
+    final response = await _client.get("appVersion", authorized: false);
+    return AppVersionDTO.fromJson(response);
+  }
+
+  Future<GetGroupInvitesResponse> getGroupInvites() async {
+    final response = await _client.get("groupInvites");
+    return GetGroupInvitesResponse.fromJson(response);
+  }
+
+  Future invitePersonToGroup(String groupId, String uid) async {
+    final body = InviteToGroupRequest(groupId: groupId, userId: uid);
+    await _client.post("group/invite", body.toJson());
+  }
+
+  Future respondToGroupInvite(String groupId, bool accept) async {
+    final body = RespondToGroupInviteRequest(groupId, accept);
+    await _client.post("group/invitation", body.toJson());
+  }
+
+  Future deleteUser() async {
+    await _client.delete("user");
+  }
 }

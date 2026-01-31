@@ -1,18 +1,23 @@
+import 'package:billsplit_flutter/data/currency_converter.dart';
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/individual_expense.dart';
 import 'package:billsplit_flutter/domain/models/payment_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/domain/models/surcharge.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
 class DebtCalculator {
+  final currencyConverter = getIt<CurrencyConverter>();
   final Iterable<Person> people;
   final Iterable<GroupExpense> expenses;
   final Iterable<Payment> payments;
-  late final expensesAndPayments = [
+  late final List<GroupExpense> expensesAndPayments = [
     ...expenses,
     ...payments.map((e) => e.toExpense())
   ];
@@ -23,14 +28,15 @@ class DebtCalculator {
       : this(people, events.whereType<GroupExpense>(),
             events.whereType<Payment>());
 
+  /// Returns a list of people mapped to a list of debts in USD to other people
   Iterable<Pair<Person, Iterable<Pair<Person, num>>>> calculateDebts() {
     return people.map((person) {
       // get expenses payed for by person
       final payedForGroupExpenses = expensesAndPayments
-          .where((expense) => expense.payerState.uid == person.uid);
+          .where((expense) => expense.payerState.value.uid == person.uid);
       // person cannot have debt to themselves
       final payedForExpensesWithoutPayee = payedForGroupExpenses
-          .where((expense) => expense.payerState.uid == person.uid);
+          .where((expense) => expense.payerState.value.uid == person.uid);
       // Update individual expenses to include the shared expense
       final Iterable<IndividualExpense> payedForIndividualExpenses =
           payedForExpensesWithoutPayee
@@ -45,7 +51,9 @@ class DebtCalculator {
         final debtsByIndebted = payedForIndividualExpenses
             .where((element) => element.person.uid == indebted.uid);
         // accumulate all their debts
-        final totalDebt = debtsByIndebted.map((e) => e.expenseState).sum;
+        final totalDebt = debtsByIndebted
+            .map((e) => currencyConverter.convertToUSD(e.expense, e.currency))
+            .sum;
         return Pair(indebted, totalDebt);
       });
       return Pair(person, accExpensesByIe);
@@ -57,10 +65,8 @@ class DebtCalculator {
     return allDebtsByPayer.map((debtsByPayer) {
       final payer = debtsByPayer.first;
       final owedByPayer = allDebtsByPayer
-          .where((element) =>
-              element.first.uid !=
-              payer
-                  .uid) // filter expenses not paid by payee, as payee cannot have debt to themselves
+          // filter expenses not paid by payee, as payee cannot have debt to themselves
+          .where((element) => element.first.uid != payer.uid)
           .map((debts) {
         final indebted = debts.first;
         final debtToPayer = debts.second
@@ -96,18 +102,17 @@ class DebtCalculator {
     });
   }
 
-  // POSSIBLE USES PAYMENTS TWICE, SINCE THEY'RE ALREADY INCLUDED
   Iterable<Pair<Person, num>> calculateDebtsAfterPayments(Person person) {
     // get debts owed by person
     final effectiveDebt = calculateEffectiveDebt(person);
-    // for each debts, calculate the payment to negate potential debt
+    // for each debts, calculate the payments to negate potential debt
     return effectiveDebt.map((debt) {
       final debtee = debt.first;
       final debtAmount = debt.second;
       if (debtAmount > 0) {
         // if debt exists, find payments paid by person to debtee
         final paymentsByPerson = payments.where((element) =>
-            element.createdBy.uid == person.uid &&
+            element.paidBy.uid == person.uid &&
             element.paidTo.uid == debtee.uid);
         final accPayments = paymentsByPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount - accPayments);
@@ -115,7 +120,7 @@ class DebtCalculator {
         // if debt is owed TO person (negative debt), find payments made by debtee to person
         final paymentsToPerson = payments.where((element) =>
             element.paidTo.uid == person.uid &&
-            element.createdBy.uid == debtee.uid);
+            element.paidBy.uid == debtee.uid);
         final accPayments = paymentsToPerson.map((e) => e.amount).sum;
         return Pair(debtee, debtAmount + accPayments);
       }
@@ -140,51 +145,56 @@ class DebtCalculator {
     calculateDebts().forEach((pair) {
       final payer = pair.first;
       final debts = pair.second;
-      print("${payer.nameState} is owed:");
+      print("${payer.displayName} is owed:");
       for (var element in debts) {
         final indExpense = element.first;
         final debt = element.second;
-        print("\t\$$debt by ${indExpense.nameState}");
+        print("\t\$$debt by ${indExpense.displayName}");
       }
     });
     print("\n=== IND DEBT ===");
     calculateDebtTo().forEach((pair) {
       final payee = pair.first;
       final payeeDebts = pair.second;
-      print("${payee.nameState} owes");
+      print("${payee.displayName} owes");
       for (var it in payeeDebts) {
         final ie = it.first;
         final debt = it.second;
-        print("\t\$$debt to ${ie.nameState}");
+        print("\t\$$debt to ${ie.displayName}");
       }
     });
     print("\n=== Effect Debt ===");
-    expenses.map((e) => e.individualExpenses).flatMap().forEach((ie) {
-      print("${ie.person.nameState} owes:");
-      final person = ie.person;
+    expenses
+        .map((e) => e.sharedExpensesState.value)
+        .flatMap()
+        .map((e) => e.participantsState.value)
+        .flatMap()
+        .toSet()
+        .forEach((person) {
+      print("${person.displayName} owes:");
       final debt = calculateEffectiveDebt(person);
       for (var it in debt) {
-        print("\tto ${it.first.nameState}: \$${it.second}");
+        print("\tto ${it.first.displayName}: \$${it.second}");
       }
     });
     print("\n=== After Payments ===");
     print("");
     for (var it in payments) {
       print(
-          "${it.createdBy.nameState} paid \$${it.amount} to ${it.paidTo.nameState}");
+          "${it.paidBy.displayName} paid \$${it.amount} to ${it.paidTo.displayName}");
     }
     print("");
     for (var person in people) {
-      print("Debts for ${person.nameState}");
+      print("Debts for ${person.displayName}");
       calculateDebtsAfterPayments(person).forEach((element) {
         final otherPerson = element.first;
         final debt = element.second;
         if (debt > 0) {
           print(
-              "\t${otherPerson.nameState} owes \$$debt to ${person.nameState}");
+              "\t${otherPerson.displayName} owes \$$debt to ${person.displayName}");
         } else if (debt < 0) {
           print(
-              "\t${person.nameState} owes \$$debt to ${otherPerson.nameState}");
+              "\t${person.displayName} owes \$$debt to ${otherPerson.displayName}");
         }
       });
     }
@@ -192,24 +202,33 @@ class DebtCalculator {
 }
 
 extension GroupExpenseExt on GroupExpense {
-  Iterable<IndividualExpense> getIndividualWithShared() =>
-      individualExpenses.map((e) {
-        final num expense = e.expenseState + getSharedExpensesForPerson(e.person);
-        return IndividualExpense(person: e.person, expense: expense);
-      });
+  Iterable<IndividualExpense> getIndividualWithShared() {
+    final people = sharedExpensesState.value
+        .map((e) => e.participantsState.value)
+        .flatMap()
+        .toSet();
+    return people.map((e) {
+      final expense = getSharedExpensesForPerson(e);
+      return IndividualExpense(
+          person: e, expense: expense, currency: currencyState.value.symbol);
+    });
+  }
 }
 
 extension PaymentExt on Payment {
   GroupExpense toExpense() => GroupExpense(
-        id: id,
-        createdBy: createdBy,
-        timestamp: timestamp,
-        description: "",
-        payer: createdBy,
-        sharedExpenses: [],
-        syncState: SyncState.synced,
-        individualExpenses: [
-          IndividualExpense(person: paidTo, expense: amount)
-        ],
-      );
+      id: id,
+      createdBy: createdBy,
+      timestamp: timestamp,
+      surcharges: [],
+      description: "",
+      receiptImageUrl: "",
+      tempParticipants: [],
+      date: DateTime.now(),
+      payer: paidBy,
+      sharedExpenses: [
+        SharedExpense(expense: amount, participants: [paidTo], description: "")
+      ],
+      syncState: SyncState.synced,
+      currency: currency);
 }
