@@ -7,8 +7,5 @@ part of '../../../data/remote/requests/respond_to_group_invite_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$RespondToGroupInviteRequestToJson(
-        RespondToGroupInviteRequest instance) =>
-    <String, dynamic>{
-      'groupId': instance.groupId,
-      'accept': instance.accept,
-    };
+  RespondToGroupInviteRequest instance,
+) => <String, dynamic>{'groupId': instance.groupId, 'accept': instance.accept};

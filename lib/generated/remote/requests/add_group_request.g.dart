@@ -7,11 +7,7 @@ part of '../../../data/remote/requests/add_group_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$AddGroupRequestToJson(AddGroupRequest instance) =>
-    <String, dynamic>{
-      'group': instance.group.toJson(),
-    };
+    <String, dynamic>{'group': instance.group.toJson()};
 
 AddGroupResponse _$AddGroupResponseFromJson(Map<String, dynamic> json) =>
-    AddGroupResponse(
-      GroupDTO.fromJson(json['group'] as Map<String, dynamic>),
-    );
+    AddGroupResponse(GroupDTO.fromJson(json['group'] as Map<String, dynamic>));

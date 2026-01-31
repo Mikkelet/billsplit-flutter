@@ -7,10 +7,7 @@ part of '../../../data/remote/dtos/app_version_dto.dart';
 // **************************************************************************
 
 AppVersionDTO _$AppVersionDTOFromJson(Map<String, dynamic> json) =>
-    AppVersionDTO(
-      json['minVersion'] as num,
-      json['latestVersion'] as num,
-    );
+    AppVersionDTO(json['minVersion'] as num, json['latestVersion'] as num);
 
 Map<String, dynamic> _$AppVersionDTOToJson(AppVersionDTO instance) =>
     <String, dynamic>{

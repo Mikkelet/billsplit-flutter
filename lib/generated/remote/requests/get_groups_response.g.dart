@@ -8,6 +8,7 @@ part of '../../../data/remote/requests/get_groups_response.dart';
 
 GetGroupsResponse _$GetGroupsResponseFromJson(Map<String, dynamic> json) =>
     GetGroupsResponse(
-      (json['groups'] as List<dynamic>)
-          .map((e) => GroupDTO.fromJson(e as Map<String, dynamic>)),
+      (json['groups'] as List<dynamic>).map(
+        (e) => GroupDTO.fromJson(e as Map<String, dynamic>),
+      ),
     );

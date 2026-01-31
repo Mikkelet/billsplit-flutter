@@ -7,9 +7,7 @@ part of '../../../data/remote/requests/add_service_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$AddServiceRequestToJson(AddServiceRequest instance) =>
-    <String, dynamic>{
-      'service': instance.service.toJson(),
-    };
+    <String, dynamic>{'service': instance.service.toJson()};
 
 AddServiceResponse _$AddServiceResponseFromJson(Map<String, dynamic> json) =>
     AddServiceResponse(

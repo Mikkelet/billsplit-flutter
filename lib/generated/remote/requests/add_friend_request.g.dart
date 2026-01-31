@@ -7,9 +7,7 @@ part of '../../../data/remote/requests/add_friend_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$AddFriendRequestToJson(AddFriendRequest instance) =>
-    <String, dynamic>{
-      'type': instance.type.toJson(),
-    };
+    <String, dynamic>{'type': instance.type.toJson()};
 
 AddFriendResponse _$AddFriendResponseFromJson(Map<String, dynamic> json) =>
     AddFriendResponse(
@@ -17,16 +15,10 @@ AddFriendResponse _$AddFriendResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$RequestTypeEmailToJson(RequestTypeEmail instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'email': instance.email,
-    };
+    <String, dynamic>{'type': instance.type, 'email': instance.email};
 
 Map<String, dynamic> _$RequestTypeUserIdToJson(RequestTypeUserId instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'friendId': instance.friendId,
-    };
+    <String, dynamic>{'type': instance.type, 'friendId': instance.friendId};
 
 Map<String, dynamic> _$RequestTypePhoneToJson(RequestTypePhone instance) =>
     <String, dynamic>{

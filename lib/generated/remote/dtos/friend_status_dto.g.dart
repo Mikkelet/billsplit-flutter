@@ -7,11 +7,7 @@ part of '../../../data/remote/dtos/friend_status_dto.dart';
 // **************************************************************************
 
 FriendStatusDTO _$FriendStatusDTOFromJson(Map<String, dynamic> json) =>
-    FriendStatusDTO(
-      json['type'] as String,
-    );
+    FriendStatusDTO(json['type'] as String);
 
 Map<String, dynamic> _$FriendStatusDTOToJson(FriendStatusDTO instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-    };
+    <String, dynamic>{'type': instance.type};

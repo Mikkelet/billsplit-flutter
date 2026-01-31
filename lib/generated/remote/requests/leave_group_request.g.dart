@@ -7,6 +7,4 @@ part of '../../../data/remote/requests/leave_group_request.dart';
 // **************************************************************************
 
 LeaveGroupRequest _$LeaveGroupRequestFromJson(Map<String, dynamic> json) =>
-    LeaveGroupRequest(
-      GroupDTO.fromJson(json['group'] as Map<String, dynamic>),
-    );
+    LeaveGroupRequest(GroupDTO.fromJson(json['group'] as Map<String, dynamic>));

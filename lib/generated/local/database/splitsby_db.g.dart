@@ -9,23 +9,37 @@ class $GroupsTableTable extends GroupsTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $GroupsTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _groupIdMeta =
-      const VerificationMeta('groupId');
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
   @override
   late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
-      'group_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _lastUpdatedMeta =
-      const VerificationMeta('lastUpdated');
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastUpdatedMeta = const VerificationMeta(
+    'lastUpdated',
+  );
   @override
   late final GeneratedColumn<int> lastUpdated = GeneratedColumn<int>(
-      'last_updated', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'last_updated',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _groupMeta = const VerificationMeta('group');
   @override
   late final GeneratedColumn<String> group = GeneratedColumn<String>(
-      'group', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'group',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [groupId, lastUpdated, group];
   @override
@@ -34,25 +48,34 @@ class $GroupsTableTable extends GroupsTable
   String get actualTableName => $name;
   static const String $name = 'groups_table';
   @override
-  VerificationContext validateIntegrity(Insertable<GroupDb> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<GroupDb> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('group_id')) {
-      context.handle(_groupIdMeta,
-          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupIdMeta);
     }
     if (data.containsKey('last_updated')) {
       context.handle(
+        _lastUpdatedMeta,
+        lastUpdated.isAcceptableOrUnknown(
+          data['last_updated']!,
           _lastUpdatedMeta,
-          lastUpdated.isAcceptableOrUnknown(
-              data['last_updated']!, _lastUpdatedMeta));
+        ),
+      );
     }
     if (data.containsKey('group')) {
       context.handle(
-          _groupMeta, group.isAcceptableOrUnknown(data['group']!, _groupMeta));
+        _groupMeta,
+        group.isAcceptableOrUnknown(data['group']!, _groupMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupMeta);
     }
@@ -65,12 +88,20 @@ class $GroupsTableTable extends GroupsTable
   GroupDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GroupDb(
-      groupId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
-      lastUpdated: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}last_updated']),
-      group: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group'])!,
+      groupId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group_id'],
+          )!,
+      lastUpdated: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}last_updated'],
+      ),
+      group:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group'],
+          )!,
     );
   }
 
@@ -99,15 +130,18 @@ class GroupDb extends DataClass implements Insertable<GroupDb> {
   GroupsTableCompanion toCompanion(bool nullToAbsent) {
     return GroupsTableCompanion(
       groupId: Value(groupId),
-      lastUpdated: lastUpdated == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastUpdated),
+      lastUpdated:
+          lastUpdated == null && nullToAbsent
+              ? const Value.absent()
+              : Value(lastUpdated),
       group: Value(group),
     );
   }
 
-  factory GroupDb.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GroupDb.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GroupDb(
       groupId: serializer.fromJson<String>(json['groupId']),
@@ -125,15 +159,15 @@ class GroupDb extends DataClass implements Insertable<GroupDb> {
     };
   }
 
-  GroupDb copyWith(
-          {String? groupId,
-          Value<int?> lastUpdated = const Value.absent(),
-          String? group}) =>
-      GroupDb(
-        groupId: groupId ?? this.groupId,
-        lastUpdated: lastUpdated.present ? lastUpdated.value : this.lastUpdated,
-        group: group ?? this.group,
-      );
+  GroupDb copyWith({
+    String? groupId,
+    Value<int?> lastUpdated = const Value.absent(),
+    String? group,
+  }) => GroupDb(
+    groupId: groupId ?? this.groupId,
+    lastUpdated: lastUpdated.present ? lastUpdated.value : this.lastUpdated,
+    group: group ?? this.group,
+  );
   GroupDb copyWithCompanion(GroupsTableCompanion data) {
     return GroupDb(
       groupId: data.groupId.present ? data.groupId.value : this.groupId,
@@ -180,8 +214,8 @@ class GroupsTableCompanion extends UpdateCompanion<GroupDb> {
     this.lastUpdated = const Value.absent(),
     required String group,
     this.rowid = const Value.absent(),
-  })  : groupId = Value(groupId),
-        group = Value(group);
+  }) : groupId = Value(groupId),
+       group = Value(group);
   static Insertable<GroupDb> custom({
     Expression<String>? groupId,
     Expression<int>? lastUpdated,
@@ -196,11 +230,12 @@ class GroupsTableCompanion extends UpdateCompanion<GroupDb> {
     });
   }
 
-  GroupsTableCompanion copyWith(
-      {Value<String>? groupId,
-      Value<int?>? lastUpdated,
-      Value<String>? group,
-      Value<int>? rowid}) {
+  GroupsTableCompanion copyWith({
+    Value<String>? groupId,
+    Value<int?>? lastUpdated,
+    Value<String>? group,
+    Value<int>? rowid,
+  }) {
     return GroupsTableCompanion(
       groupId: groupId ?? this.groupId,
       lastUpdated: lastUpdated ?? this.lastUpdated,
@@ -248,28 +283,46 @@ class $GroupExpenseTableTable extends GroupExpenseTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  static const VerificationMeta _groupIdMeta =
-      const VerificationMeta('groupId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
   @override
   late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
-      'group_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _groupExpenseMeta =
-      const VerificationMeta('groupExpense');
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _groupExpenseMeta = const VerificationMeta(
+    'groupExpense',
+  );
   @override
   late final GeneratedColumn<String> groupExpense = GeneratedColumn<String>(
-      'group_expense', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _syncStateMeta =
-      const VerificationMeta('syncState');
+    'group_expense',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _syncStateMeta = const VerificationMeta(
+    'syncState',
+  );
   @override
   late final GeneratedColumn<int> syncState = GeneratedColumn<int>(
-      'sync_state', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'sync_state',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [id, groupId, groupExpense, syncState];
   @override
@@ -278,8 +331,10 @@ class $GroupExpenseTableTable extends GroupExpenseTable
   String get actualTableName => $name;
   static const String $name = 'group_expense_table';
   @override
-  VerificationContext validateIntegrity(Insertable<GroupExpenseDb> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<GroupExpenseDb> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -288,22 +343,29 @@ class $GroupExpenseTableTable extends GroupExpenseTable
       context.missing(_idMeta);
     }
     if (data.containsKey('group_id')) {
-      context.handle(_groupIdMeta,
-          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupIdMeta);
     }
     if (data.containsKey('group_expense')) {
       context.handle(
+        _groupExpenseMeta,
+        groupExpense.isAcceptableOrUnknown(
+          data['group_expense']!,
           _groupExpenseMeta,
-          groupExpense.isAcceptableOrUnknown(
-              data['group_expense']!, _groupExpenseMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_groupExpenseMeta);
     }
     if (data.containsKey('sync_state')) {
-      context.handle(_syncStateMeta,
-          syncState.isAcceptableOrUnknown(data['sync_state']!, _syncStateMeta));
+      context.handle(
+        _syncStateMeta,
+        syncState.isAcceptableOrUnknown(data['sync_state']!, _syncStateMeta),
+      );
     } else if (isInserting) {
       context.missing(_syncStateMeta);
     }
@@ -316,14 +378,26 @@ class $GroupExpenseTableTable extends GroupExpenseTable
   GroupExpenseDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GroupExpenseDb(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      groupId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
-      groupExpense: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group_expense'])!,
-      syncState: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sync_state'])!,
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}id'],
+          )!,
+      groupId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group_id'],
+          )!,
+      groupExpense:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group_expense'],
+          )!,
+      syncState:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}sync_state'],
+          )!,
     );
   }
 
@@ -338,11 +412,12 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
   final String groupId;
   final String groupExpense;
   final int syncState;
-  const GroupExpenseDb(
-      {required this.id,
-      required this.groupId,
-      required this.groupExpense,
-      required this.syncState});
+  const GroupExpenseDb({
+    required this.id,
+    required this.groupId,
+    required this.groupExpense,
+    required this.syncState,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -362,8 +437,10 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
     );
   }
 
-  factory GroupExpenseDb.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GroupExpenseDb.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GroupExpenseDb(
       id: serializer.fromJson<String>(json['id']),
@@ -383,24 +460,25 @@ class GroupExpenseDb extends DataClass implements Insertable<GroupExpenseDb> {
     };
   }
 
-  GroupExpenseDb copyWith(
-          {String? id,
-          String? groupId,
-          String? groupExpense,
-          int? syncState}) =>
-      GroupExpenseDb(
-        id: id ?? this.id,
-        groupId: groupId ?? this.groupId,
-        groupExpense: groupExpense ?? this.groupExpense,
-        syncState: syncState ?? this.syncState,
-      );
+  GroupExpenseDb copyWith({
+    String? id,
+    String? groupId,
+    String? groupExpense,
+    int? syncState,
+  }) => GroupExpenseDb(
+    id: id ?? this.id,
+    groupId: groupId ?? this.groupId,
+    groupExpense: groupExpense ?? this.groupExpense,
+    syncState: syncState ?? this.syncState,
+  );
   GroupExpenseDb copyWithCompanion(GroupExpenseTableCompanion data) {
     return GroupExpenseDb(
       id: data.id.present ? data.id.value : this.id,
       groupId: data.groupId.present ? data.groupId.value : this.groupId,
-      groupExpense: data.groupExpense.present
-          ? data.groupExpense.value
-          : this.groupExpense,
+      groupExpense:
+          data.groupExpense.present
+              ? data.groupExpense.value
+              : this.groupExpense,
       syncState: data.syncState.present ? data.syncState.value : this.syncState,
     );
   }
@@ -447,10 +525,10 @@ class GroupExpenseTableCompanion extends UpdateCompanion<GroupExpenseDb> {
     required String groupExpense,
     required int syncState,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        groupId = Value(groupId),
-        groupExpense = Value(groupExpense),
-        syncState = Value(syncState);
+  }) : id = Value(id),
+       groupId = Value(groupId),
+       groupExpense = Value(groupExpense),
+       syncState = Value(syncState);
   static Insertable<GroupExpenseDb> custom({
     Expression<String>? id,
     Expression<String>? groupId,
@@ -467,12 +545,13 @@ class GroupExpenseTableCompanion extends UpdateCompanion<GroupExpenseDb> {
     });
   }
 
-  GroupExpenseTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? groupId,
-      Value<String>? groupExpense,
-      Value<int>? syncState,
-      Value<int>? rowid}) {
+  GroupExpenseTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? groupId,
+    Value<String>? groupExpense,
+    Value<int>? syncState,
+    Value<int>? rowid,
+  }) {
     return GroupExpenseTableCompanion(
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
@@ -525,26 +604,42 @@ class $FriendsTableTable extends FriendsTable
   static const VerificationMeta _uidMeta = const VerificationMeta('uid');
   @override
   late final GeneratedColumn<String> uid = GeneratedColumn<String>(
-      'uid', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+    'uid',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   @override
   late final GeneratedColumn<String> status = GeneratedColumn<String>(
-      'status', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _createdByMeta =
-      const VerificationMeta('createdBy');
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdByMeta = const VerificationMeta(
+    'createdBy',
+  );
   @override
   late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
-      'created_by', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'created_by',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _friendMeta = const VerificationMeta('friend');
   @override
   late final GeneratedColumn<String> friend = GeneratedColumn<String>(
-      'friend', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'friend',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [uid, status, createdBy, friend];
   @override
@@ -553,31 +648,41 @@ class $FriendsTableTable extends FriendsTable
   String get actualTableName => $name;
   static const String $name = 'friends_table';
   @override
-  VerificationContext validateIntegrity(Insertable<FriendDb> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<FriendDb> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('uid')) {
       context.handle(
-          _uidMeta, uid.isAcceptableOrUnknown(data['uid']!, _uidMeta));
+        _uidMeta,
+        uid.isAcceptableOrUnknown(data['uid']!, _uidMeta),
+      );
     } else if (isInserting) {
       context.missing(_uidMeta);
     }
     if (data.containsKey('status')) {
-      context.handle(_statusMeta,
-          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
     } else if (isInserting) {
       context.missing(_statusMeta);
     }
     if (data.containsKey('created_by')) {
-      context.handle(_createdByMeta,
-          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+      context.handle(
+        _createdByMeta,
+        createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta),
+      );
     } else if (isInserting) {
       context.missing(_createdByMeta);
     }
     if (data.containsKey('friend')) {
-      context.handle(_friendMeta,
-          friend.isAcceptableOrUnknown(data['friend']!, _friendMeta));
+      context.handle(
+        _friendMeta,
+        friend.isAcceptableOrUnknown(data['friend']!, _friendMeta),
+      );
     } else if (isInserting) {
       context.missing(_friendMeta);
     }
@@ -590,14 +695,26 @@ class $FriendsTableTable extends FriendsTable
   FriendDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FriendDb(
-      uid: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}uid'])!,
-      status: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
-      createdBy: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}created_by'])!,
-      friend: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}friend'])!,
+      uid:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}uid'],
+          )!,
+      status:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}status'],
+          )!,
+      createdBy:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}created_by'],
+          )!,
+      friend:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}friend'],
+          )!,
     );
   }
 
@@ -612,11 +729,12 @@ class FriendDb extends DataClass implements Insertable<FriendDb> {
   final String status;
   final String createdBy;
   final String friend;
-  const FriendDb(
-      {required this.uid,
-      required this.status,
-      required this.createdBy,
-      required this.friend});
+  const FriendDb({
+    required this.uid,
+    required this.status,
+    required this.createdBy,
+    required this.friend,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -636,8 +754,10 @@ class FriendDb extends DataClass implements Insertable<FriendDb> {
     );
   }
 
-  factory FriendDb.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory FriendDb.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FriendDb(
       uid: serializer.fromJson<String>(json['uid']),
@@ -657,14 +777,17 @@ class FriendDb extends DataClass implements Insertable<FriendDb> {
     };
   }
 
-  FriendDb copyWith(
-          {String? uid, String? status, String? createdBy, String? friend}) =>
-      FriendDb(
-        uid: uid ?? this.uid,
-        status: status ?? this.status,
-        createdBy: createdBy ?? this.createdBy,
-        friend: friend ?? this.friend,
-      );
+  FriendDb copyWith({
+    String? uid,
+    String? status,
+    String? createdBy,
+    String? friend,
+  }) => FriendDb(
+    uid: uid ?? this.uid,
+    status: status ?? this.status,
+    createdBy: createdBy ?? this.createdBy,
+    friend: friend ?? this.friend,
+  );
   FriendDb copyWithCompanion(FriendsTableCompanion data) {
     return FriendDb(
       uid: data.uid.present ? data.uid.value : this.uid,
@@ -716,10 +839,10 @@ class FriendsTableCompanion extends UpdateCompanion<FriendDb> {
     required String createdBy,
     required String friend,
     this.rowid = const Value.absent(),
-  })  : uid = Value(uid),
-        status = Value(status),
-        createdBy = Value(createdBy),
-        friend = Value(friend);
+  }) : uid = Value(uid),
+       status = Value(status),
+       createdBy = Value(createdBy),
+       friend = Value(friend);
   static Insertable<FriendDb> custom({
     Expression<String>? uid,
     Expression<String>? status,
@@ -736,12 +859,13 @@ class FriendsTableCompanion extends UpdateCompanion<FriendDb> {
     });
   }
 
-  FriendsTableCompanion copyWith(
-      {Value<String>? uid,
-      Value<String>? status,
-      Value<String>? createdBy,
-      Value<String>? friend,
-      Value<int>? rowid}) {
+  FriendsTableCompanion copyWith({
+    Value<String>? uid,
+    Value<String>? status,
+    Value<String>? createdBy,
+    Value<String>? friend,
+    Value<int>? rowid,
+  }) {
     return FriendsTableCompanion(
       uid: uid ?? this.uid,
       status: status ?? this.status,
@@ -794,22 +918,35 @@ class $ServicesTableTable extends ServicesTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  static const VerificationMeta _groupIdMeta =
-      const VerificationMeta('groupId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
   @override
   late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
-      'group_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _serviceMeta =
-      const VerificationMeta('service');
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _serviceMeta = const VerificationMeta(
+    'service',
+  );
   @override
   late final GeneratedColumn<String> service = GeneratedColumn<String>(
-      'service', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'service',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [id, groupId, service];
   @override
@@ -818,8 +955,10 @@ class $ServicesTableTable extends ServicesTable
   String get actualTableName => $name;
   static const String $name = 'services_table';
   @override
-  VerificationContext validateIntegrity(Insertable<ServiceDb> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<ServiceDb> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -828,14 +967,18 @@ class $ServicesTableTable extends ServicesTable
       context.missing(_idMeta);
     }
     if (data.containsKey('group_id')) {
-      context.handle(_groupIdMeta,
-          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupIdMeta);
     }
     if (data.containsKey('service')) {
-      context.handle(_serviceMeta,
-          service.isAcceptableOrUnknown(data['service']!, _serviceMeta));
+      context.handle(
+        _serviceMeta,
+        service.isAcceptableOrUnknown(data['service']!, _serviceMeta),
+      );
     } else if (isInserting) {
       context.missing(_serviceMeta);
     }
@@ -848,12 +991,21 @@ class $ServicesTableTable extends ServicesTable
   ServiceDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ServiceDb(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      groupId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
-      service: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}service'])!,
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}id'],
+          )!,
+      groupId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group_id'],
+          )!,
+      service:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}service'],
+          )!,
     );
   }
 
@@ -867,8 +1019,11 @@ class ServiceDb extends DataClass implements Insertable<ServiceDb> {
   final String id;
   final String groupId;
   final String service;
-  const ServiceDb(
-      {required this.id, required this.groupId, required this.service});
+  const ServiceDb({
+    required this.id,
+    required this.groupId,
+    required this.service,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -886,8 +1041,10 @@ class ServiceDb extends DataClass implements Insertable<ServiceDb> {
     );
   }
 
-  factory ServiceDb.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory ServiceDb.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ServiceDb(
       id: serializer.fromJson<String>(json['id']),
@@ -956,9 +1113,9 @@ class ServicesTableCompanion extends UpdateCompanion<ServiceDb> {
     required String groupId,
     required String service,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        groupId = Value(groupId),
-        service = Value(service);
+  }) : id = Value(id),
+       groupId = Value(groupId),
+       service = Value(service);
   static Insertable<ServiceDb> custom({
     Expression<String>? id,
     Expression<String>? groupId,
@@ -973,11 +1130,12 @@ class ServicesTableCompanion extends UpdateCompanion<ServiceDb> {
     });
   }
 
-  ServicesTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? groupId,
-      Value<String>? service,
-      Value<int>? rowid}) {
+  ServicesTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? groupId,
+    Value<String>? service,
+    Value<int>? rowid,
+  }) {
     return ServicesTableCompanion(
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
@@ -1025,22 +1183,35 @@ class $PaymentsTableTable extends PaymentsTable
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  static const VerificationMeta _groupIdMeta =
-      const VerificationMeta('groupId');
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
   @override
   late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
-      'group_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _paymentMeta =
-      const VerificationMeta('payment');
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _paymentMeta = const VerificationMeta(
+    'payment',
+  );
   @override
   late final GeneratedColumn<String> payment = GeneratedColumn<String>(
-      'payment', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'payment',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [id, groupId, payment];
   @override
@@ -1049,8 +1220,10 @@ class $PaymentsTableTable extends PaymentsTable
   String get actualTableName => $name;
   static const String $name = 'payments_table';
   @override
-  VerificationContext validateIntegrity(Insertable<PaymentDb> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<PaymentDb> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -1059,14 +1232,18 @@ class $PaymentsTableTable extends PaymentsTable
       context.missing(_idMeta);
     }
     if (data.containsKey('group_id')) {
-      context.handle(_groupIdMeta,
-          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupIdMeta);
     }
     if (data.containsKey('payment')) {
-      context.handle(_paymentMeta,
-          payment.isAcceptableOrUnknown(data['payment']!, _paymentMeta));
+      context.handle(
+        _paymentMeta,
+        payment.isAcceptableOrUnknown(data['payment']!, _paymentMeta),
+      );
     } else if (isInserting) {
       context.missing(_paymentMeta);
     }
@@ -1079,12 +1256,21 @@ class $PaymentsTableTable extends PaymentsTable
   PaymentDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PaymentDb(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      groupId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
-      payment: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}payment'])!,
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}id'],
+          )!,
+      groupId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group_id'],
+          )!,
+      payment:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}payment'],
+          )!,
     );
   }
 
@@ -1098,8 +1284,11 @@ class PaymentDb extends DataClass implements Insertable<PaymentDb> {
   final String id;
   final String groupId;
   final String payment;
-  const PaymentDb(
-      {required this.id, required this.groupId, required this.payment});
+  const PaymentDb({
+    required this.id,
+    required this.groupId,
+    required this.payment,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1117,8 +1306,10 @@ class PaymentDb extends DataClass implements Insertable<PaymentDb> {
     );
   }
 
-  factory PaymentDb.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory PaymentDb.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PaymentDb(
       id: serializer.fromJson<String>(json['id']),
@@ -1187,9 +1378,9 @@ class PaymentsTableCompanion extends UpdateCompanion<PaymentDb> {
     required String groupId,
     required String payment,
     this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        groupId = Value(groupId),
-        payment = Value(payment);
+  }) : id = Value(id),
+       groupId = Value(groupId),
+       payment = Value(payment);
   static Insertable<PaymentDb> custom({
     Expression<String>? id,
     Expression<String>? groupId,
@@ -1204,11 +1395,12 @@ class PaymentsTableCompanion extends UpdateCompanion<PaymentDb> {
     });
   }
 
-  PaymentsTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? groupId,
-      Value<String>? payment,
-      Value<int>? rowid}) {
+  PaymentsTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? groupId,
+    Value<String>? payment,
+    Value<int>? rowid,
+  }) {
     return PaymentsTableCompanion(
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
@@ -1253,23 +1445,37 @@ class $GroupInvitesTableTable extends GroupInvitesTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $GroupInvitesTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _groupIdMeta =
-      const VerificationMeta('groupId');
+  static const VerificationMeta _groupIdMeta = const VerificationMeta(
+    'groupId',
+  );
   @override
   late final GeneratedColumn<String> groupId = GeneratedColumn<String>(
-      'group_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _syncStateMeta =
-      const VerificationMeta('syncState');
+    'group_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _syncStateMeta = const VerificationMeta(
+    'syncState',
+  );
   @override
   late final GeneratedColumn<int> syncState = GeneratedColumn<int>(
-      'sync_state', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'sync_state',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _groupMeta = const VerificationMeta('group');
   @override
   late final GeneratedColumn<String> group = GeneratedColumn<String>(
-      'group', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'group',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [groupId, syncState, group];
   @override
@@ -1278,25 +1484,33 @@ class $GroupInvitesTableTable extends GroupInvitesTable
   String get actualTableName => $name;
   static const String $name = 'group_invites_table';
   @override
-  VerificationContext validateIntegrity(Insertable<GroupInviteDb> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<GroupInviteDb> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('group_id')) {
-      context.handle(_groupIdMeta,
-          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+      context.handle(
+        _groupIdMeta,
+        groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupIdMeta);
     }
     if (data.containsKey('sync_state')) {
-      context.handle(_syncStateMeta,
-          syncState.isAcceptableOrUnknown(data['sync_state']!, _syncStateMeta));
+      context.handle(
+        _syncStateMeta,
+        syncState.isAcceptableOrUnknown(data['sync_state']!, _syncStateMeta),
+      );
     } else if (isInserting) {
       context.missing(_syncStateMeta);
     }
     if (data.containsKey('group')) {
       context.handle(
-          _groupMeta, group.isAcceptableOrUnknown(data['group']!, _groupMeta));
+        _groupMeta,
+        group.isAcceptableOrUnknown(data['group']!, _groupMeta),
+      );
     } else if (isInserting) {
       context.missing(_groupMeta);
     }
@@ -1309,12 +1523,21 @@ class $GroupInvitesTableTable extends GroupInvitesTable
   GroupInviteDb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return GroupInviteDb(
-      groupId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group_id'])!,
-      syncState: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}sync_state'])!,
-      group: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}group'])!,
+      groupId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group_id'],
+          )!,
+      syncState:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}sync_state'],
+          )!,
+      group:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}group'],
+          )!,
     );
   }
 
@@ -1328,8 +1551,11 @@ class GroupInviteDb extends DataClass implements Insertable<GroupInviteDb> {
   final String groupId;
   final int syncState;
   final String group;
-  const GroupInviteDb(
-      {required this.groupId, required this.syncState, required this.group});
+  const GroupInviteDb({
+    required this.groupId,
+    required this.syncState,
+    required this.group,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1347,8 +1573,10 @@ class GroupInviteDb extends DataClass implements Insertable<GroupInviteDb> {
     );
   }
 
-  factory GroupInviteDb.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory GroupInviteDb.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GroupInviteDb(
       groupId: serializer.fromJson<String>(json['groupId']),
@@ -1417,9 +1645,9 @@ class GroupInvitesTableCompanion extends UpdateCompanion<GroupInviteDb> {
     required int syncState,
     required String group,
     this.rowid = const Value.absent(),
-  })  : groupId = Value(groupId),
-        syncState = Value(syncState),
-        group = Value(group);
+  }) : groupId = Value(groupId),
+       syncState = Value(syncState),
+       group = Value(group);
   static Insertable<GroupInviteDb> custom({
     Expression<String>? groupId,
     Expression<int>? syncState,
@@ -1434,11 +1662,12 @@ class GroupInvitesTableCompanion extends UpdateCompanion<GroupInviteDb> {
     });
   }
 
-  GroupInvitesTableCompanion copyWith(
-      {Value<String>? groupId,
-      Value<int>? syncState,
-      Value<String>? group,
-      Value<int>? rowid}) {
+  GroupInvitesTableCompanion copyWith({
+    Value<String>? groupId,
+    Value<int>? syncState,
+    Value<String>? group,
+    Value<int>? rowid,
+  }) {
     return GroupInvitesTableCompanion(
       groupId: groupId ?? this.groupId,
       syncState: syncState ?? this.syncState,
@@ -1489,41 +1718,43 @@ abstract class _$SplitsbyDatabase extends GeneratedDatabase {
   late final $GroupInvitesTableTable groupInvitesTable =
       $GroupInvitesTableTable(this);
   late final GroupsDAO groupsDAO = GroupsDAO(this as SplitsbyDatabase);
-  late final GroupExpenseDAO groupExpenseDAO =
-      GroupExpenseDAO(this as SplitsbyDatabase);
+  late final GroupExpenseDAO groupExpenseDAO = GroupExpenseDAO(
+    this as SplitsbyDatabase,
+  );
   late final ServicesDao servicesDao = ServicesDao(this as SplitsbyDatabase);
   late final FriendsDAO friendsDAO = FriendsDAO(this as SplitsbyDatabase);
   late final PaymentsDAO paymentsDAO = PaymentsDAO(this as SplitsbyDatabase);
-  late final GroupInvitesDAO groupInvitesDAO =
-      GroupInvitesDAO(this as SplitsbyDatabase);
+  late final GroupInvitesDAO groupInvitesDAO = GroupInvitesDAO(
+    this as SplitsbyDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        groupsTable,
-        groupExpenseTable,
-        friendsTable,
-        servicesTable,
-        paymentsTable,
-        groupInvitesTable
-      ];
+    groupsTable,
+    groupExpenseTable,
+    friendsTable,
+    servicesTable,
+    paymentsTable,
+    groupInvitesTable,
+  ];
 }
 
-typedef $$GroupsTableTableCreateCompanionBuilder = GroupsTableCompanion
-    Function({
-  required String groupId,
-  Value<int?> lastUpdated,
-  required String group,
-  Value<int> rowid,
-});
-typedef $$GroupsTableTableUpdateCompanionBuilder = GroupsTableCompanion
-    Function({
-  Value<String> groupId,
-  Value<int?> lastUpdated,
-  Value<String> group,
-  Value<int> rowid,
-});
+typedef $$GroupsTableTableCreateCompanionBuilder =
+    GroupsTableCompanion Function({
+      required String groupId,
+      Value<int?> lastUpdated,
+      required String group,
+      Value<int> rowid,
+    });
+typedef $$GroupsTableTableUpdateCompanionBuilder =
+    GroupsTableCompanion Function({
+      Value<String> groupId,
+      Value<int?> lastUpdated,
+      Value<String> group,
+      Value<int> rowid,
+    });
 
 class $$GroupsTableTableFilterComposer
     extends Composer<_$SplitsbyDatabase, $GroupsTableTable> {
@@ -1535,13 +1766,19 @@ class $$GroupsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnFilters(column));
+    column: $table.groupId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get lastUpdated => $composableBuilder(
-      column: $table.lastUpdated, builder: (column) => ColumnFilters(column));
+    column: $table.lastUpdated,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get group => $composableBuilder(
-      column: $table.group, builder: (column) => ColumnFilters(column));
+    column: $table.group,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$GroupsTableTableOrderingComposer
@@ -1554,13 +1791,19 @@ class $$GroupsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+    column: $table.groupId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get lastUpdated => $composableBuilder(
-      column: $table.lastUpdated, builder: (column) => ColumnOrderings(column));
+    column: $table.lastUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get group => $composableBuilder(
-      column: $table.group, builder: (column) => ColumnOrderings(column));
+    column: $table.group,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$GroupsTableTableAnnotationComposer
@@ -1576,93 +1819,113 @@ class $$GroupsTableTableAnnotationComposer
       $composableBuilder(column: $table.groupId, builder: (column) => column);
 
   GeneratedColumn<int> get lastUpdated => $composableBuilder(
-      column: $table.lastUpdated, builder: (column) => column);
+    column: $table.lastUpdated,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get group =>
       $composableBuilder(column: $table.group, builder: (column) => column);
 }
 
-class $$GroupsTableTableTableManager extends RootTableManager<
-    _$SplitsbyDatabase,
-    $GroupsTableTable,
-    GroupDb,
-    $$GroupsTableTableFilterComposer,
-    $$GroupsTableTableOrderingComposer,
-    $$GroupsTableTableAnnotationComposer,
-    $$GroupsTableTableCreateCompanionBuilder,
-    $$GroupsTableTableUpdateCompanionBuilder,
-    (GroupDb, BaseReferences<_$SplitsbyDatabase, $GroupsTableTable, GroupDb>),
-    GroupDb,
-    PrefetchHooks Function()> {
+class $$GroupsTableTableTableManager
+    extends
+        RootTableManager<
+          _$SplitsbyDatabase,
+          $GroupsTableTable,
+          GroupDb,
+          $$GroupsTableTableFilterComposer,
+          $$GroupsTableTableOrderingComposer,
+          $$GroupsTableTableAnnotationComposer,
+          $$GroupsTableTableCreateCompanionBuilder,
+          $$GroupsTableTableUpdateCompanionBuilder,
+          (
+            GroupDb,
+            BaseReferences<_$SplitsbyDatabase, $GroupsTableTable, GroupDb>,
+          ),
+          GroupDb,
+          PrefetchHooks Function()
+        > {
   $$GroupsTableTableTableManager(_$SplitsbyDatabase db, $GroupsTableTable table)
-      : super(TableManagerState(
+    : super(
+        TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$GroupsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$GroupsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$GroupsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> groupId = const Value.absent(),
-            Value<int?> lastUpdated = const Value.absent(),
-            Value<String> group = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GroupsTableCompanion(
-            groupId: groupId,
-            lastUpdated: lastUpdated,
-            group: group,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String groupId,
-            Value<int?> lastUpdated = const Value.absent(),
-            required String group,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GroupsTableCompanion.insert(
-            groupId: groupId,
-            lastUpdated: lastUpdated,
-            group: group,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          createFilteringComposer:
+              () => $$GroupsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$GroupsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () =>
+                  $$GroupsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> groupId = const Value.absent(),
+                Value<int?> lastUpdated = const Value.absent(),
+                Value<String> group = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GroupsTableCompanion(
+                groupId: groupId,
+                lastUpdated: lastUpdated,
+                group: group,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String groupId,
+                Value<int?> lastUpdated = const Value.absent(),
+                required String group,
+                Value<int> rowid = const Value.absent(),
+              }) => GroupsTableCompanion.insert(
+                groupId: groupId,
+                lastUpdated: lastUpdated,
+                group: group,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$GroupsTableTableProcessedTableManager = ProcessedTableManager<
-    _$SplitsbyDatabase,
-    $GroupsTableTable,
-    GroupDb,
-    $$GroupsTableTableFilterComposer,
-    $$GroupsTableTableOrderingComposer,
-    $$GroupsTableTableAnnotationComposer,
-    $$GroupsTableTableCreateCompanionBuilder,
-    $$GroupsTableTableUpdateCompanionBuilder,
-    (GroupDb, BaseReferences<_$SplitsbyDatabase, $GroupsTableTable, GroupDb>),
-    GroupDb,
-    PrefetchHooks Function()>;
-typedef $$GroupExpenseTableTableCreateCompanionBuilder
-    = GroupExpenseTableCompanion Function({
-  required String id,
-  required String groupId,
-  required String groupExpense,
-  required int syncState,
-  Value<int> rowid,
-});
-typedef $$GroupExpenseTableTableUpdateCompanionBuilder
-    = GroupExpenseTableCompanion Function({
-  Value<String> id,
-  Value<String> groupId,
-  Value<String> groupExpense,
-  Value<int> syncState,
-  Value<int> rowid,
-});
+typedef $$GroupsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SplitsbyDatabase,
+      $GroupsTableTable,
+      GroupDb,
+      $$GroupsTableTableFilterComposer,
+      $$GroupsTableTableOrderingComposer,
+      $$GroupsTableTableAnnotationComposer,
+      $$GroupsTableTableCreateCompanionBuilder,
+      $$GroupsTableTableUpdateCompanionBuilder,
+      (GroupDb, BaseReferences<_$SplitsbyDatabase, $GroupsTableTable, GroupDb>),
+      GroupDb,
+      PrefetchHooks Function()
+    >;
+typedef $$GroupExpenseTableTableCreateCompanionBuilder =
+    GroupExpenseTableCompanion Function({
+      required String id,
+      required String groupId,
+      required String groupExpense,
+      required int syncState,
+      Value<int> rowid,
+    });
+typedef $$GroupExpenseTableTableUpdateCompanionBuilder =
+    GroupExpenseTableCompanion Function({
+      Value<String> id,
+      Value<String> groupId,
+      Value<String> groupExpense,
+      Value<int> syncState,
+      Value<int> rowid,
+    });
 
 class $$GroupExpenseTableTableFilterComposer
     extends Composer<_$SplitsbyDatabase, $GroupExpenseTableTable> {
@@ -1674,16 +1937,24 @@ class $$GroupExpenseTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnFilters(column));
+    column: $table.groupId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get groupExpense => $composableBuilder(
-      column: $table.groupExpense, builder: (column) => ColumnFilters(column));
+    column: $table.groupExpense,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get syncState => $composableBuilder(
-      column: $table.syncState, builder: (column) => ColumnFilters(column));
+    column: $table.syncState,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$GroupExpenseTableTableOrderingComposer
@@ -1696,17 +1967,24 @@ class $$GroupExpenseTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+    column: $table.groupId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get groupExpense => $composableBuilder(
-      column: $table.groupExpense,
-      builder: (column) => ColumnOrderings(column));
+    column: $table.groupExpense,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get syncState => $composableBuilder(
-      column: $table.syncState, builder: (column) => ColumnOrderings(column));
+    column: $table.syncState,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$GroupExpenseTableTableAnnotationComposer
@@ -1725,107 +2003,138 @@ class $$GroupExpenseTableTableAnnotationComposer
       $composableBuilder(column: $table.groupId, builder: (column) => column);
 
   GeneratedColumn<String> get groupExpense => $composableBuilder(
-      column: $table.groupExpense, builder: (column) => column);
+    column: $table.groupExpense,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get syncState =>
       $composableBuilder(column: $table.syncState, builder: (column) => column);
 }
 
-class $$GroupExpenseTableTableTableManager extends RootTableManager<
-    _$SplitsbyDatabase,
-    $GroupExpenseTableTable,
-    GroupExpenseDb,
-    $$GroupExpenseTableTableFilterComposer,
-    $$GroupExpenseTableTableOrderingComposer,
-    $$GroupExpenseTableTableAnnotationComposer,
-    $$GroupExpenseTableTableCreateCompanionBuilder,
-    $$GroupExpenseTableTableUpdateCompanionBuilder,
-    (
-      GroupExpenseDb,
-      BaseReferences<_$SplitsbyDatabase, $GroupExpenseTableTable,
-          GroupExpenseDb>
-    ),
-    GroupExpenseDb,
-    PrefetchHooks Function()> {
+class $$GroupExpenseTableTableTableManager
+    extends
+        RootTableManager<
+          _$SplitsbyDatabase,
+          $GroupExpenseTableTable,
+          GroupExpenseDb,
+          $$GroupExpenseTableTableFilterComposer,
+          $$GroupExpenseTableTableOrderingComposer,
+          $$GroupExpenseTableTableAnnotationComposer,
+          $$GroupExpenseTableTableCreateCompanionBuilder,
+          $$GroupExpenseTableTableUpdateCompanionBuilder,
+          (
+            GroupExpenseDb,
+            BaseReferences<
+              _$SplitsbyDatabase,
+              $GroupExpenseTableTable,
+              GroupExpenseDb
+            >,
+          ),
+          GroupExpenseDb,
+          PrefetchHooks Function()
+        > {
   $$GroupExpenseTableTableTableManager(
-      _$SplitsbyDatabase db, $GroupExpenseTableTable table)
-      : super(TableManagerState(
+    _$SplitsbyDatabase db,
+    $GroupExpenseTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$GroupExpenseTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$GroupExpenseTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$GroupExpenseTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> groupId = const Value.absent(),
-            Value<String> groupExpense = const Value.absent(),
-            Value<int> syncState = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GroupExpenseTableCompanion(
-            id: id,
-            groupId: groupId,
-            groupExpense: groupExpense,
-            syncState: syncState,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String groupId,
-            required String groupExpense,
-            required int syncState,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GroupExpenseTableCompanion.insert(
-            id: id,
-            groupId: groupId,
-            groupExpense: groupExpense,
-            syncState: syncState,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          createFilteringComposer:
+              () => $$GroupExpenseTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer:
+              () => $$GroupExpenseTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$GroupExpenseTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> groupId = const Value.absent(),
+                Value<String> groupExpense = const Value.absent(),
+                Value<int> syncState = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GroupExpenseTableCompanion(
+                id: id,
+                groupId: groupId,
+                groupExpense: groupExpense,
+                syncState: syncState,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String groupId,
+                required String groupExpense,
+                required int syncState,
+                Value<int> rowid = const Value.absent(),
+              }) => GroupExpenseTableCompanion.insert(
+                id: id,
+                groupId: groupId,
+                groupExpense: groupExpense,
+                syncState: syncState,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$GroupExpenseTableTableProcessedTableManager = ProcessedTableManager<
-    _$SplitsbyDatabase,
-    $GroupExpenseTableTable,
-    GroupExpenseDb,
-    $$GroupExpenseTableTableFilterComposer,
-    $$GroupExpenseTableTableOrderingComposer,
-    $$GroupExpenseTableTableAnnotationComposer,
-    $$GroupExpenseTableTableCreateCompanionBuilder,
-    $$GroupExpenseTableTableUpdateCompanionBuilder,
-    (
+typedef $$GroupExpenseTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SplitsbyDatabase,
+      $GroupExpenseTableTable,
       GroupExpenseDb,
-      BaseReferences<_$SplitsbyDatabase, $GroupExpenseTableTable,
-          GroupExpenseDb>
-    ),
-    GroupExpenseDb,
-    PrefetchHooks Function()>;
-typedef $$FriendsTableTableCreateCompanionBuilder = FriendsTableCompanion
-    Function({
-  required String uid,
-  required String status,
-  required String createdBy,
-  required String friend,
-  Value<int> rowid,
-});
-typedef $$FriendsTableTableUpdateCompanionBuilder = FriendsTableCompanion
-    Function({
-  Value<String> uid,
-  Value<String> status,
-  Value<String> createdBy,
-  Value<String> friend,
-  Value<int> rowid,
-});
+      $$GroupExpenseTableTableFilterComposer,
+      $$GroupExpenseTableTableOrderingComposer,
+      $$GroupExpenseTableTableAnnotationComposer,
+      $$GroupExpenseTableTableCreateCompanionBuilder,
+      $$GroupExpenseTableTableUpdateCompanionBuilder,
+      (
+        GroupExpenseDb,
+        BaseReferences<
+          _$SplitsbyDatabase,
+          $GroupExpenseTableTable,
+          GroupExpenseDb
+        >,
+      ),
+      GroupExpenseDb,
+      PrefetchHooks Function()
+    >;
+typedef $$FriendsTableTableCreateCompanionBuilder =
+    FriendsTableCompanion Function({
+      required String uid,
+      required String status,
+      required String createdBy,
+      required String friend,
+      Value<int> rowid,
+    });
+typedef $$FriendsTableTableUpdateCompanionBuilder =
+    FriendsTableCompanion Function({
+      Value<String> uid,
+      Value<String> status,
+      Value<String> createdBy,
+      Value<String> friend,
+      Value<int> rowid,
+    });
 
 class $$FriendsTableTableFilterComposer
     extends Composer<_$SplitsbyDatabase, $FriendsTableTable> {
@@ -1837,16 +2146,24 @@ class $$FriendsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get uid => $composableBuilder(
-      column: $table.uid, builder: (column) => ColumnFilters(column));
+    column: $table.uid,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnFilters(column));
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get createdBy => $composableBuilder(
-      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+    column: $table.createdBy,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get friend => $composableBuilder(
-      column: $table.friend, builder: (column) => ColumnFilters(column));
+    column: $table.friend,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$FriendsTableTableOrderingComposer
@@ -1859,16 +2176,24 @@ class $$FriendsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get uid => $composableBuilder(
-      column: $table.uid, builder: (column) => ColumnOrderings(column));
+    column: $table.uid,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get status => $composableBuilder(
-      column: $table.status, builder: (column) => ColumnOrderings(column));
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get createdBy => $composableBuilder(
-      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+    column: $table.createdBy,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get friend => $composableBuilder(
-      column: $table.friend, builder: (column) => ColumnOrderings(column));
+    column: $table.friend,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$FriendsTableTableAnnotationComposer
@@ -1893,96 +2218,112 @@ class $$FriendsTableTableAnnotationComposer
       $composableBuilder(column: $table.friend, builder: (column) => column);
 }
 
-class $$FriendsTableTableTableManager extends RootTableManager<
-    _$SplitsbyDatabase,
-    $FriendsTableTable,
-    FriendDb,
-    $$FriendsTableTableFilterComposer,
-    $$FriendsTableTableOrderingComposer,
-    $$FriendsTableTableAnnotationComposer,
-    $$FriendsTableTableCreateCompanionBuilder,
-    $$FriendsTableTableUpdateCompanionBuilder,
-    (
-      FriendDb,
-      BaseReferences<_$SplitsbyDatabase, $FriendsTableTable, FriendDb>
-    ),
-    FriendDb,
-    PrefetchHooks Function()> {
+class $$FriendsTableTableTableManager
+    extends
+        RootTableManager<
+          _$SplitsbyDatabase,
+          $FriendsTableTable,
+          FriendDb,
+          $$FriendsTableTableFilterComposer,
+          $$FriendsTableTableOrderingComposer,
+          $$FriendsTableTableAnnotationComposer,
+          $$FriendsTableTableCreateCompanionBuilder,
+          $$FriendsTableTableUpdateCompanionBuilder,
+          (
+            FriendDb,
+            BaseReferences<_$SplitsbyDatabase, $FriendsTableTable, FriendDb>,
+          ),
+          FriendDb,
+          PrefetchHooks Function()
+        > {
   $$FriendsTableTableTableManager(
-      _$SplitsbyDatabase db, $FriendsTableTable table)
-      : super(TableManagerState(
+    _$SplitsbyDatabase db,
+    $FriendsTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$FriendsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$FriendsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$FriendsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> uid = const Value.absent(),
-            Value<String> status = const Value.absent(),
-            Value<String> createdBy = const Value.absent(),
-            Value<String> friend = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              FriendsTableCompanion(
-            uid: uid,
-            status: status,
-            createdBy: createdBy,
-            friend: friend,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String uid,
-            required String status,
-            required String createdBy,
-            required String friend,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              FriendsTableCompanion.insert(
-            uid: uid,
-            status: status,
-            createdBy: createdBy,
-            friend: friend,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          createFilteringComposer:
+              () => $$FriendsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$FriendsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () =>
+                  $$FriendsTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> uid = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> createdBy = const Value.absent(),
+                Value<String> friend = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FriendsTableCompanion(
+                uid: uid,
+                status: status,
+                createdBy: createdBy,
+                friend: friend,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String uid,
+                required String status,
+                required String createdBy,
+                required String friend,
+                Value<int> rowid = const Value.absent(),
+              }) => FriendsTableCompanion.insert(
+                uid: uid,
+                status: status,
+                createdBy: createdBy,
+                friend: friend,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$FriendsTableTableProcessedTableManager = ProcessedTableManager<
-    _$SplitsbyDatabase,
-    $FriendsTableTable,
-    FriendDb,
-    $$FriendsTableTableFilterComposer,
-    $$FriendsTableTableOrderingComposer,
-    $$FriendsTableTableAnnotationComposer,
-    $$FriendsTableTableCreateCompanionBuilder,
-    $$FriendsTableTableUpdateCompanionBuilder,
-    (
+typedef $$FriendsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SplitsbyDatabase,
+      $FriendsTableTable,
       FriendDb,
-      BaseReferences<_$SplitsbyDatabase, $FriendsTableTable, FriendDb>
-    ),
-    FriendDb,
-    PrefetchHooks Function()>;
-typedef $$ServicesTableTableCreateCompanionBuilder = ServicesTableCompanion
-    Function({
-  required String id,
-  required String groupId,
-  required String service,
-  Value<int> rowid,
-});
-typedef $$ServicesTableTableUpdateCompanionBuilder = ServicesTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> groupId,
-  Value<String> service,
-  Value<int> rowid,
-});
+      $$FriendsTableTableFilterComposer,
+      $$FriendsTableTableOrderingComposer,
+      $$FriendsTableTableAnnotationComposer,
+      $$FriendsTableTableCreateCompanionBuilder,
+      $$FriendsTableTableUpdateCompanionBuilder,
+      (
+        FriendDb,
+        BaseReferences<_$SplitsbyDatabase, $FriendsTableTable, FriendDb>,
+      ),
+      FriendDb,
+      PrefetchHooks Function()
+    >;
+typedef $$ServicesTableTableCreateCompanionBuilder =
+    ServicesTableCompanion Function({
+      required String id,
+      required String groupId,
+      required String service,
+      Value<int> rowid,
+    });
+typedef $$ServicesTableTableUpdateCompanionBuilder =
+    ServicesTableCompanion Function({
+      Value<String> id,
+      Value<String> groupId,
+      Value<String> service,
+      Value<int> rowid,
+    });
 
 class $$ServicesTableTableFilterComposer
     extends Composer<_$SplitsbyDatabase, $ServicesTableTable> {
@@ -1994,13 +2335,19 @@ class $$ServicesTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnFilters(column));
+    column: $table.groupId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get service => $composableBuilder(
-      column: $table.service, builder: (column) => ColumnFilters(column));
+    column: $table.service,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$ServicesTableTableOrderingComposer
@@ -2013,13 +2360,19 @@ class $$ServicesTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+    column: $table.groupId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get service => $composableBuilder(
-      column: $table.service, builder: (column) => ColumnOrderings(column));
+    column: $table.service,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ServicesTableTableAnnotationComposer
@@ -2041,92 +2394,111 @@ class $$ServicesTableTableAnnotationComposer
       $composableBuilder(column: $table.service, builder: (column) => column);
 }
 
-class $$ServicesTableTableTableManager extends RootTableManager<
-    _$SplitsbyDatabase,
-    $ServicesTableTable,
-    ServiceDb,
-    $$ServicesTableTableFilterComposer,
-    $$ServicesTableTableOrderingComposer,
-    $$ServicesTableTableAnnotationComposer,
-    $$ServicesTableTableCreateCompanionBuilder,
-    $$ServicesTableTableUpdateCompanionBuilder,
-    (
-      ServiceDb,
-      BaseReferences<_$SplitsbyDatabase, $ServicesTableTable, ServiceDb>
-    ),
-    ServiceDb,
-    PrefetchHooks Function()> {
+class $$ServicesTableTableTableManager
+    extends
+        RootTableManager<
+          _$SplitsbyDatabase,
+          $ServicesTableTable,
+          ServiceDb,
+          $$ServicesTableTableFilterComposer,
+          $$ServicesTableTableOrderingComposer,
+          $$ServicesTableTableAnnotationComposer,
+          $$ServicesTableTableCreateCompanionBuilder,
+          $$ServicesTableTableUpdateCompanionBuilder,
+          (
+            ServiceDb,
+            BaseReferences<_$SplitsbyDatabase, $ServicesTableTable, ServiceDb>,
+          ),
+          ServiceDb,
+          PrefetchHooks Function()
+        > {
   $$ServicesTableTableTableManager(
-      _$SplitsbyDatabase db, $ServicesTableTable table)
-      : super(TableManagerState(
+    _$SplitsbyDatabase db,
+    $ServicesTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$ServicesTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ServicesTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$ServicesTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> groupId = const Value.absent(),
-            Value<String> service = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ServicesTableCompanion(
-            id: id,
-            groupId: groupId,
-            service: service,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String groupId,
-            required String service,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              ServicesTableCompanion.insert(
-            id: id,
-            groupId: groupId,
-            service: service,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          createFilteringComposer:
+              () => $$ServicesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () =>
+                  $$ServicesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$ServicesTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> groupId = const Value.absent(),
+                Value<String> service = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ServicesTableCompanion(
+                id: id,
+                groupId: groupId,
+                service: service,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String groupId,
+                required String service,
+                Value<int> rowid = const Value.absent(),
+              }) => ServicesTableCompanion.insert(
+                id: id,
+                groupId: groupId,
+                service: service,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$ServicesTableTableProcessedTableManager = ProcessedTableManager<
-    _$SplitsbyDatabase,
-    $ServicesTableTable,
-    ServiceDb,
-    $$ServicesTableTableFilterComposer,
-    $$ServicesTableTableOrderingComposer,
-    $$ServicesTableTableAnnotationComposer,
-    $$ServicesTableTableCreateCompanionBuilder,
-    $$ServicesTableTableUpdateCompanionBuilder,
-    (
+typedef $$ServicesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SplitsbyDatabase,
+      $ServicesTableTable,
       ServiceDb,
-      BaseReferences<_$SplitsbyDatabase, $ServicesTableTable, ServiceDb>
-    ),
-    ServiceDb,
-    PrefetchHooks Function()>;
-typedef $$PaymentsTableTableCreateCompanionBuilder = PaymentsTableCompanion
-    Function({
-  required String id,
-  required String groupId,
-  required String payment,
-  Value<int> rowid,
-});
-typedef $$PaymentsTableTableUpdateCompanionBuilder = PaymentsTableCompanion
-    Function({
-  Value<String> id,
-  Value<String> groupId,
-  Value<String> payment,
-  Value<int> rowid,
-});
+      $$ServicesTableTableFilterComposer,
+      $$ServicesTableTableOrderingComposer,
+      $$ServicesTableTableAnnotationComposer,
+      $$ServicesTableTableCreateCompanionBuilder,
+      $$ServicesTableTableUpdateCompanionBuilder,
+      (
+        ServiceDb,
+        BaseReferences<_$SplitsbyDatabase, $ServicesTableTable, ServiceDb>,
+      ),
+      ServiceDb,
+      PrefetchHooks Function()
+    >;
+typedef $$PaymentsTableTableCreateCompanionBuilder =
+    PaymentsTableCompanion Function({
+      required String id,
+      required String groupId,
+      required String payment,
+      Value<int> rowid,
+    });
+typedef $$PaymentsTableTableUpdateCompanionBuilder =
+    PaymentsTableCompanion Function({
+      Value<String> id,
+      Value<String> groupId,
+      Value<String> payment,
+      Value<int> rowid,
+    });
 
 class $$PaymentsTableTableFilterComposer
     extends Composer<_$SplitsbyDatabase, $PaymentsTableTable> {
@@ -2138,13 +2510,19 @@ class $$PaymentsTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnFilters(column));
+    column: $table.groupId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get payment => $composableBuilder(
-      column: $table.payment, builder: (column) => ColumnFilters(column));
+    column: $table.payment,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$PaymentsTableTableOrderingComposer
@@ -2157,13 +2535,19 @@ class $$PaymentsTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+    column: $table.groupId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get payment => $composableBuilder(
-      column: $table.payment, builder: (column) => ColumnOrderings(column));
+    column: $table.payment,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PaymentsTableTableAnnotationComposer
@@ -2185,92 +2569,111 @@ class $$PaymentsTableTableAnnotationComposer
       $composableBuilder(column: $table.payment, builder: (column) => column);
 }
 
-class $$PaymentsTableTableTableManager extends RootTableManager<
-    _$SplitsbyDatabase,
-    $PaymentsTableTable,
-    PaymentDb,
-    $$PaymentsTableTableFilterComposer,
-    $$PaymentsTableTableOrderingComposer,
-    $$PaymentsTableTableAnnotationComposer,
-    $$PaymentsTableTableCreateCompanionBuilder,
-    $$PaymentsTableTableUpdateCompanionBuilder,
-    (
-      PaymentDb,
-      BaseReferences<_$SplitsbyDatabase, $PaymentsTableTable, PaymentDb>
-    ),
-    PaymentDb,
-    PrefetchHooks Function()> {
+class $$PaymentsTableTableTableManager
+    extends
+        RootTableManager<
+          _$SplitsbyDatabase,
+          $PaymentsTableTable,
+          PaymentDb,
+          $$PaymentsTableTableFilterComposer,
+          $$PaymentsTableTableOrderingComposer,
+          $$PaymentsTableTableAnnotationComposer,
+          $$PaymentsTableTableCreateCompanionBuilder,
+          $$PaymentsTableTableUpdateCompanionBuilder,
+          (
+            PaymentDb,
+            BaseReferences<_$SplitsbyDatabase, $PaymentsTableTable, PaymentDb>,
+          ),
+          PaymentDb,
+          PrefetchHooks Function()
+        > {
   $$PaymentsTableTableTableManager(
-      _$SplitsbyDatabase db, $PaymentsTableTable table)
-      : super(TableManagerState(
+    _$SplitsbyDatabase db,
+    $PaymentsTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$PaymentsTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$PaymentsTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$PaymentsTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> groupId = const Value.absent(),
-            Value<String> payment = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              PaymentsTableCompanion(
-            id: id,
-            groupId: groupId,
-            payment: payment,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String groupId,
-            required String payment,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              PaymentsTableCompanion.insert(
-            id: id,
-            groupId: groupId,
-            payment: payment,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          createFilteringComposer:
+              () => $$PaymentsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () =>
+                  $$PaymentsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$PaymentsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> groupId = const Value.absent(),
+                Value<String> payment = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PaymentsTableCompanion(
+                id: id,
+                groupId: groupId,
+                payment: payment,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String groupId,
+                required String payment,
+                Value<int> rowid = const Value.absent(),
+              }) => PaymentsTableCompanion.insert(
+                id: id,
+                groupId: groupId,
+                payment: payment,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$PaymentsTableTableProcessedTableManager = ProcessedTableManager<
-    _$SplitsbyDatabase,
-    $PaymentsTableTable,
-    PaymentDb,
-    $$PaymentsTableTableFilterComposer,
-    $$PaymentsTableTableOrderingComposer,
-    $$PaymentsTableTableAnnotationComposer,
-    $$PaymentsTableTableCreateCompanionBuilder,
-    $$PaymentsTableTableUpdateCompanionBuilder,
-    (
+typedef $$PaymentsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SplitsbyDatabase,
+      $PaymentsTableTable,
       PaymentDb,
-      BaseReferences<_$SplitsbyDatabase, $PaymentsTableTable, PaymentDb>
-    ),
-    PaymentDb,
-    PrefetchHooks Function()>;
-typedef $$GroupInvitesTableTableCreateCompanionBuilder
-    = GroupInvitesTableCompanion Function({
-  required String groupId,
-  required int syncState,
-  required String group,
-  Value<int> rowid,
-});
-typedef $$GroupInvitesTableTableUpdateCompanionBuilder
-    = GroupInvitesTableCompanion Function({
-  Value<String> groupId,
-  Value<int> syncState,
-  Value<String> group,
-  Value<int> rowid,
-});
+      $$PaymentsTableTableFilterComposer,
+      $$PaymentsTableTableOrderingComposer,
+      $$PaymentsTableTableAnnotationComposer,
+      $$PaymentsTableTableCreateCompanionBuilder,
+      $$PaymentsTableTableUpdateCompanionBuilder,
+      (
+        PaymentDb,
+        BaseReferences<_$SplitsbyDatabase, $PaymentsTableTable, PaymentDb>,
+      ),
+      PaymentDb,
+      PrefetchHooks Function()
+    >;
+typedef $$GroupInvitesTableTableCreateCompanionBuilder =
+    GroupInvitesTableCompanion Function({
+      required String groupId,
+      required int syncState,
+      required String group,
+      Value<int> rowid,
+    });
+typedef $$GroupInvitesTableTableUpdateCompanionBuilder =
+    GroupInvitesTableCompanion Function({
+      Value<String> groupId,
+      Value<int> syncState,
+      Value<String> group,
+      Value<int> rowid,
+    });
 
 class $$GroupInvitesTableTableFilterComposer
     extends Composer<_$SplitsbyDatabase, $GroupInvitesTableTable> {
@@ -2282,13 +2685,19 @@ class $$GroupInvitesTableTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnFilters(column));
+    column: $table.groupId,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<int> get syncState => $composableBuilder(
-      column: $table.syncState, builder: (column) => ColumnFilters(column));
+    column: $table.syncState,
+    builder: (column) => ColumnFilters(column),
+  );
 
   ColumnFilters<String> get group => $composableBuilder(
-      column: $table.group, builder: (column) => ColumnFilters(column));
+    column: $table.group,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$GroupInvitesTableTableOrderingComposer
@@ -2301,13 +2710,19 @@ class $$GroupInvitesTableTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get groupId => $composableBuilder(
-      column: $table.groupId, builder: (column) => ColumnOrderings(column));
+    column: $table.groupId,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<int> get syncState => $composableBuilder(
-      column: $table.syncState, builder: (column) => ColumnOrderings(column));
+    column: $table.syncState,
+    builder: (column) => ColumnOrderings(column),
+  );
 
   ColumnOrderings<String> get group => $composableBuilder(
-      column: $table.group, builder: (column) => ColumnOrderings(column));
+    column: $table.group,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$GroupInvitesTableTableAnnotationComposer
@@ -2329,79 +2744,110 @@ class $$GroupInvitesTableTableAnnotationComposer
       $composableBuilder(column: $table.group, builder: (column) => column);
 }
 
-class $$GroupInvitesTableTableTableManager extends RootTableManager<
-    _$SplitsbyDatabase,
-    $GroupInvitesTableTable,
-    GroupInviteDb,
-    $$GroupInvitesTableTableFilterComposer,
-    $$GroupInvitesTableTableOrderingComposer,
-    $$GroupInvitesTableTableAnnotationComposer,
-    $$GroupInvitesTableTableCreateCompanionBuilder,
-    $$GroupInvitesTableTableUpdateCompanionBuilder,
-    (
-      GroupInviteDb,
-      BaseReferences<_$SplitsbyDatabase, $GroupInvitesTableTable, GroupInviteDb>
-    ),
-    GroupInviteDb,
-    PrefetchHooks Function()> {
+class $$GroupInvitesTableTableTableManager
+    extends
+        RootTableManager<
+          _$SplitsbyDatabase,
+          $GroupInvitesTableTable,
+          GroupInviteDb,
+          $$GroupInvitesTableTableFilterComposer,
+          $$GroupInvitesTableTableOrderingComposer,
+          $$GroupInvitesTableTableAnnotationComposer,
+          $$GroupInvitesTableTableCreateCompanionBuilder,
+          $$GroupInvitesTableTableUpdateCompanionBuilder,
+          (
+            GroupInviteDb,
+            BaseReferences<
+              _$SplitsbyDatabase,
+              $GroupInvitesTableTable,
+              GroupInviteDb
+            >,
+          ),
+          GroupInviteDb,
+          PrefetchHooks Function()
+        > {
   $$GroupInvitesTableTableTableManager(
-      _$SplitsbyDatabase db, $GroupInvitesTableTable table)
-      : super(TableManagerState(
+    _$SplitsbyDatabase db,
+    $GroupInvitesTableTable table,
+  ) : super(
+        TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$GroupInvitesTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$GroupInvitesTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$GroupInvitesTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<String> groupId = const Value.absent(),
-            Value<int> syncState = const Value.absent(),
-            Value<String> group = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GroupInvitesTableCompanion(
-            groupId: groupId,
-            syncState: syncState,
-            group: group,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String groupId,
-            required int syncState,
-            required String group,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              GroupInvitesTableCompanion.insert(
-            groupId: groupId,
-            syncState: syncState,
-            group: group,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          createFilteringComposer:
+              () => $$GroupInvitesTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer:
+              () => $$GroupInvitesTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$GroupInvitesTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> groupId = const Value.absent(),
+                Value<int> syncState = const Value.absent(),
+                Value<String> group = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GroupInvitesTableCompanion(
+                groupId: groupId,
+                syncState: syncState,
+                group: group,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String groupId,
+                required int syncState,
+                required String group,
+                Value<int> rowid = const Value.absent(),
+              }) => GroupInvitesTableCompanion.insert(
+                groupId: groupId,
+                syncState: syncState,
+                group: group,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
           prefetchHooksCallback: null,
-        ));
+        ),
+      );
 }
 
-typedef $$GroupInvitesTableTableProcessedTableManager = ProcessedTableManager<
-    _$SplitsbyDatabase,
-    $GroupInvitesTableTable,
-    GroupInviteDb,
-    $$GroupInvitesTableTableFilterComposer,
-    $$GroupInvitesTableTableOrderingComposer,
-    $$GroupInvitesTableTableAnnotationComposer,
-    $$GroupInvitesTableTableCreateCompanionBuilder,
-    $$GroupInvitesTableTableUpdateCompanionBuilder,
-    (
+typedef $$GroupInvitesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SplitsbyDatabase,
+      $GroupInvitesTableTable,
       GroupInviteDb,
-      BaseReferences<_$SplitsbyDatabase, $GroupInvitesTableTable, GroupInviteDb>
-    ),
-    GroupInviteDb,
-    PrefetchHooks Function()>;
+      $$GroupInvitesTableTableFilterComposer,
+      $$GroupInvitesTableTableOrderingComposer,
+      $$GroupInvitesTableTableAnnotationComposer,
+      $$GroupInvitesTableTableCreateCompanionBuilder,
+      $$GroupInvitesTableTableUpdateCompanionBuilder,
+      (
+        GroupInviteDb,
+        BaseReferences<
+          _$SplitsbyDatabase,
+          $GroupInvitesTableTable,
+          GroupInviteDb
+        >,
+      ),
+      GroupInviteDb,
+      PrefetchHooks Function()
+    >;
 
 class $SplitsbyDatabaseManager {
   final _$SplitsbyDatabase _db;

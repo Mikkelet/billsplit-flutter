@@ -7,9 +7,9 @@ part of '../../../data/remote/dtos/currency_dto.dart';
 // **************************************************************************
 
 CurrencyDTO _$CurrencyDTOFromJson(Map<String, dynamic> json) => CurrencyDTO(
-      symbol: json['symbol'] as String,
-      rateSnapshot: json['rateSnapshot'] as num,
-    );
+  symbol: json['symbol'] as String,
+  rateSnapshot: json['rateSnapshot'] as num,
+);
 
 Map<String, dynamic> _$CurrencyDTOToJson(CurrencyDTO instance) =>
     <String, dynamic>{
