@@ -7,7 +7,5 @@ part of '../../../data/remote/requests/delete_expense_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$DeleteExpenseRequestToJson(
-        DeleteExpenseRequest instance) =>
-    <String, dynamic>{
-      'debts': instance.debts.map((e) => e.toJson()).toList(),
-    };
+  DeleteExpenseRequest instance,
+) => <String, dynamic>{'debts': instance.debts.map((e) => e.toJson()).toList()};

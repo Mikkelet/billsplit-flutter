@@ -1,6 +1,5 @@
 import 'package:billsplit_flutter/data/remote/dtos/event_dto.dart';
 import 'package:billsplit_flutter/domain/mappers/currency_mapper.dart';
-import 'package:billsplit_flutter/domain/mappers/groups_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/person_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/shared_expense_mapper.dart';
 import 'package:billsplit_flutter/domain/mappers/surcharge_mapper.dart';
@@ -29,7 +28,7 @@ extension EventDTOExt on EventDTO? {
           payer: expenseDto.payee.toPerson(),
           sharedExpenses: expenseDto.sharedExpenses.toSharedExpense(),
           syncState: SyncState.synced,
-          surcharges: expenseDto.surcharges?.toSurcharges() ?? [],
+          surcharges: expenseDto.surcharges.toSurcharges(),
           currency: expenseDto.currency.toCurrency());
     }
     return null;

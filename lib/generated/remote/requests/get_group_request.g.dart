@@ -7,6 +7,4 @@ part of '../../../data/remote/requests/get_group_request.dart';
 // **************************************************************************
 
 GetGroupResponse _$GetGroupResponseFromJson(Map<String, dynamic> json) =>
-    GetGroupResponse(
-      GroupDTO.fromJson(json['group'] as Map<String, dynamic>),
-    );
+    GetGroupResponse(GroupDTO.fromJson(json['group'] as Map<String, dynamic>));

@@ -7,9 +7,9 @@ part of '../../../data/remote/requests/respond_to_friend_request_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$RespondToFriendRequestRequestToJson(
-        RespondToFriendRequestRequest instance) =>
-    <String, dynamic>{
-      'accept': instance.accept,
-      'friendUid': instance.friendUid,
-      'requestId': instance.requestId,
-    };
+  RespondToFriendRequestRequest instance,
+) => <String, dynamic>{
+  'accept': instance.accept,
+  'friendUid': instance.friendUid,
+  'requestId': instance.requestId,
+};

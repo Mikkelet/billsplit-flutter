@@ -7,7 +7,5 @@ part of '../../../data/remote/requests/get_exchange_rates_request.dart';
 // **************************************************************************
 
 GetExchangeRatesRequest _$GetExchangeRatesRequestFromJson(
-        Map<String, dynamic> json) =>
-    GetExchangeRatesRequest(
-      Map<String, num>.from(json['rates'] as Map),
-    );
+  Map<String, dynamic> json,
+) => GetExchangeRatesRequest(Map<String, num>.from(json['rates'] as Map));

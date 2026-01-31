@@ -7,8 +7,5 @@ part of '../../../data/remote/requests/invite_to_group_request.dart';
 // **************************************************************************
 
 Map<String, dynamic> _$InviteToGroupRequestToJson(
-        InviteToGroupRequest instance) =>
-    <String, dynamic>{
-      'groupId': instance.groupId,
-      'userId': instance.userId,
-    };
+  InviteToGroupRequest instance,
+) => <String, dynamic>{'groupId': instance.groupId, 'userId': instance.userId};
