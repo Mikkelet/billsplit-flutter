@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Clone repository
         uses: actions/checkout@v5
@@ -17,11 +17,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.35.4
+          flutter-version: 3.38.9
 
       - name: xcode version
         run: |
-          sudo xcode-select -s /Applications/Xcode_16.4.app
+          sudo xcode-select -s /Applications/Xcode_26.2.app
           /usr/bin/xcodebuild -version
 
       - name: Install the Apple certificate and provisioning profile
@@ -53,17 +53,6 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.32.5
-
-      - name: Clone repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - name: Update xcode build number
         run: bash scripts/ci-cd/ios-set-build-number.sh
