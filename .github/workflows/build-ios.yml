@@ -78,7 +78,7 @@ jobs:
           CONFIGURATION: Release
           WORKSPACE: ios/Runner.xcworkspace
           SCHEME: Runner
-          CERTIFICATE_ID: "Apple Distribution: Mikkel Thygesen (88JMYVVGNH)"
+          CERTIFICATE_ID: "Distribution Release"
           PROFILE_ID: abe11ac0-949d-40d8-bb80-406cd39ad9df
           TEAM_ID: 88JMYVVGNH
           ARCHIVE_PATH: ios/build/Runner.xcarchive
@@ -89,11 +89,9 @@ jobs:
           -archivePath $ARCHIVE_PATH  
           -scheme $SCHEME
           CODE_SIGN_STYLE=Manual  
-          CDE_SIGN_IDENTITY="$CERTIFICATE_ID"  
-          PROVISIONING_PROFILE=$PROFILE_ID  
-          CODE_SIGNING_REQUIRED=Yes  
-          CODE_SIGNING_ALLOWED=No  
-          PROVISIONING_PROFILE_SPECIFIER=
+          CODE_SIGNING_REQUIRED=Yes 
+          CODE_SIGNING_ALLOWED=No
+          PROVISIONING_PROFILE_SPECIFIER="$CERTIFICATE_ID"
 
       - name: export
         env:
