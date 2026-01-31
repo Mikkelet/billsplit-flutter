@@ -12,10 +12,6 @@ const notificationChannelDesc =
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-  }
   await setupFlutterNotifications();
   //showFlutterNotification(message);
 }

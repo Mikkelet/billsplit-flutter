@@ -63,13 +63,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCABQuP7HOq_XnhTLHPTKFFU4YyxCqDz4o',
-    appId: '1:469876198103:ios:85faf39eb5c9ca376dfe92',
+    appId: '1:469876198103:ios:7a9ad3db28d3524a6dfe92',
     messagingSenderId: '469876198103',
     projectId: 'billsplittapp',
     storageBucket: 'billsplittapp.appspot.com',
     androidClientId: '469876198103-37j14ctjitf2gp7rvana3stcpt4dt5l3.apps.googleusercontent.com',
-    iosClientId: '469876198103-0ctg6l333jsm7onagvpllqrt8ercjs91.apps.googleusercontent.com',
-    iosBundleId: 'com.example.billsplitFlutter',
+    iosClientId: '469876198103-db9i89patfeg6jkbu128dhejtjkk5v8u.apps.googleusercontent.com',
+    iosBundleId: 'com.mikkelthygesen.splitsby',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
