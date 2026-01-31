@@ -65,8 +65,8 @@ jobs:
           CONFIGURATION: Release
           WORKSPACE: ios/Runner.xcworkspace
           SCHEME: Runner
-          CERTIFICATE_ID: "Apple Development: Mikkel Thygesen (U2F2224C2T)"
-          PROFILE_ID: 419e4cab-793d-4d9c-8a6f-2006d317e110
+          CERTIFICATE_ID: "Apple Distribution: Mikkel Thygesen (88JMYVVGNH)"
+          PROFILE_ID: abe11ac0-949d-40d8-bb80-406cd39ad9df
           TEAM_ID: 88JMYVVGNH
           ARCHIVE_PATH: ios/build/Runner.xcarchive
         run: >-
