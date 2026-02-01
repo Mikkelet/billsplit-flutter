@@ -67,21 +67,7 @@ jobs:
         run: bash scripts/ci-cd/ios-set-build-number.sh
 
       - name: flutter build ipa
-        env:
-          EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
-        run: flutter build ipa --release --export-options-plist=$EXPORT_OPTIONS_PATH
-
-      - name: export
-        env:
-          ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
-          EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
-          EXPORT_PATH: output
-          PROVISIONING_PROFILE: Distribution Release
-        run: >-
-          xcodebuild -exportArchive
-          -archivePath $ARCHIVE_PATH
-          -exportPath $EXPORT_PATH
-          -exportOptionsPlist $EXPORT_OPTIONS_PATH 
+        run: flutter build ipa --release
 
       - name: Validate & upload
         env:
