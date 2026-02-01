@@ -72,7 +72,7 @@ jobs:
       - name: Archive
         env:
           WORKSPACE: ios/Runner.xcworkspace
-          SCHEME: production
+          SCHEME: Runner
           ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
         run: >-
           xcodebuild
