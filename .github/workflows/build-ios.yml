@@ -67,11 +67,11 @@ jobs:
         run: bash scripts/ci-cd/ios-set-build-number.sh
 
       - name: flutter build ipa
-        run: flutter build ipa --release --no-codesign
+        run: flutter build ipa --release
 
       - name: export
         env:
-          ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
+          ARCHIVE_PATH: ios/build/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
           EXPORT_PATH: output
         run: >-
