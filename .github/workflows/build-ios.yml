@@ -69,19 +69,6 @@ jobs:
       - name: flutter build ipa
         run: flutter build ipa --release --no-codesign
 
-      - name: Archive
-        env:
-          WORKSPACE: ios/Runner.xcworkspace
-          SCHEME: Runner
-          ARCHIVE_PATH: ios/build/Runner.xcarchive
-        run: >-
-          xcodebuild
-          -workspace $WORKSPACE
-          -scheme $SCHEME
-          -archivePath $ARCHIVE_PATH
-          -allowProvisioningUpdates
-          archive
-
       - name: export
         env:
           ARCHIVE_PATH: ios/build/Runner.xcarchive
