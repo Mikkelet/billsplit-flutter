@@ -75,34 +75,26 @@ jobs:
 
       - name: Archive
         env:
-          CONFIGURATION: Release
           WORKSPACE: ios/Runner.xcworkspace
           SCHEME: Runner
-          CERTIFICATE_ID: "Distribution Release"
-          PROFILE_ID: abe11ac0-949d-40d8-bb80-406cd39ad9df
-          TEAM_ID: 88JMYVVGNH
           ARCHIVE_PATH: ios/build/Runner.xcarchive
         run: >-
-          xcodebuild build -sdk iphoneos  
-          -configuration $CONFIGURATION 
-          -workspace $WORKSPACE  
-          -archivePath $ARCHIVE_PATH  
+          xcodebuild
+          -workspace $WORKSPACE
           -scheme $SCHEME
-          CODE_SIGN_STYLE=Manual  
-          CODE_SIGNING_REQUIRED=Yes 
-          CODE_SIGNING_ALLOWED=No
-          PROVISIONING_PROFILE_SPECIFIER="$CERTIFICATE_ID"
+          -archivePath $ARCHIVE_PATH
+          archive
 
       - name: export
         env:
-          ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
+          ARCHIVE_PATH: ios/build/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
           EXPORT_PATH: output
         run: >-
-          xcodebuild -exportArchive 
-          -archivePath $ARCHIVE_PATH 
-          -exportPath $EXPORT_PATH 
-          -exportOptionsPlist $EXPORT_OPTIONS_PATH
+          xcodebuild -exportArchive
+          -archivePath $ARCHIVE_PATH
+          -exportPath $EXPORT_PATH
+          -exportOptionsPlist $EXPORT_OPTIONS_PATH 
 
       - name: Validate & upload
         env:
