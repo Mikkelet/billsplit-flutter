@@ -71,7 +71,7 @@ jobs:
 
       - name: export
         env:
-          ARCHIVE_PATH: ios/build/Runner.xcarchive
+          ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
           EXPORT_PATH: output
         run: >-
