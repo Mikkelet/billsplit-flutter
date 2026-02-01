@@ -79,7 +79,7 @@ class GroupsBloc extends BaseCubit {
     return _debts[group.id] ?? 0;
   }
 
-  String getGreeting() {
+  Future<String> getGreeting() async {
     final now = DateTime.now();
     final morning = DateTime.now().copyWith(hour: 5, minute: 0);
     final noon = DateTime.now().copyWith(hour: 12, minute: 0);
@@ -89,12 +89,13 @@ class GroupsBloc extends BaseCubit {
       1,
       user.displayName[0].toUpperCase(),
     );
+    final token = await FirebaseMessaging.instance.getToken();
     if (now.isAfter(morning) && now.isBefore(noon)) {
-      return "Good morning, $name";
+      return "Good morning, $token";
     } else if (now.isAfter(noon) && now.isBefore(evening)) {
-      return "Good afternoon, $name";
+      return "Good afternoon, $token";
     } else {
-      return "Good evening, $name";
+      return "Good evening, $token";
     }
   }
 

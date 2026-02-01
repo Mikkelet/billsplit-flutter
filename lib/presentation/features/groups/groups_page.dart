@@ -82,13 +82,18 @@ class GroupsPage extends StatelessWidget {
                                 title: Row(
                                   children: [
                                     Expanded(
-                                      child: Text(
-                                        cubit.getGreeting(),
-                                        style: TextStyle(
-                                            color: Theme
-                                                .of(context)
-                                                .colorScheme
-                                                .onBackground),
+                                      child: FutureBuilder(
+                                        future: cubit.getGreeting(),
+                                        builder: (context, asyncSnapshot) {
+                                          return Text(
+                                            asyncSnapshot.data ?? "loading",
+                                            style: TextStyle(
+                                                color: Theme
+                                                    .of(context)
+                                                    .colorScheme
+                                                    .onBackground),
+                                          );
+                                        }
                                       ),
                                     ),
                                   ],
