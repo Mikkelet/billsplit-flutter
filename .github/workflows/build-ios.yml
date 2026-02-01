@@ -79,6 +79,7 @@ jobs:
           -workspace $WORKSPACE
           -scheme $SCHEME
           -archivePath $ARCHIVE_PATH
+          -allowProvisioningUpdates
           archive
 
       - name: export
