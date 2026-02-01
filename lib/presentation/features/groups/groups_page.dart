@@ -10,6 +10,8 @@ import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.
 import 'package:billsplit_flutter/presentation/features/groups/widgets/drawer_action_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class GroupsPage extends StatelessWidget {
@@ -20,7 +22,9 @@ class GroupsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseBlocWidget(
-      create: (context) => GroupsBloc()..loadProfile(),
+      create: (context) =>
+      GroupsBloc()
+        ..loadProfile(),
       child: BaseBlocBuilder<GroupsBloc>(
         builder: (cubit, state) {
           return BaseScaffold(
@@ -34,7 +38,12 @@ class GroupsPage extends StatelessWidget {
               label: "Add group",
               icon: Icons.group_add_rounded,
               onPressed: () {
-                Navigator.of(context).push(AddGroupPage.getRoute());
+                FirebaseMessaging.instance.getAPNSToken().then((value) {
+                  print("qqq APN=$value");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("token=$value")));
+                });
+                //Navigator.of(context).push(AddGroupPage.getRoute());
               },
             ),
             body: RefreshIndicator(
@@ -45,14 +54,14 @@ class GroupsPage extends StatelessWidget {
                 child: StreamBuilder(
                     stream: cubit.getGroupStream(),
                     builder: (_, snapshot) {
-                      if(!snapshot.hasData){
+                      if (!snapshot.hasData) {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
                       final groups = snapshot.requireData;
                       return CustomScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           controller: _scrollingController,
                           slivers: [
                             SliverAppBar(
@@ -65,7 +74,10 @@ class GroupsPage extends StatelessWidget {
                                     ? const EdgeInsets.all(8)
                                     : null,
                                 background: Container(
-                                  color: Theme.of(context).colorScheme.tertiary,
+                                  color: Theme
+                                      .of(context)
+                                      .colorScheme
+                                      .tertiary,
                                 ),
                                 title: Row(
                                   children: [
@@ -73,7 +85,8 @@ class GroupsPage extends StatelessWidget {
                                       child: Text(
                                         cubit.getGreeting(),
                                         style: TextStyle(
-                                            color: Theme.of(context)
+                                            color: Theme
+                                                .of(context)
                                                 .colorScheme
                                                 .onBackground),
                                       ),
@@ -101,7 +114,8 @@ class GroupsPage extends StatelessWidget {
                                         child: Text(
                                           "Here you can see your groups! Click below to add one!",
                                           textAlign: TextAlign.center,
-                                          style: Theme.of(context)
+                                          style: Theme
+                                              .of(context)
                                               .textTheme
                                               .labelLarge,
                                         ),
@@ -113,7 +127,7 @@ class GroupsPage extends StatelessWidget {
                               return SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                   childCount: groups.length,
-                                  (context, index) {
+                                      (context, index) {
                                     final group = groups[index];
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -121,7 +135,7 @@ class GroupsPage extends StatelessWidget {
                                       child: GroupView(
                                         group: group,
                                         debtToGroup:
-                                            cubit.getDebtForGroup(group),
+                                        cubit.getDebtForGroup(group),
                                       ),
                                     );
                                   },

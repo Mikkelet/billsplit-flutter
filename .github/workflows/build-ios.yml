@@ -38,7 +38,7 @@ jobs:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_P12_31_01_2027 }}
           APN_CERTIFICATE_B64: ${{ secrets.APN_CERTIFICATE }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD_2 }}
-          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.DEV_PROD_MOBILEPROVISION }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.DISTRIBUTION_PROFILE }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           # create variables
