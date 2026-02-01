@@ -74,9 +74,11 @@ jobs:
           ARCHIVE_PATH: build/ios/archive/Runner.xcarchive
           EXPORT_OPTIONS_PATH: ios/ExportOptions.plist
           EXPORT_PATH: output
+          PROVISIONING_PROFILE: Distribution Release
         run: >-
           xcodebuild -exportArchive
           -archivePath $ARCHIVE_PATH
+          -exportProvisioningProfile "$PROVISIONING_PROFILE"
           -exportPath $EXPORT_PATH
           -exportOptionsPlist $EXPORT_OPTIONS_PATH 
 
