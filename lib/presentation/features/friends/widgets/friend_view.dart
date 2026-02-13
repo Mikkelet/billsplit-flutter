@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/features/friends/widgets/friend_a
 import 'package:billsplit_flutter/presentation/features/friends/widgets/friend_request_received_view.dart';
 import 'package:billsplit_flutter/presentation/features/friends/widgets/friend_request_sent_view.dart';
 import 'package:billsplit_flutter/presentation/features/inspect_profile/inspect_profile_page.dart';
+import 'package:billsplit_flutter/presentation/features/inspect_profile/inspect_profile_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +23,7 @@ class FriendView extends StatelessWidget {
       child: ClickableListItem(
         onClick: () {
           Navigator.of(context)
-              .push(InspectProfilePage.getRoute(friend.person));
+              .push(inspectProfileRoute(friend.person));
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

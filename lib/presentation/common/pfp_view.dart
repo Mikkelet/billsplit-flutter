@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/auto_generated_pfp.dart';
 import 'package:billsplit_flutter/presentation/common/circular_frame.dart';
 import 'package:billsplit_flutter/presentation/features/inspect_profile/inspect_profile_page.dart';
+import 'package:billsplit_flutter/presentation/features/inspect_profile/inspect_profile_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class ProfilePictureView extends StatelessWidget {
   Widget build(BuildContext context) {
     final onTap = canInspect
         ? () {
-            Navigator.of(context).push(InspectProfilePage.getRoute(person));
+            Navigator.of(context).push(inspectProfileRoute(person));
           }
         : null;
 
