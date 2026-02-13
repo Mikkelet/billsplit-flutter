@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/get_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/group_invites/sync_group_invites.dart';
@@ -10,10 +12,16 @@ import 'package:billsplit_flutter/domain/use_cases/groups/get_groups_usecase.dar
 import 'package:billsplit_flutter/domain/use_cases/groups/observe_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/notifications/observe_notifications_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class GroupsBloc extends BaseCubit {
+import 'groups_state.dart';
+
+class GroupsBloc extends SafeCubit<GroupsState> {
+  final AuthRepository _authRepository;
+
   final _getGroupsUseCase = GetGroupsUseCase();
   final _getFriendsUseCase = GetFriendsUseCase();
   final _observeGroupsUseCase = ObserveGroupsUseCase();
@@ -21,47 +29,44 @@ class GroupsBloc extends BaseCubit {
   final _getGroupInvitesUseCase = SyncGroupInvitesUseCase();
   final _observeNotificationsUseCase = ObserveNotificationsUseCase();
 
-  GroupsBloc() {
-    _getAPN();
-  }
+  Person get user => _authRepository.loggedInUser;
 
-  Future<void> _getAPN() async {
-    try {
-      if (!Platform.isIOS) return;
-      print("qqq await APN");
-      final apn = await FirebaseMessaging.instance.getAPNSToken();
-      print("qqq APN=$apn");
-      final token = await FirebaseMessaging.instance.getToken();
-      print("qqq token=$token");
-    } catch (e) {
-      print("qqq token error $e");
-    }
-  }
+  late final StreamSubscription<Iterable<Group>> _groupSubscription;
+  late final StreamSubscription<int> _notificationStreamSubscription;
 
-  Stream<int> get notificationStream => _observeNotificationsUseCase.observe();
   final Map<String, num> _debts = {};
 
-  Stream<List<Group>> getGroupStream() => _observeGroupsUseCase.observe().map(
-    (event) =>
-        event
-            .sortedBy<num>((group) => group.lastUpdatedState.value)
-            .reversed
-            .map((e) {
-              _getDebts(e);
-              return e;
-            })
-            .toList(),
-  );
+  GroupsBloc(this._authRepository) : super(const GroupsState());
 
-  Future loadProfile() async {
+  void init() async {
+    _groupSubscription = _observeGroupsUseCase
+        .observe()
+        .map((groups) {
+          return groups.sortedBy<num>((group) => group.lastUpdatedState.value).reversed.map((e) {
+            _getDebts(e);
+            return e;
+          });
+        })
+        .listen((groups) {
+          safeEmit(state.copyWith(groups: groups.toList(), isLoading: false));
+        });
+
+    _notificationStreamSubscription = _observeNotificationsUseCase.observe().listen((notifications) {
+
+    });
+  }
+
+  Future<void> loadProfile() async {
     try {
+      safeEmit(state.copyWith(isLoading: true));
       await Future.wait([
         _getFriendsUseCase.launch(),
         _getGroupsUseCase.launch(),
         _getGroupInvitesUseCase.launch(),
       ]);
     } catch (err, stackTrace) {
-      showError(err, stackTrace);
+      logError(err, stackTrace);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(err.toString())));
     }
   }
 
@@ -99,12 +104,19 @@ class GroupsBloc extends BaseCubit {
     }
   }
 
-  Iterable<Person> peopleInGroup(Group group) {
+  List<Person> peopleInGroup(Group group) {
     // peopleState only contains a copy of the logged in user,
     // but we need the user instance from AuthProvider
     final peopleWithoutUser = group.peopleState.value.where(
       (element) => element != user,
     );
     return [user, ...peopleWithoutUser];
+  }
+
+  @override
+  Future<void> close() async {
+    await _groupSubscription.cancel();
+    await _notificationStreamSubscription.cancel();
+    return super.close();
   }
 }

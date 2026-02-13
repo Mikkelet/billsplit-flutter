@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileState {
 
- bool get isLoading; ProfileStateEvents get event;
+ bool get isLoading; int get friendInvites; int get groupInvites; String get version; ProfileStateEvents get event;
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ProfileStateCopyWith<ProfileState> get copyWith => _$ProfileStateCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.friendInvites, friendInvites) || other.friendInvites == friendInvites)&&(identical(other.groupInvites, groupInvites) || other.groupInvites == groupInvites)&&(identical(other.version, version) || other.version == version)&&(identical(other.event, event) || other.event == event));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,event);
+int get hashCode => Object.hash(runtimeType,isLoading,friendInvites,groupInvites,version,event);
 
 @override
 String toString() {
-  return 'ProfileState(isLoading: $isLoading, event: $event)';
+  return 'ProfileState(isLoading: $isLoading, friendInvites: $friendInvites, groupInvites: $groupInvites, version: $version, event: $event)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ProfileStateCopyWith<$Res>  {
   factory $ProfileStateCopyWith(ProfileState value, $Res Function(ProfileState) _then) = _$ProfileStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, ProfileStateEvents event
+ bool isLoading, int friendInvites, int groupInvites, String version, ProfileStateEvents event
 });
 
 
@@ -62,10 +62,13 @@ class _$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? event = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? friendInvites = null,Object? groupInvites = null,Object? version = null,Object? event = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
+as bool,friendInvites: null == friendInvites ? _self.friendInvites : friendInvites // ignore: cast_nullable_to_non_nullable
+as int,groupInvites: null == groupInvites ? _self.groupInvites : groupInvites // ignore: cast_nullable_to_non_nullable
+as int,version: null == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
+as String,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
 as ProfileStateEvents,
   ));
 }
@@ -151,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  ProfileStateEvents event)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  int friendInvites,  int groupInvites,  String version,  ProfileStateEvents event)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.isLoading,_that.event);case _:
+return $default(_that.isLoading,_that.friendInvites,_that.groupInvites,_that.version,_that.event);case _:
   return orElse();
 
 }
@@ -172,10 +175,10 @@ return $default(_that.isLoading,_that.event);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  ProfileStateEvents event)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  int friendInvites,  int groupInvites,  String version,  ProfileStateEvents event)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState():
-return $default(_that.isLoading,_that.event);case _:
+return $default(_that.isLoading,_that.friendInvites,_that.groupInvites,_that.version,_that.event);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +195,10 @@ return $default(_that.isLoading,_that.event);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  ProfileStateEvents event)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  int friendInvites,  int groupInvites,  String version,  ProfileStateEvents event)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileState() when $default != null:
-return $default(_that.isLoading,_that.event);case _:
+return $default(_that.isLoading,_that.friendInvites,_that.groupInvites,_that.version,_that.event);case _:
   return null;
 
 }
@@ -207,10 +210,13 @@ return $default(_that.isLoading,_that.event);case _:
 
 
 class _ProfileState implements ProfileState {
-  const _ProfileState({this.isLoading = false, this.event = ProfileStateEvents.none});
+  const _ProfileState({this.isLoading = false, this.friendInvites = 0, this.groupInvites = 0, this.version = "", this.event = ProfileStateEvents.none});
   
 
 @override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  int friendInvites;
+@override@JsonKey() final  int groupInvites;
+@override@JsonKey() final  String version;
 @override@JsonKey() final  ProfileStateEvents event;
 
 /// Create a copy of ProfileState
@@ -223,16 +229,16 @@ _$ProfileStateCopyWith<_ProfileState> get copyWith => __$ProfileStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.event, event) || other.event == event));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.friendInvites, friendInvites) || other.friendInvites == friendInvites)&&(identical(other.groupInvites, groupInvites) || other.groupInvites == groupInvites)&&(identical(other.version, version) || other.version == version)&&(identical(other.event, event) || other.event == event));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,event);
+int get hashCode => Object.hash(runtimeType,isLoading,friendInvites,groupInvites,version,event);
 
 @override
 String toString() {
-  return 'ProfileState(isLoading: $isLoading, event: $event)';
+  return 'ProfileState(isLoading: $isLoading, friendInvites: $friendInvites, groupInvites: $groupInvites, version: $version, event: $event)';
 }
 
 
@@ -243,7 +249,7 @@ abstract mixin class _$ProfileStateCopyWith<$Res> implements $ProfileStateCopyWi
   factory _$ProfileStateCopyWith(_ProfileState value, $Res Function(_ProfileState) _then) = __$ProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, ProfileStateEvents event
+ bool isLoading, int friendInvites, int groupInvites, String version, ProfileStateEvents event
 });
 
 
@@ -260,10 +266,13 @@ class __$ProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of ProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? event = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? friendInvites = null,Object? groupInvites = null,Object? version = null,Object? event = null,}) {
   return _then(_ProfileState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
+as bool,friendInvites: null == friendInvites ? _self.friendInvites : friendInvites // ignore: cast_nullable_to_non_nullable
+as int,groupInvites: null == groupInvites ? _self.groupInvites : groupInvites // ignore: cast_nullable_to_non_nullable
+as int,version: null == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
+as String,event: null == event ? _self.event : event // ignore: cast_nullable_to_non_nullable
 as ProfileStateEvents,
   ));
 }

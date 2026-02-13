@@ -1,4 +1,3 @@
-
 import 'package:billsplit_flutter/domain/models/person.dart';
 
 extension MapExt<T> on Iterable<Iterable<T>> {
@@ -8,7 +7,7 @@ extension MapExt<T> on Iterable<Iterable<T>> {
 }
 
 extension PersonExt on Person {
-  bool isTemp(){
+  bool isTemp() {
     return uid.startsWith("temp");
   }
 }

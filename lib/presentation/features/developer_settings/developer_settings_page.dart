@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_flow.dart';
+import 'package:billsplit_flutter/presentation/features/permissions/notification_rationale_route.dart';
 import 'package:billsplit_flutter/presentation/features/permissions/notifications_rationale.dart';
 import 'package:flutter/material.dart';
 
@@ -21,21 +22,26 @@ class DeveloperSettingsPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 32),
                 ClickableListItem(
-                    onClick: () {
-                      cubit.resetGuides();
-                      cubit.showToast("Guides reset");
-                    },
-                    child: const Text("Reset guides")),
+                  onClick: () {
+                    cubit.resetGuides();
+                    cubit.showToast("Guides reset");
+                  },
+                  child: const Text("Reset guides"),
+                ),
                 const SizedBox(height: 32),
                 ClickableListItem(
-                    onClick: () {
-                      Navigator.of(context).push(OnboardingFlow.getRoute());
-                    },
-                    child: const Text("Start onboarding")),
+                  onClick: () {
+                    Navigator.of(context).push(OnboardingFlow.getRoute());
+                  },
+                  child: const Text("Start onboarding"),
+                ),
                 const SizedBox(height: 32),
-                ClickableListItem(onClick: (){
-                  Navigator.of(context).push(NotificationsRationale.getRoute());
-                }, child: const Text("Start Rationale"))
+                ClickableListItem(
+                  onClick: () {
+                    Navigator.of(context).push(notificationRationaleRote);
+                  },
+                  child: const Text("Start Rationale"),
+                ),
               ],
             ),
           );
@@ -44,6 +50,5 @@ class DeveloperSettingsPage extends StatelessWidget {
     );
   }
 
-  static Route getRoute() =>
-      MaterialPageRoute(builder: (context) => const DeveloperSettingsPage());
+  static Route getRoute() => MaterialPageRoute(builder: (context) => const DeveloperSettingsPage());
 }

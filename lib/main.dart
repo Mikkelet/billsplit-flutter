@@ -8,6 +8,7 @@ import 'package:billsplit_flutter/presentation/features/friends/friends_page.dar
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
+import 'package:billsplit_flutter/presentation/features/groups/groups_route.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
 import 'package:billsplit_flutter/presentation/features/mandatory_update/mandatory_update_page.dart';
 import 'package:billsplit_flutter/presentation/features/permissions/notifications_rationale.dart';
@@ -118,7 +119,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
                       _onUserLoggedOut(context);
                       return const LandingPage();
                     } else if (authState is LoggedInState) {
-                      return GroupsPage();
+                      return groupsRoute;
                     } else {
                       return const SplashPage();
                     }

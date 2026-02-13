@@ -22,20 +22,22 @@ class GroupPictureView extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(10),
         ),
-        child: Builder(builder: (context) {
-          final coverImageUrl = group.coverImageUrlState.value;
-          if (coverImageUrl.isEmpty) {
-            return const Image(
-              fit: BoxFit.fitWidth,
-              image: AssetImage('assets/splitsby_logo.jpg'),
+        child: Builder(
+          builder: (context) {
+            final coverImageUrl = group.coverImageUrlState.value;
+            if (coverImageUrl.isEmpty) {
+              return const Image(
+                fit: BoxFit.fitWidth,
+                image: AssetImage('assets/splitsby_logo.jpg'),
+              );
+            }
+            return CachedNetworkImage(
+              imageUrl: coverImageUrl,
+              fadeInDuration: Duration.zero,
+              fit: BoxFit.cover,
             );
-          }
-          return CachedNetworkImage(
-            imageUrl: coverImageUrl,
-            fadeInDuration: Duration.zero,
-            fit: BoxFit.cover,
-          );
-        }),
+          },
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class GroupDebtView extends StatelessWidget {
   final Group group;
   final num debt;
+
   const GroupDebtView({super.key, required this.group, required this.debt});
 
   @override
@@ -21,29 +22,32 @@ class GroupDebtView extends StatelessWidget {
           children: [
             if (debt > 0)
               Expanded(
-                child: Text(debt.fmt2dec(),
-                    textAlign: TextAlign.end,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: SplitsbyTextTheme.groupViewNegativeDebt(context)),
+                child: Text(
+                  debt.fmt2dec(),
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: SplitsbyTextTheme.groupViewNegativeDebt(context),
+                ),
               ),
             if (debt < 0)
               Expanded(
-                child: Text(debt.abs().fmt2dec(),
-                    textAlign: TextAlign.end,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: SplitsbyTextTheme.groupViewPositiveDebt(context)),
+                child: Text(
+                  debt.abs().fmt2dec(),
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: SplitsbyTextTheme.groupViewPositiveDebt(context),
+                ),
               ),
             const SizedBox(width: 4),
             Text(
               currency,
               style: SplitsbyTextTheme.groupViewDebtCurrency(context),
-            )
+            ),
           ],
         );
-      }
+      },
     );
-
   }
 }

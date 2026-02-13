@@ -26,13 +26,11 @@ class GroupView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
     return Container(
-      decoration: const BoxDecoration(boxShadow: [
-        BoxShadow(
-            blurRadius: 10,
-            spreadRadius: 1,
-            color: Colors.black12,
-            offset: Offset(0, 8))
-      ]),
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.black12, offset: Offset(0, 8)),
+        ],
+      ),
       child: Center(
         child: ClickableListItem(
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -45,10 +43,7 @@ class GroupView extends StatelessWidget {
             children: [
               Stack(
                 alignment: Alignment.bottomLeft,
-                children: [
-                  GroupPictureView(group: group),
-                  GroupTitleView(group: group)
-                ],
+                children: [GroupPictureView(group: group), GroupTitleView(group: group)],
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -66,21 +61,22 @@ class GroupView extends StatelessWidget {
                           ),
                           const Spacer(),
                           Expanded(
-                            child: Builder(builder: (context) {
-                              if (!showDebt) return const SizedBox();
-                              if (group.lastSync == null) {
-                                return Text(
-                                  "Open to synchronize",
-                                  textAlign: TextAlign.right,
-                                  style: SplitsbyTextTheme.exchangeRateLabel(
-                                      context),
+                            child: Builder(
+                              builder: (context) {
+                                if (!showDebt) return const SizedBox();
+                                if (group.lastSync == null) {
+                                  return Text(
+                                    "Open to synchronize",
+                                    textAlign: TextAlign.right,
+                                    style: SplitsbyTextTheme.exchangeRateLabel(context),
+                                  );
+                                }
+                                return GroupDebtView(
+                                  group: group,
+                                  debt: debtToGroup,
                                 );
-                              }
-                              return GroupDebtView(
-                                group: group,
-                                debt: debtToGroup,
-                              );
-                            }),
+                              },
+                            ),
                           ),
                         ],
                       ),

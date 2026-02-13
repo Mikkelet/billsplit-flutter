@@ -42,13 +42,13 @@ class OnboardingBloc extends BaseCubit {
     _initPhoneNumber();
   }
 
-  _initPhoneNumber() {
+  void _initPhoneNumber() {
     _parsePhoneNumberUseCase.launch(user.phoneNumberState.value.dial).then((value) {
       phoneNumber = value;
     });
   }
 
-  _initCurrency() {
+  void _initCurrency() {
     _getCurrencies.launch().then((_) {
       final currencyRate =
           sharedPrefs.getExchangeRate(sharedPrefs.userPrefDefaultCurrency);
@@ -63,7 +63,7 @@ class OnboardingBloc extends BaseCubit {
     });
   }
 
-  Future updateName(String name) async {
+  Future<void> updateName(String name) async {
     await _updateNameUseCase.launch(name);
     user.nameState.value = name;
   }

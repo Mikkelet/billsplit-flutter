@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class ProfileRoute {
   static Route getRoute() {
-    final widget =
-        BlocProvider(create: (context) => ProfileCubit(), child: ProfilePage());
+    final widget = BlocProvider(
+      create: (context) => ProfileCubit(),
+      child: ProfilePage(),
+    );
     return slideLeftRoute(widget);
   }
 }

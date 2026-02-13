@@ -24,6 +24,12 @@ linter:
   rules:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+formatter:
+  trailing_commas: preserve
+  page_width: 100
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

@@ -10,36 +10,35 @@ class DrawerActionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<GroupsBloc>();
     final scaffold = Scaffold.of(context);
+    final notifications = cubit.state.notifications;
     void onClick() => scaffold.openEndDrawer();
 
-    return DefaultStreamBuilder(
-        stream: cubit.notificationStream,
-        builder: (context, snapshot) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Builder(builder: (context) {
-              if (snapshot == 0) {
-                return IconButton(
-                  onPressed: onClick,
-                  icon: const Icon(Icons.menu),
-                );
-              }
-              return Container(
-                height: 32,
-                width: 32,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(90),
-                    color: Theme.of(context).colorScheme.secondaryContainer),
-                child: TextButton(
-                  onPressed: onClick,
-                  style: TextButton.styleFrom(
-                      visualDensity: VisualDensity.compact),
-                  child: Text("$snapshot"),
-                ),
-              );
-            }),
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: Builder(
+        builder: (context) {
+          if (notifications == 0) {
+            return IconButton(
+              onPressed: onClick,
+              icon: const Icon(Icons.menu),
+            );
+          }
+          return Container(
+            height: 32,
+            width: 32,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(90),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+            ),
+            child: TextButton(
+              onPressed: onClick,
+              style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+              child: Text("$notifications"),
+            ),
           );
-        });
+        },
+      ),
+    );
   }
 }

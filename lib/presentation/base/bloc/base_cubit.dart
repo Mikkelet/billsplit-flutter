@@ -7,7 +7,6 @@ import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';

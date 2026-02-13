@@ -32,100 +32,96 @@ class ProfilePage extends StatelessWidget {
           Navigator.of(context).push(DeleteUserPage.route);
         }
       },
-      child: BlocBuilder(builder: (context, state) {
-        return BaseScaffold(
-          appBar: AppBar(
-            forceMaterialTransparency: true,
-            leading: const BackButton(),
-          ),
-          body: Builder(builder: (context) {
-            if (state is Loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const UploadProfilePictureView(),
-                    const SizedBox(height: 12),
-                    MutableValue(
-                        mutableValue: context.user.nameState,
-                        builder: (context, name) {
-                          return ProfileListItem(
-                            text: context.user.displayName,
-                            onClick: () async {
-                              await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    child: EditNameDialog(
-                                      initState: context.user.displayName,
-                                      onSubmit: (name) {
-                                        cubit.updateDisplayName(name);
-                                      },
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        }),
-                    if (cubit.showProfileInfo)
-                      Column(
-                        children: [
-                          ProfileListItem(
-                            text: context.user.email,
-                            icon: null,
-                          ),
-                          const PhoneNumberView(),
-                          MutableValue(
-                              mutableValue: cubit.groupInvitesCounter,
-                              builder: (context, groupsCounter) {
-                                return ProfileListItem(
-                                  text: "Group invites",
-                                  counter: groupsCounter,
-                                  onClick: () {
-                                    Navigator.of(context)
-                                        .push(GroupInvitesPage.route);
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          return BaseScaffold(
+            appBar: AppBar(
+              forceMaterialTransparency: true,
+              leading: const BackButton(),
+            ),
+            body: Builder(
+              builder: (context) {
+                if (state.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const UploadProfilePictureView(),
+                        const SizedBox(height: 12),
+                        MutableValue(
+                          mutableValue: context.user.nameState,
+                          builder: (context, name) {
+                            return ProfileListItem(
+                              text: context.user.displayName,
+                              onClick: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child: EditNameDialog(
+                                        initState: context.user.displayName,
+                                        onSubmit: (name) {
+                                          cubit.updateDisplayName(name);
+                                        },
+                                      ),
+                                    );
                                   },
                                 );
-                              }),
-                          MutableValue(
-                              mutableValue: cubit.friendsCounter,
-                              builder: (context, counter) {
-                                return ProfileListItem(
-                                    text: "Friends",
-                                    counter: counter,
-                                    onClick: () async {
-                                      await Navigator.of(context)
-                                          .push(FriendsPage.route);
-                                      cubit.loadNotifications();
-                                    });
-                              }),
-                        ],
-                      ),
-                    UpdateUserDefaultCurrencyView(),
-                    if (kDebugMode)
-                      ProfileListItem(
-                          text: "Developer settings",
-                          onClick: () async {
-                            await Navigator.of(context)
-                                .push(DeveloperSettingsPage.getRoute());
-                          }),
-                    const SizedBox(height: 32),
-                    const SignOutButton(),
-                    const SizedBox(height: 32),
-                    const DeleteUserButton(),
-                    const SizedBox(height: 32),
-                    MutableText(mutString: cubit.appVersionState),
-                  ],
-                ),
-              ),
-            );
-          }),
-        );
-      }),
+                              },
+                            );
+                          },
+                        ),
+                        if (cubit.showProfileInfo)
+                          Column(
+                            children: [
+                              ProfileListItem(
+                                text: context.user.email,
+                                icon: null,
+                              ),
+                              const PhoneNumberView(),
+                              ProfileListItem(
+                                text: "Group invites",
+                                counter: state.groupInvites,
+                                onClick: () {
+                                  Navigator.of(context).push(GroupInvitesPage.route);
+                                },
+                              ),
+                              ProfileListItem(
+                                text: "Friends",
+                                counter: state.friendInvites,
+                                onClick: () async {
+                                  await Navigator.of(context).push(FriendsPage.route);
+                                  cubit.init();
+                                },
+                              ),
+                            ],
+                          ),
+                        UpdateUserDefaultCurrencyView(),
+                        if (kDebugMode)
+                          ProfileListItem(
+                            text: "Developer settings",
+                            onClick: () async {
+                              await Navigator.of(context).push(DeveloperSettingsPage.getRoute());
+                            },
+                          ),
+                        const SizedBox(height: 32),
+                        const SignOutButton(),
+                        const SizedBox(height: 32),
+                        const DeleteUserButton(),
+                        const SizedBox(height: 32),
+                        Text(state.version),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

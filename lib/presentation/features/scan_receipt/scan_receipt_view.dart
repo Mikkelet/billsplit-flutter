@@ -15,125 +15,124 @@ class SplitsbyCamera extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ScanReceiptCubit>();
     return BlocBuilder<ScanReceiptCubit, ScanReceiptState>(
-        builder: (context, state) {
-      return Scaffold(
-        body: Builder(builder: (context) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final receipt = cubit.receipt;
-          final cameraController = cubit.cameraController;
-          return Center(
-            child: Stack(
-              children: [
-                if (receipt == null)
-                  GestureDetector(
-                    child: cameraController.buildPreview(),
-                    onTapDown: (details) async {
-                      cubit.showFocusCircle(details.globalPosition);
-                      final normalizePos =
-                          _normalizeTapPos(context, details.globalPosition);
-                      await cameraController.setFocusPoint(normalizePos);
-                    },
-                  )
-                else
-                  Image.file(File(receipt.xFile.path)),
-                if (state.focusCircleOffset != Offset.zero)
-                  Positioned(
-                    top: state.focusCircleOffset.dy - 32,
-                    left: state.focusCircleOffset.dx - 32,
-                    width: 64,
-                    height: 64,
-                    child: const Icon(Icons.circle_outlined),
-                  ),
-                if (cubit.receipt != null)
-                  GestureDetector(
-                    child: CustomPaint(
-                      painter: TextBlockPainter(cubit.receipt!,
-                          state.upperBarrier, state.lowerBarrier),
-                      child: Container(),
+      builder: (context, state) {
+        return Scaffold(
+          body: Builder(
+            builder: (context) {
+              if (state.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final receipt = cubit.receipt;
+              final cameraController = cubit.cameraController;
+              return Center(
+                child: Stack(
+                  children: [
+                    if (receipt == null)
+                      GestureDetector(
+                        child: cameraController.buildPreview(),
+                        onTapDown: (details) async {
+                          cubit.showFocusCircle(details.globalPosition);
+                          final normalizePos = _normalizeTapPos(context, details.globalPosition);
+                          await cameraController.setFocusPoint(normalizePos);
+                        },
+                      )
+                    else
+                      Image.file(File(receipt.xFile.path)),
+                    if (state.focusCircleOffset != Offset.zero)
+                      Positioned(
+                        top: state.focusCircleOffset.dy - 32,
+                        left: state.focusCircleOffset.dx - 32,
+                        width: 64,
+                        height: 64,
+                        child: const Icon(Icons.circle_outlined),
+                      ),
+                    if (cubit.receipt != null)
+                      GestureDetector(
+                        child: CustomPaint(
+                          painter: TextBlockPainter(
+                            cubit.receipt!,
+                            state.upperBarrier,
+                            state.lowerBarrier,
+                          ),
+                          child: Container(),
+                        ),
+                        onVerticalDragUpdate: (details) {
+                          cubit.onVerticalDrag(details);
+                        },
+                      )
+                    else
+                      CustomPaint(
+                        painter: ScanGuidePainter(state.decimalDenominator),
+                        size: MediaQuery.of(context).size,
+                      ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 32),
+                        child: CircleAvatar(
+                          backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
+                          child: CloseButton(color: Theme.of(context).colorScheme.onSurface),
+                        ),
+                      ),
                     ),
-                    onVerticalDragUpdate: (details) {
-                      cubit.onVerticalDrag(details);
-                    },
-                  )
-                else
-                  CustomPaint(
-                    painter: ScanGuidePainter(state.decimalDenominator),
-                    size: MediaQuery.of(context).size,
-                  ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 48.0, horizontal: 32),
-                    child: CircleAvatar(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.surface.withAlpha(200),
-                      child: CloseButton(
-                          color: Theme.of(context).colorScheme.onSurface),
-                    ),
-                  ),
+                    if (state.menuState == MenuState.searching)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _pickFromGallery(context),
+                              _snapPicture(context),
+                              _scanningSettingsButton(context),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (state.menuState == MenuState.settings)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _decimalDenominatorToggle(context),
+                              CircleAvatar(
+                                child: BackButton(
+                                  onPressed: () {
+                                    cubit.exitSettings();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (state.menuState == MenuState.receipt)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              if (receipt != null) _cancelPicture(context),
+                              if (receipt != null) _confirmPicture(context),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-                if (state.menuState == MenuState.searching)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 32.0, horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _pickFromGallery(context),
-                          _snapPicture(context),
-                          _scanningSettingsButton(context),
-                        ],
-                      ),
-                    ),
-                  ),
-                if (state.menuState == MenuState.settings)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 32.0, horizontal: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _decimalDenominatorToggle(context),
-                          CircleAvatar(
-                            child: BackButton(
-                              onPressed: () {
-                                cubit.exitSettings();
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                if (state.menuState == MenuState.receipt)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 32.0, horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if (receipt != null) _cancelPicture(context),
-                          if (receipt != null) _confirmPicture(context),
-                        ],
-                      ),
-                    ),
-                  )
-              ],
-            ),
-          );
-        }),
-      );
-    });
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   Widget _snapPicture(BuildContext context) {
@@ -202,11 +201,12 @@ class SplitsbyCamera extends StatelessWidget {
       maxRadius: 32,
       backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
       child: IconButton(
-          onPressed: () {
-            cubit.pickFromGallery(windowSize);
-          },
-          color: Theme.of(context).colorScheme.onSurface,
-          icon: const Icon(Icons.photo_library_outlined)),
+        onPressed: () {
+          cubit.pickFromGallery(windowSize);
+        },
+        color: Theme.of(context).colorScheme.onSurface,
+        icon: const Icon(Icons.photo_library_outlined),
+      ),
     );
   }
 
@@ -217,13 +217,14 @@ class SplitsbyCamera extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
       maxRadius: 32,
       child: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop(cubit
-                .getReceiptItems(state.upperBarrier, state.lowerBarrier)
-                .toList());
-          },
-          color: Theme.of(context).colorScheme.onSurface,
-          icon: const Icon(Icons.check)),
+        onPressed: () {
+          Navigator.of(
+            context,
+          ).pop(cubit.getReceiptItems(state.upperBarrier, state.lowerBarrier).toList());
+        },
+        color: Theme.of(context).colorScheme.onSurface,
+        icon: const Icon(Icons.check),
+      ),
     );
   }
 
@@ -233,11 +234,12 @@ class SplitsbyCamera extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(200),
       maxRadius: 32,
       child: IconButton(
-          onPressed: () {
-            cubit.cancelPicture();
-          },
-          color: Theme.of(context).colorScheme.onSurface,
-          icon: const Icon(Icons.rotate_right)),
+        onPressed: () {
+          cubit.cancelPicture();
+        },
+        color: Theme.of(context).colorScheme.onSurface,
+        icon: const Icon(Icons.rotate_right),
+      ),
     );
   }
 
