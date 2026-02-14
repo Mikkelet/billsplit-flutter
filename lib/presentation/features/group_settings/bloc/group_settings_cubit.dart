@@ -6,9 +6,11 @@ import 'package:billsplit_flutter/domain/use_cases/groups/add_person_to_group_us
 import 'package:billsplit_flutter/domain/use_cases/groups/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/upload_group_picture_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
 
-class GroupSettingsCubit extends BaseCubit {
+class GroupSettingsCubit extends SafeCubit<GroupSettingsState> {
   final _leaveGroupUseCase = LeaveGroupUseCase();
   final _invitePersonToGroupUseCase = InvitePersonToGroupUseCase();
   final _addGroupUseCase = AddGroupUseCase();
@@ -16,47 +18,77 @@ class GroupSettingsCubit extends BaseCubit {
 
   final Group group;
 
-  GroupSettingsCubit(this.group) : super();
+  GroupSettingsCubit(this.group) : super(const GroupSettingsState());
 
-  void leaveGroup() {
-    showLoading();
-    _leaveGroupUseCase.launch(group.id).then((value) {
-      emit(GroupLeft());
-    }).catchError((err, st) {
-      showError(err, st);
-    });
+  Future<bool> leaveGroup() async {
+    try {
+      safeEmit(state.copyWith(leavingGroupIsLoading: true));
+      await _leaveGroupUseCase.launch(group.id);
+      return true;
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(leavingGroupIsLoading: false));
+    }
+    return false;
+  }
+
+  Future<void> updateCurrency(Currency currency) async {
+    final cached = currency;
+    group.defaultCurrencyState.value = currency.symbol;
+    try {
+      safeEmit(state.copyWith(updatingCurrencyIsLoading: true));
+      group.defaultCurrencyState.value = cached.symbol;
+      await _addGroupUseCase.launch(group);
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(updatingCurrencyIsLoading: false));
+    }
   }
 
   Future updateGroupName(String newName) async {
-    group.nameState.value = newName;
-    await _addGroupUseCase.launch(group);
+    try {
+        safeEmit(state.copyWith(updatingNameIsLoading: true));
+        group.nameState.value = newName;
+        await _addGroupUseCase.launch(group);
+    } catch(e, st) {
+        logError(e, st);
+        safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+    } finally {
+        safeEmit(state.copyWith(updatingNameIsLoading: false));
+    }
   }
 
-  void updateCurrency(Currency currency) {
-    group.defaultCurrencyState.value = currency.symbol;
-  }
-
-  void uploadGroupPicture() {
-    emit(GroupPictureUploading());
-    _uploadGroupPicture.launch(group).then((_) {
-      update();
-    }).catchError((err, st) {
-      if (err is UserCancelled) {
-        showToast("User cancelled upload");
+  Future<void> uploadGroupPicture() async {
+    try {
+      safeEmit(state.copyWith(pictureUploadIsLoading: true));
+      await _uploadGroupPicture.launch(group);
+    } catch (e, st) {
+      logError(e, st);
+      if (e is UserCancelled) {
+        safeEmit(state.copyWith(error: SplitsbyError.serverError("User cancelled upload")));
       } else {
-        showError(err, st);
+        safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
       }
-    });
+    } finally {
+      safeEmit(state.copyWith(pictureUploadIsLoading: false));
+    }
   }
 
   void deleteGroupPicture() {}
 
-  void invitePersonToGroup(Person person) {
-    emit(AddingPersonToGroup());
-    _invitePersonToGroupUseCase.launch(group, person).then((value) {
-      update();
-    }).catchError((onError, st) {
-      showError(onError, st);
-    });
+  Future<void> invitePersonToGroup(Person person) async {
+    try {
+      safeEmit(state.copyWith(addingToGroupIsLoading: true));
+      await _invitePersonToGroupUseCase.launch(group, person);
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(addingToGroupIsLoading: false));
+    }
   }
 }

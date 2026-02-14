@@ -4,7 +4,6 @@ import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
-import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
@@ -24,6 +23,7 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupSettingsCubit>();
+    final state = cubit.state;
     return ExpansionPanelList(
       expandedHeaderPadding: const EdgeInsets.only(bottom: 4),
       elevation: 0,
@@ -31,19 +31,19 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
         // To remove the downward arrow, see:
         // https://stackoverflow.com/questions/63437671/flutter-how-to-remove-icon-from-expansion-panel
         ExpansionPanel(
-            headerBuilder: (context, isExpanded) {
-              return ClickableListItem(
-                padding: EdgeInsets.zero,
-                borderRadius: !isExpanded
-                    ? null
-                    : const BorderRadius.vertical(top: Radius.circular(15)),
-                alignment: Alignment.centerLeft,
-                onClick: () {
-                  setState(() {
-                    this.isExpanded = !this.isExpanded;
-                  });
-                },
-                child: Builder(builder: (context) {
+          headerBuilder: (context, isExpanded) {
+            return ClickableListItem(
+              padding: EdgeInsets.zero,
+              borderRadius:
+                  !isExpanded ? null : const BorderRadius.vertical(top: Radius.circular(15)),
+              alignment: Alignment.centerLeft,
+              onClick: () {
+                setState(() {
+                  this.isExpanded = !this.isExpanded;
+                });
+              },
+              child: Builder(
+                builder: (context) {
                   if (!isExpanded) {
                     return Column(
                       children: [
@@ -56,27 +56,23 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                                 people: people,
                                 size: 32,
                               );
-                            }
+                            },
                           ),
                         ),
                         Container(
                           height: 10,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
+                            color: Theme.of(context).colorScheme.secondaryContainer,
                           ),
                           child: Center(
                             child: Container(
                               height: 1,
                               width: 64,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
+                              color: Theme.of(context).colorScheme.onSecondaryContainer,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     );
                   }
@@ -92,104 +88,106 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       ),
                     ],
                   );
-                }),
-              );
-            },
-            backgroundColor: Colors.transparent,
-            isExpanded: isExpanded,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                RoundedListItem(
-                  borderRadius:
-                      const BorderRadius.vertical(bottom: Radius.circular(15)),
-                  child: MutableValue(
-                    mutableValue: cubit.group.invitesState,
-                    builder: (context, invites) {
-                      return MutableValue(
-                        mutableValue: cubit.group.peopleState,
-                        builder: (context, people) {
-                          return Column(
-                            children: [
-                              ...people.mapIndexed(
-                                (i, person) => Padding(
-                                  padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
-                                  child: Row(
-                                    children: [
-                                      ProfilePictureView(
-                                          person: person, canInspect: true),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        person.displayName,
-                                        style: Theme.of(context).textTheme.labelSmall,
-                                      )
-                                    ],
-                                  ),
+                },
+              ),
+            );
+          },
+          backgroundColor: Colors.transparent,
+          isExpanded: isExpanded,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              RoundedListItem(
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15)),
+                child: MutableValue(
+                  mutableValue: cubit.group.invitesState,
+                  builder: (context, invites) {
+                    return MutableValue(
+                      mutableValue: cubit.group.peopleState,
+                      builder: (context, people) {
+                        return Column(
+                          children: [
+                            ...people.mapIndexed(
+                              (i, person) => Padding(
+                                padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
+                                child: Row(
+                                  children: [
+                                    ProfilePictureView(person: person, canInspect: true),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      person.displayName,
+                                      style: Theme.of(context).textTheme.labelSmall,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              ...invites.mapIndexed(
-                                (index, person) => Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    children: [
-                                      ProfilePictureView(person: person),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        person.displayName,
-                                        style: Theme.of(context).textTheme.labelSmall,
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        "invited",
-                                        style: Theme.of(context).textTheme.labelSmall,
-                                      ),
-                                    ],
-                                  ),
+                            ),
+                            ...invites.mapIndexed(
+                              (index, person) => Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Row(
+                                  children: [
+                                    ProfilePictureView(person: person),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      person.displayName,
+                                      style: Theme.of(context).textTheme.labelSmall,
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "invited",
+                                      style: Theme.of(context).textTheme.labelSmall,
+                                    ),
+                                  ],
                                 ),
-                              )
-                            ],
-                          );
-                        }
-                      );
-                    }
-                  ),
-                ),
-                if (cubit.state is AddingPersonToGroup)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ClickableListItem(
-                      height: 48,
-                      width: 48,
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      elevation: 2,
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(30)),
-                      onClick: () async {
-                        showBottomSheet(
-                          context: context,
-                          enableDrag: true,
-                          builder: (dialogContext) => FriendPickerDialog(
-                            onFriendAdded: (friend) {
-                              cubit.invitePersonToGroup(friend);
-                              Navigator.of(context).pop();
-                            },
-                            currentPickedFriends: cubit.group.peopleState.value,
-                          ),
+                              ),
+                            ),
+                          ],
                         );
                       },
-                      child: const Icon(
-                        Icons.add,
-                      ),
+                    );
+                  },
+                ),
+              ),
+              if (cubit.state.addingToGroupIsLoading)
+                const Center(child: CircularProgressIndicator())
+              else
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ClickableListItem(
+                    height: 48,
+                    width: 48,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    elevation: 2,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    onClick: () async {
+                      showBottomSheet(
+                        context: context,
+                        enableDrag: true,
+                        builder:
+                            (dialogContext) => FriendPickerDialog(
+                              currentPickedFriends: cubit.group.peopleState.value,
+                              onFriendAdded: (friend) {
+                                cubit.invitePersonToGroup(friend);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                      );
+                    },
+                    child: const Icon(
+                      Icons.add,
                     ),
                   ),
-              ],
-            ),
-            canTapOnHeader: true)
+                ),
+            ],
+          ),
+          canTapOnHeader: true,
+        ),
       ],
     );
   }

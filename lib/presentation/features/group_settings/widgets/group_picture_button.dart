@@ -7,10 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum ListButtonAction {
-  updateImage,
-  deleteImage;
-}
+enum ListButtonAction { updateImage, deleteImage }
 
 class GroupPictureButton extends StatelessWidget {
   const GroupPictureButton({super.key});
@@ -23,19 +20,20 @@ class GroupPictureButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       onClick: () async {
         final response = await showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 16),
-                  _listButton(context, "Upload image", ListButtonAction.updateImage),
-                  const SizedBox(height: 16),
-                  _listButton(context, "Delete image", ListButtonAction.deleteImage),
-                  const SizedBox(height: 16),
-                ],
-              );
-            });
+          context: context,
+          builder: (context) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                _listButton(context, "Upload image", ListButtonAction.updateImage),
+                const SizedBox(height: 16),
+                _listButton(context, "Delete image", ListButtonAction.deleteImage),
+                const SizedBox(height: 16),
+              ],
+            );
+          },
+        );
         switch (response) {
           case ListButtonAction.updateImage:
             cubit.uploadGroupPicture();
@@ -46,7 +44,7 @@ class GroupPictureButton extends StatelessWidget {
         }
       },
       child: LoadingView(
-        isLoading: cubit.state is GroupPictureUploading,
+        isLoading: cubit.state.pictureUploadIsLoading,
         child: MutableValue(
           mutableValue: cubit.group.coverImageUrlState,
           builder: (context, coverImageUrl) {
@@ -60,8 +58,7 @@ class GroupPictureButton extends StatelessWidget {
                 ),
               );
             }
-            return Text("Upload group picture",
-                style: Theme.of(context).textTheme.labelLarge);
+            return Text("Upload group picture", style: Theme.of(context).textTheme.labelLarge);
           },
         ),
       ),

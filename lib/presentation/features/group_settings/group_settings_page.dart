@@ -12,25 +12,20 @@ import 'package:billsplit_flutter/presentation/features/group_settings/widgets/l
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GroupSettings extends StatelessWidget {
   // Should not be const to force state updates
-  final Group group;
 
-  const GroupSettings({super.key, required this.group});
+  const GroupSettings({super.key});
 
   static const double _spacing = 12;
 
   @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget(
-      create: (context) => GroupSettingsCubit(group),
-      listener: (context, cubit, state) {
-        if (state is GroupLeft) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        }
-      },
-      child: BaseBlocBuilder<GroupSettingsCubit>(builder: (cubit, state) {
+    final cubit = context.read<GroupSettingsCubit>();
+    return BlocBuilder<GroupSettingsCubit, GroupSettingsState>(
+      builder: (context, state) {
         return BaseScaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -45,16 +40,16 @@ class GroupSettings extends StatelessWidget {
                 const GroupPictureButton(),
                 const SizedBox(height: _spacing),
                 MutableValue(
-                  mutableValue: group.nameState,
+                  mutableValue: cubit.group.nameState,
                   builder: (context, value) {
                     return UpdatableTextField(
                       initState: value,
                       updateFuture: cubit.updateGroupName,
                     );
-                  }
+                  },
                 ),
                 const SizedBox(height: _spacing),
-                DefaultGroupCurrencyView(group: group),
+                const DefaultGroupCurrencyView(),
                 const SizedBox(height: _spacing),
                 const GroupMembersView(),
                 const SizedBox(height: _spacing * 5),
@@ -63,10 +58,7 @@ class GroupSettings extends StatelessWidget {
             ),
           ),
         );
-      }),
+      },
     );
   }
-
-  static Route getRoute(Group group) =>
-      slideUpRoute(GroupSettings(group: group));
 }

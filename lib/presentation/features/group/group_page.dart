@@ -13,6 +13,7 @@ import 'package:billsplit_flutter/presentation/features/group/widgets/group_bott
 import 'package:billsplit_flutter/presentation/features/group/widgets/services_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/sort_button.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_page.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_route.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -35,17 +36,15 @@ class GroupPage extends StatelessWidget {
             mutableValue: group.coverImageUrlState,
             builder: (context, coverImage) {
               return BaseScaffold(
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
+                floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
                 floatingActionButton: Builder(
                   builder: (context) {
                     if (state is GroupState) {
                       if (state.nav == GroupPageNav.debt) {
                         return const SizedBox();
                       }
-                      final text = state.nav == GroupPageNav.events
-                          ? "Add expense"
-                          : "Add subscription";
+                      final text =
+                          state.nav == GroupPageNav.events ? "Add expense" : "Add subscription";
                       return ExtendedFloatingActionButton(
                         scrollController: ScrollController(),
                         onPressed: () {
@@ -59,19 +58,21 @@ class GroupPage extends StatelessWidget {
                   },
                 ),
                 appBar: AppBar(
-                    elevation: 0,
-                    foregroundColor: coverImage.isEmpty ? null : Colors.white,
-                    title: MutableValue(
-                      mutableValue: group.nameState,
-                      builder: (context, value) => Text(value),
-                    ),
-                    systemOverlayStyle: group.coverImageUrlState.value.isEmpty
-                        ? null
-                        : const SystemUiOverlayStyle(
+                  elevation: 0,
+                  foregroundColor: coverImage.isEmpty ? null : Colors.white,
+                  title: MutableValue(
+                    mutableValue: group.nameState,
+                    builder: (context, value) => Text(value),
+                  ),
+                  systemOverlayStyle:
+                      group.coverImageUrlState.value.isEmpty
+                          ? null
+                          : const SystemUiOverlayStyle(
                             statusBarIconBrightness: Brightness.light,
                             statusBarBrightness: Brightness.light,
                           ),
-                    flexibleSpace: Builder(builder: (context) {
+                  flexibleSpace: Builder(
+                    builder: (context) {
                       if (coverImage.isEmpty) {
                         return Container(
                           color: Theme.of(context).colorScheme.tertiary,
@@ -87,21 +88,23 @@ class GroupPage extends StatelessWidget {
                           Container(
                             alignment: Alignment.centerLeft,
                             color: Colors.black38,
-                          )
+                          ),
                         ],
                       );
-                    }),
-                    surfaceTintColor: Theme.of(context).colorScheme.surface,
-                    actions: [
-                      const SortActionButton(),
-                      IconButton(
-                          onPressed: () async {
-                            await Navigator.of(context)
-                                .push(GroupSettings.getRoute(group));
-                          },
-                          icon: const Icon(Icons.settings)),
-                    ],
-                    leading: const BackButton()),
+                    },
+                  ),
+                  surfaceTintColor: Theme.of(context).colorScheme.surface,
+                  actions: [
+                    const SortActionButton(),
+                    IconButton(
+                      onPressed: () async {
+                        await Navigator.of(context).push(groupSettingsRoute(group));
+                      },
+                      icon: const Icon(Icons.settings),
+                    ),
+                  ],
+                  leading: const BackButton(),
+                ),
                 bottomNavigationBar: const GroupBottomNav(),
                 body: Builder(
                   builder: (context) {
@@ -114,33 +117,37 @@ class GroupPage extends StatelessWidget {
                         },
                         child: Stack(
                           children: [
-                            Builder(builder: (context) {
-                              switch (cubit.navPage) {
-                                case GroupPageNav.services:
-                                  return const ServicesView();
-                                case GroupPageNav.debt:
-                                  return const DebtsView();
-                                default:
-                                  return const EventsView();
-                              }
-                            }),
+                            Builder(
+                              builder: (context) {
+                                switch (cubit.navPage) {
+                                  case GroupPageNav.services:
+                                    return const ServicesView();
+                                  case GroupPageNav.debt:
+                                    return const DebtsView();
+                                  default:
+                                    return const EventsView();
+                                }
+                              },
+                            ),
                             MutableValue(
                               mutableValue: cubit.isSyncing,
                               builder: (context, isSyncing) {
                                 if (isSyncing) {
                                   return const Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(32.0),
-                                        child: SizedBox(
-                                            height: 16,
-                                            width: 16,
-                                            child: CircularProgressIndicator()),
-                                      ));
+                                    alignment: Alignment.topCenter,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(32.0),
+                                      child: SizedBox(
+                                        height: 16,
+                                        width: 16,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                  );
                                 }
                                 return const SizedBox();
                               },
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -160,12 +167,10 @@ class GroupPage extends StatelessWidget {
     final state = cubit.state;
     if (state is GroupState) {
       if (state.nav == GroupPageNav.events) {
-        Navigator.of(context)
-            .push(AddExpensePage.getRoute(cubit.user, group, null));
+        Navigator.of(context).push(AddExpensePage.getRoute(cubit.user, group, null));
       } else {
         if (state.nav == GroupPageNav.services) {
-          Navigator.of(context)
-              .push(AddServicePage.getRoute(cubit.user, group, null));
+          Navigator.of(context).push(AddServicePage.getRoute(cubit.user, group, null));
         }
       }
     }
@@ -182,6 +187,7 @@ class GroupPage extends StatelessWidget {
   }
 
   static Route getRoute(Group group) => MaterialPageRoute(
-      builder: (context) => GroupPage(group: group),
-      settings: RouteSettings(arguments: {"group_id": group.id}));
+    builder: (context) => GroupPage(group: group),
+    settings: RouteSettings(arguments: {"group_id": group.id}),
+  );
 }
