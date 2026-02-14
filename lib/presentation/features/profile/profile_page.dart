@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/features/delete_user_flow/delete_
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
+import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/delete_user_button.dart';
@@ -86,7 +87,7 @@ class ProfilePage extends StatelessWidget {
                                 text: "Group invites",
                                 counter: state.groupInvites,
                                 onClick: () {
-                                  Navigator.of(context).push(GroupInvitesPage.route);
+                                  Navigator.of(context).push(groupInvitesRoute);
                                 },
                               ),
                               ProfileListItem(

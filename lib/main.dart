@@ -7,6 +7,7 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
+import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_route.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
@@ -92,7 +93,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
             } else if (action is OpenFriendInvitesAction) {
               Navigator.of(context).push(FriendsPage.route);
             } else if (action is OpenGroupInvitesAction) {
-              Navigator.of(context).push(GroupInvitesPage.route);
+              Navigator.of(context).push(groupInvitesRoute);
             }
           } else if (state is ShowNotificationPermissionRationale) {
             Navigator.of(context).push(NotificationsRationale.getRoute());

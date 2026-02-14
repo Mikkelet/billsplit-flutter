@@ -4,26 +4,29 @@ import 'package:billsplit_flutter/domain/use_cases/group_invites/observe_group_i
 import 'package:billsplit_flutter/domain/use_cases/group_invites/respond_to_group_invitation_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
+import 'package:billsplit_flutter/presentation/features/group_invites/bloc/group_invite_state.dart';
 
-class GroupInviteAccepted extends Main {
-  final Group group;
-
-  GroupInviteAccepted(this.group);
-}
-
-class GroupInvitesCubit extends BaseCubit {
+class GroupInvitesCubit extends SafeCubit<GroupInviteState> {
   final _observeGroupsUseCase = ObserveGroupInvitesUseCase();
   final _respondToGroupInviteUseCase = RespondToGroupInvitationUseCase();
 
-  Stream<Iterable<GroupInvite>> groupsStream() =>
-      _observeGroupsUseCase.observe();
+  GroupInvitesCubit() : super(const GroupInviteState());
 
-  void respond(Group group, bool accept) {
-    showLoading();
-    _respondToGroupInviteUseCase.launch(group, accept).then((value) {
-      emit(GroupInviteAccepted(group));
-    }).catchError((err, stackTrace) {
-      showError(err, stackTrace);
-    });
+  Stream<Iterable<GroupInvite>> groupsStream() => _observeGroupsUseCase.observe();
+
+  Future<bool> respond(Group group, bool accept) async {
+    try {
+      safeEmit(state.copyWith(isLoading: true));
+      await _respondToGroupInviteUseCase.launch(group, accept);
+      return true;
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+      return false;
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 }

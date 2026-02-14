@@ -4,6 +4,7 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/bloc/group_invite_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_title.dart';
@@ -20,13 +21,11 @@ class GroupInviteView extends StatelessWidget {
     final cubit = context.read<GroupInvitesCubit>();
     final group = groupInvite.group;
     return Container(
-      decoration: const BoxDecoration(boxShadow: [
-        BoxShadow(
-            blurRadius: 10,
-            spreadRadius: 1,
-            color: Colors.black12,
-            offset: Offset(0, 8))
-      ]),
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.black12, offset: Offset(0, 8)),
+        ],
+      ),
       child: Center(
         child: RoundedListItem(
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -35,10 +34,7 @@ class GroupInviteView extends StatelessWidget {
             children: [
               Stack(
                 alignment: Alignment.bottomLeft,
-                children: [
-                  GroupPictureView(group: group),
-                  GroupTitleView(group: group)
-                ],
+                children: [GroupPictureView(group: group), GroupTitleView(group: group)],
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -58,8 +54,11 @@ class GroupInviteView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ClickableListItem(
-                                onClick: () {
-                                  cubit.respond(group, false);
+                                onClick: () async {
+                                  final response = await cubit.respond(group, false);
+                                  if (response && context.mounted) {
+                                    Navigator.of(context).push(GroupPage.getRoute(group));
+                                  }
                                 },
                                 child: Text(
                                   "Decline",
@@ -70,18 +69,16 @@ class GroupInviteView extends StatelessWidget {
                                 onClick: () {
                                   cubit.respond(group, true);
                                 },
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
+                                color: Theme.of(context).colorScheme.secondaryContainer,
                                 child: Text(
                                   "Accept",
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
