@@ -1,8 +1,19 @@
+import 'package:billsplit_flutter/presentation/features/add_expense/add_expense_route.dart';
+import 'package:billsplit_flutter/presentation/features/add_group/add_group_route.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/add_service_route.dart';
+import 'package:billsplit_flutter/presentation/features/currency_picker/currency_picker_route.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_route.dart';
+import 'package:billsplit_flutter/presentation/features/inspect_profile/inspect_profile_route.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_route.dart';
+import 'package:billsplit_flutter/presentation/features/notifications_settings/notifications_settings_route.dart';
+import 'package:billsplit_flutter/presentation/features/onboarding/onboarding_route.dart';
+import 'package:billsplit_flutter/presentation/features/permissions/notification_rationale_route.dart';
+import 'package:billsplit_flutter/presentation/features/profile/profile_route.dart';
+import 'package:billsplit_flutter/presentation/features/scan_receipt/scan_receipt_route.dart';
+import 'package:billsplit_flutter/presentation/features/splash/splash_route.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/update_phone_number_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -40,5 +51,16 @@ final router = GoRouter(
     $friendsRoute,
     $groupRoute,
     $addServiceRoute,
+    $scanReceiptRoute,
+    $notificationsSettingsRoute,
+    $splashRoute,
+    $profileRoute,
+    $addExpenseRoute,
+    $addGroupRoute,
+    $currencyPickerRoute,
+    $groupSettingsRoute,
+    $inspectProfileRoute,
+    $notificationRationaleRoute,
+    $onboardingRoute
   ],
 );

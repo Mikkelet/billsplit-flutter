@@ -8,5 +8,4 @@ class DeveloperSettingsCubit extends BaseCubit {
     sharedPrefs.hasSeenHoldToAddIndividualExpenseTip = false;
     sharedPrefs.hasSeenSharedExpenseGuide = false;
   }
-
 }

@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/data/local/preferences/models/group_notification_setting.dart';
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
-import 'package:billsplit_flutter/presentation/features/group/notifications_settings/notification_topics.dart';
+import 'package:billsplit_flutter/presentation/features/notifications_settings/bloc/notification_topics.dart';
 import 'package:collection/collection.dart';
 
 class ToggleTopicSubscriptionUseCase {

@@ -8,7 +8,7 @@ import '../../navigation/app_router.dart';
 
 part '../../../_generated/presentation/features/friends/friends_route.g.dart';
 
-@TypedGoRoute<FriendsRoute>(path: AppRoutes.splash)
+@TypedGoRoute<FriendsRoute>(path: AppRoutes.friends)
 class FriendsRoute extends GoRouteData with $FriendsRoute {
   const FriendsRoute();
 

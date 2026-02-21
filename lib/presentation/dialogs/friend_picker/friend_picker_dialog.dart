@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_pick
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/no_friends_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/person_picker_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FriendPickerDialog extends StatelessWidget {
   final List<Person> currentPickedFriends;
@@ -19,23 +20,28 @@ class FriendPickerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget<FriendPickerCubit>(
+    return BlocProvider(
       create: (context) => FriendPickerCubit(currentPickedFriends),
-      child: BaseBlocBuilder<FriendPickerCubit>(
+      child: BlocBuilder<FriendPickerCubit, FriendsPickerState>(
         builder: (cubit, state) {
-          return DefaultStreamBuilder(
-            stream: cubit.friendsStream,
-            builder: (_, friends) {
-              if (friends.isEmpty) {
-                return const NoFriendsDialog();
-              }
-              return PersonPickerDialog(
-                people: friends,
-                onClick: (friend) {
-                  onFriendAdded(friend);
+          final cubit = context.read<FriendPickerCubit>();
+          return Builder(
+            builder: (context) {
+              return DefaultStreamBuilder(
+                stream: cubit.friendsStream,
+                builder: (_, friends) {
+                  if (friends.isEmpty) {
+                    return const NoFriendsDialog();
+                  }
+                  return PersonPickerDialog(
+                    people: friends,
+                    onClick: (friend) {
+                      onFriendAdded(friend);
+                    },
+                  );
                 },
               );
-            },
+            }
           );
         },
       ),

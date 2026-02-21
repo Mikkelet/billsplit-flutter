@@ -1,21 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../../../../presentation/features/friends/friends_route.dart';
+part of '../../../../presentation/features/onboarding/onboarding_route.dart';
 
 // **************************************************************************
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$friendsRoute];
+List<RouteBase> get $appRoutes => [$onboardingRoute];
 
-RouteBase get $friendsRoute =>
-    GoRouteData.$route(path: '/friends', factory: $FriendsRoute._fromState);
+RouteBase get $onboardingRoute => GoRouteData.$route(
+  path: '/onboarding',
+  factory: $OnboardingRoute._fromState,
+);
 
-mixin $FriendsRoute on GoRouteData {
-  static FriendsRoute _fromState(GoRouterState state) => const FriendsRoute();
+mixin $OnboardingRoute on GoRouteData {
+  static OnboardingRoute _fromState(GoRouterState state) => OnboardingRoute();
 
   @override
-  String get location => GoRouteData.$location('/friends');
+  String get location => GoRouteData.$location('/onboarding');
 
   @override
   void go(BuildContext context) => context.go(location);

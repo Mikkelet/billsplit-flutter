@@ -38,7 +38,7 @@ class DeveloperSettingsPage extends StatelessWidget {
                 const SizedBox(height: 32),
                 ClickableListItem(
                   onClick: () {
-                    Navigator.of(context).push(notificationRationaleRote);
+                    NotificationRationaleRoute().push(context);
                   },
                   child: const Text("Start Rationale"),
                 ),

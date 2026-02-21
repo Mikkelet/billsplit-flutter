@@ -17,8 +17,7 @@ class FriendView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClickableListItem(
       onClick: () {
-        Navigator.of(context)
-            .push(inspectProfileRoute(friend.person));
+        InspectProfileRoute(friend.person).push(context);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -38,7 +37,7 @@ class FriendView extends StatelessWidget {
                 }
               },
             ),
-          )
+          ),
         ],
       ),
     );

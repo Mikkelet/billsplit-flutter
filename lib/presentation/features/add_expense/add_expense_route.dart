@@ -18,8 +18,11 @@ class AddExpenseRoute extends GoRouteData with $AddExpenseRoute {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return MaterialPage(
       child: BlocProvider(
-        create: (context) =>
-            AddExpenseBloc(getIt.get(), groupId: groupId, groupExpenseId: expenseId),
+        create: (context) => AddExpenseBloc(
+          getIt.get(),
+          groupId: groupId,
+          groupExpenseId: expenseId,
+        ),
         child: AddExpensePage(),
       ),
     );

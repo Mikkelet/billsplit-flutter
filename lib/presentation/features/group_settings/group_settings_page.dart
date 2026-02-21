@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/update_textfield/updatable_textfield.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
-import 'package:billsplit_flutter/presentation/features/group_settings/widgets/default_currency/default_group_currency_view.dart';
+import 'package:billsplit_flutter/presentation/features/group_settings/widgets/default_group_currency_view.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/widgets/group_members_view.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/widgets/group_picture_button.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/widgets/leave_group_button.dart';

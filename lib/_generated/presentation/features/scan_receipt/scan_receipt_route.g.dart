@@ -1,21 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../../../../presentation/features/friends/friends_route.dart';
+part of '../../../../presentation/features/scan_receipt/scan_receipt_route.dart';
 
 // **************************************************************************
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$friendsRoute];
+List<RouteBase> get $appRoutes => [$scanReceiptRoute];
 
-RouteBase get $friendsRoute =>
-    GoRouteData.$route(path: '/friends', factory: $FriendsRoute._fromState);
+RouteBase get $scanReceiptRoute => GoRouteData.$route(
+  path: '/scan-receipt',
+  factory: $ScanReceiptRoute._fromState,
+);
 
-mixin $FriendsRoute on GoRouteData {
-  static FriendsRoute _fromState(GoRouterState state) => const FriendsRoute();
+mixin $ScanReceiptRoute on GoRouteData {
+  static ScanReceiptRoute _fromState(GoRouterState state) => ScanReceiptRoute();
 
   @override
-  String get location => GoRouteData.$location('/friends');
+  String get location => GoRouteData.$location('/scan-receipt');
 
   @override
   void go(BuildContext context) => context.go(location);

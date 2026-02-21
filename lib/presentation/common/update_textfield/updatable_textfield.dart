@@ -8,10 +8,9 @@ import 'package:billsplit_flutter/presentation/common/update_textfield/update_te
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum UpdateTextFieldState { isUpdating, isEditing, display }
-
-class UpdatableTextField extends StatefulWidget {
+class UpdatableTextField extends StatelessWidget {
   final String initState;
   final int charLimit;
   final String hintText;
@@ -28,34 +27,21 @@ class UpdatableTextField extends StatefulWidget {
   });
 
   @override
-  State<UpdatableTextField> createState() => _UpdatableTextField();
-}
-
-class _UpdatableTextField extends SafeState<UpdatableTextField> {
-  late String currentState = widget.initState;
-  late final controller = TextEditingController(text: currentState);
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget<UpdateTextFieldCubit>(
-      create: (context) => UpdateTextFieldCubit(widget.updateFuture),
+    final cubit = context.read<UpdateTextFieldCubit>();
+    return BlocProvider(
+      create: (context) => UpdateTextFieldCubit(updateFuture, initState),
       child: RoundedListItem(
         height: 64,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BaseBlocBuilder<UpdateTextFieldCubit>(
-          builder: (cubit, state) {
-            if (state is DisplayText) {
+        child: BlocBuilder<UpdateTextFieldCubit, UpdatableTextFieldState>(
+          builder: (context, state) {
+            if (state.view == UpdatableTextFieldView.display) {
               return Row(
                 children: [
                   Expanded(
                     child: Text(
-                      widget.initState,
+                      initState,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: Theme.of(context).textTheme.labelLarge,
@@ -68,12 +54,11 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     padding: EdgeInsets.zero,
                     onClick: () {
                       HapticFeedback.heavyImpact();
-                      currentState = widget.initState;
                       cubit.onEditPressed();
                     },
                     color: Theme.of(context).colorScheme.secondaryContainer,
                     child: const Icon(Icons.edit),
-                  )
+                  ),
                 ],
               );
             }
@@ -82,21 +67,17 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
               children: [
                 Expanded(
                   child: TextField(
-                      autofocus: true,
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.labelLarge?.fontSize),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: widget.hintText,
-                        counterText: "",
-                      ),
-                      maxLines: 1,
-                      maxLength: widget.charLimit,
-                      controller: controller,
-                      onChanged: (val) {
-                        currentState = val;
-                      },
+                    autofocus: true,
+                    style: TextStyle(fontSize: Theme.of(context).textTheme.labelLarge?.fontSize),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: hintText,
+                      counterText: "",
+                    ),
+                    maxLines: 1,
+                    maxLength: charLimit,
+                    controller: cubit.controller,
+                    onChanged: (_) {},
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -108,11 +89,7 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     width: 40,
                     padding: EdgeInsets.zero,
                     onClick: () {
-                      if (currentState != widget.initState) {
-                        cubit.onUpdatePressed(currentState);
-                      } else {
-                        cubit.onCancelPressed();
-                      }
+                        cubit.onUpdatePressed();
                     },
                     color: Colors.green,
                     child: const Icon(Icons.check),
@@ -123,14 +100,12 @@ class _UpdatableTextField extends SafeState<UpdatableTextField> {
                     width: 40,
                     padding: EdgeInsets.zero,
                     onClick: () {
-                      currentState = widget.initState;
-                      controller.text = widget.initState;
                       cubit.onCancelPressed();
                     },
                     color: Colors.red,
                     child: const Icon(Icons.close),
                   ),
-                ]
+                ],
               ],
             );
           },
