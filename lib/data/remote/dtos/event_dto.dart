@@ -6,7 +6,7 @@ import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_pretty/json_pretty.dart';
 
-part '../../../generated/remote/dtos/event_dto.g.dart';
+part '../../../_generated/data/remote/dtos/event_dto.g.dart';
 
 @JsonSerializable()
 class EventDTO {
@@ -23,20 +23,15 @@ class EventDTO {
     required this.type,
   });
 
-  static EventDTO? fromJson(Json json) {
-    try {
-      final type = json["type"] as String;
-      switch (type) {
-        case "expense":
-          return GroupExpenseDTO.fromJson(json);
-        case "payment":
-          return PaymentDTO.fromJson(json);
-        default:
-          return null;
-      }
-    } on Exception catch (err, _) {
-      print(err);
-      return null;
+  static EventDTO fromJson(Json json) {
+    final type = json["type"] as String;
+    switch (type) {
+      case "expense":
+        return GroupExpenseDTO.fromJson(json);
+      case "payment":
+        return PaymentDTO.fromJson(json);
+      default:
+        throw Exception("Invalid type");
     }
   }
 
@@ -77,8 +72,7 @@ class GroupExpenseDTO extends EventDTO {
     required this.surcharges,
   });
 
-  factory GroupExpenseDTO.fromJson(Json json) =>
-      _$GroupExpenseDTOFromJson(json);
+  factory GroupExpenseDTO.fromJson(Json json) => _$GroupExpenseDTOFromJson(json);
 
   @override
   Json toJson() => _$GroupExpenseDTOToJson(this);

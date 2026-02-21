@@ -51,9 +51,9 @@ class GroupsBloc extends SafeCubit<GroupsState> {
           safeEmit(state.copyWith(groups: groups.toList(), isLoading: false));
         });
 
-    _notificationStreamSubscription = _observeNotificationsUseCase.observe().listen((notifications) {
-
-    });
+    _notificationStreamSubscription = _observeNotificationsUseCase.observe().listen(
+      (notifications) {},
+    );
   }
 
   Future<void> loadProfile() async {

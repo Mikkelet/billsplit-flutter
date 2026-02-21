@@ -1,7 +1,19 @@
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class FinishOnboardingEvent extends Main {}
+part '../../../../_generated/presentation/features/onboarding/bloc/onboarding_state.freezed.dart';
 
-class SubmittingUserEvent extends Main {}
+@freezed
+abstract class OnboardingState with _$OnboardingState {
+  const factory OnboardingState({
+    @Default(false) bool isLoading,
+    @Default(SplitsbyError.none()) SplitsbyError error,
+    @Default(Currency.usdValue) Currency selectedCurrency,
+    @Default("") String filePath,
+  }) = _OnboardingState;
 
-class SubmitUserSuccessEvent extends Main {}
+  const OnboardingState._();
+
+  OnboardingState loading() => copyWith(isLoading: true, error: SplitsbyError.none());
+}

@@ -1,27 +1,17 @@
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/page_view_title.dart';
+import 'package:billsplit_flutter/presentation/features/landing/bloc/landing_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_in_view.dart';
 import 'package:billsplit_flutter/presentation/features/landing/widgets/sign_up_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LandingPage extends StatefulWidget {
+class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
   @override
-  State<LandingPage> createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  final PageController pageController = PageController();
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final cubit = context.read<LandingCubit>();
     return BaseScaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -36,13 +26,13 @@ class _LandingPageState extends State<LandingPage> {
       body: Column(
         children: [
           PageViewTitle(
-            pageController: pageController,
+            pageController: cubit.pageController,
             titleOne: "Sign In",
             titleTwo: "Sign Up",
           ),
           Expanded(
             child: PageView(
-              controller: pageController,
+              controller: cubit.pageController,
               children: const [
                 SignInView(),
                 SignUpView(),

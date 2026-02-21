@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UpdatePhoneNumberState {
 
- bool get isLoading; String get errorMessage; String get phoneNumber; String get countryCode;
+ bool get isLoading; SplitsbyError get errorMessage; bool get success; String get phoneNumber; String get countryCode;
 /// Create a copy of UpdatePhoneNumberState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UpdatePhoneNumberStateCopyWith<UpdatePhoneNumberState> get copyWith => _$Update
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdatePhoneNumberState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpdatePhoneNumberState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,phoneNumber,countryCode);
+int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,success,phoneNumber,countryCode);
 
 @override
 String toString() {
-  return 'UpdatePhoneNumberState(isLoading: $isLoading, errorMessage: $errorMessage, phoneNumber: $phoneNumber, countryCode: $countryCode)';
+  return 'UpdatePhoneNumberState(isLoading: $isLoading, errorMessage: $errorMessage, success: $success, phoneNumber: $phoneNumber, countryCode: $countryCode)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UpdatePhoneNumberStateCopyWith<$Res>  {
   factory $UpdatePhoneNumberStateCopyWith(UpdatePhoneNumberState value, $Res Function(UpdatePhoneNumberState) _then) = _$UpdatePhoneNumberStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, String errorMessage, String phoneNumber, String countryCode
+ bool isLoading, SplitsbyError errorMessage, bool success, String phoneNumber, String countryCode
 });
 
 
@@ -62,11 +62,12 @@ class _$UpdatePhoneNumberStateCopyWithImpl<$Res>
 
 /// Create a copy of UpdatePhoneNumberState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? errorMessage = null,Object? phoneNumber = null,Object? countryCode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? errorMessage = null,Object? success = null,Object? phoneNumber = null,Object? countryCode = null,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as SplitsbyError,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  String errorMessage,  String phoneNumber,  String countryCode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  SplitsbyError errorMessage,  bool success,  String phoneNumber,  String countryCode)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UpdatePhoneNumberState() when $default != null:
-return $default(_that.isLoading,_that.errorMessage,_that.phoneNumber,_that.countryCode);case _:
+return $default(_that.isLoading,_that.errorMessage,_that.success,_that.phoneNumber,_that.countryCode);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.isLoading,_that.errorMessage,_that.phoneNumber,_that.count
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  String errorMessage,  String phoneNumber,  String countryCode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  SplitsbyError errorMessage,  bool success,  String phoneNumber,  String countryCode)  $default,) {final _that = this;
 switch (_that) {
 case _UpdatePhoneNumberState():
-return $default(_that.isLoading,_that.errorMessage,_that.phoneNumber,_that.countryCode);case _:
+return $default(_that.isLoading,_that.errorMessage,_that.success,_that.phoneNumber,_that.countryCode);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.isLoading,_that.errorMessage,_that.phoneNumber,_that.count
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  String errorMessage,  String phoneNumber,  String countryCode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  SplitsbyError errorMessage,  bool success,  String phoneNumber,  String countryCode)?  $default,) {final _that = this;
 switch (_that) {
 case _UpdatePhoneNumberState() when $default != null:
-return $default(_that.isLoading,_that.errorMessage,_that.phoneNumber,_that.countryCode);case _:
+return $default(_that.isLoading,_that.errorMessage,_that.success,_that.phoneNumber,_that.countryCode);case _:
   return null;
 
 }
@@ -208,12 +209,13 @@ return $default(_that.isLoading,_that.errorMessage,_that.phoneNumber,_that.count
 /// @nodoc
 
 
-class _UpdatePhoneNumberState implements UpdatePhoneNumberState {
-  const _UpdatePhoneNumberState({this.isLoading = false, this.errorMessage = "", this.phoneNumber = "", this.countryCode = ""});
+class _UpdatePhoneNumberState extends UpdatePhoneNumberState {
+  const _UpdatePhoneNumberState({this.isLoading = false, this.errorMessage = const SplitsbyError.none(), this.success = false, this.phoneNumber = "", this.countryCode = ""}): super._();
   
 
 @override@JsonKey() final  bool isLoading;
-@override@JsonKey() final  String errorMessage;
+@override@JsonKey() final  SplitsbyError errorMessage;
+@override@JsonKey() final  bool success;
 @override@JsonKey() final  String phoneNumber;
 @override@JsonKey() final  String countryCode;
 
@@ -227,16 +229,16 @@ _$UpdatePhoneNumberStateCopyWith<_UpdatePhoneNumberState> get copyWith => __$Upd
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdatePhoneNumberState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdatePhoneNumberState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,phoneNumber,countryCode);
+int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,success,phoneNumber,countryCode);
 
 @override
 String toString() {
-  return 'UpdatePhoneNumberState(isLoading: $isLoading, errorMessage: $errorMessage, phoneNumber: $phoneNumber, countryCode: $countryCode)';
+  return 'UpdatePhoneNumberState(isLoading: $isLoading, errorMessage: $errorMessage, success: $success, phoneNumber: $phoneNumber, countryCode: $countryCode)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$UpdatePhoneNumberStateCopyWith<$Res> implements $UpdatePh
   factory _$UpdatePhoneNumberStateCopyWith(_UpdatePhoneNumberState value, $Res Function(_UpdatePhoneNumberState) _then) = __$UpdatePhoneNumberStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, String errorMessage, String phoneNumber, String countryCode
+ bool isLoading, SplitsbyError errorMessage, bool success, String phoneNumber, String countryCode
 });
 
 
@@ -264,11 +266,12 @@ class __$UpdatePhoneNumberStateCopyWithImpl<$Res>
 
 /// Create a copy of UpdatePhoneNumberState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? errorMessage = null,Object? phoneNumber = null,Object? countryCode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? errorMessage = null,Object? success = null,Object? phoneNumber = null,Object? countryCode = null,}) {
   return _then(_UpdatePhoneNumberState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as SplitsbyError,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,
   ));

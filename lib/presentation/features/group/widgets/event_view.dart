@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/events/expense_event_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/events/payment_view.dart';
+import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +17,7 @@ class EventView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<GroupBloc>();
-    final isCreatedByUser = event.createdBy.uid == cubit.user.uid;
+    final isCreatedByUser = event.createdBy.uid == context.user.uid;
     return Builder(builder: (context) {
       if (event is GroupExpense) {
         return Row(

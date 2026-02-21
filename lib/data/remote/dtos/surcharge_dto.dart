@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part '../../../generated/remote/dtos/surcharge_dto.g.dart';
+part '../../../_generated/data/remote/dtos/surcharge_dto.g.dart';
 
 @JsonSerializable()
 class SurchargeDTO {

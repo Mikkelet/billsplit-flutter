@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part '../../../../generated/local/preferences/models/recent_currency.g.dart';
+part '../../../../_generated/data/local/preferences/models/recent_currency.g.dart';
 
 @JsonSerializable()
 class RecentCurrency implements Comparable<dynamic> {

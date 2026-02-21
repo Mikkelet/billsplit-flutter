@@ -31,14 +31,11 @@ class OnboardingStepUploadProfilePicture extends StatelessWidget {
               const SizedBox(height: 64),
               const UploadProfilePictureView(),
               const SizedBox(height: 64),
-              NextStepButton(cubit.nextButtonText(this))
+              NextStepButton(cubit.nextButtonText(this)),
             ],
           ),
         ),
       ),
     );
   }
-
-  static Route getRoute() =>
-      slideLeftRoute(const OnboardingStepUploadProfilePicture());
 }

@@ -1,7 +1,7 @@
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/features/friends/bloc/add_friend_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/friends/bloc/friends_cubit.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
@@ -27,7 +27,7 @@ class _AddFriendEmailViewState extends SafeState<AddFriendEmailView> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AddFriendCubit>();
+    final cubit = context.read<FriendsCubit>();
     return RoundedListItem(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       height: 64,

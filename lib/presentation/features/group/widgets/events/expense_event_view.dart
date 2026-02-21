@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,8 +25,7 @@ class ExpenseEventView extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           )
         else if (groupExpense.syncState == SyncState.pending)
-          const SizedBox(
-              height: 20, width: 20, child: CircularProgressIndicator()),
+          const SizedBox(height: 20, width: 20, child: CircularProgressIndicator()),
         ClickableListItem(
           color: builder(() {
             if (groupExpense.syncState == SyncState.pending) {
@@ -39,8 +39,9 @@ class ExpenseEventView extends StatelessWidget {
           onClick: () {
             final cubit = context.read<GroupBloc>();
             if (groupExpense.syncState == SyncState.synced) {
-              Navigator.of(context).push(AddExpensePage.getRoute(
-                  cubit.user, cubit.group, groupExpense));
+              Navigator.of(
+                context,
+              ).push(AddExpensePage.getRoute(context.user, cubit.state.requireGroup, groupExpense));
             } else if (groupExpense.syncState == SyncState.failed) {
               cubit.retryAddExpense(groupExpense);
             }
@@ -48,17 +49,17 @@ class ExpenseEventView extends StatelessWidget {
           child: Column(
             children: [
               MutableValue(
-                  mutableValue: groupExpense.descriptionState,
-                  builder: (context, description) {
-                    final formatted = _formatDescription(description);
-                    final fontStyle = _descriptionFontStyle(description);
-                    return Text(formatted,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(fontStyle: fontStyle));
-                  }),
+                mutableValue: groupExpense.descriptionState,
+                builder: (context, description) {
+                  final formatted = _formatDescription(description);
+                  final fontStyle = _descriptionFontStyle(description);
+                  return Text(
+                    formatted,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: fontStyle),
+                  );
+                },
+              ),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -76,27 +77,29 @@ class ExpenseEventView extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   MutableValue(
-                      mutableValue: groupExpense.currencyState,
-                      builder: (context, currency) {
-                        return Text(
-                          currency.symbol.toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 15,
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                        );
-                      }),
+                    mutableValue: groupExpense.currencyState,
+                    builder: (context, currency) {
+                      return Text(
+                        currency.symbol.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
               MutableValue(
-                  mutableValue: groupExpense.payerState,
-                  builder: (context, payer) {
-                    return Text(
-                      "paid by ${payer.nameState} on ${groupExpense.dateString}",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    );
-                  })
+                mutableValue: groupExpense.payerState,
+                builder: (context, payer) {
+                  return Text(
+                    "paid by ${payer.nameState} on ${groupExpense.dateString}",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  );
+                },
+              ),
             ],
           ),
         ),

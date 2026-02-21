@@ -4,11 +4,9 @@ import 'package:billsplit_flutter/domain/repositories/auth_state.dart';
 import 'package:billsplit_flutter/firebase_options.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_bloc_builder.dart';
-import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
-import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
-import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
+import 'package:billsplit_flutter/presentation/features/friends/friends_route.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
-import 'package:billsplit_flutter/presentation/features/groups/groups_page.dart';
 import 'package:billsplit_flutter/presentation/features/groups/groups_route.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_page.dart';
 import 'package:billsplit_flutter/presentation/features/mandatory_update/mandatory_update_page.dart';
@@ -53,8 +51,7 @@ class BillSplitApp extends StatefulWidget {
   State<BillSplitApp> createState() => _BillSplitAppState();
 }
 
-class _BillSplitAppState extends SafeState<BillSplitApp>
-    with WidgetsBindingObserver {
+class _BillSplitAppState extends SafeState<BillSplitApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -89,11 +86,11 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
           if (state is NotificationActionEvent) {
             final action = state.notificationAction;
             if (action is OpenGroupAction) {
-              Navigator.of(context).push(GroupPage.getRoute(action.group));
+              GroupRoute(action.group.id).push(context);
             } else if (action is OpenFriendInvitesAction) {
-              Navigator.of(context).push(FriendsPage.route);
+              FriendsRoute().push(context);
             } else if (action is OpenGroupInvitesAction) {
-              Navigator.of(context).push(groupInvitesRoute);
+              GroupInvitesRoute().push(context);
             }
           } else if (state is ShowNotificationPermissionRationale) {
             Navigator.of(context).push(NotificationsRationale.getRoute());
@@ -137,9 +134,7 @@ class _BillSplitAppState extends SafeState<BillSplitApp>
   // delay popUntil to reduce false nulls
   void _onUserLoggedOut(BuildContext context) {
     Navigator.of(context).popUntil(
-          (route) =>
-      route.settings.name == "/${MandatoryUpdatePage.routeName}" ||
-          route.isFirst,
+      (route) => route.settings.name == "/${MandatoryUpdatePage.routeName}" || route.isFirst,
     );
   }
 

@@ -1,0 +1,40 @@
+import 'package:billsplit_flutter/presentation/features/friends/friends_route.dart';
+import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
+import 'package:billsplit_flutter/presentation/features/landing/landing_route.dart';
+import 'package:billsplit_flutter/presentation/features/update_phone_number/update_phone_number_route.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
+
+abstract class AppRoutes {
+  static const splash = "/";
+  static const home = "/home";
+  static const group = "/groups/:id";
+  static const groupSettings = "/groups/:id/settings";
+  static const expense = "/expense/:id";
+  static const profile = "/profile";
+  static const friends = "/friends";
+  static const groupsInvites = "group-invites";
+  static const inspectProfile = "/users/:id";
+  static const scanReceipt = "/scan";
+  static const addGroup = "/add-group";
+  static const addService = "/add-service";
+  static const addExpense = "/add-expense";
+  static const onboarding = "/onboarding";
+  static const landing = "/landing";
+}
+
+final rootNavKey = GlobalKey<NavigatorState>();
+
+final router = GoRouter(
+  navigatorKey: rootNavKey,
+  initialLocation: AppRoutes.splash,
+  redirect: (context, state) {
+    return null;
+  },
+  routes: [
+    $landingRoute,
+    $updatePhoneNumberRoute,
+    $groupInvitesRoute,
+    $friendsRoute,
+  ],
+);

@@ -15,48 +15,54 @@ class UpdatePhoneNumberFlow extends StatefulWidget {
 }
 
 class _UpdatePhoneNumberFlowState extends State<UpdatePhoneNumberFlow> {
+  void showSuccess(BuildContext context, UpdatePhoneNumberState state) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomDialog(
+          title: "Success",
+          text: "Your phone number has been updated to ${state.phoneNumber}",
+          primaryText: "OK",
+          onPrimaryClick: () {
+            Navigator.of(context)
+              ..pop()
+              ..pop();
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<UpdatePhoneNumberCubit>();
     return BlocConsumer<UpdatePhoneNumberCubit, UpdatePhoneNumberState>(
-        listener: (context, state) {
-      if (state is UpdateNumberSuccess) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return CustomDialog(
-              title: "Success",
-              text:
-                  "Your phone number has been updated to ${state.phoneNumber}",
-              primaryText: "OK",
-              onPrimaryClick: () {
-                Navigator.of(context)
-                  ..pop()
-                  ..pop();
-              },
-            );
-          },
+      listenWhen: (prev, curr) => curr.success,
+      listener: (context, state) {
+        showSuccess(context, state);
+      },
+      builder: (context, state) {
+        return BaseScaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+          ),
+          body: Builder(
+            builder: (context) {
+              return PageView(
+                controller: cubit.pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  UpdatePhoneNumberPage(
+                    initialCountry: state.countryCode,
+                    phoneNumber: state.phoneNumber,
+                  ),
+                  ConfirmPhoneNumberPage(),
+                ],
+              );
+            },
+          ),
         );
-      }
-    }, builder: (context, state) {
-      return BaseScaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-        ),
-        body: Builder(builder: (context) {
-          return PageView(
-            controller: cubit.pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              UpdatePhoneNumberPage(
-                initialCountry: state.countryCode,
-                phoneNumber: state.phoneNumber,
-              ),
-              ConfirmPhoneNumberPage(),
-            ],
-          );
-        }),
-      );
-    });
+      },
+    );
   }
 }

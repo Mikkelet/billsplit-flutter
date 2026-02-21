@@ -19,9 +19,9 @@ class DebtView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final groupCubit = context.read<GroupBloc>();
-
+    final group = groupCubit.state.requireGroup;
     return MutableValue(
-      mutableValue: groupCubit.group.defaultCurrencyState,
+      mutableValue: group.defaultCurrencyState,
       builder: (context, currency) {
         String text = "";
         TextStyle style = Theme.of(context).textTheme.bodyLarge!;
@@ -61,7 +61,7 @@ class DebtView extends StatelessWidget {
                     isScrollControlled: true,
                     builder: (context) => PayCustomDebtView(
                       debt: debt,
-                      group: groupCubit.group,
+                      group: group,
                     ),
                   );
                 },

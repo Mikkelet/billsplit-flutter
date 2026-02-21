@@ -11,13 +11,13 @@ class PasswordTextField extends StatefulWidget {
   final BorderRadius borderRadius;
   final String hintText;
 
-  const PasswordTextField(
-      {Key? key,
-      this.borderRadius = BorderRadius.zero,
-      required this.controller,
-      required this.error,
-      required this.hintText})
-      : super(key: key);
+  const PasswordTextField({
+    super.key,
+    this.borderRadius = BorderRadius.zero,
+    required this.controller,
+    required this.error,
+    required this.hintText,
+  });
 
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
@@ -57,33 +57,36 @@ class _PasswordTextFieldState extends SafeState<PasswordTextField> {
           ),
         ),
         ClickableListItem(
-            width: 64,
-            height: 64,
-            padding: EdgeInsets.zero,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.zero,
-              topLeft: Radius.zero,
-              bottomRight: widget.borderRadius.bottomRight,
-              topRight: widget.borderRadius.topRight,
-            ),
-            color: builder(() {
-              if (showPassword) {
-                return Theme.of(context).colorScheme.secondaryContainer;
-              }
-              return Theme.of(context).colorScheme.primaryContainer;
-            }),
-            onClick: () {
-              setState(() {
-                showPassword = !showPassword;
-              });
-            },
-            child: Icon(builder(() {
+          width: 64,
+          height: 64,
+          padding: EdgeInsets.zero,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.zero,
+            topLeft: Radius.zero,
+            bottomRight: widget.borderRadius.bottomRight,
+            topRight: widget.borderRadius.topRight,
+          ),
+          color: builder(() {
+            if (showPassword) {
+              return Theme.of(context).colorScheme.secondaryContainer;
+            }
+            return Theme.of(context).colorScheme.primaryContainer;
+          }),
+          onClick: () {
+            setState(() {
+              showPassword = !showPassword;
+            });
+          },
+          child: Icon(
+            builder(() {
               if (showPassword) {
                 return Icons.visibility;
               } else {
                 return Icons.visibility_off;
               }
-            })))
+            }),
+          ),
+        ),
       ],
     );
   }

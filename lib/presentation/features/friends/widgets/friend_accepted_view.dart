@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class FriendAcceptedView extends StatelessWidget {
   final Person person;
 
-  const FriendAcceptedView({Key? key, required this.person}) : super(key: key);
+  const FriendAcceptedView({super.key, required this.person});
 
   @override
   Widget build(BuildContext context) {

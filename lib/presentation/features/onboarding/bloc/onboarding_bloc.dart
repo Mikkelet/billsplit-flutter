@@ -1,12 +1,17 @@
 import 'dart:io';
 
+import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
+import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_state.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_change_display_name.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboarding_step_default_currency.dart';
@@ -16,104 +21,114 @@ import 'package:billsplit_flutter/presentation/features/onboarding/screens/onboa
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class OnboardingBloc extends BaseCubit {
+class OnboardingBloc extends SafeCubit<OnboardingState> {
   final _updateNameUseCase = UpdateDisplayNameUseCase();
   final _getCurrencies = GetExchangeRatesUseCase();
   final _parsePhoneNumberUseCase = ParsePhoneNumberUseCase();
+  final SharedPrefs _prefs;
+  final AuthRepository _authRepository;
 
-  final PageController controller = PageController();
-  int _currentStep = 1;
   late final steps = [
     const OnboardingStepWelcomeView(),
     const OnboardingStepChangeDisplayName(),
     const OnboardingStepUploadProfilePicture(),
-    OnboardingStepDefaultCurrency(),
-    if (!user.isGuest) const OnboardingStepPhoneNumber(),
+    const OnboardingStepDefaultCurrency(),
+    if (!_user.isGuest) const OnboardingStepPhoneNumber(),
   ];
 
-  String _name = "";
-  Currency currency = Currency.usd();
-  File? displayPhoto;
-  PhoneNumber? phoneNumber;
+  final nameController = TextEditingController();
+  final pageController = PageController();
 
-  OnboardingBloc() {
-    _name = user.nameState.value;
-    _initCurrency();
-    _initPhoneNumber();
+  String get _name => nameController.text;
+
+  Person get _user => _authRepository.loggedInUser;
+
+  int get _currentStep => pageController.page?.toInt() ?? 0;
+
+  bool get isLastStep => _currentStep == steps.length - 1;
+
+  OnboardingBloc(this._prefs, this._authRepository) : super(const OnboardingState()) {
+    _init();
   }
 
-  void _initPhoneNumber() {
-    _parsePhoneNumberUseCase.launch(user.phoneNumberState.value.dial).then((value) {
-      phoneNumber = value;
-    });
+  Future<void> _init() async {
+    try {
+      safeEmit(state.loading());
+      await Future.wait([
+        _initCurrency(),
+        _initPhoneNumber(),
+      ]);
+    } catch (e, st) {
+      safeEmit(state.copyWith(error: SplitsbyError.unknown(e.toString())));
+      logError(e, st);
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
-  void _initCurrency() {
-    _getCurrencies.launch().then((_) {
-      final currencyRate =
-          sharedPrefs.getExchangeRate(sharedPrefs.userPrefDefaultCurrency);
-      if (currencyRate != null) {
-        currency = Currency(
-          symbol: sharedPrefs.userPrefDefaultCurrency,
-          rate: currencyRate,
-        );
-      }
-    }).catchError((err, stackTrace) {
-      showError(err, stackTrace);
-    });
+  Future<void> _initPhoneNumber() async {
+    await _parsePhoneNumberUseCase.launch(_user.phoneNumberState.value.dial);
+  }
+
+  Future<void> _initCurrency() async {
+    await _getCurrencies.launch();
+    final currencyRate = _prefs.getExchangeRate(_prefs.userPrefDefaultCurrency);
+    if (currencyRate != null) {
+      safeEmit(
+        state.copyWith(
+          selectedCurrency: Currency(
+            symbol: _prefs.userPrefDefaultCurrency,
+            rate: currencyRate,
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> updateName(String name) async {
-    await _updateNameUseCase.launch(name);
-    user.nameState.value = name;
+    try {
+      safeEmit(state.loading());
+      await _updateNameUseCase.launch(name);
+      _user.nameState.value = name;
+    } catch (e, st) {
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+      logError(e, st);
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
-  void submitProfile() {
-    showLoading();
-    _updateNameUseCase.launch(name).then((value) {
-      emit(SubmitUserSuccessEvent());
-    }).catchError((err, stackTrace) {
-      showError(err, stackTrace);
-    });
+  Future<void> submitProfile() async {
+    try {
+      safeEmit(state.loading());
+      await _updateNameUseCase.launch(nameController.text);
+    } catch (e, st) {
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+      logError(e, st);
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
   void updateCurrency(Currency currency) {
-    sharedPrefs.userPrefDefaultCurrency = currency.symbol;
-    emit(Main());
+    _prefs.userPrefDefaultCurrency = currency.symbol;
   }
 
   void onNextClicked() {
-    if (_currentStep == steps.length) {
-      emit(FinishOnboardingEvent());
-    } else {
-      controller.nextPage(
-        duration: 500.ms,
-        curve: Curves.fastEaseInToSlowEaseOut,
-      );
-    }
+    pageController.nextPage(
+      curve: Curves.fastEaseInToSlowEaseOut,
+      duration: 500.ms,
+    );
   }
 
   void onPreviousClicked() {
-    if (_currentStep < 1) {
-      emit(FinishOnboardingEvent());
-    } else {
-      controller.previousPage(
-        duration: 500.ms,
-        curve: Curves.fastEaseInToSlowEaseOut,
-      );
-    }
+    pageController.previousPage(
+      curve: Curves.fastEaseInToSlowEaseOut,
+      duration: 500.ms,
+    );
   }
 
-  void onNameChanged(String value) {
-    _name = value;
-    emit(Main());
-  }
-
-  String get name {
-    return _name;
-  }
-
-  String nextButtonText(Widget widget) {
+  String nextButtonText(StatelessWidget widget) {
     final index = steps.indexOf(widget) + 1;
     if (index == 1) {
       return "Let's get started";
@@ -131,11 +146,7 @@ class OnboardingBloc extends BaseCubit {
 
   @override
   Future<void> close() {
-    controller.dispose();
+    pageController.dispose();
     return super.close();
-  }
-
-  void onPageChanged(int page) {
-    _currentStep = page + 1;
   }
 }

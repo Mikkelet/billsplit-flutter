@@ -1,9 +1,10 @@
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
-import 'package:billsplit_flutter/presentation/features/add_service/add_service_page.dart';
+import 'package:billsplit_flutter/presentation/features/add_service/add_service_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,8 +18,7 @@ class ServiceView extends StatelessWidget {
     final cubit = context.read<GroupBloc>();
     return ClickableListItem(
       onClick: () {
-        Navigator.of(context)
-            .push(AddServicePage.getRoute(cubit.user, cubit.group, service));
+        Navigator.of(context).push(addServiceRoute(context.user, cubit.state.requireGroup, service));
       },
       child: Row(
         children: [
@@ -29,7 +29,7 @@ class ServiceView extends StatelessWidget {
                 person: payer,
                 size: 64,
               );
-            }
+            },
           ),
           const SizedBox(width: 20),
           Flexible(
@@ -61,13 +61,13 @@ class ServiceView extends StatelessWidget {
                                   style: Theme.of(context).textTheme.bodyMedium,
                                   overflow: TextOverflow.ellipsis,
                                 );
-                              }
+                              },
                             );
-                          }
+                          },
                         );
-                      }
+                      },
                     );
-                  }
+                  },
                 ),
               ],
             ),

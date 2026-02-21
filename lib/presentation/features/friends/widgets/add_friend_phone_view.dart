@@ -2,15 +2,13 @@ import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/billsplit_country_picker.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/features/friends/bloc/add_friend_cubit.dart';
+import 'package:billsplit_flutter/presentation/features/friends/bloc/friends_cubit.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddFriendPhoneView extends StatefulWidget {
-
-  // removed const to trigger state changes
   const AddFriendPhoneView({super.key});
 
   @override
@@ -29,11 +27,12 @@ class _AddFriendPhoneViewState extends SafeState<AddFriendPhoneView> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AddFriendCubit>();
+    final cubit = context.read<FriendsCubit>();
+
     return Row(
       children: [
         BillSplitCountryPicker(
-          initialCountry: cubit.countryCode,
+          initialCountry: cubit.state.dialCode,
           onChange: (countryCode) {
             cubit.changeCountryCode(countryCode);
           },
@@ -51,11 +50,11 @@ class _AddFriendPhoneViewState extends SafeState<AddFriendPhoneView> {
                     controller: _textFieldController,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
-                        errorText: errorText,
-                        hintStyle:
-                            SplitsbyTextTheme.textFieldHintStyle(context),
-                        border: InputBorder.none,
-                        hintText: "Enter a phone number"),
+                      errorText: errorText,
+                      hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+                      border: InputBorder.none,
+                      hintText: "Enter a phone number",
+                    ),
                     onChanged: (_) {
                       setState(() {
                         errorText = null;
@@ -75,7 +74,7 @@ class _AddFriendPhoneViewState extends SafeState<AddFriendPhoneView> {
                     },
                     icon: const Icon(Icons.send),
                   ),
-                )
+                ),
               ],
             ),
           ),

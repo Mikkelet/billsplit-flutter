@@ -2,7 +2,7 @@ import 'package:billsplit_flutter/data/remote/dtos/group_dto.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part '../../../generated/remote/requests/get_group_request.g.dart';
+part '../../../_generated/data/remote/requests/get_group_request.g.dart';
 
 @JsonSerializable(createToJson: false)
 class GetGroupResponse {

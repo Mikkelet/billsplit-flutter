@@ -16,70 +16,16 @@ import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SignUpView extends StatefulWidget {
+class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
 
   @override
-  State<SignUpView> createState() => _SignUpViewState();
-}
-
-class _SignUpViewState extends SafeState<SignUpView> {
-  final emailFieldController = TextEditingController();
-  final passwordFieldController = TextEditingController();
-  final repeatPasswordFieldController = TextEditingController();
-  String? emailError;
-  String? passwordError;
-  String? repeatPasswordError;
-
-  @override
-  void initState() {
-    emailFieldController.addListener(() {
-      _resetEmailError();
-    });
-    passwordFieldController.addListener(() {
-      _resetPasswordError();
-    });
-    repeatPasswordFieldController.addListener(() {
-      _resetRepeatPasswordError();
-    });
-    super.initState();
-  }
-
-  _resetEmailError() {
-    if (emailError != null) {
-      setState(() {
-        emailError = null;
-      });
-    }
-  }
-
-  _resetRepeatPasswordError() {
-    if (repeatPasswordError != null) {
-      setState(() {
-        repeatPasswordError = null;
-      });
-    }
-  }
-
-  _resetPasswordError() {
-    if (passwordError != null) {
-      setState(() {
-        passwordError = null;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget(
-      create: (context) => LandingCubit(),
-      listener: (context, cubit, state) {
-        if (state is SignUpSuccessful || state is SignUpAnonymously) {
-          Navigator.of(context).push(OnboardingFlow.getRoute());
-        }
-      },
-      child: BaseBlocBuilder<LandingCubit>(builder: (cubit, state) {
+    final cubit = context.read<LandingCubit>();
+    return BlocBuilder<LandingCubit, LandingState>(
+      builder: (context, state) {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -87,37 +33,36 @@ class _SignUpViewState extends SafeState<SignUpView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 RoundedListItem(
-                    height: 64,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(10),
-                      bottom: Radius.circular(0),
+                  height: 64,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(10),
+                    bottom: Radius.circular(0),
+                  ),
+                  child: TextField(
+                    controller: cubit.emailFieldController,
+                    style: SplitsbyTextTheme.textFieldStyle(context),
+                    decoration: InputDecoration(
+                      hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+                      errorStyle: SplitsbyTextTheme.textFieldErrorText(context),
+                      errorText: state.emailError,
+                      hintText: "Email",
+                      border: InputBorder.none,
                     ),
-                    child: TextField(
-                      controller: emailFieldController,
-                      style: SplitsbyTextTheme.textFieldStyle(context),
-                      decoration: InputDecoration(
-                        hintStyle:
-                            SplitsbyTextTheme.textFieldHintStyle(context),
-                        errorStyle:
-                            SplitsbyTextTheme.textFieldErrorText(context),
-                        errorText: emailError,
-                        hintText: "Email",
-                        border: InputBorder.none,
-                      ),
-                    )),
+                  ),
+                ),
                 PasswordTextField(
-                  controller: passwordFieldController,
-                  error: passwordError,
+                  controller: cubit.passwordFieldController,
+                  error: state.passwordError,
                   borderRadius: const BorderRadius.all(Radius.zero),
                   hintText: "Enter password (min. 6 characters)",
                 ),
                 PasswordTextField(
-                  controller: repeatPasswordFieldController,
-                  error: repeatPasswordError,
+                  controller: cubit.repeatPasswordFieldController,
+                  error: state.repeatPasswordError,
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(0),
-                    bottom: Radius.circular(10)
+                    bottom: Radius.circular(10),
                   ),
                   hintText: "Repeat password",
                 ),
@@ -130,21 +75,16 @@ class _SignUpViewState extends SafeState<SignUpView> {
                       const Spacer(),
                       ClickableListItem(
                         borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(30)),
+                          topRight: Radius.circular(10),
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(30),
+                        ),
                         height: 48,
                         width: 128,
                         color: Theme.of(context).colorScheme.secondaryContainer,
                         onClick: () {
-                          if (validateFields()) {
-                            final String email = emailFieldController.value.text;
-                            final String password =
-                                passwordFieldController.value.text;
-                            cubit.signUpWithEmail(email, password);
-                          }
-                          updateState();
+                          cubit.signUpWithEmail();
                         },
                         child: Text(
                           "Sign up",
@@ -154,57 +94,17 @@ class _SignUpViewState extends SafeState<SignUpView> {
                     ],
                   ),
                 const SizedBox(height: 32),
-                if (Platform.isIOS)
-                  const AppleSignButton(),
+                if (Platform.isIOS) const AppleSignButton(),
                 const SizedBox(height: 8),
                 const SignInWithGoogleButton(),
                 const SizedBox(height: 8),
-                const GuestSignInButton()
+                const GuestSignInButton(),
               ],
             ),
           ),
         );
-      }),
+      },
     );
   }
 
-  bool validateFields() {
-    validateEmail();
-    validatePassword();
-    validateRepeatPassword();
-    return emailError == null &&
-        passwordError == null &&
-        repeatPasswordError == null;
-  }
-
-  validateEmail() {
-    if (emailFieldController.text.isEmpty) {
-      emailError = "Enter email";
-    } else if (!EmailValidator.validate(emailFieldController.text)) {
-      emailError = "Invalid email";
-    } else {
-      emailError = null;
-    }
-  }
-
-  validatePassword() {
-    if (passwordFieldController.text.isEmpty) {
-      passwordError = "Enter a password";
-    } else if (passwordFieldController.text.length < 6) {
-      passwordError = "Password is too short (min 6 characters)";
-    } else {
-      passwordError = null;
-    }
-  }
-
-  validateRepeatPassword() {
-    if (repeatPasswordFieldController.text.isEmpty) {
-      repeatPasswordError = "Repeat your password";
-    } else if (repeatPasswordFieldController.text !=
-        passwordFieldController.text) {
-      repeatPasswordError = "Passwords do not match";
-    } else {
-      repeatPasswordError = null;
-    }
-  }
 }

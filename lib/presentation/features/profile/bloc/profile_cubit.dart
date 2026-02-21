@@ -3,6 +3,7 @@ import 'package:billsplit_flutter/data/remote/network_client.dart';
 import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/friend.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
 import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/domain/use_cases/auth/sign_out_usecase.dart';
@@ -32,6 +33,9 @@ class ProfileCubit extends SafeCubit<ProfileState> {
   }
 
   bool get showProfileInfo => !authRepository.loggedInUser.isGuest;
+
+  Person get user => authRepository.loggedInUser;
+
 
   void init() {
     _observeNotifications();

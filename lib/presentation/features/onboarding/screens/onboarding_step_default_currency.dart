@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/onboarding_bloc.dart';
 
 class OnboardingStepDefaultCurrency extends StatelessWidget {
-
-  OnboardingStepDefaultCurrency({super.key});
+  const OnboardingStepDefaultCurrency({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class OnboardingStepDefaultCurrency extends StatelessWidget {
               const SizedBox(height: 64),
               const UpdateUserDefaultCurrencyView(),
               const SizedBox(height: 64),
-              NextStepButton(cubit.nextButtonText(this))
+              NextStepButton(cubit.nextButtonText(this)),
             ],
           ),
         ),

@@ -21,8 +21,7 @@ class PhoneNumberView extends StatelessWidget {
             text: "Click here to add phone number",
             icon: null,
             onClick: () async {
-              await Navigator.of(context)
-                  .push(UpdatePhoneNumberRoute.getRoute());
+              await UpdatePhoneNumberRoute().push(context);
               cubit.update();
             },
           );
@@ -31,8 +30,7 @@ class PhoneNumberView extends StatelessWidget {
           text: phoneNumber.display,
           icon: null,
           onClick: () async {
-            await Navigator.of(context).push(
-                UpdatePhoneNumberRoute.getRoute(phoneNumber: phoneNumber));
+            await UpdatePhoneNumberRoute(phoneNumber: phoneNumber.dial).push(context);
             cubit.update();
           },
         );

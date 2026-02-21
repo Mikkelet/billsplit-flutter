@@ -56,6 +56,4 @@ class UploadProfilePictureView extends StatelessWidget {
       ),
     );
   }
-
-  static Route getRoute() => slideLeftRoute(const UploadProfilePictureView());
 }

@@ -5,26 +5,8 @@ import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class OnboardingStepChangeDisplayName extends StatefulWidget {
+class OnboardingStepChangeDisplayName extends StatelessWidget {
   const OnboardingStepChangeDisplayName({super.key});
-
-  @override
-  State<OnboardingStepChangeDisplayName> createState() =>
-      _OnboardingStepChangeDisplayNameState();
-
-  static Route getRoute() =>
-      slideLeftRoute(const OnboardingStepChangeDisplayName());
-}
-
-class _OnboardingStepChangeDisplayNameState
-    extends State<OnboardingStepChangeDisplayName> {
-  final _textController = TextEditingController();
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,24 +24,21 @@ class _OnboardingStepChangeDisplayNameState
               ),
               const SizedBox(height: 64),
               RoundedListItem(
-                  child: TextField(
-                autofocus: true,
-                style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelLarge?.fontSize),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Enter your name",
-                  counterText: "",
+                child: TextField(
+                  autofocus: true,
+                  style: TextStyle(fontSize: Theme.of(context).textTheme.labelLarge?.fontSize),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Enter your name",
+                    counterText: "",
+                  ),
+                  maxLines: 1,
+                  maxLength: 40,
+                  controller: cubit.nameController,
                 ),
-                maxLines: 1,
-                maxLength: 40,
-                controller: _textController..text = cubit.name,
-                onChanged: (value) {
-                  cubit.onNameChanged(value);
-                },
-              )),
+              ),
               const SizedBox(height: 64),
-              NextStepButton(cubit.nextButtonText(widget))
+              NextStepButton(cubit.nextButtonText(this)),
             ],
           ),
         ),

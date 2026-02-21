@@ -1,11 +1,9 @@
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/update_currency/update_user_default_currency_view.dart';
 import 'package:billsplit_flutter/presentation/common/upload_profile_picture/upload_pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/delete_user_flow/delete_user_page.dart';
 import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_page.dart';
-import 'package:billsplit_flutter/presentation/features/friends/friends_page.dart';
-import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_page.dart';
+import 'package:billsplit_flutter/presentation/features/friends/friends_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
@@ -87,14 +85,14 @@ class ProfilePage extends StatelessWidget {
                                 text: "Group invites",
                                 counter: state.groupInvites,
                                 onClick: () {
-                                  Navigator.of(context).push(groupInvitesRoute);
+                                  GroupInvitesRoute().push(context);
                                 },
                               ),
                               ProfileListItem(
                                 text: "Friends",
                                 counter: state.friendInvites,
                                 onClick: () async {
-                                  await Navigator.of(context).push(FriendsPage.route);
+                                  await FriendsRoute().push(context);
                                   cubit.init();
                                 },
                               ),

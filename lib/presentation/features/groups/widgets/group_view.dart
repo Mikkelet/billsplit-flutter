@@ -2,6 +2,7 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/groups/bloc/groups_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_debt_view.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
@@ -35,7 +36,7 @@ class GroupView extends StatelessWidget {
         child: ClickableListItem(
           color: Theme.of(context).colorScheme.primaryContainer,
           onClick: () {
-            _onClick(context);
+            GroupRoute(group.id).push(context);
           },
           padding: EdgeInsets.zero,
           cornerRadius: 10,
@@ -89,9 +90,5 @@ class GroupView extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _onClick(BuildContext context) {
-    Navigator.of(context).push(GroupPage.getRoute(group));
   }
 }

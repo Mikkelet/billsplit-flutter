@@ -6,24 +6,8 @@ import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ConfirmPhoneNumberPage extends StatefulWidget {
-
-  // cannot be const due to update state
+class ConfirmPhoneNumberPage extends StatelessWidget {
   const ConfirmPhoneNumberPage({super.key});
-
-  @override
-  State<ConfirmPhoneNumberPage> createState() => _ConfirmPhoneNumberPageState();
-}
-
-class _ConfirmPhoneNumberPageState extends State<ConfirmPhoneNumberPage> {
-  late final TextEditingController _textEditingController =
-      TextEditingController();
-
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +23,7 @@ class _ConfirmPhoneNumberPageState extends State<ConfirmPhoneNumberPage> {
           const SizedBox(height: 16),
           RoundedListItem(
             child: TextField(
-              controller: _textEditingController,
+              controller: cubit.textEditingController,
               decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
@@ -52,8 +36,7 @@ class _ConfirmPhoneNumberPageState extends State<ConfirmPhoneNumberPage> {
               width: 64,
               height: 64,
               onClick: () {
-                final smsCode = _textEditingController.text;
-                cubit.submitCode(smsCode);
+                cubit.submitCode();
               },
               child: const Icon(Icons.send),
             ),

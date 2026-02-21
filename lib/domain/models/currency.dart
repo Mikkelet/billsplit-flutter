@@ -2,9 +2,11 @@ class Currency {
   final String _symbol;
   final num rate;
 
-  Currency({required String symbol, required this.rate}) : _symbol = symbol;
+  const Currency({required String symbol, required this.rate}) : _symbol = symbol;
 
-  factory Currency.usd() => Currency(symbol: "usd", rate: 1);
+  static Currency usd() => usdValue;
+
+  static const Currency usdValue = Currency(symbol: "usd", rate: 1);
 
   String get symbol => _symbol.toUpperCase();
 

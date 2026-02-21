@@ -13,3 +13,4 @@ Route<dynamic> inspectProfileRoute(Person person) => MaterialPageRoute(
     );
   },
 );
+

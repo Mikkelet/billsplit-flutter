@@ -9,6 +9,7 @@ import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_
 import 'package:billsplit_flutter/presentation/features/add_group/widgets/add_people_to_group_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/widgets/added_person_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
@@ -29,7 +30,7 @@ class AddGroupPage extends StatelessWidget {
       listener: (context, cubit, state) {
         if (state is GroupAdded) {
           Navigator.of(context).pop();
-          Navigator.of(context).push(GroupPage.getRoute(state.group));
+          GroupRoute(state.group.id).push(context);
         }
       },
       child: BaseBlocBuilder<AddGroupCubit>(

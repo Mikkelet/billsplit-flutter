@@ -6,6 +6,7 @@ import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboardi
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_state.dart';
 import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
@@ -17,49 +18,40 @@ class OnboardingFlow extends StatefulWidget {
 }
 
 class _OnboardingFlowState extends State<OnboardingFlow> {
-
   @override
   Widget build(BuildContext context) {
-    return BaseBlocWidget<OnboardingBloc>(
-      create: (context) => OnboardingBloc(),
-      listener: (context, cubit, event) {
-        if (event is FinishOnboardingEvent) {
-          Navigator.of(context).pop();
-        }
-      },
-      child: BaseBlocBuilder<OnboardingBloc>(
-        builder: (cubit, state) {
-          return BaseScaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              leading: BackButton(
+    final cubit = context.read<OnboardingBloc>();
+    return BlocBuilder<OnboardingBloc, OnboardingState>(
+      builder: (context, state) {
+        return BaseScaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: BackButton(
+              onPressed: () {
+                cubit.onPreviousClicked();
+              },
+            ),
+            actions: [
+              CloseButton(
                 onPressed: () {
-                  cubit.onPreviousClicked();
+                  Navigator.of(context).pop();
                 },
               ),
-              actions: [
-                CloseButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ),
-            body: Builder(builder: (context) {
+            ],
+          ),
+          body: Builder(
+            builder: (context) {
               if (state is Loading) {
                 return const Center(child: CircularProgressIndicator());
               }
               return PageView(
-                controller: cubit.controller,
-                onPageChanged: (page) {
-                  cubit.onPageChanged(page);
-                },
+                controller: cubit.pageController,
                 children: cubit.steps,
               );
-            }),
-          );
-        },
-      ),
+            },
+          ),
+        );
+      },
     );
   }
 }

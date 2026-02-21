@@ -1,31 +1,44 @@
-import 'package:billsplit_flutter/domain/models/phone_number.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/confirm_phone_number_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_phone_number_use_case.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/bloc/update_phone_number_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UpdatePhoneNumberCubit extends Cubit<UpdatePhoneNumberState> {
+class UpdatePhoneNumberCubit extends SafeCubit<UpdatePhoneNumberState> {
   final _updatePhoneNumberUseCase = UpdatePhoneNumberUseCase();
   final _confirmPhoneNumberUseCase = ConfirmPhoneNumberUseCase();
+  final _parsePhoneNumber = ParsePhoneNumberUseCase();
 
   int _currentStep = 0;
+  final String? _initialPhoneNumber;
   static const int _maxStep = 1;
   final PageController pageController = PageController();
-  String _verificationId = "";
+  final TextEditingController textEditingController = TextEditingController();
 
-  UpdatePhoneNumberCubit(PhoneNumber? phoneNumber)
-      : super(UpdatePhoneNumberState(
-          countryCode: phoneNumber?.countryCode ?? "",
-          phoneNumber: phoneNumber?.phoneNumber ?? "",
-        ));
+  UpdatePhoneNumberCubit(this._initialPhoneNumber) : super(const UpdatePhoneNumberState());
+
+  void init() async {
+    try {
+      safeEmit(state.loading());
+      final parsed = await _parsePhoneNumber.launch(_initialPhoneNumber);
+      if (parsed != null) {
+        safeEmit(state.copyWith(phoneNumber: parsed.phoneNumber, countryCode: parsed.countryCode));
+      }
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(errorMessage: SplitsbyError.unknown(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
+  }
 
   void sendSms(String phoneNumber) async {
     try {
-      emit(state.copyWith(isLoading: true));
+      safeEmit(state.loading());
       final fullNumber = "${state.countryCode}${state.phoneNumber}";
       await _updatePhoneNumberUseCase.launch(
         phoneNumber: fullNumber,
@@ -33,29 +46,34 @@ class UpdatePhoneNumberCubit extends Cubit<UpdatePhoneNumberState> {
         onFailed: _onFailed,
       );
     } catch (e, st) {
-      // showError(err, stackTrace);
+      logError(e, st);
+      safeEmit(state.copyWith(errorMessage: SplitsbyError.unknown(e.toString())));
     } finally {
       emit(state.copyWith(isLoading: false));
     }
   }
 
   void _onFailed(UiException e) {
-    // showError(e, null);
+    logError(e, StackTrace.current);
+    safeEmit(state.copyWith(errorMessage: SplitsbyError.unknown(e.toString())));
   }
 
   void _onCodeSent(String verificationId) {
-    _verificationId = verificationId;
     nextStep();
   }
 
-  void submitCode(String code) async {
+  void submitCode() async {
     try {
-      emit(state.copyWith(isLoading: true));
-      await _confirmPhoneNumberUseCase.launch(_verificationId, code);
-      // emit success
-      //emit(UpdateNumberSuccess());
+      safeEmit(state.loading());
+      await _confirmPhoneNumberUseCase.launch(
+        textEditingController.text,
+        textEditingController.text,
+      );
     } catch (e, st) {
-      // showError(e, st);
+      logError(e, st);
+      safeEmit(
+        state.copyWith(errorMessage: SplitsbyError.unknown(e.toString())),
+      );
     } finally {
       emit(state.copyWith(isLoading: false));
     }
@@ -77,7 +95,7 @@ class UpdatePhoneNumberCubit extends Cubit<UpdatePhoneNumberState> {
 
   void changeCountryCode(CountryCode country) {
     if (country.dialCode == null) {
-      emit(state.copyWith(errorMessage: "Unexpected error occurred"));
+      emit(state.copyWith(errorMessage: SplitsbyError.unknown("")));
     } else {
       emit(state.copyWith(countryCode: country.dialCode!));
     }
@@ -88,8 +106,11 @@ class UpdatePhoneNumberCubit extends Cubit<UpdatePhoneNumberState> {
   }
 
   void updateStep() {
-    pageController.animateToPage(_currentStep,
-        duration: const Duration(milliseconds: 500), curve: Curves.linear);
+    pageController.animateToPage(
+      _currentStep,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.linear,
+    );
   }
 
   @override

@@ -1,15 +1,19 @@
-import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/profile_page.dart';
-import 'package:billsplit_flutter/presentation/utils/routing_utils.dart';
+import 'package:billsplit_flutter/presentation/navigation/transitions/slide_in_page.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-abstract class ProfileRoute {
-  static Route getRoute() {
-    final widget = BlocProvider(
-      create: (context) => ProfileCubit(),
+import '../../navigation/app_router.dart';
+
+part '../../../_generated/presentation/features/profile/profile_route.g.dart';
+
+@TypedGoRoute<ProfileRoute>(path: AppRoutes.profile)
+class ProfileRoute extends GoRouteData with $ProfileRoute {
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return SlideInTransition(
+      state: state,
       child: ProfilePage(),
     );
-    return slideLeftRoute(widget);
   }
 }

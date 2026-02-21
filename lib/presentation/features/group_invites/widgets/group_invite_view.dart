@@ -5,6 +5,7 @@ import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/bloc/group_invite_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_title.dart';
@@ -34,7 +35,10 @@ class GroupInviteView extends StatelessWidget {
             children: [
               Stack(
                 alignment: Alignment.bottomLeft,
-                children: [GroupPictureView(group: group), GroupTitleView(group: group)],
+                children: [
+                  GroupPictureView(group: group),
+                  GroupTitleView(group: group),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -57,7 +61,7 @@ class GroupInviteView extends StatelessWidget {
                                 onClick: () async {
                                   final response = await cubit.respond(group, false);
                                   if (response && context.mounted) {
-                                    Navigator.of(context).push(GroupPage.getRoute(group));
+                                    GroupRoute(group.id).push(context);
                                   }
                                 },
                                 child: Text(

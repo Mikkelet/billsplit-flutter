@@ -1,4 +1,10 @@
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
+import 'package:billsplit_flutter/utils/pair.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../../../domain/models/group.dart';
+part '../../../../_generated/presentation/features/group/bloc/group_state.freezed.dart';
 
 enum GroupPageNav {
   events,
@@ -17,8 +23,23 @@ enum GroupPageNav {
   }
 }
 
-class GroupState extends Main {
-  final GroupPageNav nav;
+enum SortEvents {
+  added,
+  specified;
+}
 
-  GroupState(this.nav);
+@freezed
+abstract class GroupState with _$GroupState {
+  const factory GroupState({
+    @Default(false) bool isLoading,
+    @Default(GroupPageNav.events) GroupPageNav groupNav,
+    @Default(SortEvents.added) SortEvents sortBy,
+    @Default([]) Iterable<Pair<Person, num>> debts,
+    @Default(SplitsbyError.none()) SplitsbyError error,
+    Group? group,
+  }) = _GroupState;
+
+  const GroupState._();
+
+  Group get requireGroup => group!;
 }

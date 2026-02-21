@@ -4,10 +4,14 @@ targets:
       source_gen:combining_builder:
         options:
           build_extensions:
-            '^lib/data/{{}}.dart': 'lib/generated/{{}}.g.dart'
+            '^lib/{{}}.dart': 'lib/_generated/{{}}.g.dart'
       json_serializable:
         options:
           explicit_to_json: true
+          any_map: true
+        generate_for:
+          exclude:
+            - 'lib/database/**'
       freezed|freezed:
         enabled: true
         options:
