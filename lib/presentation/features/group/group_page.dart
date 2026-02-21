@@ -1,5 +1,5 @@
 import 'package:billsplit_flutter/presentation/common/extended_fab.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/add_expense_route.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/add_service_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
@@ -9,8 +9,6 @@ import 'package:billsplit_flutter/presentation/features/group/widgets/group_bott
 import 'package:billsplit_flutter/presentation/features/group/widgets/services_view.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/sort_button.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_route.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
-import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,14 +50,9 @@ class GroupPage extends StatelessWidget {
               ? null
               : AppBar(
                   elevation: 0,
-                  foregroundColor: state.requireGroup.coverImageUrlState.value.isEmpty
-                      ? null
-                      : Colors.white,
-                  title: MutableValue(
-                    mutableValue: state.requireGroup.nameState,
-                    builder: (context, value) => Text(value),
-                  ),
-                  systemOverlayStyle: state.requireGroup.coverImageUrlState.value.isEmpty
+                  foregroundColor: state.requireGroup.coverImageUrl.isEmpty ? null : Colors.white,
+                  title: Text(state.requireGroup.name),
+                  systemOverlayStyle: state.requireGroup.coverImageUrl.isEmpty
                       ? null
                       : const SystemUiOverlayStyle(
                           statusBarIconBrightness: Brightness.light,
@@ -67,7 +60,7 @@ class GroupPage extends StatelessWidget {
                         ),
                   flexibleSpace: Builder(
                     builder: (context) {
-                      if (state.requireGroup.coverImageUrlState.value.isEmpty) {
+                      if (state.requireGroup.coverImageUrl.isEmpty) {
                         return Container(
                           color: Theme.of(context).colorScheme.tertiary,
                         );
@@ -76,7 +69,7 @@ class GroupPage extends StatelessWidget {
                         fit: StackFit.expand,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: state.requireGroup.coverImageUrlState.value,
+                            imageUrl: state.requireGroup.coverImageUrl,
                             fit: BoxFit.cover,
                           ),
                           Container(
@@ -141,7 +134,7 @@ class GroupPage extends StatelessWidget {
     final cubit = context.read<GroupBloc>();
     final state = cubit.state;
     if (state.groupNav == GroupPageNav.events) {
-      Navigator.of(context).push(AddExpensePage.getRoute(context.user, state.requireGroup, null));
+      AddExpenseRoute(groupId: state.requireGroup.id, expenseId: "").push(context);
     } else if (state.groupNav == GroupPageNav.services) {
       AddServiceRoute.add(state.requireGroup.id).push(context);
     }

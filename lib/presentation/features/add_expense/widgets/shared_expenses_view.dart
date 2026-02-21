@@ -1,9 +1,7 @@
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/list_position.dart';
-import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,17 +17,11 @@ class SharedExpensesView extends StatefulWidget {
   State<SharedExpensesView> createState() => _SharedExpensesViewState();
 }
 
-class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
+class _SharedExpensesViewState extends State<SharedExpensesView> {
   late bool showAll = widget.showAll;
   static const int _showAllLimit = 3;
 
-  static const _randomMenuItems = [
-    "Burger",
-    "Fries",
-    "Wine",
-    "Soda",
-    "Chicken nuggets"
-  ];
+  static const _randomMenuItems = ["Burger", "Fries", "Wine", "Soda", "Chicken nuggets"];
 
   static String _getHintTextIndex(int index) {
     if (index >= _randomMenuItems.length) {
@@ -41,24 +33,24 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddExpenseBloc>();
-    return MutableValue(
-      mutableValue: cubit.groupExpense.sharedExpensesState,
-      builder: (context, sharedExpensesState) {
+    final state = cubit.state;
+    return Builder(
+      builder: (context) {
+        final allExpenses = state.groupExpense.sharedExpenses;
         Iterable<SharedExpense> sharedExpenses;
-        if (showAll && sharedExpensesState.length > _showAllLimit) {
-          sharedExpenses = sharedExpensesState;
+        if (showAll && allExpenses.length > _showAllLimit) {
+          sharedExpenses = allExpenses;
         } else {
-          sharedExpenses = sharedExpensesState.take(_showAllLimit);
+          sharedExpenses = allExpenses.take(_showAllLimit);
         }
         return Column(
           children: [
             ...sharedExpenses.mapIndexed(
               (i, SharedExpense e) {
-                final listPos =
-                    ListPosition.calculatePosition(i, sharedExpensesState);
-                final autoFocus = (listPos == ListPosition.last ||
-                        listPos == ListPosition.single) &&
-                    e.expenseState.value == 0;
+                final listPos = ListPosition.calculatePosition(i, sharedExpenses);
+                final autoFocus =
+                    (listPos == ListPosition.last || listPos == ListPosition.single) &&
+                    e.expense == 0;
 
                 return SharedExpenseView(
                   key: UniqueKey(),
@@ -71,16 +63,17 @@ class _SharedExpensesViewState extends SafeState<SharedExpensesView> {
             ),
             if (!showAll)
               ClickableListItem(
-                  height: 48,
-                  onClick: () {
-                    setState(() {
-                      showAll = true;
-                    });
-                  },
-                  child: Text(
-                    "Show all",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ))
+                height: 48,
+                onClick: () {
+                  setState(() {
+                    showAll = true;
+                  });
+                },
+                child: Text(
+                  "Show all",
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
           ],
         );
       },

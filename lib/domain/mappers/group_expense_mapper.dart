@@ -17,24 +17,26 @@ extension GroupExpensesDtoExt on Iterable<GroupExpenseDTO> {
 
 extension GroupExpenseDtoExt on GroupExpenseDTO {
   GroupExpenseDb toDb(String groupId, SyncState syncState) => GroupExpenseDb(
-      id: id,
-      groupId: groupId,
-      groupExpense: json.encode(this),
-      syncState: syncState.index);
+    id: id,
+    groupId: groupId,
+    groupExpense: json.encode(this),
+    syncState: syncState.index,
+  );
 
   GroupExpense toGroupExpense() => GroupExpense(
-      id: id,
-      createdBy: createdBy.toPerson(),
-      timestamp: timestamp,
-      tempParticipants: tempParticipants.toPeople(),
-      receiptImageUrl: receiptImageUrl,
-      date: DateTime.parse(date),
-      description: description,
-      payer: payee.toPerson(),
-      currency: currency.toCurrency(),
-      syncState: SyncState.synced,
-      surcharges: surcharges?.toSurcharges() ?? [],
-      sharedExpenses: sharedExpenses.toSharedExpense());
+    id: id,
+    createdBy: createdBy.toPerson(),
+    timestamp: timestamp,
+    tempParticipants: tempParticipants.toPeople(),
+    receiptImageUrl: receiptImageUrl,
+    date: date,
+    description: description,
+    payer: payee.toPerson(),
+    currency: currency.toCurrency(),
+    syncState: SyncState.synced,
+    surcharges: surcharges.toSurcharges().toList(),
+    sharedExpenses: sharedExpenses.toSharedExpense().toList(),
+  );
 }
 
 extension GroupExpensesDbExt on Iterable<GroupExpenseDb> {
@@ -42,33 +44,34 @@ extension GroupExpensesDbExt on Iterable<GroupExpenseDb> {
 }
 
 extension GroupExpenseDbExt on GroupExpenseDb {
-  GroupExpenseDTO toDTO() =>
-      GroupExpenseDTO.fromJson(json.decode(groupExpense));
+  GroupExpenseDTO toDTO() => GroupExpenseDTO.fromJson(json.decode(groupExpense));
 
   GroupExpense toGroupExpense() {
     final dto = GroupExpenseDTO.fromJson(json.decode(groupExpense));
     return GroupExpense(
-        id: id,
-        createdBy: dto.createdBy.toPerson(),
-        timestamp: dto.timestamp,
-        tempParticipants: dto.tempParticipants.toPeople(),
-        description: dto.description,
-        date: DateTime.parse(dto.date),
-        receiptImageUrl: dto.receiptImageUrl,
-        surcharges: dto.surcharges?.toSurcharges() ?? [],
-        sharedExpenses: dto.sharedExpenses.toSharedExpense(),
-        payer: dto.payee.toPerson(),
-        syncState: SyncState.fromId(syncState),
-        currency: dto.currency.toCurrency());
+      id: id,
+      createdBy: dto.createdBy.toPerson(),
+      timestamp: dto.timestamp,
+      tempParticipants: dto.tempParticipants.toPeople(),
+      description: dto.description,
+      date: dto.date,
+      receiptImageUrl: dto.receiptImageUrl,
+      surcharges: dto.surcharges.toSurcharges().toList(),
+      sharedExpenses: dto.sharedExpenses.toSharedExpense().toList(),
+      payer: dto.payee.toPerson(),
+      syncState: SyncState.fromId(syncState),
+      currency: dto.currency.toCurrency(),
+    );
   }
 }
 
 extension GroupExpenseExt on GroupExpense {
   GroupExpenseDb toDb(String groupId, SyncState syncState, {String? tempId}) {
     return GroupExpenseDb(
-        id: tempId ?? id,
-        groupId: groupId,
-        groupExpense: jsonEncode(toEventDTO().toJson()),
-        syncState: syncState.index);
+      id: tempId ?? id,
+      groupId: groupId,
+      groupExpense: jsonEncode(toEventDTO().toJson()),
+      syncState: syncState.index,
+    );
   }
 }

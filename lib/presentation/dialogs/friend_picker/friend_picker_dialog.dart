@@ -8,13 +8,14 @@ import 'package:billsplit_flutter/presentation/dialogs/person_picker_dialog.dart
 import 'package:flutter/material.dart';
 
 class FriendPickerDialog extends StatelessWidget {
-  final Iterable<Person> currentPickedFriends;
+  final List<Person> currentPickedFriends;
   final Function(Person) onFriendAdded;
 
-  const FriendPickerDialog(
-      {super.key,
-      required this.onFriendAdded,
-      required this.currentPickedFriends});
+  const FriendPickerDialog({
+    super.key,
+    required this.onFriendAdded,
+    required this.currentPickedFriends,
+  });
 
   @override
   Widget build(BuildContext context) {

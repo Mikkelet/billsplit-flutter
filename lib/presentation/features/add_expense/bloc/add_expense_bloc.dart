@@ -1,146 +1,186 @@
 import 'dart:async';
 
+import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
-import 'package:billsplit_flutter/domain/models/group.dart';
-import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/scanned_receipt_item.dart';
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/domain/models/surcharge.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/delete_expense_usecase.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/domain/use_cases/events/observe_event_usecase.dart';
+import 'package:billsplit_flutter/domain/use_cases/groups/observe_group_usecase.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_state.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/cupertino.dart';
 
-class AddExpenseBloc extends BaseCubit {
+import '../../../base/errors.dart';
+
+class AddExpenseBloc extends SafeCubit<AddExpenseState> {
   final _addExpenseUseCase = AddEventUseCase();
   final _deleteExpenseUseCase = DeleteExpenseUseCase();
+  final _observeGroupUseCase = ObserveGroupUseCase();
+  final _observeExpenseUseCase = ObserveGroupExpenseUseCase();
+  final SharedPrefs _sharedPrefs;
 
-  final Group group;
-  final GroupExpense groupExpense;
-  final MutableState<Iterable<Person>> peopleStream = <Person>[].obs();
+  final descriptionTextController = TextEditingController();
+  final PageController pageController = PageController();
 
-  Stream<bool> get individualExpenseStream {
-    final participantsStream = groupExpense.sharedExpensesState.value
-        .map((event) => event.participantsState.stateStream);
-    final streams = [
-      groupExpense.totalStream,
-      groupExpense.currencyState.stateStream,
-      groupExpense.payerState.stateStream,
-      ...participantsStream,
-    ];
-    return CombineLatestStream(streams, (values) => true);
-  }
+  final String groupId;
+  final String groupExpenseId;
 
-  AddExpenseBloc(this.group, this.groupExpense) : super.withState(Main()) {
-    if (groupExpense.id.isEmpty) {
-      final groupDefCurrencyRate =
-          sharedPrefs.getExchangeRate(group.defaultCurrencyState.value);
+  AddExpenseBloc(this._sharedPrefs, {required this.groupId, required this.groupExpenseId})
+    : super(const AddExpenseState());
+
+  bool get isChanged => true;
+
+  Future<void> init() async {
+    _observeExpenseUseCase.observe(groupId, groupExpenseId).listen((expense) {
+      safeEmit(state.copyWith(groupExpense: expense));
+      if (expense.sharedExpenses.length > 1 && state.view == ExpenseView.simple) {
+        pageController.jumpToPage(1);
+      }
+    });
+    _observeGroupUseCase.invoke(groupId).listen((group) {
+      safeEmit(
+        state.copyWith(
+          people: [
+            ...state.groupExpense.tempParticipants,
+            ...state.group.people,
+          ],
+        ),
+      );
+    });
+    if (state.groupExpense.id.isEmpty) {
+      final groupDefCurrencyRate = _sharedPrefs.getExchangeRate(state.group.defaultCurrency);
       if (groupDefCurrencyRate == null) {
         updateCurrency(Currency.usd());
       } else {
-        updateCurrency(Currency(
-            symbol: group.defaultCurrencyState.value,
-            rate: groupDefCurrencyRate));
+        updateCurrency(Currency(symbol: state.group.defaultCurrency, rate: groupDefCurrencyRate));
       }
     }
-    group.peopleState
-        .combine(groupExpense.tempParticipantsState, (x, y) => [...x, ...y])
-        .listen((data) {
-      peopleStream.value = data;
-    }).addTo(compositeSubscription);
   }
 
-  void addExpense() {
-    _addExpenseUseCase.launch(group, groupExpense);
-    emit(AddExpenseSuccess());
+  void addExpense() async {
+    try {
+      safeEmit(state.copyWith(isLoading: true));
+      await _addExpenseUseCase.launch(state.group, state.groupExpense);
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.unknown(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
   void onPayerSelected(Person person) {
-    groupExpense.payerState.value = person;
+    final groupExpense = state.groupExpense.copyWith(payer: person);
+    safeEmit(state.copyWith(groupExpense: groupExpense));
   }
 
   void onQuickAddSharedExpense() {
-    final sharedExpense = groupExpense.addNewSharedExpense(
-        withParticipants: group.peopleState.value);
-    emit(QuickAddSharedExpense(sharedExpense));
+    final expenses = List.of(state.groupExpense.sharedExpenses);
+    final newExpense = SharedExpense(participants: state.group.people);
+    expenses.add(newExpense);
+    final copy = state.groupExpense.copyWith(sharedExpenses: expenses);
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
   void addExpenseForUser(Person person) {
-    final sharedExpense =
-        groupExpense.addNewSharedExpense(withParticipants: [person]);
-    emit(QuickAddSharedExpense(sharedExpense));
+    final expenses = List.of(state.groupExpense.sharedExpenses);
+    final newExpense = SharedExpense(participants: [person]);
+    expenses.add(newExpense);
+    final copy = state.groupExpense.copyWith(sharedExpenses: expenses);
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
-  void deleteExpense() {
-    showLoading();
-    _deleteExpenseUseCase.launch(group.id, groupExpense).then((_) {
-      emit(ExpenseDeleted());
-    }).catchError((err, st) {
-      showError(err, st);
-    });
+  Future<bool> deleteExpense() async {
+    try {
+      safeEmit(state.copyWith(isLoading: true));
+      await _deleteExpenseUseCase.launch(state.group.id, state.groupExpense);
+      return true;
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+      return false;
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
   void updateCurrency(Currency currency) {
-    print("qqq change currency ${currency.symbol}");
-    groupExpense.currencyState.value = currency;
+    final copy = state.groupExpense.copyWith(currency: currency);
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
-  uploadReceipt(Iterable<ScannedReceiptItem> receiptItems) {
+  void uploadReceipt(Iterable<ScannedReceiptItem> receiptItems) {
     if (receiptItems.isEmpty) {
-      showToast("No items found");
       return;
     }
-    final sharedExpenses = receiptItems.map((e) => SharedExpense(
+    final sharedExpenses = receiptItems.map(
+      (e) => SharedExpense(
         expense: e.expense,
-        participants: group.peopleState.value,
-        description: e.description));
-    groupExpense.sharedExpensesState.clear();
-    groupExpense.sharedExpensesState.addAll(sharedExpenses);
+        participants: state.group.people,
+        description: e.description,
+      ),
+    );
+    final copy = state.groupExpense.copyWith(sharedExpenses: sharedExpenses.toList());
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
   void removeSharedExpense(SharedExpense sharedExpense) {
-    groupExpense.removeSharedExpense(sharedExpense);
-    if (groupExpense.sharedExpensesState.isEmpty) {
-      groupExpense.addNewSharedExpense(
-          withParticipants: group.peopleState.value);
-    }
+    if (state.groupExpense.sharedExpenses.length == 1) return;
+    final expenseCopy = state.groupExpense.sharedExpenses.where((it) => it != sharedExpense);
+    final copy = state.groupExpense.copyWith(sharedExpenses: expenseCopy.toList());
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
-  void updateParticipantsForExpense(
-      SharedExpense sharedExpense, Iterable<Person> participants) {
-    sharedExpense.participantsState.value = participants;
+  void updateParticipantsForExpense(SharedExpense sharedExpense, Iterable<Person> participants) {
+    final expense = sharedExpense.copyWith(participants: participants.toList());
+    // TODO
   }
 
   void updateSharedExpense(SharedExpense sharedExpense, num value) {
-    sharedExpense.expenseState.value = value;
+    final copy = sharedExpense.copyWith(expense: value);
+    // TODO
   }
 
   void switchToSingle() {
-    groupExpense.sharedExpensesState.value =
-        groupExpense.sharedExpensesState.sublist(0, 1);
+    final copy = state.groupExpense.copyWith(
+      sharedExpenses: [state.groupExpense.sharedExpenses.first],
+    );
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
   void updateDate(DateTime dateTime) {
-    groupExpense.dateState.value = dateTime;
+    final copy = state.groupExpense.copyWith(date: dateTime.toIso8601String());
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
   void updateDescription(String description) {
-    groupExpense.descriptionState.value = description;
+    final copy = state.groupExpense.copyWith(description: description);
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
   void onAddTempParticipant(String name, SharedExpense sharedExpense) {
-    groupExpense.addTempParticipant(name, sharedExpense);
-    update();
+    final temps = [...state.groupExpense.tempParticipants, Person(name: name)];
+    final copy = state.groupExpense.copyWith(tempParticipants: temps);
+    safeEmit(state.copyWith(groupExpense: copy));
   }
 
   void onUpdateSurcharge(num value) {
-    groupExpense.surchargesState.clear();
-    groupExpense.surchargesState.add(Surcharge(
-        name: "Surcharge", type: SurchargeType.percentage, value: value));
-    update();
+    final copy = state.groupExpense.copyWith(
+      surcharges: [Surcharge(name: "Surcharge", type: SurchargeType.percentage, value: value)],
+    );
+    safeEmit(state.copyWith(groupExpense: copy));
+  }
+
+  void resetChanges() {}
+
+  @override
+  Future<void> close() {
+    pageController.dispose();
+    descriptionTextController.dispose();
+    return super.close();
   }
 }

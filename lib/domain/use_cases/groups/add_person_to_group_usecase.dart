@@ -11,7 +11,9 @@ class InvitePersonToGroupUseCase {
 
   Future launch(Group group, Person person) async {
     await _apiService.invitePersonToGroup(group.id, person.uid);
-    group.invitePerson(person);
-    await _database.groupsDAO.insertGroup(group.toDb());
+    final groupInvites = List.of(group.invites);
+    groupInvites.add(person);
+    final groupCopy = group.copyWith(invites: groupInvites);
+    await _database.groupsDAO.insertGroup(groupCopy.toDb());
   }
 }

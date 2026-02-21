@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:billsplit_flutter/domain/models/shared_expense.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
-import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SharedExpenseDescriptionView extends StatefulWidget {
+class SharedExpenseDescriptionView extends StatelessWidget {
   final SharedExpense sharedExpense;
   final bool showIcon;
   final bool alignRight;
@@ -22,50 +21,32 @@ class SharedExpenseDescriptionView extends StatefulWidget {
   });
 
   @override
-  State<SharedExpenseDescriptionView> createState() =>
-      _SharedExpenseDescriptionViewState();
-}
-
-class _SharedExpenseDescriptionViewState
-    extends SafeState<SharedExpenseDescriptionView> {
-  late final textController =
-      TextEditingController(text: widget.sharedExpense.descriptionState.value);
-
-  @override
-  void dispose() {
-    textController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelLarge;
+    final cubit = context.read<AddExpenseBloc>();
     return TextField(
-      controller: textController,
-      onChanged: (value) {
-        widget.sharedExpense.descriptionState.value = value;
-      },
+      controller: cubit.descriptionTextController,
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       textInputAction: TextInputAction.next,
-      textAlign: widget.alignRight ? TextAlign.end : TextAlign.start,
-      autofocus: widget.autoFocus,
+      textAlign: alignRight ? TextAlign.end : TextAlign.start,
+      autofocus: autoFocus,
       maxLines: 1,
       maxLength: 20,
       style: style,
       decoration: InputDecoration(
-        hintStyle: SplitsbyTextTheme.textFieldHintStyle(context)
-            .copyWith(fontSize: style?.fontSize),
+        hintStyle: SplitsbyTextTheme.textFieldHintStyle(
+          context,
+        ).copyWith(fontSize: style?.fontSize),
         counterText: "",
-        prefixIcon: widget.showIcon
-            ? const Padding(
-                padding: EdgeInsets.only(right: 8), child: Icon(Icons.edit))
+        prefixIcon: showIcon
+            ? const Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.edit))
             : null,
         isDense: true,
         prefixIconConstraints: const BoxConstraints(),
         border: InputBorder.none,
-        hintText: widget.hintText,
+        hintText: hintText,
       ),
     );
   }

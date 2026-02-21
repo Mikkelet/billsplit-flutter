@@ -1,16 +1,15 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participant_picker/temporary_participant_view.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantsPickerDialog extends StatelessWidget {
-  final MutableListState<Person> participantsState;
-  final MutableState<Iterable<Person>> peopleState;
-  late final Iterable<Person> initialParticipantState;
-  late final Iterable<Person> initialPeopleState;
+  final List<Person> participants;
+  final List<Person> people;
+  final List<Person> initialParticipantState;
+  final List<Person> initialpeople;
   final num totalExpense;
   final String currencySymbol;
   final Widget? extraAction;
@@ -18,81 +17,71 @@ class ParticipantsPickerDialog extends StatelessWidget {
   final bool showSubmit;
   final Function(String)? onAddTempParticipant;
 
-  ParticipantsPickerDialog({
+  const ParticipantsPickerDialog({
     super.key,
-    required this.participantsState,
-    required this.peopleState,
+    required this.participants,
+    required this.people,
     required this.totalExpense,
     required this.currencySymbol,
     required this.description,
     this.showSubmit = true,
     this.onAddTempParticipant,
     this.extraAction,
-  })  : initialParticipantState = participantsState.value,
-        initialPeopleState = peopleState.value;
+  })  : initialParticipantState = participants,
+        initialpeople = people;
 
   final _showMin1PersonError = false;
 
   void changeParticipantStatus(Person person, bool isParticipant) {
     if (isParticipant) {
-      participantsState.add(person);
+      participants.add(person);
     } else {
-      participantsState.remove(person);
+      participants.remove(person);
     }
   }
 
   bool _isEveryoneSelected(int peopleSize) =>
-      peopleSize == participantsState.value.length;
+      peopleSize == participants.length;
 
   @override
   Widget build(BuildContext context) {
     final allowTempParticipants = onAddTempParticipant != null;
-    return MutableValue<Iterable<Person>>(
-      mutableValue: peopleState,
-      builder: (context, people) {
-        return MutableValue(
-          mutableValue: participantsState,
-          builder: (context, participants) {
-            return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              appBar: _appBar(context, people),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 4),
-                      ...people.map(
-                        (person) => _participantView(context, person),
-                      ),
-                      if (allowTempParticipants) const SizedBox(height: 8),
-                      if (allowTempParticipants)
-                        TemporaryParticipantView(
-                          onAddTempParticipant: onAddTempParticipant,
-                        ),
-                      const SizedBox(height: 8),
-                      if (_showMin1PersonError)
-                        Text(
-                          "Must include at least one person",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.error),
-                        ),
-                      if (extraAction != null) const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [if (extraAction != null) extraAction!],
-                      ),
-                    ],
-                  ),
-                ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: _appBar(context, people),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 4),
+              ...people.map(
+                    (person) => _participantView(context, person),
               ),
-            );
-          },
-        );
-      },
+              if (allowTempParticipants) const SizedBox(height: 8),
+              if (allowTempParticipants)
+                TemporaryParticipantView(
+                  onAddTempParticipant: onAddTempParticipant,
+                ),
+              const SizedBox(height: 8),
+              if (_showMin1PersonError)
+                Text(
+                  "Must include at least one person",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(
+                      color: Theme.of(context).colorScheme.error),
+                ),
+              if (extraAction != null) const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [if (extraAction != null) extraAction!],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -106,10 +95,9 @@ class ParticipantsPickerDialog extends StatelessWidget {
           // show the change-back animation before popping,
           // so the user can see they discarded their changes
           final shouldWait =
-              participantsState.value != initialParticipantState ||
-                  peopleState.value != initialPeopleState;
-          participantsState.value = initialParticipantState;
-          peopleState.value = initialPeopleState;
+              participants != initialParticipantState ||
+                  people != initialpeople;
+          people = initialpeople;
           if (shouldWait) {
             await Future.delayed(const Duration(milliseconds: 500));
           }
@@ -159,8 +147,8 @@ class ParticipantsPickerDialog extends StatelessWidget {
                     ? null
                     : (value) {
                         if (value == false) {
-                          participantsState.clear();
-                          participantsState.addAll(people);
+                          participants.clear();
+                          participants.addAll(people);
                         }
                       },
               ),
@@ -174,9 +162,9 @@ class ParticipantsPickerDialog extends StatelessWidget {
   Widget _participantView(BuildContext context, Person person) {
     num amount = 0;
     final isTemp = person.uid.startsWith("temp");
-    final isParticipant = participantsState.value.contains(person);
+    final isParticipant = participants.contains(person);
     if (totalExpense > 0 && isParticipant) {
-      amount = totalExpense / participantsState.value.length;
+      amount = totalExpense / participants.length;
     }
     return Column(
       children: [
@@ -185,8 +173,8 @@ class ParticipantsPickerDialog extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  participantsState.clear();
-                  participantsState.add(person);
+                  participants.clear();
+                  participants.add(person);
                 },
                 child: Row(
                   children: [
@@ -234,10 +222,10 @@ class ParticipantsPickerDialog extends StatelessWidget {
               fillColor: WidgetStateProperty.resolveWith((states) {
                 return Theme.of(context).colorScheme.secondaryContainer;
               }),
-              value: participantsState.value.contains(person),
+              value: participants.contains(person),
               onChanged: (isParticipant) {
                 if (isParticipant == false &&
-                    participantsState.value.length == 1) {
+                    participants.length == 1) {
                   // cannot have 0 participants
                 } else {
                   changeParticipantStatus(person, isParticipant ?? false);

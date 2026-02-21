@@ -1,3 +1,4 @@
+import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
 import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,6 +14,9 @@ abstract class AddServiceState with _$AddServiceState {
     @Default("") String serviceId,
     @Default(false) bool showCannotBe0ZeroError,
     @Default("") String nameErrorText,
+    required Person payer,
+    @Default("") String currency,
+    @Default([]) List<Person> participants,
     Group? group,
     SubscriptionService? service,
   }) = _AddServiceState;
@@ -24,4 +28,6 @@ abstract class AddServiceState with _$AddServiceState {
   Group get requireGroup => group!;
 
   SubscriptionService get requireService => service!;
+
+
 }

@@ -18,18 +18,19 @@ extension EventDTOExt on EventDTO? {
     if (this is GroupExpenseDTO) {
       final expenseDto = this as GroupExpenseDTO;
       return GroupExpense(
-          id: this!.id,
-          timestamp: this!.timestamp,
-          description: expenseDto.description,
-          createdBy: this!.createdBy.toPerson(),
-          receiptImageUrl: expenseDto.receiptImageUrl,
-          date: DateTime.parse(expenseDto.date),
-          tempParticipants: expenseDto.tempParticipants.toPeople(),
-          payer: expenseDto.payee.toPerson(),
-          sharedExpenses: expenseDto.sharedExpenses.toSharedExpense(),
-          syncState: SyncState.synced,
-          surcharges: expenseDto.surcharges.toSurcharges(),
-          currency: expenseDto.currency.toCurrency());
+        id: this!.id,
+        timestamp: this!.timestamp.toInt(),
+        description: expenseDto.description,
+        createdBy: this!.createdBy.toPerson(),
+        receiptImageUrl: expenseDto.receiptImageUrl,
+        date: expenseDto.date,
+        tempParticipants: expenseDto.tempParticipants.toPeople(),
+        payer: expenseDto.payee.toPerson(),
+        sharedExpenses: expenseDto.sharedExpenses.toSharedExpense().toList(),
+        syncState: SyncState.synced,
+        surcharges: expenseDto.surcharges.toSurcharges().toList(),
+        currency: expenseDto.currency.toCurrency(),
+      );
     }
     return null;
   }
@@ -42,26 +43,26 @@ extension EventExt on Event {
       final expense = this as GroupExpense;
       return GroupExpenseDTO(
         id: realId,
-        tempParticipants:
-            expense.tempParticipantsState.value.map((e) => e.toDTO()),
+        tempParticipants: expense.tempParticipants.map((e) => e.toDTO()),
         createdBy: createdBy.toDTO(),
-        date: expense.dateState.value.toIso8601String(),
-        receiptImageUrl: expense.receiptImageUrlState.value,
+        date: expense.date,
+        receiptImageUrl: expense.receiptImageUrl,
         timestamp: timestamp,
-        description: expense.descriptionState.value,
-        payee: expense.payerState.value.toDTO(),
-        sharedExpenses: expense.sharedExpensesState.value.toDTO(),
-        currency: expense.currencyState.value.toDTO(),
-        surcharges: expense.surchargesState.value.toSurcharges(),
+        description: expense.description,
+        payee: expense.payer.toDTO(),
+        sharedExpenses: expense.sharedExpenses.toDTO(),
+        currency: expense.currency.toDTO(),
+        surcharges: expense.surcharges.toSurcharges(),
       );
     }
     return PaymentDTO(
-        id: id,
-        createdBy: createdBy.toDTO(),
-        timestamp: timestamp,
-        paidTo: (this as Payment).paidTo.toDTO(),
-        paidBy: (this as Payment).paidBy.toDTO(),
-        currency: (this as Payment).currency.toDTO(),
-        amount: (this as Payment).amount);
+      id: id,
+      createdBy: createdBy.toDTO(),
+      timestamp: timestamp,
+      paidTo: (this as Payment).paidTo.toDTO(),
+      paidBy: (this as Payment).paidBy.toDTO(),
+      currency: (this as Payment).currency.toDTO(),
+      amount: (this as Payment).amount,
+    );
   }
 }

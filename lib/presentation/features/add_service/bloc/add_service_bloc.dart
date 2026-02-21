@@ -10,6 +10,7 @@ import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
+import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_cubit.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -21,7 +22,11 @@ class AddServiceBloc extends SafeCubit<AddServiceState> {
   final _addServiceUseCase = AddServiceUseCase();
   final _deleteServiceUseCase = DeleteServiceUseCase();
 
-  AddServiceBloc(this.serviceId, this.groupId) : super(const AddServiceState()) {
+  AddServiceBloc(
+    ProfileCubit profileCubit, {
+    required this.serviceId,
+    required this.groupId,
+  }) : super(AddServiceState(payer: profileCubit.user)) {
     init();
   }
 
@@ -37,11 +42,19 @@ class AddServiceBloc extends SafeCubit<AddServiceState> {
   late final expenseTextController = ExpenseTextFieldController();
 
   void init() {
+    nameTextController.addListener(() {});
+    expenseTextController.addListener(() {});
     _serviceStream =
         _observeServiceUseCase.observe(groupId, serviceId).listen((service) {
-          safeEmit(state.copyWith(service: service));
-          nameTextController.text = service.nameState.value;
-          expenseTextController.text = service.monthlyExpenseState.value.fmt2dec(readOnly: false);
+          safeEmit(
+            state.copyWith(
+              service: service,
+              payer: service.payer,
+              participants: service.participants.toList(),
+            ),
+          );
+          nameTextController.text = service.name;
+          expenseTextController.text = service.monthlyExpense.fmt2dec(readOnly: false);
         })..onError((e, st) {
           logError(e, st);
           safeEmit(state.copyWith(error: SplitsbyError.unknown(e.toString())));
@@ -65,7 +78,7 @@ class AddServiceBloc extends SafeCubit<AddServiceState> {
   }
 
   void onPayerClicked(Person person) {
-    service.payerState.value = person;
+    safeEmit(state.copyWith(payer: person));
   }
 
   Future<void> deleteService(SubscriptionService service) async {
@@ -82,18 +95,16 @@ class AddServiceBloc extends SafeCubit<AddServiceState> {
   }
 
   void updateCurrency(String symbol) {
-    service.currencyState.value = symbol;
+    safeEmit(state.copyWith(currency: symbol));
   }
 
-  void updateParticipants(Iterable<Person> participants) {
-    service.participantsState.value = participants;
-    if (!service.participantsState.value.contains(service.payerState.value)) {
-      service.payerState.value = service.participantsState.value.first;
-    }
-    if (service.participantsState.isEmpty) {
-      service.participantsState.add(service.payerState.value);
-    }
-  }
+  String get name => nameTextController.text;
+
+  double get monthlyExpense => double.tryParse(expenseTextController.text) ?? 0;
+
+  double get monthlyServicePerPerson => monthlyExpense / state.participants.length;
+
+  bool get isChanged => true;
 
   @override
   Future<void> close() async {

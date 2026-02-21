@@ -17,7 +17,7 @@ class GroupTitleView extends StatelessWidget {
       alignment: Alignment.centerLeft,
       padding: padding,
       child: Text(
-        group.nameState.value,
+        group.name,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(color: textColor),
         softWrap: false,
         overflow: TextOverflow.ellipsis,

@@ -4,7 +4,6 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/loading_view.dart';
 import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/features/group/group_page.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/bloc/group_invite_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/groups/widgets/group_picture.dart';
@@ -47,7 +46,7 @@ class GroupInviteView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ProfilePictureStack(
-                        people: group.peopleState.value,
+                        people: group.people,
                         size: 30,
                         limit: 3,
                       ),

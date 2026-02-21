@@ -20,8 +20,8 @@ class ObserveDebtsUseCase {
       if (events.isEmpty) return [];
       final temps = _getTemps(events.whereType<GroupExpense>());
       final people = {
-        ...group.peopleState.value,
-        ...group.pastMembersState.value,
+        ...group.people,
+        ...group.pastMembers,
         ...temps
       };
       final calculator = DebtCalculator.fromCombined(people, events);
@@ -31,7 +31,7 @@ class ObserveDebtsUseCase {
         final converted = _convertCurrencyUseCase.launch(
           e.second,
           Currency.usd().symbol,
-          group.defaultCurrencyState.value,
+          group.defaultCurrency,
         );
         return Pair(e.first, converted);
       });
@@ -43,6 +43,6 @@ class ObserveDebtsUseCase {
     return expenses.fold(
         [],
         (previousValue, element) =>
-            [...previousValue, ...element.tempParticipantsState.value]);
+            [...previousValue, ...element.tempParticipants]);
   }
 }

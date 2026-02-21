@@ -2,10 +2,8 @@ import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/sync_state.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
-import 'package:billsplit_flutter/presentation/features/add_expense/expense_page.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/add_expense_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
-import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,20 +37,18 @@ class ExpenseEventView extends StatelessWidget {
           onClick: () {
             final cubit = context.read<GroupBloc>();
             if (groupExpense.syncState == SyncState.synced) {
-              Navigator.of(
-                context,
-              ).push(AddExpensePage.getRoute(context.user, cubit.state.requireGroup, groupExpense));
+              final groupId = cubit.state.requireGroup.id;
+              AddExpenseRoute(expenseId: groupExpense.id, groupId: groupId).push(context);
             } else if (groupExpense.syncState == SyncState.failed) {
               cubit.retryAddExpense(groupExpense);
             }
           },
           child: Column(
             children: [
-              MutableValue(
-                mutableValue: groupExpense.descriptionState,
-                builder: (context, description) {
-                  final formatted = _formatDescription(description);
-                  final fontStyle = _descriptionFontStyle(description);
+              Builder(
+                builder: (context) {
+                  final formatted = _formatDescription(groupExpense.description);
+                  final fontStyle = _descriptionFontStyle(groupExpense.description);
                   return Text(
                     formatted,
                     textAlign: TextAlign.center,
@@ -64,41 +60,24 @@ class ExpenseEventView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  StreamBuilder(
-                    stream: groupExpense.totalStream,
-                    initialData: groupExpense.total,
-                    builder: (context, snapshot) {
-                      final total = snapshot.requireData;
-                      return Text(
-                        total.fmt2dec(),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      );
-                    },
+                  Text(
+                    groupExpense.total.fmt2dec(),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(width: 8),
-                  MutableValue(
-                    mutableValue: groupExpense.currencyState,
-                    builder: (context, currency) {
-                      return Text(
-                        currency.symbol.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                      );
-                    },
+                  Text(
+                    groupExpense.currency.symbol.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              MutableValue(
-                mutableValue: groupExpense.payerState,
-                builder: (context, payer) {
-                  return Text(
-                    "paid by ${payer.nameState} on ${groupExpense.dateString}",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  );
-                },
+              Text(
+                "paid by ${groupExpense.payer.name} on ${groupExpense.date}",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -109,7 +88,7 @@ class ExpenseEventView extends StatelessWidget {
 
   String _formatDescription(String description) {
     return description.isNotEmpty
-        ? "\"${groupExpense.descriptionState}\""
+        ? "\"${groupExpense.description}\""
         : "${groupExpense.createdBy.displayName} added a new expense";
   }
 

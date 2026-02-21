@@ -3,7 +3,6 @@ import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/utils/errors_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -19,19 +18,17 @@ abstract class BaseCubit extends Cubit<UiState> {
 
   final compositeSubscription = CompositeSubscription();
 
-  final loading = false.obs();
+  final loading = false;
 
   BaseCubit() : super(Main());
 
   BaseCubit.withState(super.initialState) : super();
 
   void update() {
-    loading.value = false;
     emit(Main());
   }
 
   void showLoading() {
-    loading.value = true;
     emit(Loading());
   }
 

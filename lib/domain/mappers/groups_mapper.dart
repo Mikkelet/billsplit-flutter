@@ -20,46 +20,43 @@ extension GroupDtosExt on Iterable<GroupDTO> {
 
 extension GroupDtoExt on GroupDTO {
   Group toGroup() => Group(
-        id: id,
-        name: name,
-        coverImageUrl: coverImageUrl,
-        defaultCurrency: defaultCurrency,
-        lastUpdated: lastUpdated,
-        people: people.toPeople(),
-        invites: invites.toPeople(),
-        createdBy: createdBy.toPerson(),
-        pastMembers: pastMembers.toPeople(),
-        timestamp: timestamp,
-      );
+    id: id,
+    name: name,
+    coverImageUrl: coverImageUrl,
+    defaultCurrency: defaultCurrency,
+    lastUpdated: lastUpdated,
+    people: people.toPeople(),
+    invites: invites.toPeople(),
+    createdBy: createdBy.toPerson(),
+    pastMembers: pastMembers.toPeople(),
+    timestamp: timestamp,
+  );
 
   GroupDb toDb() => GroupDb(
-        groupId: id,
-        group: json.encode(toJson()),
-        lastUpdated: nowEpoch,
-      );
+    groupId: id,
+    group: json.encode(toJson()),
+    lastUpdated: nowEpoch,
+  );
 
-  GroupInvite toGroupInvite() =>
-      GroupInvite(group: toGroup(), syncState: SyncState.synced);
+  GroupInvite toGroupInvite() => GroupInvite(group: toGroup(), syncState: SyncState.synced);
 
-  GroupInviteDb toGroupInviteDb() => GroupInviteDb(
-      groupId: id,
-      syncState: SyncState.synced.index,
-      group: json.encode(toJson()));
+  GroupInviteDb toGroupInviteDb() =>
+      GroupInviteDb(groupId: id, syncState: SyncState.synced.index, group: json.encode(toJson()));
 }
 
 extension GroupExt on Group {
   GroupDTO toDTO() => GroupDTO(
-        id: id,
-        name: nameState.value,
-        coverImageUrl: coverImageUrlState.value,
-        people: peopleState.value.toDTO(),
-        invites: invitesState.value.toDTO(),
-        lastUpdated: lastUpdatedState.value,
-        defaultCurrency: defaultCurrencyState.value,
-        pastMembers: pastMembersState.value.toDTO(),
-        createdBy: createdBy.toDTO(),
-        timestamp: timestamp,
-      );
+    id: id,
+    name: name,
+    coverImageUrl: coverImageUrl,
+    people: people.toDTO(),
+    invites: invites.toDTO(),
+    lastUpdated: lastUpdated,
+    defaultCurrency: defaultCurrency,
+    pastMembers: pastMembers.toDTO(),
+    createdBy: createdBy.toDTO(),
+    timestamp: timestamp,
+  );
 
   GroupDb toDb() {
     final dtoJson = json.encode(toDTO().toJson());
@@ -77,17 +74,18 @@ extension GroupDbExt on GroupDb {
   Group toGroup() {
     final dto = toDTO();
     return Group(
-        id: dto.id,
-        name: dto.name,
-        coverImageUrl: dto.coverImageUrl,
-        people: dto.people.toPeople(),
-        pastMembers: dto.pastMembers.toPeople(),
-        invites: dto.invites.toPeople(),
-        createdBy: dto.createdBy.toPerson(),
-        timestamp: dto.timestamp,
-        lastUpdated: dto.lastUpdated,
-        defaultCurrency: dto.defaultCurrency,
-        lastSync: lastUpdated);
+      id: dto.id,
+      name: dto.name,
+      coverImageUrl: dto.coverImageUrl,
+      people: dto.people.toPeople(),
+      pastMembers: dto.pastMembers.toPeople(),
+      invites: dto.invites.toPeople(),
+      createdBy: dto.createdBy.toPerson(),
+      timestamp: dto.timestamp,
+      lastUpdated: dto.lastUpdated,
+      defaultCurrency: dto.defaultCurrency,
+      lastSync: lastUpdated?.toInt() ?? 0,
+    );
   }
 
   GroupDTO toDTO() {

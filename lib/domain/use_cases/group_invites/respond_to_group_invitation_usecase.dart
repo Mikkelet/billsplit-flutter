@@ -14,9 +14,19 @@ class RespondToGroupInvitationUseCase {
     await _database.groupInvitesDAO.updatePending(group.toDb());
     await _apiService.respondToGroupInvite(group.id, accept);
     await _database.groupInvitesDAO.remove(group.toDb());
-    group.respondToInvite(_authRepository.loggedInUser, accept);
+
     if (accept) {
-      await _database.groupsDAO.insertGroup(group.toDb());
+      final invitesCopy = List.of(group.invites);
+      invitesCopy.remove(_authRepository.loggedInUser);
+      final groupCopy = group.copyWith(invites: invitesCopy);
+      await _database.groupsDAO.insertGroup(groupCopy.toDb());
+    } else {
+      final invitesCopy = List.of(group.invites);
+      final peopleCopy = List.of(group.people);
+      invitesCopy.remove(_authRepository.loggedInUser);
+      peopleCopy.add(_authRepository.loggedInUser);
+      final groupCopy = group.copyWith(invites: invitesCopy, people: peopleCopy);
+      await _database.groupsDAO.insertGroup(groupCopy.toDb());
     }
   }
 }

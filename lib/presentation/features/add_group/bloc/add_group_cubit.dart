@@ -5,63 +5,76 @@ import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/get_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/friends/observe_friends_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/add_group_usecase.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/add_group/bloc/add_group_state.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:flutter/cupertino.dart';
 
-class LoadingFriends extends Main {}
-
-class AddGroupCubit extends BaseCubit {
+class AddGroupCubit extends SafeCubit<AddGroupState> {
   final _observeFriendsUseCase = ObserveFriendsUseCase();
   final _getFriendsUseCase = GetFriendsUseCase();
   final _addGroupUseCase = AddGroupUseCase();
+  final nameTextController = TextEditingController();
 
-  final groupName = "".obs();
-  final currency = Currency.usd().symbol.obs();
-  final people = <Person>[].obsList();
+  AddGroupCubit() : super(AddGroupState());
 
   void onAddPerson(Person person) {
-    people.add(person);
+    final copy = List.of(state.people);
+    copy.add(person);
+    safeEmit(state.copyWith(people: copy));
   }
 
   void removePerson(Person person) {
-    people.remove(person);
+    final copy = List.of(state.people);
+    copy.remove(person);
+    safeEmit(state.copyWith(people: copy));
   }
 
-  late Stream<Iterable<Person>> friendsStream = _observeFriendsUseCase
-      .observe()
-      .map((friends) => friends
-          .where((friend) => friend.status == FriendStatus.accepted)
-          .map((friend) => friend.person)
-          .toSet()
-          .difference(people.value.toSet()));
+  late Stream<Iterable<Person>> friendsStream = _observeFriendsUseCase.observe().map(
+        (friends) =>
+        friends
+            .where((friend) => friend.status == FriendStatus.accepted)
+            .map((friend) => friend.person)
+            .toSet()
+            .difference(state.people.toSet()),
+  );
 
-  void loadFriends() {
-    emit(LoadingFriends());
-    _getFriendsUseCase.launch().then((value) {
-      emit(Main());
-    }).catchError((err, st) {
-      showError(err, st);
-    });
+  Future<void> loadFriends() async {
+    try {
+      safeEmit(state.copyWith(isLoading: true));
+      await _getFriendsUseCase.launch();
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.unknown(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
-  void addGroup() {
-    final group =
-        Group.newGroup(user, groupName.value, people.value, currency.value);
-    showLoading();
-    _addGroupUseCase.launch(group).then((value) {
-      emit(GroupAdded(value));
-    }).catchError((error, st) {
-      showError(error, st);
-    });
+  void addGroup() async {
+    try {
+      final group = Group(
+        name: state.groupName,
+        people: state.people,
+        defaultCurrency: state.currency,
+      );
+      safeEmit(state.copyWith(isLoading: true));
+      await _addGroupUseCase.launch(group);
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.unknown(e.toString())));
+    } finally {
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
   void updateCurrency(Currency currency) {
-    this.currency.value = currency.symbol;
+    safeEmit(state.copyWith(currency: currency.symbol));
   }
 
-  void onUpdateGroupName(String name) {
-    groupName.value = name;
+  @override
+  Future<void> close() async {
+    nameTextController.dispose();
+    return super.close();
   }
 }

@@ -22,7 +22,7 @@ extension ServiceDtoExt on ServiceDTO {
         createdBy: createdBy.toPerson(),
         currency: currency,
         imageUrl: imageUrl,
-        monthlyExpense: monthlyExpense,
+        monthlyExpense: monthlyExpense.toDouble(),
         payer: payer.toPerson(),
         participants: participants.toPeople());
   }
@@ -41,12 +41,12 @@ extension ServiceDbExt on ServiceDb {
 extension ServiceExt on SubscriptionService {
   ServiceDTO toDTO() => ServiceDTO(
         id: id,
-        name: nameState.value,
-        currency: currencyState.value,
+        name: name,
+        currency: currency,
         imageUrl: imageUrl,
-        monthlyExpense: monthlyExpenseState.value,
+        monthlyExpense: monthlyExpense,
         createdBy: createdBy.toDTO(),
-        participants: participantsState.value.toDTO(),
-        payer: payerState.value.toDTO(),
+        participants: participants.toDTO(),
+        payer: payer.toDTO(),
       );
 }

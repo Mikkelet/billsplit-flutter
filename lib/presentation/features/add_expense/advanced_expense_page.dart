@@ -1,7 +1,9 @@
 import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/domain/models/shared_expense.dart';
 import 'package:billsplit_flutter/extensions.dart';
+import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_shared_expense_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/add_surcharge.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/date_picker_view.dart';
@@ -10,24 +12,17 @@ import 'package:billsplit_flutter/presentation/features/add_expense/widgets/expe
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/paid_by_dropdown.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/scan_receipt_button.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/widgets/shared_expenses_view.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
-  final GroupExpense groupExpense;
-  final Group group;
-  final PageController pageController;
-
-  const AdvancedExpensePage({
-    required this.groupExpense,
-    required this.group,
-    super.key,
-    required this.pageController,
-  });
+  const AdvancedExpensePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AddExpenseBloc>();
+    final group = cubit.state.group;
+    final groupExpense = cubit.state.groupExpense;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -36,13 +31,9 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
             // Shared Expenses
             Column(
               children: [
-                MutableValue(
-                    mutableValue: groupExpense.sharedExpensesState,
-                    builder: (context, sharedExpenses) {
-                      return SharedExpensesView(
-                        showAll: sharedExpenses.length <= 3,
-                      );
-                    }),
+                SharedExpensesView(
+                  showAll: groupExpense.sharedExpenses.length <= 3,
+                ),
                 const SizedBox(height: 4),
                 Align(
                   alignment: Alignment.centerRight,
@@ -56,10 +47,7 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
                           child: Text(
                             "Add as many as you need!\nSwipe to delete",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary),
+                            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
                           ),
                         ),
                       ),
@@ -70,27 +58,16 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
               ],
             ),
             const SizedBox(height: 8),
-            MutableValue(
-                mutableValue: groupExpense.descriptionState,
-                builder: (context, description) {
-                  return DescriptionTextField(initialText: description);
-                }),
+            DescriptionTextField(initialText: groupExpense.description),
             const SizedBox(height: 8),
-            AddSurcharge(initialValue: groupExpense.surcharge),
+            AddSurcharge(initialValue: groupExpense.surcharges.first.value),
             const SizedBox(height: 8),
             DatePickerView(),
             //const LongPressTipView(),
             const SizedBox(height: 8),
             const ExpenseTotalView(),
             const SizedBox(height: 8),
-            StreamBuilder(
-              stream: getParticipatingPeople(),
-              initialData: const <Person>[],
-              builder: (context, snapshot) {
-                final people = snapshot.requireData;
-                return PaidByDropDownView(people: people);
-              },
-            ),
+            PaidByDropDownView(people: getParticipatingPeople(groupExpense, group)),
             const SizedBox(height: 120),
           ],
         ),
@@ -98,11 +75,10 @@ class AdvancedExpensePage extends StatelessWidget with WidgetsBindingObserver {
     );
   }
 
-  Stream<Iterable<Person>> getParticipatingPeople() {
-    final pastMembers = groupExpense.sharedExpensesState.stateStream
-        .map((event) => event.map((e) => e.participantsState.value))
-        .map((event) => event.flatMap());
-    return pastMembers.zipWith(
-        group.peopleState.stateStream, (t, s) => {...t, ...s});
+  List<Person> getParticipatingPeople(GroupExpense groupExpense, Group group) {
+    final pastMembers = groupExpense.sharedExpenses
+        .map((event) => event.map((e) => e.participants))
+        .flatMap();
+    return [...pastMembers, ...group.people];
   }
 }

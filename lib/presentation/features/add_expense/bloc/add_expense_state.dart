@@ -1,14 +1,24 @@
-import 'package:billsplit_flutter/domain/models/shared_expense.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
+import 'package:billsplit_flutter/domain/models/group.dart';
+import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
+import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:billsplit_flutter/presentation/base/errors.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class AddExpenseSuccess extends Main {}
+part '../../../../_generated/presentation/features/add_expense/bloc/add_expense_state.freezed.dart';
 
-class ExpenseUpdated extends Main {}
-
-class QuickAddSharedExpense extends Main {
-  final SharedExpense sharedExpense;
-
-  QuickAddSharedExpense(this.sharedExpense);
+@freezed
+abstract class AddExpenseState with _$AddExpenseState {
+  const factory AddExpenseState({
+    @Default(false) bool isLoading,
+    @Default(SplitsbyError.none()) SplitsbyError error,
+    @Default(Group()) Group group,
+    @Default(GroupExpense()) GroupExpense groupExpense,
+    @Default([]) List<Person> people,
+    @Default(ExpenseView.simple) ExpenseView view,
+  }) = _AddExpenseState;
 }
 
-class ExpenseDeleted extends Main{}
+enum ExpenseView {
+  simple,
+  advanced;
+}

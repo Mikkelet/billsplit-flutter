@@ -17,35 +17,37 @@ class AuthRepository {
   Person? _loggedInUser;
 
   Stream<AuthState> observeAuthState() {
-    return _authProvider.authListener().asyncMap((firebaseUser) async {
-      if (firebaseUser == null) {
-        if (_sharedPrefs.isUserLoggedIn) {
+    return _authProvider
+        .authListener()
+        .asyncMap((firebaseUser) async {
+          if (firebaseUser == null) {
+            if (_sharedPrefs.isUserLoggedIn) {
+              _sharedPrefs.isUserLoggedIn = true;
+              return LoggedInState(Person.dummy(123));
+            }
+            return LoggedOutState();
+          }
+
           _sharedPrefs.isUserLoggedIn = true;
-          return LoggedInState(Person.dummy(123));
-        }
-        return LoggedOutState();
-      }
 
-      _sharedPrefs.isUserLoggedIn = true;
-
-      final parsedPhoneNumber =
-          await _parsePhoneNumberUseCase.launch(firebaseUser.phoneNumber);
-      _loggedInUser = Person(
-        uid: firebaseUser.uid,
-        name: firebaseUser.displayName ?? "",
-        pfpUrl: firebaseUser.photoURL ?? "",
-        email: firebaseUser.email ?? "",
-        isGuest: firebaseUser.isAnonymous,
-        phoneNumber: parsedPhoneNumber ?? const PhoneNumber.none(),
-      );
-      _subscribeToUserTopic(_loggedInUser!);
-      return LoggedInState(_loggedInUser!);
-    }).map((event) {
-      if (event is LoggedOutState) {
-        _loggedInUser = null;
-      }
-      return event;
-    });
+          final parsedPhoneNumber = await _parsePhoneNumberUseCase.launch(firebaseUser.phoneNumber);
+          _loggedInUser = Person(
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName ?? "",
+            pfpUrl: firebaseUser.photoURL ?? "",
+            email: firebaseUser.email ?? "",
+            isGuest: firebaseUser.isAnonymous,
+            phoneNumber: parsedPhoneNumber ?? const PhoneNumber(),
+          );
+          _subscribeToUserTopic(_loggedInUser!);
+          return LoggedInState(_loggedInUser!);
+        })
+        .map((event) {
+          if (event is LoggedOutState) {
+            _loggedInUser = null;
+          }
+          return event;
+        });
   }
 
   void _subscribeToUserTopic(Person person) async {

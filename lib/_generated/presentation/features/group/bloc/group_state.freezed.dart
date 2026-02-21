@@ -49,7 +49,7 @@ $Res call({
 });
 
 
-
+$GroupCopyWith<$Res>? get group;
 
 }
 /// @nodoc
@@ -73,7 +73,19 @@ as SplitsbyError,group: freezed == group ? _self.group : group // ignore: cast_n
 as Group?,
   ));
 }
+/// Create a copy of GroupState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GroupCopyWith<$Res>? get group {
+    if (_self.group == null) {
+    return null;
+  }
 
+  return $GroupCopyWith<$Res>(_self.group!, (value) {
+    return _then(_self.copyWith(group: value));
+  });
+}
 }
 
 
@@ -255,7 +267,7 @@ $Res call({
 });
 
 
-
+@override $GroupCopyWith<$Res>? get group;
 
 }
 /// @nodoc
@@ -280,7 +292,19 @@ as Group?,
   ));
 }
 
+/// Create a copy of GroupState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GroupCopyWith<$Res>? get group {
+    if (_self.group == null) {
+    return null;
+  }
 
+  return $GroupCopyWith<$Res>(_self.group!, (value) {
+    return _then(_self.copyWith(group: value));
+  });
+}
 }
 
 // dart format on

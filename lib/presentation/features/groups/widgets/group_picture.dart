@@ -24,7 +24,7 @@ class GroupPictureView extends StatelessWidget {
         ),
         child: Builder(
           builder: (context) {
-            final coverImageUrl = group.coverImageUrlState.value;
+            final coverImageUrl = group.coverImageUrl;
             if (coverImageUrl.isEmpty) {
               return const Image(
                 fit: BoxFit.fitWidth,

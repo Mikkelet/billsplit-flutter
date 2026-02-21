@@ -8,8 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DescriptionTextField extends StatefulWidget {
   final String initialText;
 
-  const DescriptionTextField({Key? key, required this.initialText})
-      : super(key: key);
+  const DescriptionTextField({super.key, required this.initialText});
 
   @override
   State<DescriptionTextField> createState() => _DescriptionTextFieldState();
@@ -40,13 +39,13 @@ class _DescriptionTextFieldState extends SafeState<DescriptionTextField> {
           cubit.updateDescription(value);
         },
         decoration: InputDecoration(
-            counterText: "",
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
-            border: InputBorder.none,
-            isDense: true,
-            hintText:
-                "Enter a description"),
+          counterText: "",
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          hintStyle: SplitsbyTextTheme.textFieldHintStyle(context),
+          border: InputBorder.none,
+          isDense: true,
+          hintText: "Enter a description",
+        ),
       ),
     );
   }

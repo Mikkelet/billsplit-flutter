@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:billsplit_flutter/domain/models/event.dart';
-import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/group_expense_event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/domain/models/subscription_service.dart';
@@ -10,18 +9,14 @@ import 'package:billsplit_flutter/domain/use_cases/events/add_event_usecase.dart
 import 'package:billsplit_flutter/domain/use_cases/events/observe_debts_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/events/observe_events_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/get_group_usecase.dart';
-import 'package:billsplit_flutter/domain/use_cases/groups/observe_groups_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/services/observe_services_usecase.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_state.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:collection/collection.dart';
 
 import '../../../../domain/use_cases/groups/observe_group_usecase.dart';
-
 
 class GroupBloc extends SafeCubit<GroupState> {
   final _getGroupUseCase = GetGroupUseCase();
@@ -46,20 +41,17 @@ class GroupBloc extends SafeCubit<GroupState> {
     await for (final events in _observeEventsUseCase.observe(groupId)) {
       num sortBy(Event event) {
         if (state.sortBy == SortEvents.added) return event.timestamp;
-        if (event is GroupExpense) return event.dateState.value.millisecondsSinceEpoch;
+        if (event is GroupExpense) return event.dateTime.millisecondsSinceEpoch;
         return event.timestamp;
       }
-      yield events
-          .sortedBy(sortBy)
-          .reversed
-          .toList();
+
+      yield events.sortedBy(sortBy).reversed.toList();
     }
   }
 
-
   Stream<List<SubscriptionService>> getServicesStream() async* {
     await for (final services in _observeServicesUseCase.observe(groupId)) {
-      yield services.toList().sortedBy((element) => element.nameState.value);
+      yield services.toList().sortedBy((element) => element.name);
     }
   }
 
@@ -68,7 +60,6 @@ class GroupBloc extends SafeCubit<GroupState> {
       yield* _observeDebtsUseCase.observe(state.requireGroup);
     }
   }
-
 
   void loadGroup() async {
     try {

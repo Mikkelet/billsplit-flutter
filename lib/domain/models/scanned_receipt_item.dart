@@ -5,8 +5,5 @@ class ScannedReceiptItem {
   final String description;
   final Rect boundaryBox;
 
-  ScannedReceiptItem(
-      {required this.expense,
-        required this.description,
-        required this.boundaryBox});
+  ScannedReceiptItem({required this.expense, required this.description, required this.boundaryBox});
 }

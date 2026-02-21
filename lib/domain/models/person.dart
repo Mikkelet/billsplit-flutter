@@ -1,56 +1,24 @@
 import 'package:billsplit_flutter/domain/models/phone_number.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Person {
-  final String uid;
-  final String _name;
-  final String _pfpUrl;
-  final PhoneNumber _phoneNumber;
-  final String email;
-  final bool isGuest;
+part '../../_generated/domain/models/person.freezed.dart';
 
-  // modifiable values
-  late final MutableState<String> nameState = _name.obs();
-  late final MutableState<String> pfpUrlState = _pfpUrl.obs();
-  late final MutableState<PhoneNumber> phoneNumberState = _phoneNumber.obs();
+@freezed
+abstract class Person with _$Person {
+  const factory Person({
+    @Default("") String uid,
+    @Default("") String name,
+    @Default("") String pfpUrl,
+    @Default("") String email,
+    @Default(PhoneNumber()) PhoneNumber phoneNumber,
+    @Default(false) bool isGuest,
+  }) = _Person;
 
-  Person({
-    required this.uid,
-    required String name,
-    this.isGuest = false,
-    String pfpUrl = "",
-    PhoneNumber phoneNumber = const PhoneNumber.none(),
-    this.email = "",
-  })  : _name = name.isEmpty ? "Splitsby user" : name,
-        _phoneNumber = phoneNumber,
-        _pfpUrl = pfpUrl;
+  const Person._();
 
-  Person.temp() : this(uid: "", name: "New Person");
+  factory Person.temp() => Person(uid: "", name: "New Person");
 
-  Person.dummy(num seed) : this(uid: "P$seed", name: "Person $seed");
+  factory Person.dummy(num seed) => Person(uid: "P$seed", name: "Person $seed");
 
-  String get displayName =>
-      nameState.value.isEmpty ? "Splitsby user" : nameState.value;
-
-  Stream<String> get displayNameStream => nameState.stateStream
-      .map((name) => name.isEmpty ? "Splitsby user" : name);
-
-  @override
-  int get hashCode => uid.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    if (other is! Person) return false;
-    return uid == other.uid;
-  }
-
-  @override
-  String toString() {
-    return "Person(id=$uid, name=$_name)";
-  }
-
-  void resetChanges() {
-    pfpUrlState.value = _pfpUrl;
-    nameState.value = _name;
-  }
+  String get displayName => name.isEmpty ? "Splitsby user" : name;
 }

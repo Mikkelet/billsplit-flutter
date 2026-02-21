@@ -5,14 +5,13 @@ import 'package:billsplit_flutter/presentation/common/base_scaffold.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
-import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/participant_picker/participants_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/dialogs/reset_changes_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_service_state.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/widgets/service_participant_view.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
+import 'package:billsplit_flutter/presentation/features/currency_picker/currency_picker_route.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
@@ -67,26 +66,18 @@ class AddServicePage extends StatelessWidget {
                     icon: const Icon(Icons.delete),
                     color: Theme.of(context).colorScheme.error,
                   ),
-                StreamBuilder(
-                  stream: state.requireService.isChangedStream,
-                  initialData: state.requireService.isChanged,
-                  builder: (context, snapshot) {
-                    final isChanged = snapshot.requireData;
-                    return MutableValue(
-                      mutableValue: state.requireService.monthlyExpenseState,
-                      builder: (context, monthlyExpense) {
-                        VoidCallback? callback;
-                        final enableButton = isChanged && monthlyExpense > 0;
-                        if (enableButton) {
-                          callback = () {
-                            cubit.submitService();
-                          };
-                        }
-                        return IconButton(
-                          onPressed: callback,
-                          icon: const Icon(Icons.check),
-                        );
-                      },
+                Builder(
+                  builder: (context) {
+                    VoidCallback? callback;
+                    final enableButton = cubit.isChanged && state.requireService.monthlyExpense > 0;
+                    if (enableButton) {
+                      callback = () {
+                        cubit.submitService();
+                      };
+                    }
+                    return IconButton(
+                      onPressed: callback,
+                      icon: const Icon(Icons.check),
                     );
                   },
                 ),
@@ -94,13 +85,12 @@ class AddServicePage extends StatelessWidget {
             );
           }),
           body: PopScope(
-            canPop: !state.requireService.isChanged,
+            canPop: !cubit.isChanged,
             onPopInvokedWithResult: (didPop, result) async {
               await showDialog(
                 context: context,
                 builder: (context) => ResetChangesDialog(
                   () {
-                    state.requireService.resetChanges();
                     context.pop();
                   },
                 ),
@@ -120,9 +110,6 @@ class AddServicePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           child: TextField(
                             controller: cubit.nameTextController,
-                            onChanged: (value) {
-                              state.requireService.nameState.value = value;
-                            },
                             textInputAction: TextInputAction.next,
                             maxLines: 1,
                             maxLength: 30,
@@ -151,9 +138,7 @@ class AddServicePage extends StatelessWidget {
                                   textEditingController: cubit.expenseTextController,
                                   canBeZero: !state.showCannotBe0ZeroError,
                                   fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
-                                  onChange: (value) {
-                                    state.requireService.monthlyExpenseState.value = value;
-                                  },
+                                  onChange: (value) {},
                                 ),
                               ),
                             ),
@@ -165,19 +150,14 @@ class AddServicePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Theme.of(context).colorScheme.secondaryContainer,
                                 onClick: () async {
-                                  final response = await Navigator.of(context).push(
-                                    CurrencyPickerDialog.getRoute(
-                                      convertToCurrency:
-                                          state.requireGroup.defaultCurrencyState.value,
-                                    ),
-                                  );
+                                  final response = await CurrencyPickerRoute(
+                                    convertToCurrency: state.requireGroup.defaultCurrency,
+                                  ).push(context);
                                   if (response is Currency) {
                                     cubit.updateCurrency(response.symbol);
                                   }
                                 },
-                                child: MutableText(
-                                  mutString: state.requireService.currencyState,
-                                ),
+                                child: Text(state.requireService.currency),
                               ),
                             ),
                           ],
@@ -189,26 +169,9 @@ class AddServicePage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: MutableValue(
-                              mutableValue: state.requireService.currencyState,
-                              builder: (context, currency) {
-                                return MutableValue(
-                                  mutableValue: state.requireService.monthlyExpenseState,
-                                  builder: (context, monthlyService) {
-                                    return MutableValue(
-                                      mutableValue: state.requireService.participantsState,
-                                      builder: (context, participants) {
-                                        final monthlyServicePerPerson =
-                                            monthlyService / participants.length;
-                                        return Text(
-                                          "Participants will pay ${currency.toUpperCase()} ${monthlyServicePerPerson.fmt2dec()} every month",
-                                          style: Theme.of(context).textTheme.labelSmall,
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              },
+                            child: Text(
+                              "Participants will pay ${state.requireService.currency.toUpperCase()} ${cubit.monthlyServicePerPerson.fmt2dec()} every month",
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
                           ),
                         ),
@@ -235,24 +198,15 @@ class AddServicePage extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              MutableValue(
-                                mutableValue: state.requireService.participantsState,
-                                builder: (context, participants) {
-                                  return Column(
-                                    children: [
-                                      ...participants.mapIndexed(
-                                        (i, e) {
-                                          if (i > 0) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(top: 8),
-                                              child: ServiceParticipantView(person: e),
-                                            );
-                                          }
-                                          return ServiceParticipantView(person: e);
-                                        },
-                                      ),
-                                    ],
-                                  );
+                              ...state.participants.mapIndexed(
+                                (i, e) {
+                                  if (i > 0) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: ServiceParticipantView(person: e),
+                                    );
+                                  }
+                                  return ServiceParticipantView(person: e);
                                 },
                               ),
                               Align(
@@ -265,12 +219,11 @@ class AddServicePage extends StatelessWidget {
                                       builder: (context) => Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: ParticipantsPickerDialog(
-                                          participantsState: state.requireService.participantsState,
-                                          peopleState: state.requireGroup.peopleState,
-                                          currencySymbol: state.requireService.currencyState.value,
-                                          description: state.requireService.nameState.value,
-                                          totalExpense:
-                                              state.requireService.monthlyExpenseState.value,
+                                          participants: state.participants,
+                                          people: state.requireGroup.people,
+                                          currencySymbol: state.currency,
+                                          description: cubit.name,
+                                          totalExpense: cubit.monthlyExpense,
                                         ),
                                       ),
                                     );

@@ -7,53 +7,36 @@ import 'package:billsplit_flutter/presentation/common/base_bloc_widget.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/default_text_field.dart';
 import 'package:billsplit_flutter/presentation/common/expense_textfield/expense_textfield_controller.dart';
 import 'package:billsplit_flutter/presentation/common/simple_button.dart';
-import 'package:billsplit_flutter/presentation/dialogs/currency_picker/currency_picker_dialog.dart';
+import 'package:billsplit_flutter/presentation/features/currency_picker/currency_picker_dialog.dart';
+import 'package:billsplit_flutter/presentation/features/currency_picker/currency_picker_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/debt_state.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PayCustomDebtView extends StatefulWidget {
-  final Group group;
-  final Pair<Person, num> debt;
-
-  const PayCustomDebtView({Key? key, required this.debt, required this.group})
-      : super(key: key);
-
-  @override
-  State<PayCustomDebtView> createState() => _PayCustomDebtViewState();
-}
-
-class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
-  late final controller = ExpenseTextFieldController();
+class PayCustomDebtView extends StatelessWidget {
+  const PayCustomDebtView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String title;
+    final cubit = context.read<DebtCubit>();
+    return BlocBuilder<DebtCubit, DebtState>(
+      builder: (context, state) {
+        String title;
 
-    if (widget.debt.second > 0) {
-      title = "Pay your debt to ${widget.debt.first.nameState}";
-    } else {
-      title = "Mark ${widget.debt.first.nameState}'s debt as paid";
-    }
-    return BaseBlocWidget<DebtCubit>(
-      listener: (context, cubit, state) {
-        if (state is DebtPayed) {
-          Navigator.of(context).pop();
-        } else if (state is CurrencyChanged) {
-          controller.text = cubit.amount.fmtTextField();
+        if (cubit.debt.second > 0) {
+          title = "Pay your debt to ${cubit.debt.first.name}";
+        } else {
+          title = "Mark ${cubit.debt.first.name}'s debt as paid";
         }
-      },
-      create: (context) => DebtCubit(widget.group, widget.debt),
-      child: BaseBlocBuilder<DebtCubit>(builder: (cubit, state) {
-        controller.text = cubit.amount.fmtTextField();
+        cubit.controller.text = cubit.state.amount.fmtTextField();
 
         return SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -64,20 +47,19 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SimpleButton(
-                        onClick: () async {
-                          final response = await Navigator.of(context).push(
-                              CurrencyPickerDialog.getRoute(
-                                  convertToCurrency: cubit.currency));
-                          if (response is Currency) {
-                            cubit.updateCurrency(response.symbol);
-                          }
-                        },
-                        child: Text(cubit.currency.toUpperCase())),
+                      onClick: () async {
+                        final response = await CurrencyPickerRoute().push(context);
+                        if (response is Currency) {
+                          cubit.updateCurrency(response.symbol);
+                        }
+                      },
+                      child: Text(state.currency.toUpperCase()),
+                    ),
                     SizedBox(
                       width: 200,
                       child: ExpenseTextField(
                         maxValue: cubit.maxAmount,
-                        textEditingController: controller,
+                        textEditingController: cubit.controller,
                         onChange: (value) {
                           cubit.updateAmount(value);
                         },
@@ -92,7 +74,7 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
                     if (state is Loading) const CircularProgressIndicator(),
                     if (state is Main)
                       IconButton(
-                        onPressed: cubit.amount == 0
+                        onPressed: cubit.state.amount == 0
                             ? null
                             : () {
                                 cubit.payDebt();
@@ -106,13 +88,7 @@ class _PayCustomDebtViewState extends SafeState<PayCustomDebtView> {
             ),
           ),
         );
-      }),
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }

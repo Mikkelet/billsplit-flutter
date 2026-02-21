@@ -14,7 +14,7 @@ class EventDTO {
   final String type;
   final String id;
   final PersonDTO createdBy;
-  final num timestamp;
+  final int timestamp;
 
   EventDTO({
     required this.id,

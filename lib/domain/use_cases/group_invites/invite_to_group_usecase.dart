@@ -9,10 +9,11 @@ class InviteToGroupUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
 
-
   Future<void> launch(Group group, Person person) async {
     await _apiService.invitePersonToGroup(group.id, person.uid);
-    group.invitesState.add(person);
-    await _database.groupsDAO.insertGroup(group.toDb());
+    final copyInvites = List.of(group.invites);
+    copyInvites.add(person);
+    final groupCopy = group.copyWith(invites: copyInvites);
+    await _database.groupsDAO.insertGroup(groupCopy.toDb());
   }
 }

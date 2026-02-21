@@ -13,8 +13,6 @@ import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_use
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/profile/bloc/profile_state.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -99,7 +97,7 @@ class ProfileCubit extends SafeCubit<ProfileState> {
 
   Future<PhoneNumber?> getPhoneNumber() async {
     final user = authRepository.loggedInUser;
-    final phoneNumber = await _parseUsePhoneNumberUseCase.launch(user.phoneNumberState.value.dial);
+    final phoneNumber = await _parseUsePhoneNumberUseCase.launch(user.phoneNumber.dial);
     return phoneNumber;
   }
 

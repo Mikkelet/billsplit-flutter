@@ -1,15 +1,10 @@
-import 'dart:io';
-
 import 'package:billsplit_flutter/data/local/preferences/shared_prefs.dart';
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
-import 'package:billsplit_flutter/domain/models/phone_number.dart';
 import 'package:billsplit_flutter/domain/repositories/auth_repository.dart';
 import 'package:billsplit_flutter/domain/use_cases/currency/get_exchange_rates_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/parse_phonenumber_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/profile/update_display_name_usecase.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/onboarding/bloc/onboarding_state.dart';
@@ -67,7 +62,7 @@ class OnboardingBloc extends SafeCubit<OnboardingState> {
   }
 
   Future<void> _initPhoneNumber() async {
-    await _parsePhoneNumberUseCase.launch(_user.phoneNumberState.value.dial);
+    await _parsePhoneNumberUseCase.launch(_user.phoneNumber.dial);
   }
 
   Future<void> _initCurrency() async {
@@ -89,7 +84,7 @@ class OnboardingBloc extends SafeCubit<OnboardingState> {
     try {
       safeEmit(state.loading());
       await _updateNameUseCase.launch(name);
-      _user.nameState.value = name;
+      // TODO: _user.name = name;
     } catch (e, st) {
       safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
       logError(e, st);

@@ -1,10 +1,11 @@
+import 'package:billsplit_flutter/di/get_it.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/extensions.dart';
 import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
+import 'package:billsplit_flutter/presentation/features/group/bloc/debt_cubit.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/group/widgets/pay_debt/pay_custom_debt_view.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
 import 'package:billsplit_flutter/utils/pair.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
@@ -20,21 +21,19 @@ class DebtView extends StatelessWidget {
   Widget build(BuildContext context) {
     final groupCubit = context.read<GroupBloc>();
     final group = groupCubit.state.requireGroup;
-    return MutableValue(
-      mutableValue: group.defaultCurrencyState,
-      builder: (context, currency) {
+    return Builder(
+      builder: (context) {
         String text = "";
         TextStyle style = Theme.of(context).textTheme.bodyLarge!;
-        final String defaultCurrency = currency.toUpperCase();
+        final defaultCurrency = group.defaultCurrency.toUpperCase();
         final isDebt = debt.second > 0;
 
         if (isDebt) {
-          text =
-          "You owe $defaultCurrency ${debt.second.fmt2dec()} to ${debt.first.displayName}";
+          text = "You owe $defaultCurrency ${debt.second.fmt2dec()} to ${debt.first.displayName}";
           style = SplitsbyTextTheme.groupViewNegativeDebt(context);
         } else if (debt.second < 0) {
           text =
-          "${debt.first.displayName} owes you $defaultCurrency ${debt.second.abs().fmt2dec()}";
+              "${debt.first.displayName} owes you $defaultCurrency ${debt.second.abs().fmt2dec()}";
           style = SplitsbyTextTheme.groupViewPositiveDebt(context);
         }
         final showPayButton = isDebt || debt.first.isTemp();
@@ -59,17 +58,22 @@ class DebtView extends StatelessWidget {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    builder: (context) => PayCustomDebtView(
-                      debt: debt,
-                      group: group,
+                    builder: (context) => BlocProvider(
+                      create: (context) => DebtCubit(
+                        group,
+                        debt,
+                        getIt.get(),
+                        getIt.get(),
+                      ),
+                      child: PayCustomDebtView(),
                     ),
                   );
                 },
                 child: _payButtonContent(context),
-              )
+              ),
           ],
         );
-      }
+      },
     );
   }
 
@@ -82,10 +86,9 @@ class DebtView extends StatelessWidget {
     }
     return Text(
       "Pay",
-      style: Theme.of(context)
-          .textTheme
-          .labelMedium
-          ?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
+      style: Theme.of(
+        context,
+      ).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
     );
   }
 }

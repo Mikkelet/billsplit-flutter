@@ -32,30 +32,33 @@ final sampleGroup = Group(
 );
 
 final sampleIndividualExpenses = samplePeopleShera.toList().mapIndexed(
-    (i, p) => IndividualExpense(currency: "usd", person: p, expense: i * 100));
+  (i, p) => IndividualExpense(currency: "usd", person: p, expense: i * 100),
+);
 
 final sampleSharedExpense = [
   SharedExpense(
-      expense: sampleIndividualExpenses.length * 200,
-      participants: samplePeopleShera,
-      description: "")
+    expense: sampleIndividualExpenses.length * 200,
+    participants: samplePeopleShera,
+    description: "",
+  ),
 ];
 
 List<GroupExpense> get sampleSharedExpenses {
   return [
     GroupExpense(
-        id: "0",
-        createdBy: samplePeopleShera[2],
-        description: "Taking down the fire nation",
-        surcharges: [],
-        payer: samplePeopleShera[0],
-        timestamp: 1,
-        tempParticipants: [],
-        currency: Currency(symbol: "usd", rate: 1),
-        syncState: SyncState.synced,
-        receiptImageUrl: "",
-        date: DateTime.now(),
-        sharedExpenses: sampleSharedExpense),
+      id: "0",
+      createdBy: samplePeopleShera[2],
+      description: "Taking down the fire nation",
+      surcharges: [],
+      payer: samplePeopleShera[0],
+      timestamp: 1,
+      tempParticipants: [],
+      currency: Currency(symbol: "usd", rate: 1),
+      syncState: SyncState.synced,
+      receiptImageUrl: "",
+      date: "",
+      sharedExpenses: sampleSharedExpense,
+    ),
     GroupExpense(
       id: "1",
       createdBy: samplePeopleShera[2],
@@ -65,50 +68,55 @@ List<GroupExpense> get sampleSharedExpenses {
       tempParticipants: [],
       currency: Currency(symbol: "usd", rate: 1),
       timestamp: 2,
-      date: DateTime.now(),
+      date: "",
       receiptImageUrl: "",
       syncState: SyncState.synced,
       sharedExpenses: sampleSharedExpense,
     ),
     GroupExpense(
-        id: "2",
-        createdBy: samplePeopleShera[1],
-        description: "Appa haircut",
-        surcharges: [],
-        payer: samplePeopleShera[2],
-        timestamp: 3,
-        date: DateTime.now(),
-        receiptImageUrl: "",
-        tempParticipants: [],
-        currency: Currency(symbol: "usd", rate: 1),
-        syncState: SyncState.synced,
-        sharedExpenses: sampleSharedExpense),
+      id: "2",
+      createdBy: samplePeopleShera[1],
+      description: "Appa haircut",
+      surcharges: [],
+      payer: samplePeopleShera[2],
+      timestamp: 3,
+      date: "",
+      receiptImageUrl: "",
+      tempParticipants: [],
+      currency: Currency(symbol: "usd", rate: 1),
+      syncState: SyncState.synced,
+      sharedExpenses: sampleSharedExpense,
+    ),
     GroupExpense(
-        id: "3",
-        createdBy: samplePeopleShera[0],
-        description: "",
-        surcharges: [],
-        payer: samplePeopleShera[2],
-        timestamp: 4,
-        date: DateTime.now(),
-        receiptImageUrl: "",
-        tempParticipants: [],
-        currency: Currency(symbol: "usd", rate: 1),
-        syncState: SyncState.synced,
-        sharedExpenses: sampleSharedExpense),
+      id: "3",
+      createdBy: samplePeopleShera[0],
+      description: "",
+      surcharges: [],
+      payer: samplePeopleShera[2],
+      timestamp: 4,
+      date: "",
+
+      receiptImageUrl: "",
+      tempParticipants: [],
+      currency: Currency(symbol: "usd", rate: 1),
+      syncState: SyncState.synced,
+      sharedExpenses: sampleSharedExpense,
+    ),
     GroupExpense(
-        id: "4",
-        createdBy: samplePeopleShera[0],
-        description: "Foods",
-        surcharges: [],
-        payer: samplePeopleShera[2],
-        tempParticipants: [],
-        timestamp: 5,
-        date: DateTime.now(),
-        receiptImageUrl: "",
-        currency: Currency(symbol: "usd", rate: 1),
-        syncState: SyncState.synced,
-        sharedExpenses: sampleSharedExpense),
+      id: "4",
+      createdBy: samplePeopleShera[0],
+      description: "Foods",
+      surcharges: [],
+      payer: samplePeopleShera[2],
+      tempParticipants: [],
+      timestamp: 5,
+      date: "",
+
+      receiptImageUrl: "",
+      currency: Currency(symbol: "usd", rate: 1),
+      syncState: SyncState.synced,
+      sharedExpenses: sampleSharedExpense,
+    ),
   ];
 }
 
@@ -152,8 +160,7 @@ void main() {
   GetIt.instance.registerSingleton(SharedPrefs());
   GetIt.instance.registerSingleton(CurrencyConverter());
 
-  final debtCalculator =
-      DebtCalculator(samplePeopleShera, sampleSharedExpenses, samplePayments);
+  final debtCalculator = DebtCalculator(samplePeopleShera, sampleSharedExpenses, samplePayments);
 
   print("Total expense: ${debtCalculator.calculateTotalDebt()}");
   print("==== DEBT ====");
@@ -190,8 +197,7 @@ void main() {
   print("\n=== After Payments ===");
   print("");
   samplePayments.forEach((it) {
-    print(
-        "${it.createdBy.displayName} paid \$${it.amount} to ${it.paidTo.displayName}");
+    print("${it.createdBy.displayName} paid \$${it.amount} to ${it.paidTo.displayName}");
   });
   print("");
   samplePeopleShera.forEach((person) {
@@ -200,11 +206,9 @@ void main() {
       final otherPerson = element.first;
       final debt = element.second;
       if (debt > 0)
-        print(
-            "\t${otherPerson.displayName} owes \$$debt to ${person.displayName}");
+        print("\t${otherPerson.displayName} owes \$$debt to ${person.displayName}");
       else if (debt < 0)
-        print(
-            "\t${person.displayName} owes \$$debt to ${otherPerson.displayName}");
+        print("\t${person.displayName} owes \$$debt to ${otherPerson.displayName}");
     });
   });
 }

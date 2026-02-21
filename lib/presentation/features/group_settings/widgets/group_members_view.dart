@@ -4,7 +4,6 @@ import 'package:billsplit_flutter/presentation/common/profile_picture_stack.dart
 import 'package:billsplit_flutter/presentation/common/rounded_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/friend_picker/friend_picker_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_cubit.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
             return ClickableListItem(
               padding: EdgeInsets.zero,
               borderRadius:
-                  !isExpanded ? null : const BorderRadius.vertical(top: Radius.circular(15)),
+              !isExpanded ? null : const BorderRadius.vertical(top: Radius.circular(15)),
               alignment: Alignment.centerLeft,
               onClick: () {
                 setState(() {
@@ -49,27 +48,28 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: MutableValue(
-                            mutableValue: cubit.group.peopleState,
-                            builder: (context, people) {
-                              return ProfilePictureStack(
-                                people: people,
-                                size: 32,
-                              );
-                            },
+                          child: ProfilePictureStack(
+                            people: cubit.group.people,
+                            size: 32,
                           ),
                         ),
                         Container(
                           height: 10,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.secondaryContainer,
+                            color: Theme
+                                .of(context)
+                                .colorScheme
+                                .secondaryContainer,
                           ),
                           child: Center(
                             child: Container(
                               height: 1,
                               width: 64,
-                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
                             ),
                           ),
                         ),
@@ -83,7 +83,10 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Group Members",
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelSmall,
                         ),
                       ),
                     ],
@@ -99,54 +102,55 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
             children: [
               RoundedListItem(
                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15)),
-                child: MutableValue(
-                  mutableValue: cubit.group.invitesState,
-                  builder: (context, invites) {
-                    return MutableValue(
-                      mutableValue: cubit.group.peopleState,
-                      builder: (context, people) {
-                        return Column(
-                          children: [
-                            ...people.mapIndexed(
-                              (i, person) => Padding(
-                                padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
-                                child: Row(
-                                  children: [
-                                    ProfilePictureView(person: person, canInspect: true),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      person.displayName,
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                  ],
+                child: Column(
+                  children: [
+                    ...cubit.group.people.mapIndexed(
+                          (i, person) =>
+                          Padding(
+                            padding: EdgeInsets.only(top: i > 0 ? 8 : 0),
+                            child: Row(
+                              children: [
+                                ProfilePictureView(person: person, canInspect: true),
+                                const SizedBox(width: 8),
+                                Text(
+                                  person.displayName,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .labelSmall,
                                 ),
-                              ),
+                              ],
                             ),
-                            ...invites.mapIndexed(
-                              (index, person) => Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: Row(
-                                  children: [
-                                    ProfilePictureView(person: person),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      person.displayName,
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      "invited",
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                    ),
-                                  ],
+                          ),
+                    ),
+                    ...cubit.group.invites.mapIndexed(
+                          (index, person) =>
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: [
+                                ProfilePictureView(person: person),
+                                const SizedBox(width: 8),
+                                Text(
+                                  person.displayName,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .labelSmall,
                                 ),
-                              ),
+                                const Spacer(),
+                                Text(
+                                  "invited",
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .labelSmall,
+                                ),
+                              ],
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                          ),
+                    ),
+                  ],
                 ),
               ),
               if (cubit.state.addingToGroupIsLoading)
@@ -157,7 +161,10 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                   child: ClickableListItem(
                     height: 48,
                     width: 48,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: Theme
+                        .of(context)
+                        .colorScheme
+                        .secondaryContainer,
                     elevation: 2,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(15),
@@ -170,8 +177,9 @@ class _GroupMembersViewState extends SafeState<GroupMembersView> {
                         context: context,
                         enableDrag: true,
                         builder:
-                            (dialogContext) => FriendPickerDialog(
-                              currentPickedFriends: cubit.group.peopleState.value,
+                            (dialogContext) =>
+                            FriendPickerDialog(
+                              currentPickedFriends: cubit.group.people,
                               onFriendAdded: (friend) {
                                 cubit.invitePersonToGroup(friend);
                                 Navigator.of(context).pop();

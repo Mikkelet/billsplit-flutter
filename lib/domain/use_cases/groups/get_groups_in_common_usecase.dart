@@ -11,7 +11,7 @@ class GetGroupsInCommonUseCase {
     final allGroups = await _database.groupsDAO.getGroups();
     final groupsInCommon = allGroups
         .map((e) => e.toGroup())
-        .where((group) => group.peopleState.value.contains(person));
+        .where((group) => group.people.contains(person));
     return groupsInCommon;
   }
 }

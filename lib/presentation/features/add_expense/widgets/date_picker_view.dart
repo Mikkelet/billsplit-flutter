@@ -27,7 +27,7 @@ class DatePickerView extends StatelessWidget {
         }
       },
       child: Text(
-        cubit.groupExpense.dateString,
+        cubit.state.groupExpense.date,
         style: Theme
             .of(context)
             .textTheme

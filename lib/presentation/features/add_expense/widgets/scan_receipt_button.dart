@@ -3,6 +3,8 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/dialogs/custom_dialog.dart';
 import 'package:billsplit_flutter/presentation/features/add_expense/bloc/add_expense_bloc.dart';
 import 'package:billsplit_flutter/presentation/features/scan_receipt/scan_receipt_route.dart';
+import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
+import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,8 +20,8 @@ class ScanReceiptButton extends StatelessWidget {
         height: 48,
         width: 48,
         onClick: () async {
-          if (!cubit.sharedPrefs.hasSeenScannerDisclaimer) {
-            cubit.sharedPrefs.hasSeenScannerDisclaimer = true;
+          if (!context.prefs.hasSeenScannerDisclaimer) {
+            context.prefs.hasSeenScannerDisclaimer = true;
             await showDialog(
                 context: context,
                 builder: (context) => const CustomDialog(

@@ -12,7 +12,6 @@ import 'package:billsplit_flutter/presentation/features/profile/widgets/edit_nam
 import 'package:billsplit_flutter/presentation/features/profile/widgets/phone_number_view.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/profile_list_item.dart';
 import 'package:billsplit_flutter/presentation/features/profile/widgets/signout_button.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/utils/di_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,24 +49,19 @@ class ProfilePage extends StatelessWidget {
                       children: [
                         const UploadProfilePictureView(),
                         const SizedBox(height: 12),
-                        MutableValue(
-                          mutableValue: context.user.nameState,
-                          builder: (context, name) {
-                            return ProfileListItem(
-                              text: context.user.displayName,
-                              onClick: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Dialog(
-                                      child: EditNameDialog(
-                                        initState: context.user.displayName,
-                                        onSubmit: (name) {
-                                          cubit.updateDisplayName(name);
-                                        },
-                                      ),
-                                    );
-                                  },
+                        ProfileListItem(
+                          text: context.user.displayName,
+                          onClick: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  child: EditNameDialog(
+                                    initState: context.user.displayName,
+                                    onSubmit: (name) {
+                                      cubit.updateDisplayName(name);
+                                    },
+                                  ),
                                 );
                               },
                             );

@@ -1,25 +1,21 @@
 import 'package:billsplit_flutter/domain/models/currency.dart';
 import 'package:billsplit_flutter/domain/models/event.dart';
 import 'package:billsplit_flutter/domain/models/person.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Payment extends Event {
-  final Person paidTo;
-  final Person paidBy;
-  final num amount;
-  final Currency currency;
+part '../../_generated/domain/models/payment_event.freezed.dart';
 
-  Payment(
-      {required String id,
-      required Person createdBy,
-      required num timestamp,
-      required this.paidTo,
-      required this.paidBy,
-      required this.currency,
-      required this.amount})
-      : super(id, createdBy, timestamp);
+@freezed
+abstract class Payment extends Event with _$Payment {
+  const factory Payment({
+    @Default(Person()) Person paidTo,
+    @Default(Person()) Person paidBy,
+    @Default(0) num amount,
+    @Default(Currency.usdValue) Currency currency,
+    @Default("") String id,
+    @Default(Person()) Person createdBy,
+    @Default(0) int timestamp,
+  }) = _Payment;
 
-  @override
-  String toString() {
-    return "Payment(id=$id, createdBy=$createdBy, paidTo=$paidTo, paidBy=$paidBy, amount=$amount, currency=$currency)";
-  }
+  const Payment._() : super("", const Person(), 0);
 }

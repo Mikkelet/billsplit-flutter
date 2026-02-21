@@ -9,7 +9,7 @@ class DeleteExpenseUseCase {
   final _apiService = getIt<ApiService>();
   final _database = getIt<SplitsbyDatabase>();
 
-  Future launch(String groupId, GroupExpense expense) async {
+  Future<void> launch(String groupId, GroupExpense expense) async {
     await _apiService.deleteExpense(groupId, expense.id);
     await _database.groupExpenseDAO.deleteExpense(expense.id);
 

@@ -6,7 +6,6 @@ class DeleteUserUseCase {
   final _apiService = getIt<ApiService>();
   final _signoutUseCase = SignOutUseCase();
 
-
   Future launch() async {
     await _apiService.deleteUser();
     await _signoutUseCase.launch();

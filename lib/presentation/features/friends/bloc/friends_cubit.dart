@@ -45,7 +45,7 @@ class FriendsCubit extends SafeCubit<FriendsState> {
   }
 
   void _parsePhoneNumber() async {
-    final parsed = await _parsePhoneNumberUseCase.launch("user.phoneNumberState.value.dial");
+    final parsed = await _parsePhoneNumberUseCase.launch("user.phoneNumber.dial");
     if (parsed != null) {
       safeEmit(state.copyWith(dialCode: parsed.countryCode));
     }

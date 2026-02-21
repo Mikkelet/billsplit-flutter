@@ -5,7 +5,6 @@ import 'package:billsplit_flutter/domain/use_cases/groups/add_group_usecase.dart
 import 'package:billsplit_flutter/domain/use_cases/groups/add_person_to_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/leave_group_usecase.dart';
 import 'package:billsplit_flutter/domain/use_cases/groups/upload_group_picture_usecase.dart';
-import 'package:billsplit_flutter/presentation/base/bloc/base_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/safe_cubit.dart';
 import 'package:billsplit_flutter/presentation/base/errors.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/bloc/group_settings_state.dart';
@@ -35,12 +34,10 @@ class GroupSettingsCubit extends SafeCubit<GroupSettingsState> {
   }
 
   Future<void> updateCurrency(Currency currency) async {
-    final cached = currency;
-    group.defaultCurrencyState.value = currency.symbol;
     try {
       safeEmit(state.copyWith(updatingCurrencyIsLoading: true));
-      group.defaultCurrencyState.value = cached.symbol;
-      await _addGroupUseCase.launch(group);
+      final copy = group.copyWith(defaultCurrency: currency.symbol);
+      await _addGroupUseCase.launch(copy);
     } catch (e, st) {
       logError(e, st);
       safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
@@ -51,14 +48,14 @@ class GroupSettingsCubit extends SafeCubit<GroupSettingsState> {
 
   Future updateGroupName(String newName) async {
     try {
-        safeEmit(state.copyWith(updatingNameIsLoading: true));
-        group.nameState.value = newName;
-        await _addGroupUseCase.launch(group);
-    } catch(e, st) {
-        logError(e, st);
-        safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
+      safeEmit(state.copyWith(updatingNameIsLoading: true));
+      final copy = group.copyWith(name: newName);
+      await _addGroupUseCase.launch(copy);
+    } catch (e, st) {
+      logError(e, st);
+      safeEmit(state.copyWith(error: SplitsbyError.serverError(e.toString())));
     } finally {
-        safeEmit(state.copyWith(updatingNameIsLoading: false));
+      safeEmit(state.copyWith(updatingNameIsLoading: false));
     }
   }
 

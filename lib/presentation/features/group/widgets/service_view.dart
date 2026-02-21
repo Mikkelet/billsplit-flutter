@@ -3,8 +3,6 @@ import 'package:billsplit_flutter/presentation/common/clickable_list_item.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/add_service_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/bloc/group_bloc.dart';
-import 'package:billsplit_flutter/presentation/mutable_state.dart';
-import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,14 +20,9 @@ class ServiceView extends StatelessWidget {
       },
       child: Row(
         children: [
-          MutableValue(
-            mutableValue: service.payerState,
-            builder: (context, payer) {
-              return ProfilePictureView(
-                person: payer,
-                size: 64,
-              );
-            },
+          ProfilePictureView(
+            person: service.payer,
+            size: 64,
           ),
           const SizedBox(width: 20),
           Flexible(
@@ -38,34 +31,21 @@ class ServiceView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                MutableText(
-                  mutString: service.nameState,
+                Text(
+                  service.name,
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 const SizedBox(height: 4),
-                MutableValue(
-                  mutableValue: service.currencyState,
-                  builder: (context, currency) {
-                    return MutableValue(
-                      mutableValue: service.payerState,
-                      builder: (context, payer) {
-                        return MutableValue(
-                          mutableValue: service.monthlyExpenseState,
-                          builder: (context, monthlyService) {
-                            return MutableValue(
-                              mutableValue: payer.nameState,
-                              builder: (context, payerName) {
-                                return Text(
-                                  "${currency.toUpperCase()} $monthlyService is paid by $payerName",
-                                  softWrap: false,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  overflow: TextOverflow.ellipsis,
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
+                Builder(
+                  builder: (context) {
+                    final currency = service.currency;
+                    final payer = service.payer;
+                    final payerName = payer.name;
+                    return Text(
+                      "${currency.toUpperCase()} ${service.monthlyExpense} is paid by $payerName",
+                      softWrap: false,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      overflow: TextOverflow.ellipsis,
                     );
                   },
                 ),

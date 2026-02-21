@@ -11,7 +11,7 @@ EventDTO _$EventDTOFromJson(Map json) => EventDTO(
   createdBy: PersonDTO.fromJson(
     Map<String, dynamic>.from(json['createdBy'] as Map),
   ),
-  timestamp: json['timestamp'] as num,
+  timestamp: (json['timestamp'] as num).toInt(),
   type: json['type'] as String,
 );
 
@@ -27,7 +27,7 @@ GroupExpenseDTO _$GroupExpenseDTOFromJson(Map json) => GroupExpenseDTO(
   createdBy: PersonDTO.fromJson(
     Map<String, dynamic>.from(json['createdBy'] as Map),
   ),
-  timestamp: json['timestamp'] as num,
+  timestamp: (json['timestamp'] as num).toInt(),
   type: json['type'] as String? ?? "expense",
   date: json['date'] as String,
   receiptImageUrl: json['receiptImageUrl'] as String,
@@ -69,7 +69,7 @@ PaymentDTO _$PaymentDTOFromJson(Map json) => PaymentDTO(
   createdBy: PersonDTO.fromJson(
     Map<String, dynamic>.from(json['createdBy'] as Map),
   ),
-  timestamp: json['timestamp'] as num,
+  timestamp: (json['timestamp'] as num).toInt(),
   type: json['type'] as String? ?? "payment",
   currency: CurrencyDTO.fromJson(
     Map<String, dynamic>.from(json['currency'] as Map),

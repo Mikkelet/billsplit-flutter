@@ -3,5 +3,4 @@ class Debt {
   final num owes;
 
   Debt(this.userId, this.owes);
-
 }

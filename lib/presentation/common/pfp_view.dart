@@ -34,7 +34,7 @@ class ProfilePictureView extends StatelessWidget {
       onTap: onTap,
       child: Builder(
         builder: (context) {
-          final pfpUrl = person.pfpUrlState.value;
+          final pfpUrl = person.pfpUrl;
           if (pfpUrl.isEmpty) {
             return CircularFrame(
                 show: showBorder,

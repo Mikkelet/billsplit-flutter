@@ -12,9 +12,7 @@ extension NumExt on num {
   String fmt2dec({bool readOnly = true}) {
     if (this == 0) return readOnly ? "0.00" : "";
     if (this < 1) return formatter4dec.format(this);
-    return remainder(1) != 0
-        ? formatter2dec.format(this)
-        : formatter0dec.format(this);
+    return remainder(1) != 0 ? formatter2dec.format(this) : formatter0dec.format(this);
   }
 
   String fmtTextField() => fmt2dec(readOnly: false).replaceAll(",", "");
@@ -34,7 +32,7 @@ const List<String> monthNames = [
   'September',
   'October',
   'November',
-  'December'
+  'December',
 ];
 
 extension ListPersonExt on Iterable<Person> {
@@ -52,7 +50,7 @@ extension ListSharedExpenseExt on List<SharedExpense> {
     for (int i = 0; i < length; i++) {
       final self = this[i];
       final other = otherExpenses[i];
-      if (!self.compareData(other)) return false;
+      if (self != other) return false;
     }
     return true;
   }

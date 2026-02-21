@@ -1,5 +1,6 @@
 import 'package:billsplit_flutter/domain/models/person.dart';
 import 'package:billsplit_flutter/presentation/common/pfp_view.dart';
+import 'package:billsplit_flutter/presentation/utils/bloc_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +14,7 @@ class AddedPersonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AddGroupCubit>();
-    final showRemoveButton = person.uid == cubit.user.uid;
+    final showRemoveButton = person.uid == context.user.uid;
     return Row(
       children: [
         ProfilePictureView(person: person),
@@ -23,17 +24,19 @@ class AddedPersonView extends StatelessWidget {
           style: Theme.of(context).textTheme.labelLarge,
         ),
         const Flexible(
-            child: SizedBox(
-          width: double.infinity,
-        )),
+          child: SizedBox(
+            width: double.infinity,
+          ),
+        ),
         !showRemoveButton
             ? IconButton(
                 onPressed: () {
                   cubit.removePerson(person);
                 },
                 color: Colors.red,
-                icon: const Icon(Icons.remove))
-            : const SizedBox()
+                icon: const Icon(Icons.remove),
+              )
+            : const SizedBox(),
       ],
     );
   }

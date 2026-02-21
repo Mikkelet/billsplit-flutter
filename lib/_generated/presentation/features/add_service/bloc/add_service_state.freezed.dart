@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AddServiceState {
 
- SplitsbyError get error; String get serviceId; bool get showCannotBe0ZeroError; String get nameErrorText; Group? get group; SubscriptionService? get service;
+ SplitsbyError get error; String get serviceId; bool get showCannotBe0ZeroError; String get nameErrorText; Person get payer; String get currency; List<Person> get participants; Group? get group; SubscriptionService? get service;
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AddServiceStateCopyWith<AddServiceState> get copyWith => _$AddServiceStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddServiceState&&(identical(other.error, error) || other.error == error)&&(identical(other.serviceId, serviceId) || other.serviceId == serviceId)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText)&&(identical(other.group, group) || other.group == group)&&(identical(other.service, service) || other.service == service));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddServiceState&&(identical(other.error, error) || other.error == error)&&(identical(other.serviceId, serviceId) || other.serviceId == serviceId)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText)&&(identical(other.payer, payer) || other.payer == payer)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.participants, participants)&&(identical(other.group, group) || other.group == group)&&(identical(other.service, service) || other.service == service));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,error,serviceId,showCannotBe0ZeroError,nameErrorText,group,service);
+int get hashCode => Object.hash(runtimeType,error,serviceId,showCannotBe0ZeroError,nameErrorText,payer,currency,const DeepCollectionEquality().hash(participants),group,service);
 
 @override
 String toString() {
-  return 'AddServiceState(error: $error, serviceId: $serviceId, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText, group: $group, service: $service)';
+  return 'AddServiceState(error: $error, serviceId: $serviceId, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText, payer: $payer, currency: $currency, participants: $participants, group: $group, service: $service)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $AddServiceStateCopyWith<$Res>  {
   factory $AddServiceStateCopyWith(AddServiceState value, $Res Function(AddServiceState) _then) = _$AddServiceStateCopyWithImpl;
 @useResult
 $Res call({
- SplitsbyError error, String serviceId, bool showCannotBe0ZeroError, String nameErrorText, Group? group, SubscriptionService? service
+ SplitsbyError error, String serviceId, bool showCannotBe0ZeroError, String nameErrorText, Person payer, String currency, List<Person> participants, Group? group, SubscriptionService? service
 });
 
 
-
+$PersonCopyWith<$Res> get payer;$GroupCopyWith<$Res>? get group;$SubscriptionServiceCopyWith<$Res>? get service;
 
 }
 /// @nodoc
@@ -62,18 +62,54 @@ class _$AddServiceStateCopyWithImpl<$Res>
 
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? error = null,Object? serviceId = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,Object? group = freezed,Object? service = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? error = null,Object? serviceId = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,Object? payer = null,Object? currency = null,Object? participants = null,Object? group = freezed,Object? service = freezed,}) {
   return _then(_self.copyWith(
 error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as SplitsbyError,serviceId: null == serviceId ? _self.serviceId : serviceId // ignore: cast_nullable_to_non_nullable
 as String,showCannotBe0ZeroError: null == showCannotBe0ZeroError ? _self.showCannotBe0ZeroError : showCannotBe0ZeroError // ignore: cast_nullable_to_non_nullable
 as bool,nameErrorText: null == nameErrorText ? _self.nameErrorText : nameErrorText // ignore: cast_nullable_to_non_nullable
-as String,group: freezed == group ? _self.group : group // ignore: cast_nullable_to_non_nullable
+as String,payer: null == payer ? _self.payer : payer // ignore: cast_nullable_to_non_nullable
+as Person,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String,participants: null == participants ? _self.participants : participants // ignore: cast_nullable_to_non_nullable
+as List<Person>,group: freezed == group ? _self.group : group // ignore: cast_nullable_to_non_nullable
 as Group?,service: freezed == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as SubscriptionService?,
   ));
 }
+/// Create a copy of AddServiceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonCopyWith<$Res> get payer {
+  
+  return $PersonCopyWith<$Res>(_self.payer, (value) {
+    return _then(_self.copyWith(payer: value));
+  });
+}/// Create a copy of AddServiceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GroupCopyWith<$Res>? get group {
+    if (_self.group == null) {
+    return null;
+  }
 
+  return $GroupCopyWith<$Res>(_self.group!, (value) {
+    return _then(_self.copyWith(group: value));
+  });
+}/// Create a copy of AddServiceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SubscriptionServiceCopyWith<$Res>? get service {
+    if (_self.service == null) {
+    return null;
+  }
+
+  return $SubscriptionServiceCopyWith<$Res>(_self.service!, (value) {
+    return _then(_self.copyWith(service: value));
+  });
+}
 }
 
 
@@ -155,10 +191,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Group? group,  SubscriptionService? service)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Person payer,  String currency,  List<Person> participants,  Group? group,  SubscriptionService? service)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AddServiceState() when $default != null:
-return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.group,_that.service);case _:
+return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.payer,_that.currency,_that.participants,_that.group,_that.service);case _:
   return orElse();
 
 }
@@ -176,10 +212,10 @@ return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.n
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Group? group,  SubscriptionService? service)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Person payer,  String currency,  List<Person> participants,  Group? group,  SubscriptionService? service)  $default,) {final _that = this;
 switch (_that) {
 case _AddServiceState():
-return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.group,_that.service);case _:
+return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.payer,_that.currency,_that.participants,_that.group,_that.service);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +232,10 @@ return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.n
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Group? group,  SubscriptionService? service)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Person payer,  String currency,  List<Person> participants,  Group? group,  SubscriptionService? service)?  $default,) {final _that = this;
 switch (_that) {
 case _AddServiceState() when $default != null:
-return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.group,_that.service);case _:
+return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.payer,_that.currency,_that.participants,_that.group,_that.service);case _:
   return null;
 
 }
@@ -211,13 +247,22 @@ return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.n
 
 
 class _AddServiceState extends AddServiceState {
-  const _AddServiceState({this.error = const SplitsbyError.none(), this.serviceId = "", this.showCannotBe0ZeroError = false, this.nameErrorText = "", this.group, this.service}): super._();
+  const _AddServiceState({this.error = const SplitsbyError.none(), this.serviceId = "", this.showCannotBe0ZeroError = false, this.nameErrorText = "", required this.payer, this.currency = "", final  List<Person> participants = const [], this.group, this.service}): _participants = participants,super._();
   
 
 @override@JsonKey() final  SplitsbyError error;
 @override@JsonKey() final  String serviceId;
 @override@JsonKey() final  bool showCannotBe0ZeroError;
 @override@JsonKey() final  String nameErrorText;
+@override final  Person payer;
+@override@JsonKey() final  String currency;
+ final  List<Person> _participants;
+@override@JsonKey() List<Person> get participants {
+  if (_participants is EqualUnmodifiableListView) return _participants;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_participants);
+}
+
 @override final  Group? group;
 @override final  SubscriptionService? service;
 
@@ -231,16 +276,16 @@ _$AddServiceStateCopyWith<_AddServiceState> get copyWith => __$AddServiceStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddServiceState&&(identical(other.error, error) || other.error == error)&&(identical(other.serviceId, serviceId) || other.serviceId == serviceId)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText)&&(identical(other.group, group) || other.group == group)&&(identical(other.service, service) || other.service == service));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddServiceState&&(identical(other.error, error) || other.error == error)&&(identical(other.serviceId, serviceId) || other.serviceId == serviceId)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText)&&(identical(other.payer, payer) || other.payer == payer)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other._participants, _participants)&&(identical(other.group, group) || other.group == group)&&(identical(other.service, service) || other.service == service));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,error,serviceId,showCannotBe0ZeroError,nameErrorText,group,service);
+int get hashCode => Object.hash(runtimeType,error,serviceId,showCannotBe0ZeroError,nameErrorText,payer,currency,const DeepCollectionEquality().hash(_participants),group,service);
 
 @override
 String toString() {
-  return 'AddServiceState(error: $error, serviceId: $serviceId, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText, group: $group, service: $service)';
+  return 'AddServiceState(error: $error, serviceId: $serviceId, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText, payer: $payer, currency: $currency, participants: $participants, group: $group, service: $service)';
 }
 
 
@@ -251,11 +296,11 @@ abstract mixin class _$AddServiceStateCopyWith<$Res> implements $AddServiceState
   factory _$AddServiceStateCopyWith(_AddServiceState value, $Res Function(_AddServiceState) _then) = __$AddServiceStateCopyWithImpl;
 @override @useResult
 $Res call({
- SplitsbyError error, String serviceId, bool showCannotBe0ZeroError, String nameErrorText, Group? group, SubscriptionService? service
+ SplitsbyError error, String serviceId, bool showCannotBe0ZeroError, String nameErrorText, Person payer, String currency, List<Person> participants, Group? group, SubscriptionService? service
 });
 
 
-
+@override $PersonCopyWith<$Res> get payer;@override $GroupCopyWith<$Res>? get group;@override $SubscriptionServiceCopyWith<$Res>? get service;
 
 }
 /// @nodoc
@@ -268,19 +313,55 @@ class __$AddServiceStateCopyWithImpl<$Res>
 
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? error = null,Object? serviceId = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,Object? group = freezed,Object? service = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? error = null,Object? serviceId = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,Object? payer = null,Object? currency = null,Object? participants = null,Object? group = freezed,Object? service = freezed,}) {
   return _then(_AddServiceState(
 error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as SplitsbyError,serviceId: null == serviceId ? _self.serviceId : serviceId // ignore: cast_nullable_to_non_nullable
 as String,showCannotBe0ZeroError: null == showCannotBe0ZeroError ? _self.showCannotBe0ZeroError : showCannotBe0ZeroError // ignore: cast_nullable_to_non_nullable
 as bool,nameErrorText: null == nameErrorText ? _self.nameErrorText : nameErrorText // ignore: cast_nullable_to_non_nullable
-as String,group: freezed == group ? _self.group : group // ignore: cast_nullable_to_non_nullable
+as String,payer: null == payer ? _self.payer : payer // ignore: cast_nullable_to_non_nullable
+as Person,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
+as String,participants: null == participants ? _self._participants : participants // ignore: cast_nullable_to_non_nullable
+as List<Person>,group: freezed == group ? _self.group : group // ignore: cast_nullable_to_non_nullable
 as Group?,service: freezed == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as SubscriptionService?,
   ));
 }
 
+/// Create a copy of AddServiceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PersonCopyWith<$Res> get payer {
+  
+  return $PersonCopyWith<$Res>(_self.payer, (value) {
+    return _then(_self.copyWith(payer: value));
+  });
+}/// Create a copy of AddServiceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$GroupCopyWith<$Res>? get group {
+    if (_self.group == null) {
+    return null;
+  }
 
+  return $GroupCopyWith<$Res>(_self.group!, (value) {
+    return _then(_self.copyWith(group: value));
+  });
+}/// Create a copy of AddServiceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SubscriptionServiceCopyWith<$Res>? get service {
+    if (_self.service == null) {
+    return null;
+  }
+
+  return $SubscriptionServiceCopyWith<$Res>(_self.service!, (value) {
+    return _then(_self.copyWith(service: value));
+  });
+}
 }
 
 // dart format on
