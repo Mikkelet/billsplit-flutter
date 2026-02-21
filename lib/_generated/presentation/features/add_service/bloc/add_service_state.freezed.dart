@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AddServiceState {
 
- bool get isLoading; SplitsbyError get error; bool get showCannotBe0ZeroError; String get nameErrorText;
+ SplitsbyError get error; String get serviceId; bool get showCannotBe0ZeroError; String get nameErrorText; Group? get group; SubscriptionService? get service;
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AddServiceStateCopyWith<AddServiceState> get copyWith => _$AddServiceStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddServiceState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AddServiceState&&(identical(other.error, error) || other.error == error)&&(identical(other.serviceId, serviceId) || other.serviceId == serviceId)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText)&&(identical(other.group, group) || other.group == group)&&(identical(other.service, service) || other.service == service));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,error,showCannotBe0ZeroError,nameErrorText);
+int get hashCode => Object.hash(runtimeType,error,serviceId,showCannotBe0ZeroError,nameErrorText,group,service);
 
 @override
 String toString() {
-  return 'AddServiceState(isLoading: $isLoading, error: $error, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText)';
+  return 'AddServiceState(error: $error, serviceId: $serviceId, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText, group: $group, service: $service)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AddServiceStateCopyWith<$Res>  {
   factory $AddServiceStateCopyWith(AddServiceState value, $Res Function(AddServiceState) _then) = _$AddServiceStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, SplitsbyError error, bool showCannotBe0ZeroError, String nameErrorText
+ SplitsbyError error, String serviceId, bool showCannotBe0ZeroError, String nameErrorText, Group? group, SubscriptionService? service
 });
 
 
@@ -62,13 +62,15 @@ class _$AddServiceStateCopyWithImpl<$Res>
 
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? error = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? error = null,Object? serviceId = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,Object? group = freezed,Object? service = freezed,}) {
   return _then(_self.copyWith(
-isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as SplitsbyError,showCannotBe0ZeroError: null == showCannotBe0ZeroError ? _self.showCannotBe0ZeroError : showCannotBe0ZeroError // ignore: cast_nullable_to_non_nullable
+error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as SplitsbyError,serviceId: null == serviceId ? _self.serviceId : serviceId // ignore: cast_nullable_to_non_nullable
+as String,showCannotBe0ZeroError: null == showCannotBe0ZeroError ? _self.showCannotBe0ZeroError : showCannotBe0ZeroError // ignore: cast_nullable_to_non_nullable
 as bool,nameErrorText: null == nameErrorText ? _self.nameErrorText : nameErrorText // ignore: cast_nullable_to_non_nullable
-as String,
+as String,group: freezed == group ? _self.group : group // ignore: cast_nullable_to_non_nullable
+as Group?,service: freezed == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
+as SubscriptionService?,
   ));
 }
 
@@ -153,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  SplitsbyError error,  bool showCannotBe0ZeroError,  String nameErrorText)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Group? group,  SubscriptionService? service)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AddServiceState() when $default != null:
-return $default(_that.isLoading,_that.error,_that.showCannotBe0ZeroError,_that.nameErrorText);case _:
+return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.group,_that.service);case _:
   return orElse();
 
 }
@@ -174,10 +176,10 @@ return $default(_that.isLoading,_that.error,_that.showCannotBe0ZeroError,_that.n
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  SplitsbyError error,  bool showCannotBe0ZeroError,  String nameErrorText)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Group? group,  SubscriptionService? service)  $default,) {final _that = this;
 switch (_that) {
 case _AddServiceState():
-return $default(_that.isLoading,_that.error,_that.showCannotBe0ZeroError,_that.nameErrorText);case _:
+return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.group,_that.service);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +196,10 @@ return $default(_that.isLoading,_that.error,_that.showCannotBe0ZeroError,_that.n
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  SplitsbyError error,  bool showCannotBe0ZeroError,  String nameErrorText)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SplitsbyError error,  String serviceId,  bool showCannotBe0ZeroError,  String nameErrorText,  Group? group,  SubscriptionService? service)?  $default,) {final _that = this;
 switch (_that) {
 case _AddServiceState() when $default != null:
-return $default(_that.isLoading,_that.error,_that.showCannotBe0ZeroError,_that.nameErrorText);case _:
+return $default(_that.error,_that.serviceId,_that.showCannotBe0ZeroError,_that.nameErrorText,_that.group,_that.service);case _:
   return null;
 
 }
@@ -208,14 +210,16 @@ return $default(_that.isLoading,_that.error,_that.showCannotBe0ZeroError,_that.n
 /// @nodoc
 
 
-class _AddServiceState implements AddServiceState {
-  const _AddServiceState({this.isLoading = false, this.error = const SplitsbyError.none(), this.showCannotBe0ZeroError = false, this.nameErrorText = ""});
+class _AddServiceState extends AddServiceState {
+  const _AddServiceState({this.error = const SplitsbyError.none(), this.serviceId = "", this.showCannotBe0ZeroError = false, this.nameErrorText = "", this.group, this.service}): super._();
   
 
-@override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  SplitsbyError error;
+@override@JsonKey() final  String serviceId;
 @override@JsonKey() final  bool showCannotBe0ZeroError;
 @override@JsonKey() final  String nameErrorText;
+@override final  Group? group;
+@override final  SubscriptionService? service;
 
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +231,16 @@ _$AddServiceStateCopyWith<_AddServiceState> get copyWith => __$AddServiceStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddServiceState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AddServiceState&&(identical(other.error, error) || other.error == error)&&(identical(other.serviceId, serviceId) || other.serviceId == serviceId)&&(identical(other.showCannotBe0ZeroError, showCannotBe0ZeroError) || other.showCannotBe0ZeroError == showCannotBe0ZeroError)&&(identical(other.nameErrorText, nameErrorText) || other.nameErrorText == nameErrorText)&&(identical(other.group, group) || other.group == group)&&(identical(other.service, service) || other.service == service));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,error,showCannotBe0ZeroError,nameErrorText);
+int get hashCode => Object.hash(runtimeType,error,serviceId,showCannotBe0ZeroError,nameErrorText,group,service);
 
 @override
 String toString() {
-  return 'AddServiceState(isLoading: $isLoading, error: $error, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText)';
+  return 'AddServiceState(error: $error, serviceId: $serviceId, showCannotBe0ZeroError: $showCannotBe0ZeroError, nameErrorText: $nameErrorText, group: $group, service: $service)';
 }
 
 
@@ -247,7 +251,7 @@ abstract mixin class _$AddServiceStateCopyWith<$Res> implements $AddServiceState
   factory _$AddServiceStateCopyWith(_AddServiceState value, $Res Function(_AddServiceState) _then) = __$AddServiceStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, SplitsbyError error, bool showCannotBe0ZeroError, String nameErrorText
+ SplitsbyError error, String serviceId, bool showCannotBe0ZeroError, String nameErrorText, Group? group, SubscriptionService? service
 });
 
 
@@ -264,13 +268,15 @@ class __$AddServiceStateCopyWithImpl<$Res>
 
 /// Create a copy of AddServiceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? error = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? error = null,Object? serviceId = null,Object? showCannotBe0ZeroError = null,Object? nameErrorText = null,Object? group = freezed,Object? service = freezed,}) {
   return _then(_AddServiceState(
-isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as SplitsbyError,showCannotBe0ZeroError: null == showCannotBe0ZeroError ? _self.showCannotBe0ZeroError : showCannotBe0ZeroError // ignore: cast_nullable_to_non_nullable
+error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as SplitsbyError,serviceId: null == serviceId ? _self.serviceId : serviceId // ignore: cast_nullable_to_non_nullable
+as String,showCannotBe0ZeroError: null == showCannotBe0ZeroError ? _self.showCannotBe0ZeroError : showCannotBe0ZeroError // ignore: cast_nullable_to_non_nullable
 as bool,nameErrorText: null == nameErrorText ? _self.nameErrorText : nameErrorText // ignore: cast_nullable_to_non_nullable
-as String,
+as String,group: freezed == group ? _self.group : group // ignore: cast_nullable_to_non_nullable
+as Group?,service: freezed == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
+as SubscriptionService?,
   ));
 }
 

@@ -22,20 +22,3 @@ class AddEventResponse {
 
   factory AddEventResponse.fromJson(Json json) => _$AddEventResponseFromJson(json);
 }
-
-/**
- * object AddEvent {
-
-    @kotlinx.serialization.Serializable
-    data class Request(
-    val groupId: String,
-    val event: EventDTO,
-    val debts: List<DebtDTO>
-    )
-
-    @kotlinx.serialization.Serializable
-    data class Response(
-    val event: EventDTO
-    )
-    }
- */

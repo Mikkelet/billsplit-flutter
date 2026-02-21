@@ -14,24 +14,14 @@ import 'package:billsplit_flutter/presentation/features/add_service/bloc/add_ser
 import 'package:billsplit_flutter/presentation/features/add_service/widgets/service_participant_view.dart';
 import 'package:billsplit_flutter/presentation/mutable_state.dart';
 import 'package:billsplit_flutter/presentation/themes/splitsby_text_theme.dart';
-import 'package:billsplit_flutter/utils/safe_stateful_widget.dart';
 import 'package:billsplit_flutter/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class AddServicePage extends StatefulWidget {
+class AddServicePage extends StatelessWidget {
   const AddServicePage({super.key});
-
-  @override
-  State<AddServicePage> createState() => _AddServicePageState();
-}
-
-class _AddServicePageState extends SafeState<AddServicePage> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +37,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
               forceMaterialTransparency: true,
               title: Builder(
                 builder: (context) {
-                  if (cubit.service.id.isEmpty) {
+                  if (state.requireService.id.isEmpty) {
                     return const Text("New Subscription");
                   }
                   return const Text("Edit Subscription");
@@ -56,35 +46,34 @@ class _AddServicePageState extends SafeState<AddServicePage> {
               leading: const BackButton(),
               surfaceTintColor: Theme.of(context).colorScheme.surface,
               actions: [
-                if (cubit.service.id.isNotEmpty)
+                if (state.requireService.id.isNotEmpty)
                   IconButton(
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder:
-                            (context) => CustomDialog(
-                              text: "Are you sure you want to delete this subscription service?",
-                              primaryText: "No, keep it",
-                              onPrimaryClick: () {
-                                Navigator.of(context).pop();
-                              },
-                              secondaryText: "Yes, delete it",
-                              onSecondaryClick: () {
-                                cubit.deleteService(cubit.service);
-                              },
-                            ),
+                        builder: (context) => CustomDialog(
+                          text: "Are you sure you want to delete this subscription service?",
+                          primaryText: "No, keep it",
+                          onPrimaryClick: () {
+                            Navigator.of(context).pop();
+                          },
+                          secondaryText: "Yes, delete it",
+                          onSecondaryClick: () {
+                            cubit.deleteService(state.requireService);
+                          },
+                        ),
                       );
                     },
                     icon: const Icon(Icons.delete),
                     color: Theme.of(context).colorScheme.error,
                   ),
                 StreamBuilder(
-                  stream: cubit.service.isChangedStream,
-                  initialData: cubit.service.isChanged,
+                  stream: state.requireService.isChangedStream,
+                  initialData: state.requireService.isChanged,
                   builder: (context, snapshot) {
                     final isChanged = snapshot.requireData;
                     return MutableValue(
-                      mutableValue: cubit.service.monthlyExpenseState,
+                      mutableValue: state.requireService.monthlyExpenseState,
                       builder: (context, monthlyExpense) {
                         VoidCallback? callback;
                         final enableButton = isChanged && monthlyExpense > 0;
@@ -104,20 +93,18 @@ class _AddServicePageState extends SafeState<AddServicePage> {
               ],
             );
           }),
-          body: WillPopScope(
-            onWillPop: () async {
-              if (cubit.service.isChanged) {
-                return await showDialog(
-                  context: context,
-                  builder:
-                      (context) => ResetChangesDialog(
-                        () {
-                          cubit.service.resetChanges();
-                        },
-                      ),
-                );
-              }
-              return true;
+          body: PopScope(
+            canPop: !state.requireService.isChanged,
+            onPopInvokedWithResult: (didPop, result) async {
+              await showDialog(
+                context: context,
+                builder: (context) => ResetChangesDialog(
+                  () {
+                    state.requireService.resetChanges();
+                    context.pop();
+                  },
+                ),
+              );
             },
             child: Builder(
               builder: (context) {
@@ -134,7 +121,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                           child: TextField(
                             controller: cubit.nameTextController,
                             onChanged: (value) {
-                              cubit.service.nameState.value = value;
+                              state.requireService.nameState.value = value;
                             },
                             textInputAction: TextInputAction.next,
                             maxLines: 1,
@@ -165,7 +152,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                   canBeZero: !state.showCannotBe0ZeroError,
                                   fontSize: Theme.of(context).textTheme.labelLarge?.fontSize,
                                   onChange: (value) {
-                                    cubit.service.monthlyExpenseState.value = value;
+                                    state.requireService.monthlyExpenseState.value = value;
                                   },
                                 ),
                               ),
@@ -180,7 +167,8 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                 onClick: () async {
                                   final response = await Navigator.of(context).push(
                                     CurrencyPickerDialog.getRoute(
-                                      convertToCurrency: cubit.group.defaultCurrencyState.value,
+                                      convertToCurrency:
+                                          state.requireGroup.defaultCurrencyState.value,
                                     ),
                                   );
                                   if (response is Currency) {
@@ -188,7 +176,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                   }
                                 },
                                 child: MutableText(
-                                  mutString: cubit.service.currencyState,
+                                  mutString: state.requireService.currencyState,
                                 ),
                               ),
                             ),
@@ -202,13 +190,13 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: MutableValue(
-                              mutableValue: cubit.service.currencyState,
+                              mutableValue: state.requireService.currencyState,
                               builder: (context, currency) {
                                 return MutableValue(
-                                  mutableValue: cubit.service.monthlyExpenseState,
+                                  mutableValue: state.requireService.monthlyExpenseState,
                                   builder: (context, monthlyService) {
                                     return MutableValue(
-                                      mutableValue: cubit.service.participantsState,
+                                      mutableValue: state.requireService.participantsState,
                                       builder: (context, participants) {
                                         final monthlyServicePerPerson =
                                             monthlyService / participants.length;
@@ -248,7 +236,7 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                           child: Column(
                             children: [
                               MutableValue(
-                                mutableValue: cubit.service.participantsState,
+                                mutableValue: state.requireService.participantsState,
                                 builder: (context, participants) {
                                   return Column(
                                     children: [
@@ -274,17 +262,17 @@ class _AddServicePageState extends SafeState<AddServicePage> {
                                     await showModalBottomSheet(
                                       context: context,
                                       backgroundColor: Theme.of(context).colorScheme.surface,
-                                      builder:
-                                          (context) => Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: ParticipantsPickerDialog(
-                                              participantsState: cubit.service.participantsState,
-                                              peopleState: cubit.group.peopleState,
-                                              currencySymbol: cubit.service.currencyState.value,
-                                              description: cubit.service.nameState.value,
-                                              totalExpense: cubit.service.monthlyExpenseState.value,
-                                            ),
-                                          ),
+                                      builder: (context) => Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: ParticipantsPickerDialog(
+                                          participantsState: state.requireService.participantsState,
+                                          peopleState: state.requireGroup.peopleState,
+                                          currencySymbol: state.requireService.currencyState.value,
+                                          description: state.requireService.nameState.value,
+                                          totalExpense:
+                                              state.requireService.monthlyExpenseState.value,
+                                        ),
+                                      ),
                                     );
                                   },
                                   icon: const Icon(Icons.group),

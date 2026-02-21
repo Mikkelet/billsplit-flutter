@@ -23,13 +23,13 @@ class EventDTO {
     required this.type,
   });
 
-  static EventDTO fromJson(Json json) {
+  factory EventDTO.fromJson(Json json) {
     final type = json["type"] as String;
     switch (type) {
       case "expense":
-        return GroupExpenseDTO.fromJson(json);
+        return GroupExpenseDTO.fromJson(Json.from(json));
       case "payment":
-        return PaymentDTO.fromJson(json);
+        return PaymentDTO.fromJson(Json.from(json));
       default:
         throw Exception("Invalid type");
     }

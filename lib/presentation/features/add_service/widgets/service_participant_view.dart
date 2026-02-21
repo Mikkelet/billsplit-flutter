@@ -15,43 +15,46 @@ class ServiceParticipantView extends StatelessWidget {
     final cubit = context.read<AddServiceBloc>();
 
     return MutableValue(
-        mutableValue: cubit.service.payerState,
-        builder: (context, payer) {
-          final isPayer = payer.uid == person.uid;
-          return Row(
-            children: [
-              PayerView(
-                  person: person,
-                  size: 40,
-                  onClick: () {
-                    cubit.onPayerClicked(person);
-                  }),
-              const SizedBox(width: 4),
-              if (isPayer)
-                Expanded(
-                  child: TextButton(
-                    style: const ButtonStyle(alignment: Alignment.centerLeft),
-                    onPressed: () {},
-                    child: Text(
-                      "${person.displayName} is paying",
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
+      mutableValue: cubit.state.requireService.payerState,
+      builder: (context, payer) {
+        final isPayer = payer.uid == person.uid;
+        return Row(
+          children: [
+            PayerView(
+              person: person,
+              size: 40,
+              onClick: () {
+                cubit.onPayerClicked(person);
+              },
+            ),
+            const SizedBox(width: 4),
+            if (isPayer)
+              Expanded(
+                child: TextButton(
+                  style: const ButtonStyle(alignment: Alignment.centerLeft),
+                  onPressed: () {},
+                  child: Text(
+                    "${person.displayName} is paying",
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
-                )
-              else
-                Expanded(
-                  child: TextButton(
-                      style: const ButtonStyle(alignment: Alignment.centerLeft),
-                      onPressed: () {
-                        cubit.onPayerClicked(person);
-                      },
-                      child: Text(
-                        person.displayName,
-                        style: Theme.of(context).textTheme.labelSmall,
-                      )),
                 ),
-            ],
-          );
-        });
+              )
+            else
+              Expanded(
+                child: TextButton(
+                  style: const ButtonStyle(alignment: Alignment.centerLeft),
+                  onPressed: () {
+                    cubit.onPayerClicked(person);
+                  },
+                  child: Text(
+                    person.displayName,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
   }
 }

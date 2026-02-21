@@ -18,7 +18,7 @@ class ServiceView extends StatelessWidget {
     final cubit = context.read<GroupBloc>();
     return ClickableListItem(
       onClick: () {
-        Navigator.of(context).push(addServiceRoute(context.user, cubit.state.requireGroup, service));
+        AddServiceRoute.edit(cubit.state.requireGroup.id, service.id);
       },
       child: Row(
         children: [

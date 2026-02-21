@@ -6,10 +6,12 @@ part of '../../../../data/remote/requests/add_event_request.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Map<String, dynamic> _$AddEventRequestToJson(AddEventRequest instance) => <String, dynamic>{
-  'groupId': instance.groupId,
-  'event': instance.event.toJson(),
-};
+Map<String, dynamic> _$AddEventRequestToJson(AddEventRequest instance) =>
+    <String, dynamic>{
+      'groupId': instance.groupId,
+      'event': instance.event.toJson(),
+    };
 
-AddEventResponse _$AddEventResponseFromJson(Map json) =>
-    AddEventResponse(EventDTO.fromJson(json['event'] as Map<String, dynamic>));
+AddEventResponse _$AddEventResponseFromJson(Map json) => AddEventResponse(
+  EventDTO.fromJson(Map<String, dynamic>.from(json['event'] as Map)),
+);

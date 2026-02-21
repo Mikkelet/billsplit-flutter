@@ -1,4 +1,6 @@
+import 'package:billsplit_flutter/presentation/features/add_service/add_service_route.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_route.dart';
+import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_route.dart';
 import 'package:billsplit_flutter/presentation/features/update_phone_number/update_phone_number_route.dart';
@@ -36,5 +38,7 @@ final router = GoRouter(
     $updatePhoneNumberRoute,
     $groupInvitesRoute,
     $friendsRoute,
+    $groupRoute,
+    $addServiceRoute,
   ],
 );

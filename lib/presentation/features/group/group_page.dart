@@ -142,10 +142,8 @@ class GroupPage extends StatelessWidget {
     final state = cubit.state;
     if (state.groupNav == GroupPageNav.events) {
       Navigator.of(context).push(AddExpensePage.getRoute(context.user, state.requireGroup, null));
-    } else {
-      if (state.groupNav == GroupPageNav.services) {
-        Navigator.of(context).push(addServiceRoute(context.user, state.requireGroup, null));
-      }
+    } else if (state.groupNav == GroupPageNav.services) {
+      AddServiceRoute.add(state.requireGroup.id).push(context);
     }
   }
 }
