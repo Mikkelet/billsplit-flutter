@@ -34,6 +34,8 @@ jobs:
           
           # import certificate to keychain
           pwd
+          cd .github/workflows/scripts
+          pwd
           ls
           sh .github/workflows/scripts/install_ios_cert.sh $P12_PASSWORD $KEYCHAIN_PATH $KEYCHAIN_PASSWORD
           
