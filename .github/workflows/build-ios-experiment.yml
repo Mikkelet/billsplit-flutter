@@ -33,7 +33,8 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           
           # import certificate to keychain
+          pwd
           ls
-          sh .github/workflows/scripts/install_ios_cert.sh $P12_P12_PASSWORD $KEYCHAIN_PATH $KEYCHAIN_PASSWORD
+          sh .github/workflows/scripts/install_ios_cert.sh $P12_PASSWORD $KEYCHAIN_PATH $KEYCHAIN_PASSWORD
           
           
