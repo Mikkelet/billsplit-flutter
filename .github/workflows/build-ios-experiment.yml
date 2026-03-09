@@ -1,4 +1,4 @@
-name: Build-iOS
+name: Install certificate
 
 on:
   push:
