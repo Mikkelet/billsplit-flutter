@@ -8,6 +8,10 @@ jobs:
   build:
     runs-on: macos-26
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # we need the git history for the build number
       - name: xcode version
         run: |
           sudo xcode-select -s /Applications/Xcode_26.2.app
