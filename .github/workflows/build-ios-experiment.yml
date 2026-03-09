@@ -28,13 +28,11 @@ jobs:
           
           # openssl pkcs12 -in $CERTIFICATE_PATH -nokeys -passin pass:$P12_PASSWORD | openssl x509 -sha1 -noout -fingerprint -subject -dates -nameopt utf8,sep_semi_plus_space
           
-          # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           
           # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          sh .github/workflows/scripts/install_ios_cert.sh $P12_P12_PASSWORD $KEYCHAIN_PATH $KEYCHAIN_PASSWORD
+          
           
