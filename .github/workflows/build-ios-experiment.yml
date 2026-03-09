@@ -20,15 +20,10 @@ jobs:
         env:
           CERTIFICATE: ${{ secrets.CERTIFICATE_P12_31_01_2027 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          CERTIFICATE_PATH: $RUNNER_TEMP/build_certificate.p12
         run: |
-          # import certificate and provisioning profile from secrets
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           # sh .github/workflows/scripts/decode_cert.sh $CERTIFICATE $CERTIFICATE_PATH
           echo -n "$CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
-          
-          # openssl pkcs12 -in $CERTIFICATE_PATH -nokeys -passin pass:$P12_PASSWORD | openssl x509 -sha1 -noout -fingerprint -subject -dates -nameopt utf8,sep_semi_plus_space
-          
-          # import certificate to keychain
           sh .github/workflows/scripts/install_ios_cert.sh $P12_PASSWORD $CERTIFICATE_PATH
           
           
