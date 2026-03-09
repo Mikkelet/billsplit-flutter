@@ -18,8 +18,7 @@ class AuthProvider {
   }
 
   Future signInWithEmail(String email, String password) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
-        email: email, password: password);
+    await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
   }
 
   Future signInWithGoogle() async {
@@ -28,13 +27,16 @@ class AuthProvider {
 
     final auth = googleSignInAccount.authentication;
     final credential = GoogleAuthProvider.credential(
-        accessToken: auth.idToken, idToken: auth.idToken);
+      accessToken: auth.idToken,
+      idToken: auth.idToken,
+    );
     await _firebaseAuth.signInWithCredential(credential);
   }
 
   Future<void> signInWithApple() async {
-    final appleIDCredential =
-        await SignInWithApple.getAppleIDCredential(scopes: _appleSignInScopes);
+    final appleIDCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: _appleSignInScopes,
+    );
     final credential = OAuthProvider('apple.com').credential(
       idToken: appleIDCredential.identityToken,
       accessToken: appleIDCredential.authorizationCode,
@@ -43,8 +45,7 @@ class AuthProvider {
   }
 
   Future signUpWithEmail(String email, String password) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
   }
 
   Future signUpAsGuest() async {
@@ -78,10 +79,11 @@ class AuthProvider {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future<void> updatePhoneNumber(
-      {required String phoneNumber,
-      required Function(UiException e) onFailed,
-      required Function(String verificationId) onCodeSent}) async {
+  Future<void> updatePhoneNumber({
+    required String phoneNumber,
+    required Function(UiException e) onFailed,
+    required Function(String verificationId) onCodeSent,
+  }) async {
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(minutes: 2),
@@ -100,7 +102,9 @@ class AuthProvider {
 
   Future<void> submitSmsCode(String verificationId, String smsCode) async {
     final credential = PhoneAuthProvider.credential(
-        verificationId: verificationId, smsCode: smsCode);
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
     await _firebaseAuth.currentUser!.updatePhoneNumber(credential);
   }
 

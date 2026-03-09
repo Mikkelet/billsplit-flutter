@@ -22,13 +22,13 @@ class AuthRepository {
         .asyncMap((firebaseUser) async {
           if (firebaseUser == null) {
             if (_sharedPrefs.isUserLoggedIn) {
-              _sharedPrefs.isUserLoggedIn = true;
+              await _sharedPrefs.setIsLoggedIn(true);
               return LoggedInState(Person.dummy(123));
             }
             return LoggedOutState();
           }
 
-          _sharedPrefs.isUserLoggedIn = true;
+          await _sharedPrefs.setIsLoggedIn(true);
 
           final parsedPhoneNumber = await _parsePhoneNumberUseCase.launch(firebaseUser.phoneNumber);
           _loggedInUser = Person(
@@ -49,6 +49,8 @@ class AuthRepository {
           return event;
         });
   }
+
+  bool get isLoggedIn => _sharedPrefs.isUserLoggedIn;
 
   void _subscribeToUserTopic(Person person) async {
     final topic = "user-${person.uid}";

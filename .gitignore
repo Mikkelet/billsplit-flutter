@@ -140,5 +140,5 @@ app.*.symbols
 # FVM
 
 # FVM Version Cache
-.fvm/
 .fvmrc
+private_keys/

@@ -3,22 +3,15 @@ import 'package:billsplit_flutter/domain/models/group.dart';
 import 'package:billsplit_flutter/domain/models/notification_action.dart';
 import 'package:billsplit_flutter/presentation/base/bloc/base_state.dart';
 
-class ShowNotificationPermissionRationale extends Main {}
+import 'package:billsplit_flutter/presentation/base/errors.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class GroupOpenedFromNotification extends Main {
-  final Group group;
+part '../_generated/presentation/main_state.freezed.dart';
 
-  GroupOpenedFromNotification(this.group);
-}
-
-class NotificationActionEvent extends Main {
-  final NotificationAction notificationAction;
-
-  NotificationActionEvent({required this.notificationAction});
-}
-
-class MandatoryUpdateState extends Main {
-  final AppVersion appVersion;
-
-  MandatoryUpdateState(this.appVersion);
+@freezed
+abstract class MainState with _$MainState {
+  const factory MainState({
+    @Default(false) bool isLoading,
+    @Default(SplitsbyError.none()) SplitsbyError error,
+  }) = _MainState;
 }

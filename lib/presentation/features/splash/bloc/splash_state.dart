@@ -6,7 +6,7 @@ part '../../../../_generated/presentation/features/splash/bloc/splash_state.free
 @freezed
 abstract class SplashState with _$SplashState {
   const factory SplashState({
-    @Default(false) bool isLoading,
+    @Default(true) bool isLoading,
     @Default(SplitsbyError.none()) SplitsbyError error,
   }) = _SplashState;
 

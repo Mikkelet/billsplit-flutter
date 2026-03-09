@@ -22,10 +22,11 @@ class SharedPrefs {
   // hasSeenPushNotificationPermissionRationale
   bool get hasSeenPushNotificationPermissionRationale =>
       _sharedPrefs.getBool(hasSeenPushNotificationPermissionRationaleKey) ??
-      false;
+          false;
 
-  set hasSeenPushNotificationPermissionRationale(bool value) => _sharedPrefs
-      .setBool(hasSeenPushNotificationPermissionRationaleKey, value);
+  set hasSeenPushNotificationPermissionRationale(bool value) =>
+      _sharedPrefs
+          .setBool(hasSeenPushNotificationPermissionRationaleKey, value);
 
   // get Group Notification settings
   Iterable<GroupNotificationSetting> get groupNotificationSettings {
@@ -71,7 +72,7 @@ class SharedPrefs {
     final lsJson = _sharedPrefs.getStringList(recentCurrenciesKey) ?? [];
     if (lsJson.isEmpty) return [];
     final recentSorted =
-        lsJson.map((e) => RecentCurrency.fromJson(jsonDecode(e))).toList();
+    lsJson.map((e) => RecentCurrency.fromJson(jsonDecode(e))).toList();
     return recentSorted.map((e) {
       final rate = getExchangeRate(e.symbol);
       return Currency(symbol: e.symbol, rate: rate!);
@@ -80,7 +81,9 @@ class SharedPrefs {
 
   set recentCurrencies(Iterable<Currency> currencies) {
     final currencyWithTimestamp = currencies.map((currency) =>
-        RecentCurrency(currency.symbol, DateTime.now().millisecondsSinceEpoch));
+        RecentCurrency(currency.symbol, DateTime
+            .now()
+            .millisecondsSinceEpoch));
     final encoded = currencyWithTimestamp.map((e) => jsonEncode(e.toJson()));
     _sharedPrefs.setStringList(recentCurrenciesKey, encoded.toList());
   }
@@ -116,8 +119,9 @@ class SharedPrefs {
   // isUserLoggedId
   bool get isUserLoggedIn => _sharedPrefs.getBool(isUserLoggedIdKey) ?? false;
 
-  set isUserLoggedIn(bool value) =>
-      _sharedPrefs.setBool(isUserLoggedIdKey, value);
+  Future<void> setIsLoggedIn(bool value) async {
+    await _sharedPrefs.setBool(isUserLoggedIdKey, value);
+  }
 
   // lastUsedDecimalDenominator
   String get lastUsedDecimalDenominator =>
@@ -125,6 +129,7 @@ class SharedPrefs {
 
   set lastUsedDecimalDenominator(String denominator) =>
       _sharedPrefs.setString(lastUsedDecimalDenominatorKey, denominator);
+
 
   // Keys
   static const hasSeenHoldToAddIndividualExpenseTipKey =
@@ -141,4 +146,5 @@ class SharedPrefs {
   static const hasSeenSharedExpenseGuideKey = "hasSeenSharedExpenseGuide";
   static const isUserLoggedIdKey = "isUserLoggedId";
   static const lastUsedDecimalDenominatorKey = "lastUsedDecimalDenominator";
+  static const isLoggedIn = "isLoggedIn";
 }

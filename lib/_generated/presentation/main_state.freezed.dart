@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of '../../../../../presentation/features/splash/bloc/splash_state.dart';
+part of '../../presentation/main_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,20 +12,20 @@ part of '../../../../../presentation/features/splash/bloc/splash_state.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$SplashState {
+mixin _$MainState {
 
  bool get isLoading; SplitsbyError get error;
-/// Create a copy of SplashState
+/// Create a copy of MainState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SplashStateCopyWith<SplashState> get copyWith => _$SplashStateCopyWithImpl<SplashState>(this as SplashState, _$identity);
+$MainStateCopyWith<MainState> get copyWith => _$MainStateCopyWithImpl<MainState>(this as MainState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SplashState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MainState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
@@ -34,15 +34,15 @@ int get hashCode => Object.hash(runtimeType,isLoading,error);
 
 @override
 String toString() {
-  return 'SplashState(isLoading: $isLoading, error: $error)';
+  return 'MainState(isLoading: $isLoading, error: $error)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SplashStateCopyWith<$Res>  {
-  factory $SplashStateCopyWith(SplashState value, $Res Function(SplashState) _then) = _$SplashStateCopyWithImpl;
+abstract mixin class $MainStateCopyWith<$Res>  {
+  factory $MainStateCopyWith(MainState value, $Res Function(MainState) _then) = _$MainStateCopyWithImpl;
 @useResult
 $Res call({
  bool isLoading, SplitsbyError error
@@ -53,14 +53,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$SplashStateCopyWithImpl<$Res>
-    implements $SplashStateCopyWith<$Res> {
-  _$SplashStateCopyWithImpl(this._self, this._then);
+class _$MainStateCopyWithImpl<$Res>
+    implements $MainStateCopyWith<$Res> {
+  _$MainStateCopyWithImpl(this._self, this._then);
 
-  final SplashState _self;
-  final $Res Function(SplashState) _then;
+  final MainState _self;
+  final $Res Function(MainState) _then;
 
-/// Create a copy of SplashState
+/// Create a copy of MainState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? error = null,}) {
   return _then(_self.copyWith(
@@ -73,8 +73,8 @@ as SplitsbyError,
 }
 
 
-/// Adds pattern-matching-related methods to [SplashState].
-extension SplashStatePatterns on SplashState {
+/// Adds pattern-matching-related methods to [MainState].
+extension MainStatePatterns on MainState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -87,10 +87,10 @@ extension SplashStatePatterns on SplashState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SplashState value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _MainState value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _SplashState() when $default != null:
+case _MainState() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -109,10 +109,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SplashState value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _MainState value)  $default,){
 final _that = this;
 switch (_that) {
-case _SplashState():
+case _MainState():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -130,10 +130,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SplashState value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _MainState value)?  $default,){
 final _that = this;
 switch (_that) {
-case _SplashState() when $default != null:
+case _MainState() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -153,7 +153,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  SplitsbyError error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _SplashState() when $default != null:
+case _MainState() when $default != null:
 return $default(_that.isLoading,_that.error);case _:
   return orElse();
 
@@ -174,7 +174,7 @@ return $default(_that.isLoading,_that.error);case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  SplitsbyError error)  $default,) {final _that = this;
 switch (_that) {
-case _SplashState():
+case _MainState():
 return $default(_that.isLoading,_that.error);case _:
   throw StateError('Unexpected subclass');
 
@@ -194,7 +194,7 @@ return $default(_that.isLoading,_that.error);case _:
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  SplitsbyError error)?  $default,) {final _that = this;
 switch (_that) {
-case _SplashState() when $default != null:
+case _MainState() when $default != null:
 return $default(_that.isLoading,_that.error);case _:
   return null;
 
@@ -206,24 +206,24 @@ return $default(_that.isLoading,_that.error);case _:
 /// @nodoc
 
 
-class _SplashState extends SplashState {
-  const _SplashState({this.isLoading = true, this.error = const SplitsbyError.none()}): super._();
+class _MainState implements MainState {
+  const _MainState({this.isLoading = false, this.error = const SplitsbyError.none()});
   
 
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  SplitsbyError error;
 
-/// Create a copy of SplashState
+/// Create a copy of MainState
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$SplashStateCopyWith<_SplashState> get copyWith => __$SplashStateCopyWithImpl<_SplashState>(this, _$identity);
+_$MainStateCopyWith<_MainState> get copyWith => __$MainStateCopyWithImpl<_MainState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SplashState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MainState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
@@ -232,15 +232,15 @@ int get hashCode => Object.hash(runtimeType,isLoading,error);
 
 @override
 String toString() {
-  return 'SplashState(isLoading: $isLoading, error: $error)';
+  return 'MainState(isLoading: $isLoading, error: $error)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$SplashStateCopyWith<$Res> implements $SplashStateCopyWith<$Res> {
-  factory _$SplashStateCopyWith(_SplashState value, $Res Function(_SplashState) _then) = __$SplashStateCopyWithImpl;
+abstract mixin class _$MainStateCopyWith<$Res> implements $MainStateCopyWith<$Res> {
+  factory _$MainStateCopyWith(_MainState value, $Res Function(_MainState) _then) = __$MainStateCopyWithImpl;
 @override @useResult
 $Res call({
  bool isLoading, SplitsbyError error
@@ -251,17 +251,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$SplashStateCopyWithImpl<$Res>
-    implements _$SplashStateCopyWith<$Res> {
-  __$SplashStateCopyWithImpl(this._self, this._then);
+class __$MainStateCopyWithImpl<$Res>
+    implements _$MainStateCopyWith<$Res> {
+  __$MainStateCopyWithImpl(this._self, this._then);
 
-  final _SplashState _self;
-  final $Res Function(_SplashState) _then;
+  final _MainState _self;
+  final $Res Function(_MainState) _then;
 
-/// Create a copy of SplashState
+/// Create a copy of MainState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? error = null,}) {
-  return _then(_SplashState(
+  return _then(_MainState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,error: null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as SplitsbyError,

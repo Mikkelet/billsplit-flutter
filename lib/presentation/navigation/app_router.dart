@@ -2,10 +2,12 @@ import 'package:billsplit_flutter/presentation/features/add_expense/add_expense_
 import 'package:billsplit_flutter/presentation/features/add_group/add_group_route.dart';
 import 'package:billsplit_flutter/presentation/features/add_service/add_service_route.dart';
 import 'package:billsplit_flutter/presentation/features/currency_picker/currency_picker_route.dart';
+import 'package:billsplit_flutter/presentation/features/developer_settings/developer_settings_route.dart';
 import 'package:billsplit_flutter/presentation/features/friends/friends_route.dart';
 import 'package:billsplit_flutter/presentation/features/group/group_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_invites/group_invites_route.dart';
 import 'package:billsplit_flutter/presentation/features/group_settings/group_settings_route.dart';
+import 'package:billsplit_flutter/presentation/features/groups/groups_route.dart';
 import 'package:billsplit_flutter/presentation/features/inspect_profile/inspect_profile_route.dart';
 import 'package:billsplit_flutter/presentation/features/landing/landing_route.dart';
 import 'package:billsplit_flutter/presentation/features/notifications_settings/notifications_settings_route.dart';
@@ -61,6 +63,8 @@ final router = GoRouter(
     $groupSettingsRoute,
     $inspectProfileRoute,
     $notificationRationaleRoute,
-    $onboardingRoute
+    $onboardingRoute,
+    $developerSettingsRoute,
+    $groupsRoute,
   ],
 );

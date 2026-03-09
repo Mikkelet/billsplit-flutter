@@ -14,7 +14,7 @@ class SignOutUseCase {
   final _sharedPrefs = getIt<SharedPrefs>();
 
   Future launch() async {
-    _sharedPrefs.isUserLoggedIn = false;
+    await _sharedPrefs.setIsLoggedIn(false);
     _unsubscribeFromTopic();
     await _database.friendsDAO.clearTable();
     await _database.groupsDAO.clearTable();
