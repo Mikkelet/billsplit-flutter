@@ -26,7 +26,7 @@ jobs:
           # import certificate and provisioning profile from secrets
           echo -n "$CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
           
-          openssl pkcs12 -in $CERTIFICATE_PATH -nokeys -passin pass:$P12_PASSWORD | openssl x509 -sha1 -noout -fingerprint -subject -dates -nameopt utf8,sep_semi_plus_space
+          # openssl pkcs12 -in $CERTIFICATE_PATH -nokeys -passin pass:$P12_PASSWORD | openssl x509 -sha1 -noout -fingerprint -subject -dates -nameopt utf8,sep_semi_plus_space
           
           # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
