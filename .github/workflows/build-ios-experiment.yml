@@ -20,10 +20,10 @@ jobs:
         env:
           CERTIFICATE: ${{ secrets.CERTIFICATE_P12_31_01_2027 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          CERTIFICATE_PATH: $RUNNER_TEMP/build_certificate.p12
         run: |
-          # sh .github/workflows/scripts/decode_cert.sh $CERTIFICATE $CERTIFICATE_PATH
-          echo -n "$CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          sh .github/workflows/scripts/decode_cert.sh $CERTIFICATE $CERTIFICATE_PATH
+          #echo -n "$CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
           sh .github/workflows/scripts/install_ios_cert.sh $P12_PASSWORD $CERTIFICATE_PATH
           
           

@@ -1,4 +1,4 @@
 CERTIFICATE=$1
 CERTIFICATE_PATH=$2
 
-echo -n "$CERTIFICATE" | base64 --decode -o $CERTIFICATE_PATH
+echo -n "$CERTIFICATE\n" | base64 --decode -o $CERTIFICATE_PATH
